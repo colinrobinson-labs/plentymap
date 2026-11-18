@@ -10,7 +10,8 @@ const out = join(root, "www");
 await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 for (const f of ["index.html", "favicon.ico", "css", "js", "fonts", "icons", "i18n", "vendor", "data"]) {
-  await cp(join(root, f), join(out, f), { recursive: true, filter: s => !s.includes(join("data", "tiles")) });
+  // the map tiles and the nationwide packs stay on the site; the apps read them from there
+  await cp(join(root, f), join(out, f), { recursive: true, filter: s => !s.includes(join("data", "tiles")) && !s.includes(join("data", "us")) });
 }
 let html = await readFile(join(out, "index.html"), "utf8");
 html = html

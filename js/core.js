@@ -92,6 +92,8 @@ export async function loadLang(code) {
 }
 const PR = {};
 const plural = (n) => (PR[S.lang] ||= new Intl.PluralRules(S.lang)).select(n);
+/* Text-wide values: {snap} is the name people know food money by where they are (CalFresh, SNAP...). */
+export const VARS = { snap: "CalFresh" };
 export function t(k, v) {
   let s;
   if (v && typeof v.n === "number") {
@@ -100,6 +102,7 @@ export function t(k, v) {
   }
   s ??= STR[k] ?? EN[k] ?? k;
   if (v) for (const x in v) s = s.split("{" + x + "}").join(x === "n" ? num(v[x]) : v[x]);
+  if (s.includes("{snap}")) s = s.split("{snap}").join(VARS.snap);
   return s;
 }
 export const hasT = k => k in STR || k in EN;
@@ -136,7 +139,8 @@ export const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;"
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 export const safeUrl = u => { try { const x = new URL(u); return /^https?:$/.test(x.protocol) ? x.href : ""; } catch { return ""; } };
-export const telHref = p => { const d = String(p || "").replace(/[^\d+]/g, ""); return d.length >= 7 ? "tel:" + d : ""; };
+// full numbers, and the 3-digit N11 lines (2-1-1)
+export const telHref = p => { const d = String(p || "").replace(/[^\d+]/g, ""); return d.length >= 7 || /^[2-8]11$/.test(d) ? "tel:" + d : ""; };
 
 let toastT;
 export function toast(msg) {

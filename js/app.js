@@ -1,6 +1,6 @@
 /* Plenty Map: start-up, language picker, first-run setup, tabs and routing, settings and privacy. */
-import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION } from "./core.js";
-import { region, findPlace, setLoc, inRegion, nearestZip, placeNames } from "./region.js";
+import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION, VARS } from "./core.js";
+import { region, findPlace, setLoc, covered, nearestZip, placeNames, programName } from "./region.js";
 
 /* GitHub Pages can't send frame-ancestors, so refuse to run inside someone else's frame (clickjacking). */
 if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch { document.documentElement.textContent = ""; } }
@@ -101,10 +101,15 @@ export function locForm(p, value = "") {
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
   const say = m => { const el = msg(); if (el) el.textContent = m; else toast(m); announce(m); };
-  let filled = false;
-  $(`#${p}-q`).addEventListener("focus", async () => {
-    if (filled) return; filled = true;
-    try { $(`#${p}-places`).innerHTML = (await placeNames()).map(n => `<option value="${esc(n)}">`).join(""); } catch {}
+  // suggestions follow what's typed (towns across the U.S. are loaded a letter at a time)
+  let tmr = 0, last = "";
+  $(`#${p}-q`).addEventListener("input", () => {
+    clearTimeout(tmr);
+    tmr = setTimeout(async () => {
+      const q = $(`#${p}-q`)?.value || "";
+      if (q.length < 2 || q === last) return; last = q;
+      try { const list = await placeNames(q); const dl = $(`#${p}-places`); if (dl) dl.innerHTML = list.map(n => `<option value="${esc(n)}">`).join(""); } catch {}
+    }, 180);
   });
   form.onsubmit = async e => {
     e.preventDefault();
@@ -116,11 +121,13 @@ export function bindLoc(p, after) {
   $(`#${p}-gps`).onclick = async () => {
     const btn = $(`#${p}-gps`); btn.disabled = true; say(t("loc_finding"));
     try {
-      const pos = await getPosition(); const R = await region();
-      if (!inRegion(pos.lat, pos.lon, R)) { say(t("loc_outside")); return; }
-      const z = nearestZip(pos.lat, pos.lon, R);
+      const pos = await getPosition();
+      if (!(await covered(pos.lat, pos.lon))) { say(t("loc_outside")); return; }
       // round to about 100 m: plenty for "near me", and less exact than the phone's fix
-      const loc = { lat: +pos.lat.toFixed(3), lon: +pos.lon.toFixed(3), label: t("loc_here"), zip: z, src: "gps" };
+      const lat = +pos.lat.toFixed(3), lon = +pos.lon.toFixed(3);
+      const R = await region({ lat, lon });
+      const z = nearestZip(lat, lon, R);
+      const loc = { lat, lon, label: t("loc_here"), zip: z.zip, st: z.st || R.st, src: "gps" };
       setLoc(loc); say(""); after?.(loc);
     } catch (err) {
       say(t(err?.code === 1 || /denied|permission/i.test(err?.message || "") ? "loc_denied" : "loc_failed"));
@@ -184,6 +191,9 @@ function net() {
 }
 
 /* ---------- start ---------- */
+// the name food money goes by where the person is (CalFresh in California, SNAP in most states)
+const syncSnap = () => { VARS.snap = programName(); };
+syncSnap(); addEventListener("pm:loc", syncSnap);
 async function boot() {
   applyTheme();
   matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applyTheme);

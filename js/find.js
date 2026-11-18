@@ -1,5 +1,5 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
-   and CalFresh restaurants near a ZIP or the phone's location. All from the region file. */
+   and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
 import { S, save, t, esc, $, $$, ico, money, num, dateFmt, timeFmt, miles, dist, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
@@ -19,6 +19,7 @@ const CATS = [
 ];
 const KDOT = { pantry: "k-pantry", senior: "k-senior", meal: "k-meal", fridge: "k-fridge", store: "k-store", market: "k-market", rmp: "k-meal" };
 const PAGE = 20;
+const FA_URL = "https://www.feedingamerica.org/find-your-local-foodbank";
 // county middle, used only to sort when no location is set
 const MID = { lat: 32.85, lon: -117.0 };
 
@@ -110,7 +111,7 @@ const ageDays = iso => (Date.now() - new Date(iso + (iso.length === 10 ? "T12:00
 const dayFmt = iso => dateFmt(new Date(iso.slice(0, 10) + "T12:00:00Z"), { month: "short", day: "numeric", year: "numeric" });
 function stale(s) {
   if (!FREE.includes(s.k)) return false;
-  if (R.built && ageDays(R.built) > 7) return true;
+  if (R.built && ageDays(R.built) > R.staleAfter) return true;
   if (s.d.some(d => PARTNER(d.src))) return false;
   return !s.ed || ageDays(s.ed) > STALE_DAYS;
 }
@@ -151,8 +152,8 @@ function siteCard(s) {
       ? `<p class="when">${ico("clock", "i sm")}<span>${next.map((x, i) => `${i ? "<br>" : ""}${esc(whenText(x))}${s.d.length > 1 && (x.d.prog === "csfp" || x.d.f?.includes("senior")) ? " · " + esc(t("f_senior")) : ""}${x.now ? ` <span class="badge ok">${esc(t("open_now"))}</span>` : ""}`).join("")}</span></p>`
       : `<p class="when">${ico("phone", "i sm")}<span>${esc(t(s.d?.some(d => d.when) ? "call_check" : "call_hours"))}</span></p>`)
     : "";
-  const kindNote = s.k === "store" ? [s.tier === "budget" ? `<span class="badge ok">${esc(t("low_prices"))}</span>` : "", ...(s.cu || []).slice(0, 2).map(c => `<span class="badge yolk">${esc(t("cu_" + c))}</span>`)].join("")
-    : s.k === "market" ? `<span class="badge yolk">${esc(t("market_match"))}</span>`
+  const kindNote = s.k === "store" ? [s.tier === "budget" ? `<span class="badge ok">${esc(t("low_prices"))}</span>` : "", s.inc ? `<span class="badge yolk">${esc(t("inc_badge"))}</span>` : "", ...(s.cu || []).slice(0, 2).map(c => `<span class="badge yolk">${esc(t("cu_" + c))}</span>`)].join("")
+    : s.k === "market" ? (R.partner ? `<span class="badge yolk">${esc(t("market_match"))}</span>` : s.inc ? `<span class="badge yolk">${esc(t("inc_badge"))}</span>` : "")
     : s.k === "rmp" ? `<span class="badge">${esc(t("rmp_badge"))}</span>` : "";
   const details = free ? s.d.map(d => {
     const rows = [
@@ -167,7 +168,7 @@ function siteCard(s) {
   }).join("") : "";
   let flags = free ? [...new Set(s.d.flatMap(d => d.f || []))] : [];
   // a 60+ box at a pantry that also serves everyone shouldn't mark the whole place "60+ only"
-  if (s.d.some(d => !(d.f || []).includes("senior") && d.prog !== "csfp")) flags = flags.filter(f => f !== "senior");
+  if (free && s.d.some(d => !(d.f || []).includes("senior") && d.prog !== "csfp")) flags = flags.filter(f => f !== "senior");
   const tel = telHref(s.ph), web = safeUrl(s.w);
   return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
     <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
@@ -191,13 +192,21 @@ function siteCard(s) {
 function catNote() {
   const n = {
     store: t("note_store"),
-    market: t("note_market"),
+    market: t(R.partner ? "note_market" : "us_note_market"),
     rmp: t("note_rmp"),
     senior: t("note_senior"),
-    meal: t("note_meal"),
+    meal: t(R.partner ? "note_meal" : "us_note_meal"),
     fridge: t("note_fridge"),
   }[F.cat];
-  return n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "";
+  // outside San Diego County, free food comes from OpenStreetMap only: say so, and where to find the rest
+  const extra = !R.partner && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
+    ? `<div class="notice info">${ico("info")}<p>${esc(t("us_listings_note"))} <a href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${esc(t("us_fb_find"))}</a> · <a href="tel:211">${esc(t("call_211"))}</a></p></div>` : "";
+  return (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
+}
+
+function dataNote() {
+  const d = dateFmt(new Date(R.built), { month: "long", day: "numeric" });
+  return `${ico("info")}<p>${esc(t(R.partner ? "data_note" : "us_data_note", { d }))}</p>`;
 }
 
 function paintList() {
@@ -209,8 +218,10 @@ function paintList() {
   const shown = list.slice(0, F.shown);
   const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
   $("#fcount").textContent = t("results", { n: list.length });
+  // outside San Diego County, an empty free-food list points to the people who know every pantry
+  const helpBtns = freeCat && !R.partner ? `<div class="row center"><a class="btn sm pri" href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${ico("ext", "i sm")} ${esc(t("us_fb_find"))}</a><a class="btn sm" href="tel:211">${ico("phone", "i sm")} ${esc(t("call_211"))}</a></div>` : "";
   box.innerHTML = shown.length ? shown.map(siteCard).join("") :
-    `<li class="card empty">${ico("search")}<p><b>${esc(t("none_h"))}</b></p><p class="mute">${esc(t(freeCat && (F.today || F.walk || F.drive) ? "none_filters" : "none_p"))}</p></li>`;
+    `<li class="card empty">${ico("search")}<p><b>${esc(t("none_h"))}</b></p><p class="mute">${esc(t(freeCat && (F.today || F.walk || F.drive) ? "none_filters" : "none_p"))}</p>${helpBtns}</li>`;
   $("#fmore").innerHTML = list.length > F.shown ? `<button class="btn" type="button" id="more">${esc(t("show_more", { n: Math.min(PAGE, list.length - F.shown) }))}</button>` : "";
   $("#more")?.addEventListener("click", () => { F.shown += PAGE; paintList(); $(`#flist li:nth-child(${F.shown - PAGE + 1}) a, #flist li:nth-child(${F.shown - PAGE + 1}) button`)?.focus(); });
   $$("[data-share]", box).forEach(b => b.onclick = () => shareSite(R.byId.get(b.dataset.share)));
@@ -267,17 +278,15 @@ export async function render(main, { args }) {
     const s = R.byId.get(args[0]);
     if (s) { focusId = s.id; F.cat = !FREE.includes(s.k) ? s.k : s.k === "senior" && !S.senior ? "senior" : "free"; F.today = F.walk = F.drive = false; }
   }
-  const built = new Date(R.built);
   const wide = matchMedia("(min-width: 960px)");
   main.innerHTML = `
   <section class="hero" aria-labelledby="find-h">
     <h1 class="disp" id="find-h">${esc(S.loc ? t("find_h_near", { p: S.loc.label }) : t("find_h"))}</h1>
-    <p>${esc(t("find_p"))}</p>
+    <p id="find-p">${esc(t(R.partner ? "find_p" : "us_find_p"))}</p>
     ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
     <p class="small" id="f-msg" role="status"></p>
   </section>
   <div class="chips" role="group" aria-label="${esc(t("show"))}" id="fcats">
-    ${CATS.map(c => chip(c.id, `<span class="dot ${KDOT[c.kinds[0]]}" aria-hidden="true"></span>${esc(t("cat_" + c.id))}`, F.cat === c.id)).join("")}
   </div>
   <div class="row between">
     <div class="chips wrap" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
@@ -295,10 +304,10 @@ export async function render(main, { args }) {
     </div>
     <div class="mapbox" id="fmap" hidden></div>
   </div>
-  <div class="notice info">${ico("info")}<p>${esc(t("data_note", { d: dateFmt(built, { month: "long", day: "numeric" }) }))}</p></div>
+  <div class="notice info" id="fdata">${dataNote()}</div>
   ${foot()}`;
 
-  bindLoc("f", () => { F.shown = PAGE; $("#find-h").textContent = t("find_h_near", { p: S.loc.label }); paintList(); mapApi?.recenter(S.loc); });
+  bindLoc("f", () => { $("#find-h").textContent = t("find_h_near", { p: S.loc.label }); });
   const paintFilters = () => {
     const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
     $("#fflt").innerHTML = freeCat ? [
@@ -315,18 +324,33 @@ export async function render(main, { args }) {
     });
     $("#fnote").innerHTML = catNote();
   };
-  $$("[data-cat]").forEach(b => b.onclick = () => {
-    F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;
-    $$("[data-cat]").forEach(x => x.setAttribute("aria-pressed", x === b));
-    paintFilters(); paintList(); announce($("#fcount").textContent);
-  });
+  // categories this area has nothing for (no senior box sites, no restaurant program) are left out
+  const paintCats = () => {
+    const has = new Set([...R.sites, ...R.stores].map(s => s.k));
+    const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || c.kinds.some(k => has.has(k)));
+    if (!cats.some(c => c.id === F.cat)) F.cat = "free";
+    $("#fcats").innerHTML = cats.map(c => chip(c.id, `<span class="dot ${KDOT[c.kinds[0]]}" aria-hidden="true"></span>${esc(t("cat_" + c.id))}`, F.cat === c.id)).join("");
+    $$("[data-cat]").forEach(b => b.onclick = () => {
+      F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;
+      $$("[data-cat]").forEach(x => x.setAttribute("aria-pressed", x === b));
+      paintFilters(); paintList(); announce($("#fcount").textContent);
+    });
+  };
+  paintCats();
   $$("[data-view]").forEach(b => b.onclick = () => setView(b.dataset.view));
   paintFilters(); paintList();
   mapApi = null;
   if (wide.matches) loadMap(); else setView(F.view);
   const onWide = () => { if (wide.matches) { $("#flistwrap").hidden = false; loadMap(); } else setView(F.view); };
   wide.addEventListener("change", onWide);
-  const onLoc = () => paintList();
+  // a new place can mean a new area: load it, then repaint everything that depends on it
+  const onLoc = async () => {
+    R = await region(); F.shown = PAGE;
+    if (!$("#flist")) return;
+    $("#find-p").textContent = t(R.partner ? "find_p" : "us_find_p");
+    $("#fdata").innerHTML = dataNote();
+    paintCats(); paintFilters(); paintList(); mapApi?.recenter(S.loc);
+  };
   addEventListener("pm:loc", onLoc);
   if (focusId) requestAnimationFrame(() => { const el = $(`#s-${CSS.escape(focusId)}`); el?.scrollIntoView({ block: "center" }); });
   const timer = setInterval(paintList, 5 * 60000); // "open now" stays honest if the app sits open

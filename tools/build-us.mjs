@@ -78,7 +78,8 @@ for (const a of snap) {
   if (city) { const ck = a.State + "|" + fold(city); cityN[ck] = (cityN[ck] || 0) + 1; }
   if (t !== "Farmers and Markets" && t !== "Restaurant Meals Program" && SKIP.test(rawName)) continue;
   if (t === "Other" && !CUISINE.some(([, rx]) => rx.test(rawName)) && !BUDGET.test(rawName)) continue;
-  const n = tidyName(rawName);
+  // national chains carry store codes the shared tidy-up leaves behind ("Target Store T", "Kroger J-123")
+  const n = tidyName(rawName).replace(/\s+Store\s+[A-Z]{0,2}$/i, "").replace(/(\S{3,})\s+[A-Z]$/, "$1").replace(/[/.]+(?=\S)/g, m => m.includes("/") ? " / " : m).trim();
   if (!n) continue;
   const base = { a: clean(a.Store_Street_Address), c: city, z, lat: r5(lat), lon: r5(lon) };
   if (t === "Restaurant Meals Program") { cell(cellOf(lat, lon)).stores.push({ id: "rmp-" + a.Record_ID, k: "rmp", n, ...base }); nRmp++; continue; }
@@ -158,7 +159,7 @@ for (const [p, m] of Object.entries(byPre)) await writeFile(join(outDir, "zip", 
 // suggests the larger ones first. Land area breaks ties.
 const weight = p => cityN[p.st + "|" + fold(p.n)] || 0;
 const byL = {};
-for (const p of places.sort((a, b) => weight(b) - weight(a) || b.a - a.a)) { const l = fold(p.n)[0]; if (!l) continue; (byL[/[a-z]/.test(l) ? l : "0"] ||= []).push([p.n, p.st, p.lat, p.lon]); }
+for (const p of places.sort((a, b) => weight(b) - weight(a) || b.a - a.a)) { const l = fold(p.n)[0]; if (!l) continue; (byL[/[a-z]/.test(l) ? l : "0"] ||= []).push([p.n, p.st, p.lat, p.lon, weight(p)]); }
 for (const [l, arr] of Object.entries(byL)) await writeFile(join(outDir, "places", l + ".json"), JSON.stringify(arr));
 await writeFile(join(outDir, "index.json"), JSON.stringify({
   v: 1, built: fetched, tracked: hist.since, cell: 0.5,

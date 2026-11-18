@@ -2,6 +2,7 @@
 import { S, save, t, esc, $, $$, ico, money, num, rt, dayName, shareThing, toast, announce, activeCuisine } from "./core.js";
 import { food, canCook, dietOk, perServing, price, name, pkgLabel, cuisineMatch } from "./food.js";
 import { SNAP } from "./benefits.js";
+import { stateOf } from "./region.js";
 import { foot } from "./app.js";
 
 let FD;
@@ -117,7 +118,7 @@ function paint() {
   if (!S.plan || S.plan.key !== planKey()) makePlan();
   const tot = totals();
   const n = Math.max(1, people());
-  const snapMonth = SNAP.max(n);
+  const snapMonth = SNAP.max(n, stateOf());
   const weekly = S.weekly ?? Math.round(snapMonth / 4.33);
   const pct = weekly ? tot.eat / weekly : 0;
   $("#wk").placeholder = money(Math.round(snapMonth / 4.33), false);
