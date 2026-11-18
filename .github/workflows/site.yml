@@ -4,7 +4,7 @@ name: Site
 on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", ".github/workflows/research.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs"]
   workflow_dispatch:
 permissions:
   contents: write
