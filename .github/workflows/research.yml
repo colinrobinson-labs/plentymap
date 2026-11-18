@@ -1,40 +1,32 @@
 name: Research snapshot
-# One-off: checks the size and shape of the national public sources before the US data build.
+# One-off: checks every outside link the Help tab will use (final address and status).
 on:
   push:
     branches: [launch]
-    paths: [".github/workflows/research.yml"]
+    paths: [".github/workflows/research.yml", "tools/.links-check.txt"]
   workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  probe:
+  links:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Probe national sources
+      - uses: actions/checkout@v4
+      - name: Check links
         run: |
-          mkdir -p out/probe && cd out/probe
-          UA="PlentyMapDataBot/1.0 (free food-help app; research)"
-          B="https://services1.arcgis.com/RLQu0rK7h4kbsBq5/arcgis/rest/services/snap_retailer_location_data/FeatureServer/0"
-          curl -fsS -A "$UA" "$B?f=json" -o snap_layer.json || echo fail layer
-          curl -fsS -A "$UA" "$B/query?where=1%3D1&returnCountOnly=true&f=json" -o snap_count.json || echo fail count
-          curl -fsS -A "$UA" "$B/query?where=1%3D1&outFields=State&returnGeometry=false&groupByFieldsForStatistics=State&outStatistics=%5B%7B%22statisticType%22%3A%22count%22%2C%22onStatisticField%22%3A%22State%22%2C%22outStatisticFieldName%22%3A%22n%22%7D%5D&f=json" -o snap_by_state.json || echo fail bystate
-          curl -fsS -A "$UA" "$B/query?where=State%3D%27VT%27&outFields=*&resultRecordCount=3&outSR=4326&f=json" -o snap_sample.json || echo fail sample
-          Q='[out:json][timeout:300];area["ISO3166-1"="US"][admin_level=2]->.us;(nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"](area.us);nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"](area.us););out count;(node["place"~"^(city|town|village|suburb|borough|quarter|hamlet|neighbourhood)$"](area.us););out count;'
-          curl -fsS -A "$UA" --max-time 400 --data-urlencode "data=$Q" https://overpass-api.de/api/interpreter -o osm_count.json || echo fail osm
-          for y in 2025 2024; do
-            curl -fsS -A "$UA" "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/${y}_Gazetteer/${y}_Gaz_place_national.zip" -o place.zip && { unzip -p place.zip | head -5 > place_head.txt; unzip -p place.zip | wc -l > place_lines.txt; echo $y > place_year.txt; break; }
-          done
-          curl -fsS -A "$UA" "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2025_Gazetteer/2025_Gaz_zcta_national.zip" -o z.zip && unzip -p z.zip | head -3 > zcta_head.txt
-          curl -fsSL -A "Mozilla/5.0" "https://www.feedingamerica.org/find-your-local-foodbank" -o fa.html || echo fail fa
-          grep -oE '(https?:)?//[a-z0-9.-]*feedingamerica[a-z0-9./_-]*|ws-api[^"'"'"' ]*|/api/[^"'"'"' ]*' fa.html | sort -u > fa_urls.txt || true
-          curl -fsS -A "Mozilla/5.0" "https://www.feedingamerica.org/robots.txt" -o fa_robots.txt || true
-          ls -la
+          mkdir -p out
+          while read -r u; do
+            [ -n "$u" ] || continue
+            r=$(curl -sS -L -o /tmp/body -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/130 Safari/537.36" --max-time 40 -w '%{http_code} %{url_effective}' "$u" 2>&1 | tail -1)
+            title=$(grep -o -i '<title[^>]*>[^<]*' /tmp/body 2>/dev/null | head -1 | sed 's/<title[^>]*>//' | tr -s ' \n\t' ' ' | cut -c1-90)
+            printf '%s\t%s\t%s\n' "$u" "$r" "$title" >> out/links.tsv
+          done < tools/.links-check.txt
+          cut -f2 out/links.tsv | cut -c1-3 | sort | uniq -c
       - name: Save to the research branch
         run: |
           cd out
           git init -q && git checkout -q -b research
           git config user.name "plentymap-bot" && git config user.email "bot@plentymap.com"
-          git add -A && git commit -qm "National source probe $(date -u +%F)"
+          git add -A && git commit -qm "Link check $(date -u +%F)"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" research

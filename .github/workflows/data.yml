@@ -16,6 +16,7 @@ on:
     paths:
       - "tools/fetch-sources.mjs"
       - "tools/build-region.mjs"
+      - "tools/lib-food.mjs"
       - "js/hours.js"
       - ".github/workflows/data.yml"
 permissions:

@@ -4,7 +4,7 @@ name: Site
 on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", "tools/us-region.geojson"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", ".github/workflows/research.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -36,6 +36,15 @@ jobs:
           cp /tmp/d/tiles/san-diego.pmtiles "_site/data/tiles/san-diego-$day.pmtiles"
           cp -r /tmp/d/tiles/fonts _site/data/tiles/fonts
           printf '{"file":"san-diego-%s.pmtiles","built":"%s"}\n' "$day" "$day" > _site/data/tiles/tiles.json
+      - name: Add the nationwide data packs from the usdata branch
+        run: |
+          set -e
+          if git fetch --depth 1 origin usdata 2>/dev/null; then
+            git archive FETCH_HEAD us | tar -x -C _site/data
+            ls _site/data/us/cells | wc -l
+          else
+            echo "::warning::no usdata branch yet; the app falls back to San Diego only"
+          fi
           du -sh _site; find _site -size +90M
       - name: Publish to gh-pages
         run: |

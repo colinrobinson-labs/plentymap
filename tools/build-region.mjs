@@ -5,6 +5,7 @@ import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSchedule, parseNotes, resolveYears } from "../js/hours.js";
+import { r5, clean, none, tidyName, phoneOf, firstPhoneIn, urlOk } from "./lib-food.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const [raw = "raw", outDir = join(here, "../data/regions")] = process.argv.slice(2);
@@ -14,16 +15,6 @@ const fetched = (await rd("report.json"))?.fetched || new Date().toISOString();
 const REF = new Date(fetched);
 const BBOX = [-117.62, 32.53, -116.08, 33.51];
 const inBox = (lat, lon) => lon >= BBOX[0] && lon <= BBOX[2] && lat >= BBOX[1] && lat <= BBOX[3];
-const r5 = x => Math.round(x * 1e5) / 1e5;
-const clean = s => (s ?? "").toString().replace(/\s+/g, " ").replace(/\s+([,.;])/g, "$1").trim();
-const none = s => !s || /^(none|n\/a|na|-)$/i.test(s.trim());
-
-// Title-case names that arrive in ALL CAPS ("FOOD 4 LESS 318" -> "Food 4 Less")
-function tidyName(n) {
-  n = clean(n).replace(/\s+(#?\s?[A-Z]{0,3}-?\d{2,6}|\d{1,3})(\s+\d+)*$/i, "").replace(/\s+(Llc|Inc\.?|LLC|INC\.?)$/i, "").replace(/\s+NAFMNP$/i, "").replace(/\s+CFM\s*\d*$/i, "").trim();
-  if (n === n.toUpperCase() && /[A-Z]{3}/.test(n)) n = n.toLowerCase().replace(/\b([a-z])/g, c => c.toUpperCase()).replace(/\b(Of|And|De|La|Del)\b/g, w => w === "La" || w === "De" || w === "Del" ? w : w.toLowerCase());
-  return n.replace(/^Ralph'?s Grocery$/i, "Ralphs").replace(/^Vons$/i, "Vons").replace(/'S\b/g, "'s").replace(/\bMkt\b/i, "Market");
-}
 function splitAddr(a) {
   // "5901 Rancho Hills Drive, San Diego, CA 92139" (+ ", US")
   a = clean(a).replace(/,?\s*(US|USA|United States)$/i, "");
@@ -31,10 +22,6 @@ function splitAddr(a) {
   if (!m) return { a, c: "", z: (a.match(/\b9\d{4}\b/) || [""])[0] };
   return { a: m[1].trim(), c: m[2].trim(), z: m[3] || "" };
 }
-const phoneOf = s => { const d = (s || "").replace(/\D/g, "").replace(/^1(?=\d{10}$)/, ""); return d.length === 10 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : ""; };
-const firstPhoneIn = s => { const m = (s || "").match(/\(?\b(\d{3})\)?[\s.-]*(\d{3})[\s.-]*(\d{4})\b/); return m ? `${m[1]}-${m[2]}-${m[3]}` : ""; };
-const urlOk = u => { try { const x = new URL(/^https?:/i.test(u) ? u : "https://" + u); return /\./.test(x.hostname) ? x.href : ""; } catch { return ""; } };
-
 /* Short, translatable facts pulled from the food banks' English notes. The English stays visible too. */
 function flagsFrom(...texts) {
   const s = texts.filter(Boolean).join(" ").toLowerCase();

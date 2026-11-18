@@ -1,0 +1,57 @@
+name: US data
+# Weekly: pulls the national public sources (USDA SNAP retailers, OpenStreetMap food sites,
+# Census ZIP and place centers), builds the small per-area packs the app reads outside
+# San Diego County, saves them to the usdata branch, and republishes the site.
+# The phone never calls any of these sources.
+on:
+  schedule:
+    - cron: "41 11 * * 1"   # Mondays, ~4am Pacific
+  workflow_dispatch:
+  push:
+    branches: [main, launch]
+    paths:
+      - "tools/fetch-us.mjs"
+      - "tools/build-us.mjs"
+      - "tools/lib-food.mjs"
+      - ".github/workflows/us-data.yml"
+permissions:
+  contents: write
+  actions: write
+concurrency: us-data
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Get the current usdata branch (keeps the freshness history)
+        run: |
+          mkdir -p /tmp/u/raw
+          if git fetch --depth=1 origin usdata 2>/dev/null; then
+            git archive FETCH_HEAD raw/history.json | tar -x -C /tmp/u 2>/dev/null || true
+          fi
+          ls -la /tmp/u/raw
+      - name: Fetch national sources
+        run: node tools/fetch-us.mjs /tmp/u/raw
+      - name: Build the packs
+        run: |
+          node tools/build-us.mjs /tmp/u/raw /tmp/u/us
+          du -sh /tmp/u/us; ls /tmp/u/us/cells | wc -l
+      - name: Save to the usdata branch
+        run: |
+          cd /tmp/u
+          # keep the branch small: the history and report, not the big raw downloads
+          mkdir -p keep && mv raw/history.json raw/report.json keep/ && rm -rf raw && mv keep raw
+          git init -q -b usdata
+          git config user.name "plenty-map-data"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plenty Map US data $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" usdata
+      - name: Republish the site
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref "${{ github.ref_name }}"
