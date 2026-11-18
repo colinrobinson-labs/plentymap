@@ -22,8 +22,9 @@ env:
   AWS_DEFAULT_REGION: auto
   AWS_REQUEST_CHECKSUM_CALCULATION: when_required
   AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
-  # Keep the file under this size so storage stays inside R2's free 10 GB with room for the swap.
-  MAX_BYTES: "9000000000"
+  # Most detailed zoom that fits under this size. Street level (z14) for the US is about 9.7 GB;
+  # with the previous month kept during the swap, storage runs a few cents a month over the free 10 GB.
+  MAX_BYTES: "12000000000"
 jobs:
   tiles:
     runs-on: ubuntu-latest
@@ -50,7 +51,7 @@ jobs:
         run: |
           set -e
           sudo mkdir -p /mnt/t && sudo chown "$USER" /mnt/t && df -h /mnt
-          for z in 15 14 13; do
+          for z in 14 13; do
             /tmp/pmtiles extract "$SRC" /mnt/t/us.pmtiles --region=tools/us-region.geojson --maxzoom=$z --download-threads=8
             SIZE=$(stat -c %s /mnt/t/us.pmtiles)
             echo "maxzoom $z: $SIZE bytes"
