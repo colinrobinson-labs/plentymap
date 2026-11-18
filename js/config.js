@@ -1,6 +1,8 @@
-/* Where the big map files live. On the website they sit next to the app. The phone apps carry
-   everything except the 85 MB map tiles, which they read from our own site (never a third party). */
+/* Where the big files live. The app, data and label fonts sit next to the app (the phone apps carry
+   them inside). The US street map is one large file on our own tiles host (Cloudflare R2), read in
+   small ranges, never from a third party. The San Diego file on the site is the fallback. */
 export const SITE = "https://plentymap.com/";
+export const TILES = "https://tiles.plentymap.com/";
 const isNative = !!window.Capacitor?.isNativePlatform?.();
 export const CONFIG = {
   dataBase: isNative ? SITE : "",

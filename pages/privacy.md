@@ -29,15 +29,17 @@ This information is never sent to us or anyone else. You can erase it at any tim
 
 ## Your location
 
-If you allow it, Plenty Map uses your location to sort food help by distance. That happens on your device; your location is not sent to us or to any map company. You can say no and type a ZIP code or neighborhood instead, which is also looked up on your device.
+If you allow it, Plenty Map uses your location to sort food help by distance. That happens on your device; your exact location is not sent to us or to any map company. You can say no and type a ZIP code or neighborhood instead, which is also looked up on your device.
 
 When you ask for directions, Plenty Map opens your phone's maps app with the destination address. From then on, that maps app's own privacy policy applies.
 
 ## What our web host sees
 
-The app, its maps and its food listings are served by our web host, GitHub Pages. Like any website, the host receives basic technical details needed to deliver those files: your IP address, your device and browser type, the time, and which file was requested. Listings are packaged by region, so a request shows at most the general region whose data you downloaded, never your exact location.
+The app and its food listings are served by our web host, GitHub Pages. Like any website, the host receives basic technical details needed to deliver those files: your IP address, your device and browser type, the time, and which file was requested. Listings are packaged by region, so a request shows at most the general region whose data you downloaded, never your exact location.
 
 We do not use this information to identify you, and we have no access to logs of it. GitHub may keep short-term logs for security and to keep the service running, as described in the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
+
+The street map is served from our own map address, tiles.plentymap.com, which runs on Cloudflare. To draw the map, your device asks for the pieces of the map you are looking at, so Cloudflare receives the same kind of technical details plus which map area was requested. We have no access to logs of it. Cloudflare's handling of this data is described in the [Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/).
 
 ## Links to other services
 

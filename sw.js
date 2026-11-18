@@ -1,8 +1,8 @@
 /* Plenty Map service worker: the app works with no signal.
    - App shell, English text and San Diego data are stored on install.
    - The person's own language, the map code and any map area they've looked at are stored as they use them.
-   - Everything comes from our own site. */
-const V = "pm-1.0.0-2";
+   - Everything comes from our own site, plus the street map from our own tiles host. */
+const V = "pm-1.0.0-3";
 const SHELL = `${V}-shell`, DATA = `${V}-data`, MAP = "pm-map-1", TILES = "pm-tiles-1";
 const PRECACHE = [
   "./", "index.html", "manifest.webmanifest", "favicon.ico",
@@ -33,15 +33,15 @@ self.addEventListener("activate", e => {
 });
 
 const sameOrigin = u => u.origin === self.location.origin;
+const TILES_HOST = "https://tiles.plentymap.com";
 
 self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  if (!sameOrigin(url)) return;
   const p = url.pathname;
-
-  if (p.endsWith(".pmtiles")) return e.respondWith(tile(req, url));
+  if (p.endsWith(".pmtiles") && (sameOrigin(url) || url.origin === TILES_HOST)) return e.respondWith(tile(req, url));
+  if (!sameOrigin(url)) return;
   if (req.mode === "navigate") return e.respondWith(networkFirst(req, SHELL, "index.html"));
   if (/\/vendor\/|\/data\/tiles\/fonts\//.test(p)) return e.respondWith(cacheFirst(req, MAP));
   if (/\/i18n\/|\/data\//.test(p)) return e.respondWith(staleWhileRevalidate(req, DATA));
@@ -109,9 +109,9 @@ async function trim(cache) {
 /* The tiles file is renamed each time it is rebuilt. The map tells us the current name, and pieces
    of any older file are dropped so they can never mix with the new one. */
 self.addEventListener("message", e => {
-  if (e.data?.type !== "tiles-file" || typeof e.data.path !== "string") return;
-  const cur = e.data.path;
+  if (e.data?.type !== "tiles-file" || typeof e.data.url !== "string") return;
+  let cur; try { cur = new URL(e.data.url); } catch { return; }
   e.waitUntil(caches.open(TILES).then(async c => {
-    for (const k of await c.keys()) if (new URL(k.url).pathname !== cur) await c.delete(k);
+    for (const k of await c.keys()) { const u = new URL(k.url); if (u.origin !== cur.origin || u.pathname !== cur.pathname) await c.delete(k); }
   }));
 });

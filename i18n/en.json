@@ -324,7 +324,7 @@
  "pv_3": "The quick check for benefits runs on your phone and is never saved or sent.",
  "pv_4": "Your area, saved recipes, list and prices are stored on your phone. You can erase them any time in Settings.",
  "pv_h2": "Where the app gets its data",
- "pv_5": "All lists, recipes and map pieces come from our own site, plentymap.com. The app talks to no one else.",
+ "pv_5": "All lists and recipes come from our own site, plentymap.com, and map pieces from our own map server, tiles.plentymap.com, run by Cloudflare. The app talks to no one else.",
  "pv_6": "Like any website, our web host may keep short-lived technical logs, such as IP addresses, for security. We don't use them to track anyone.",
  "pv_7": "If you tap Directions, Call or a website, your phone opens that app or site, and their own privacy rules apply.",
  "pv_h3": "Children",

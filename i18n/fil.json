@@ -324,7 +324,7 @@
 "pv_3": "Tumatakbo sa phone mo ang mabilisang check ng benepisyo at hindi kailanman sine-save o ipinapadala.",
 "pv_4": "Ang lugar mo, naka-save na recipe, listahan at presyo ay nasa phone mo. Puwede mo itong burahin kahit kailan sa Settings.",
 "pv_h2": "Saan kinukuha ng app ang data",
-"pv_5": "Lahat ng listahan, recipe at piraso ng mapa ay galing sa sarili naming site, plentymap.com. Wala nang ibang kinakausap ang app.",
+"pv_5": "Lahat ng listahan at recipe ay galing sa sarili naming site, plentymap.com, at ang mga piraso ng mapa ay galing sa sarili naming map server, tiles.plentymap.com, na pinapatakbo ng Cloudflare. Wala nang ibang kinakausap ang app.",
 "pv_6": "Gaya ng ibang website, puwedeng magtago ang web host namin ng panandaliang technical log, gaya ng IP address, para sa seguridad. Hindi namin ito ginagamit para subaybayan ang sinuman.",
 "pv_7": "Kapag tinap mo ang Direksyon, Tumawag o isang website, bubuksan ng phone mo ang app o site na iyon, at ang sarili nilang patakaran sa privacy ang susundin.",
 "pv_h3": "Mga bata",

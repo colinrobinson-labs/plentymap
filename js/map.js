@@ -1,7 +1,7 @@
-/* The map: MapLibre + a San Diego County PMTiles file and glyphs, all served from our own site.
+/* The map: MapLibre + a US PMTiles file from our tiles host, and glyphs from our own site.
    Loaded only when someone opens the map, so the app shell stays small. */
 import { t, esc } from "./core.js";
-import { CONFIG } from "./config.js";
+import { CONFIG, TILES } from "./config.js";
 
 const KCOL = { pantry: "#E0664F", senior: "#6FA3DE", meal: "#B987C7", fridge: "#3FB8BC", store: "#7FC796", market: "#F5C04A", rmp: "#B987C7" };
 let loaded = null;
@@ -56,11 +56,20 @@ export async function mountMap(el, { center, onSelect }) {
   el.setAttribute("role", "region");
   el.setAttribute("aria-label", t("map_label"));
   const base = CONFIG.dataBase;
-  let file = "san-diego.pmtiles";
-  try { const r = await fetch(base + "data/tiles/tiles.json", { cache: "no-cache" }); if (r.ok) file = (await r.json()).file || file; } catch {}
-  if (!/^[\w.-]+\.pmtiles$/.test(file)) file = "san-diego.pmtiles";
-  const tiles = new URL(base + "data/tiles/" + file, location.href).href;
-  navigator.serviceWorker?.controller?.postMessage({ type: "tiles-file", path: new URL(tiles).pathname });
+  // The US map on our tiles host; if that can't be reached, the San Diego file on our own site.
+  let tiles = null;
+  try {
+    const r = await fetch(TILES + "tiles.json", { cache: "no-cache" });
+    const f = r.ok ? (await r.json()).file : null;
+    if (typeof f === "string" && /^[\w.-]+\.pmtiles$/.test(f)) tiles = TILES + f;
+  } catch {}
+  if (!tiles) {
+    let file = "san-diego.pmtiles";
+    try { const r = await fetch(base + "data/tiles/tiles.json", { cache: "no-cache" }); if (r.ok) file = (await r.json()).file || file; } catch {}
+    if (!/^[\w.-]+\.pmtiles$/.test(file)) file = "san-diego.pmtiles";
+    tiles = new URL(base + "data/tiles/" + file, location.href).href;
+  }
+  navigator.serviceWorker?.controller?.postMessage({ type: "tiles-file", url: tiles });
   const glyphs = new URL(base + "data/tiles/fonts/", location.href).href + "{fontstack}/{range}.pbf";
   const layers = window.basemaps.layers("protomaps", flavor(), { lang: "en" }).filter(l => !/^pois|landuse_pedestrian/.test(l.id) && !l.layout?.["icon-image"]);
   const map = new ml.Map({
@@ -70,8 +79,8 @@ export async function mountMap(el, { center, onSelect }) {
       sources: { protomaps: { type: "vector", url: "pmtiles://" + tiles, attribution: '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · Protomaps' } },
       layers,
     },
-    center: [center.lon, center.lat], zoom: 12, minZoom: 8, maxZoom: 17,
-    maxBounds: [[-118.3, 32.3], [-115.6, 33.8]],
+    center: [center.lon, center.lat], zoom: 12, minZoom: 3, maxZoom: 17,
+    maxBounds: [[-180, 12], [-60, 74]], // the US, Alaska to Puerto Rico
     attributionControl: { compact: true }, cooperativeGestures: false, pitchWithRotate: false, dragRotate: false,
   });
   map.touchZoomRotate.disableRotation();
