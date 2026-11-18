@@ -3,7 +3,7 @@ name: Site
 # from the data branch, to the gh-pages branch that GitHub Pages serves.
 on:
   push:
-    branches: [main]
+    branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
     paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml"]
   workflow_dispatch:
 permissions:
@@ -22,7 +22,7 @@ jobs:
           set -e
           mkdir -p _site
           cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
-          mkdir -p _site/data && cp -r data/regions _site/data/
+          mkdir -p _site/data && cp -r data/regions data/food.json _site/data/
           cp -r privacy support _site/ 2>/dev/null || true
           echo "plentymap.com" > _site/CNAME
           touch _site/.nojekyll

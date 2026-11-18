@@ -120,6 +120,7 @@ function paint() {
   const snapMonth = SNAP.max(n);
   const weekly = S.weekly ?? Math.round(snapMonth / 4.33);
   const pct = weekly ? tot.eat / weekly : 0;
+  $("#wk").placeholder = money(Math.round(snapMonth / 4.33), false);
   $("#kpis").innerHTML = `
     <div class="card kpi"><b>${esc(money(tot.eat, false))}</b><span>${esc(t("week_cost"))}</span></div>
     <div class="card kpi"><b>${esc(money(tot.eat / Math.max(1, n) / 7))}</b><span>${esc(t("per_person_day"))}</span></div>
@@ -185,7 +186,7 @@ export async function render(main) {
         <div><span class="lbl small mute" id="l-meals"><b>${esc(t("meals_q"))}</b></span>
           <div class="chips wrap" role="group" aria-labelledby="l-meals">${["b", "l", "d"].map(m => `<button class="chip" type="button" data-m="${m}" aria-pressed="${!!S.meals[m]}">${esc(t("meal_" + m))}</button>`).join("")}</div></div>
         <label class="field"><span>${esc(t("weekly_q"))}</span>
-          <input class="in" id="wk" inputmode="decimal" placeholder="${esc(t("weekly_ph"))}" value="${S.weekly ?? ""}">
+          <input class="in" id="wk" inputmode="decimal" value="${S.weekly ?? ""}">
           <small>${esc(t("weekly_hint"))}</small></label>
       </div>
       <div class="kpis" id="kpis"></div>

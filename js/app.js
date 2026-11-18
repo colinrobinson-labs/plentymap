@@ -2,6 +2,9 @@
 import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION } from "./core.js";
 import { region, findPlace, setLoc, inRegion, nearestZip, placeNames } from "./region.js";
 
+/* GitHub Pages can't send frame-ancestors, so refuse to run inside someone else's frame (clickjacking). */
+if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch { document.documentElement.textContent = ""; } }
+
 const TABS = [
   { id: "find", icon: "basket" },
   { id: "cook", icon: "pot" },

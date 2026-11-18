@@ -129,7 +129,7 @@ function siteCard(s) {
   if (s.d.some(d => !(d.f || []).includes("senior") && d.prog !== "csfp")) flags = flags.filter(f => f !== "senior");
   const tel = telHref(s.ph), web = safeUrl(s.w);
   return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
-    <h3><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h3>
+    <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
     <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}<span aria-hidden="true">·</span><span>${esc(addr)}</span></p>
     ${when}
     ${free ? `<div class="row">${flagBadges({ f: flags })}</div>` : kindNote ? `<div class="row">${kindNote}</div>` : ""}
