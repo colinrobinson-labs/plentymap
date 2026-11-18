@@ -1,0 +1,48 @@
+name: Site
+# Publishes plentymap.com: the app, the privacy and support pages, and the map tiles
+# from the data branch, to the gh-pages branch that GitHub Pages serves.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: site
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the site folder
+        run: |
+          set -e
+          mkdir -p _site
+          cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
+          mkdir -p _site/data && cp -r data/regions _site/data/
+          cp -r privacy support _site/ 2>/dev/null || true
+          echo "plentymap.com" > _site/CNAME
+          touch _site/.nojekyll
+      - name: Add map tiles from the data branch
+        run: |
+          set -e
+          git fetch --depth 1 origin data
+          mkdir -p /tmp/d _site/data/tiles
+          git archive FETCH_HEAD tiles | tar -x -C /tmp/d
+          day=$(jq -r '.built' /tmp/d/tiles/info.json | cut -c1-10 | tr -d '-')
+          cp /tmp/d/tiles/san-diego.pmtiles "_site/data/tiles/san-diego-$day.pmtiles"
+          cp -r /tmp/d/tiles/fonts _site/data/tiles/fonts
+          printf '{"file":"san-diego-%s.pmtiles","built":"%s"}\n' "$day" "$day" > _site/data/tiles/tiles.json
+          du -sh _site; find _site -size +90M
+      - name: Publish to gh-pages
+        run: |
+          cd _site
+          git init -q -b gh-pages
+          git config user.name "plentymap-site"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Site from ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
