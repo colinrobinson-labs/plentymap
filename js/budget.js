@@ -8,7 +8,7 @@ let FD;
 const AISLES = ["prod", "pantry", "cans", "dairy", "meat", "frozen", "bread", "spice"];
 const portions = () => S.hh.a + S.hh.k * 0.7;
 const people = () => S.hh.a + S.hh.k;
-const planKey = () => [2, S.hh.a, S.hh.k, S.diet, S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|");
+const planKey = () => [2, S.hh.a, S.hh.k, S.diet, [...S.avoid].sort().join("+"), S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|");
 
 function pools() {
   const ok = r => canCook(r) && dietOk(r) && r.lvl <= S.comfort;

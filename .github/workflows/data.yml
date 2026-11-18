@@ -82,6 +82,9 @@ jobs:
           done
           ls -la /tmp/databranch/tiles
 
+      - name: Build the region file
+        run: node tools/build-region.mjs /tmp/databranch/raw data/regions
+
       - name: Save raw data and tiles to the data branch
         run: |
           cd /tmp/databranch
@@ -91,9 +94,6 @@ jobs:
           git add -A
           git commit -q -m "Plenty Map source data $(date -u +%F)"
           git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" data
-
-      - name: Build the region file
-        run: node tools/build-region.mjs /tmp/databranch/raw data/regions
 
       - name: Commit the region file if it changed
         id: commit

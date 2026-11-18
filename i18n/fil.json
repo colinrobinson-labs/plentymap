@@ -293,7 +293,7 @@
 "pantry_p": "Karamihan sa pantry ay hindi humihingi ng ID at hindi nagtatanong tungkol sa immigration status. May ilan na nagtatanong ng kita o ZIP.",
 "more_h": "Mabuting malaman",
 "mm_h": "Doblehin ang CalFresh mo sa farmers market",
-"mm_p": "Nagdadagdag ang Market Match ng pera para sa prutas at gulay kapag CalFresh ang gamit mo sa market, madalas hanggang $10 bawat punta. Magtanong sa info booth.",
+"mm_p": "Nagdadagdag ang Market Match ng pera para sa prutas at gulay kapag CalFresh ang gamit mo sa market, madalas hanggang {m} bawat punta. Magtanong sa info booth.",
 "imm_h": "Pamilyang imigrante",
 "imm_p": "Mula Abril 2026, maraming refugee, asylee at parolee ang hindi na makakakuha ng CalFresh. Puwede pa ring makakuha ang mga batang citizen. Bukas ang food bank, WIC at pagkain sa paaralan sa pamilya ng anumang status.",
 "work_h": "Bagong patakaran sa trabaho ng CalFresh",
@@ -357,5 +357,7 @@
 "cf_max_one": "Ang pinakamalaking makukuha ng bahay na may {n} tao ay {m} kada buwan.",
 "cf_max_other": "Ang pinakamalaking makukuha ng bahay na may {n} tao ay {m} kada buwan.",
 "app_name": "Plenty Map",
-"ios_location": "Ginagamit ng Plenty Map ang lokasyon mo sa phone mo lang, para ipakita ang libreng pagkain at tindahan malapit sa iyo. Hindi ito ipinapadala kahit saan."
+"ios_location": "Ginagamit ng Plenty Map ang lokasyon mo sa phone mo lang, para ipakita ang libreng pagkain at tindahan malapit sa iyo. Hindi ito ipinapadala kahit saan.",
+"diet_halal":"Halal","diet_kosher":"Kosher","avoid_q":"Walang","avoid_gluten":"Gluten","avoid_dairy":"Gatas","avoid_egg":"Itlog","avoid_peanut":"Mani","avoid_soy":"Soy","avoid_fish":"Isda at shellfish","avoid_salt":"Mas kaunting sodium","sodium":"sodium bawat serving","contains":"May:","al_gluten":"trigo (gluten)","al_dairy":"gatas","al_egg":"itlog","al_peanut":"mani","al_soy":"soy","al_fish":"isda o shellfish","note_tamari":"Gumamit ng gluten-free na toyo (tamari).","note_gf_bouil":"Gumamit ng gluten-free na bouillon.","note_gf_oats":"Gumamit ng oats na may label na gluten-free.","note_soy_label":"Tingnan ang label: madalas may soy ang bouillon at instant noodles.","note_halal_meat":"Bumili ng halal na manok o baka.","note_halal_bouil":"Gumamit ng halal o gulay na bouillon.","note_kosher":"Bumili ng kosher na karne, at hanapin ang kosher na tatak sa mga nakabalot na pagkain.","note_salt":"Wala pang 600 mg sodium bawat serving, hindi pa kasama ang asin na idaragdag mo.","label_check":"May allergy? Laging basahin ang label. Iba-iba ang bawat brand.",
+"listed_by":"Inilista ng {s}, sinuri noong {d}","osm_edited":"Mula sa OpenStreetMap, huling binago noong {d}","changed_on":"nagbago ang detalye noong {d}","stale":"Baka luma na ito. Tumawag bago pumunta.","call_first":"Tumawag bago pumunta.","report_q":"May mali ba rito?","report_closed":"Sarado","report_nofood":"Ubos na ang pagkain","report_hours":"Maling oras","report_other":"Iba pa","report_note":"Bubuksan ang email app mo na may laman na. Ang ipapadala mo lang ang makikita namin."
 }

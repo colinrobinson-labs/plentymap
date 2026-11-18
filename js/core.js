@@ -1,6 +1,7 @@
 /* Plenty Map core: state, device-only storage, i18n, formatting, icons, small UI helpers.
    Nothing here talks to any server except our own static files. */
 
+import { MARKET } from "./config.js";
 export const VERSION = "1.0.0";
 
 export const LANGS = [
@@ -39,7 +40,8 @@ export const S = {
   maxCost: store.get("maxCost", 0),     // per serving, 0 = any
   comfort: store.get("comfort", 2),     // 1 easy, 2 some cooking, 3 likes to cook
   cuisine: store.get("cuisine", null),  // null = use the language default
-  diet: store.get("diet", "any"),       // any, veg, vegan
+  diet: store.get("diet", "any"),       // any, veg, vegan, halal, kosher
+  avoid: new Set(store.get("avoid", [])), // gluten, dairy, egg, peanut, soy, fish, salt (lower sodium)
   have: new Set(store.get("have", [])),
   saved: new Set(store.get("saved", [])),
   hh: store.get("hh", { a: 1, k: 0 }),
@@ -116,7 +118,8 @@ export const recipeInLang = id => !!REC[id];
 const NF = {};
 const nfo = (o) => { const k = S.lang + JSON.stringify(o); return (NF[k] ||= new Intl.NumberFormat(S.lang + "-u-nu-latn", o)); };
 export const num = (n, d = 0) => nfo({ maximumFractionDigits: d }).format(n);
-export const money = (v, cents = true) => nfo({ style: "currency", currency: "USD", minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }).format(v);
+/* Money always goes through the active market's currency (config.js), shown in the reader's language. */
+export const money = (v, cents = true) => nfo({ style: "currency", currency: MARKET.currency, minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }).format(v);
 export function dateFmt(d, o) { return new Intl.DateTimeFormat(S.lang + "-u-nu-latn", { timeZone: "America/Los_Angeles", ...o }).format(d); }
 export const dayName = (wd, style = "long") => dateFmt(new Date(Date.UTC(2024, 0, 7 + wd, 20)), { weekday: style }); // 2024-01-07 was a Sunday
 export function timeFmt(hhmm) {
@@ -171,6 +174,7 @@ const IC = {
   map: '<path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6z"/><path d="M9 4v14M15 6v14"/>',
   list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/>',
+  flag: '<path d="M5 21V3.5"/><path d="M5 4h12.5l-3 4.25 3 4.25H5z"/>',
   alert: '<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.3v.1"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',

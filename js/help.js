@@ -84,7 +84,7 @@ export async function render(main) {
 
     <div class="sec"><h2>${esc(t("more_h"))}</h2></div>
     <div class="grid2">
-      ${prog("mm", t("mm_h"), "", esc(t("mm_p")), `<a class="btn sm" href="#/find">${esc(t("cat_market"))}</a>` + out(LINKS.marketmatch, t("learn_more")))}
+      ${prog("mm", t("mm_h"), "", esc(t("mm_p", { m: money(10, false) })), `<a class="btn sm" href="#/find">${esc(t("cat_market"))}</a>` + out(LINKS.marketmatch, t("learn_more")))}
       ${prog("imm", t("imm_h"), "", esc(t("imm_p")), tel(PHONES.sd211, t("call_211")) + out(LINKS.hr1, t("learn_more")))}
       ${prog("work", t("work_h"), "", esc(t("work_p")), out(LINKS.hr1, t("learn_more")))}
       ${prog("scam", t("scam_h"), "", esc(t("scam_p")))}

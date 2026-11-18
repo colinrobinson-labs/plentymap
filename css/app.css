@@ -354,3 +354,15 @@ legend{padding:0;margin-block-end:4px}
 /* Desktop: category chips wrap instead of scrolling off the edge */
 @media (min-width:960px){.chips{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0}}
 .findwrap>*,.list>*,.site>*,.filters>*,.urgent>*,.prog>*,.grid2>*,.qs>*,.stack>*,.hero>*{min-width:0}
+.notice.dietbox{background:var(--line-2);margin-block:12px}
+.notice.dietbox .i{color:var(--ink-2)}
+.notice.dietbox p{margin:0 0 4px}
+.notice.dietbox ul{margin:4px 0;padding-inline-start:20px}
+.notice.dietbox .tiny{color:var(--ink-2);margin-block-start:6px}
+.site .notice.stale{font-size:14.5px;padding:8px 12px;margin-block:6px}
+.callahead{display:flex;gap:8px;align-items:flex-start;margin:6px 0;font-size:15px}
+.callahead .i{margin-block-start:3px;flex:none}
+.callahead a{font-weight:700;white-space:nowrap}
+.site details.report{margin-block-start:4px}
+.site details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:32px}
+.site details.report .acts{margin-block:6px}

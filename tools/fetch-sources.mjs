@@ -59,7 +59,7 @@ await step("osm", async () => {
   nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"](${b});
   nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"](${b});
 );
-out center tags;
+out center meta;
 (
   node["place"~"^(city|town|village|suburb|neighbourhood|quarter|hamlet)$"](${b});
 );

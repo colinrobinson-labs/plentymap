@@ -4,6 +4,7 @@ import { S, save, t, esc, $, $$, ico, money, num, dateFmt, timeFmt, miles, dist,
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
+import { CONFIG } from "./config.js";
 
 const FREE = ["pantry", "senior", "meal", "fridge"];
 const CATS = [
@@ -80,6 +81,7 @@ function candidates() {
       const key = s => { const x = soon(s)[0]; return x ? x.date + (x.t[0] || "99") : "9999"; };
       list.sort((a, b) => key(a).localeCompare(key(b)) || a._m - b._m);
     } else list.sort((a, b) => a._m - b._m);
+    list = [...list.filter(s => !stale(s)), ...list.filter(stale)];
   } else if (F.cat === "store") {
     const cu = activeCuisine();
     const w = { budget: 1, standard: 1.35, premium: 2.2 };
@@ -97,6 +99,45 @@ function flagBadges(d) {
   return order.filter(k => f.includes(k)).map(k => `<span class="badge ${tone[k]}">${esc(t("f_" + k))}</span>`).join("");
 }
 const srcName = src => R.sources?.[src]?.name || "";
+
+/* ---------- freshness ---------- */
+// Food bank lists are rebuilt every night, so a listing they still carry counts as current.
+// Other sources (OpenStreetMap) count as stale once their last edit is older than STALE_DAYS,
+// and everything does if our nightly rebuild itself has stopped for a week.
+const STALE_DAYS = 90, DAY = 864e5;
+const PARTNER = src => src !== "osm";
+const ageDays = iso => (Date.now() - new Date(iso + (iso.length === 10 ? "T12:00:00Z" : "")).getTime()) / DAY;
+const dayFmt = iso => dateFmt(new Date(iso.slice(0, 10) + "T12:00:00Z"), { month: "short", day: "numeric", year: "numeric" });
+function stale(s) {
+  if (!FREE.includes(s.k)) return false;
+  if (R.built && ageDays(R.built) > 7) return true;
+  if (s.d.some(d => PARTNER(d.src))) return false;
+  return !s.ed || ageDays(s.ed) > STALE_DAYS;
+}
+/* Who to call before going: the site, else the food bank that listed it, else 211 */
+function callAhead(s) {
+  if (s.ph) return { ph: s.ph, who: "" };
+  const src = s.d.map(d => R.sources?.[d.src]).find(x => x?.phone);
+  return src ? { ph: src.phone, who: src.name } : { ph: "211", who: "211" };
+}
+const REPORTS = ["closed", "nofood", "hours", "other"];
+function reportLinks(s) {
+  const to = CONFIG.contact;
+  return REPORTS.map(k => {
+    const subj = `Plenty Map report: ${k} - ${s.n}`;
+    const body = `Site: ${s.n}\nAddress: ${[s.a, s.c].filter(Boolean).join(", ")}\nListing ID: ${s.id}\nProblem: ${k}\n\nAnything else (optional, any language):\n`;
+    return `<a class="btn sm ghost" href="mailto:${to}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(body)}">${esc(t("report_" + k))}</a>`;
+  }).join("");
+}
+
+function fresh(s) {
+  const partners = [...new Set(s.d.filter(d => PARTNER(d.src)).map(d => srcName(d.src)))].filter(Boolean);
+  const parts = partners.length
+    ? [t("listed_by", { s: partners.join(", "), d: dayFmt(R.built) })]
+    : [s.ed ? t("osm_edited", { d: dayFmt(s.ed) }) : t("src_by", { s: "OpenStreetMap" })];
+  if (s.chg) parts.push(t("changed_on", { d: dayFmt(s.chg) }));
+  return parts.join(" · ");
+}
 
 function siteCard(s) {
   const free = FREE.includes(s.k);
@@ -131,7 +172,9 @@ function siteCard(s) {
   return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
     <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
     <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}<span aria-hidden="true">·</span><span>${esc(addr)}</span></p>
+    ${free && stale(s) ? `<p class="notice stale">${ico("alert", "i sm")}<span>${esc(t("stale"))}</span></p>` : ""}
     ${when}
+    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <a href="${esc(h)}" dir="ltr">${esc(c.ph)}</a>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
     ${free ? `<div class="row">${flagBadges({ f: flags })}</div>` : kindNote ? `<div class="row">${kindNote}</div>` : ""}
     <div class="acts">
       <a class="btn sm pri" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out>${ico("route", "i sm")} ${esc(t("directions"))}</a>
@@ -140,7 +183,8 @@ function siteCard(s) {
       <button class="btn sm ghost" type="button" data-share="${esc(s.id)}">${ico("share", "i sm")} ${esc(t("share"))}</button>
     </div>
     ${details ? `<details><summary>${ico("chev", "i sm")} ${esc(t("details"))}</summary>${!isEn ? `<p class="src">${esc(t("src_english"))}</p>` : ""}${details}</details>` : ""}
-    ${free ? `<p class="src">${esc(t("src_by", { s: [...new Set(s.d.map(d => srcName(d.src)))].filter(Boolean).join(", ") || "OpenStreetMap" }))}${callFirst ? "" : " · " + esc(t("times_change"))}</p>` : ""}
+    ${free ? `<p class="src">${esc(fresh(s))}${callFirst ? "" : " · " + esc(t("times_change"))}</p>
+    <details class="report"><summary>${ico("flag", "i sm")} ${esc(t("report_q"))}</summary><div class="acts">${reportLinks(s)}</div><p class="tiny mute">${esc(t("report_note"))}</p></details>` : ""}
   </li>`;
 }
 

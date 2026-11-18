@@ -293,7 +293,7 @@
  "pantry_p": "Most pantries need no ID and don't ask about immigration status. Some ask your income or ZIP.",
  "more_h": "Good to know",
  "mm_h": "Double your CalFresh at farmers markets",
- "mm_p": "Market Match adds extra money for fruits and vegetables when you spend CalFresh at the market, often up to $10 a visit. Ask at the info booth.",
+ "mm_p": "Market Match adds extra money for fruits and vegetables when you spend CalFresh at the market, often up to {m} a visit. Ask at the info booth.",
  "imm_h": "Immigrant families",
  "imm_p": "Since April 2026, many refugees, asylees and parolees can no longer get CalFresh. Children who are citizens can still get it. Food banks, WIC and school meals are open to families of any status.",
  "work_h": "New CalFresh work rule",
@@ -357,5 +357,7 @@
  "cf_ask_one": "Your income is over {g} a month for 1 person. Costs like rent and child care can still bring you in, so it's worth asking.",
  "cf_max_one": "The most 1 person can get is {m} a month.",
  "app_name": "Plenty Map",
- "ios_location": "Plenty Map uses your location only on your phone, to show free food and stores near you. It is never sent anywhere."
+ "ios_location": "Plenty Map uses your location only on your phone, to show free food and stores near you. It is never sent anywhere.",
+"diet_halal":"Halal","diet_kosher":"Kosher","avoid_q":"Leave out","avoid_gluten":"Gluten","avoid_dairy":"Dairy","avoid_egg":"Eggs","avoid_peanut":"Peanuts","avoid_soy":"Soy","avoid_fish":"Fish and shellfish","avoid_salt":"Lower sodium","sodium":"sodium per serving","contains":"Contains:","al_gluten":"wheat (gluten)","al_dairy":"milk","al_egg":"egg","al_peanut":"peanuts","al_soy":"soy","al_fish":"fish or shellfish","note_tamari":"Use gluten-free soy sauce (tamari).","note_gf_bouil":"Use gluten-free bouillon.","note_gf_oats":"Use oats labeled gluten-free.","note_soy_label":"Check labels: bouillon and instant noodles often have soy.","note_halal_meat":"Buy halal chicken or beef.","note_halal_bouil":"Use halal or vegetable bouillon.","note_kosher":"Buy kosher meat, and look for a kosher symbol on packaged foods.","note_salt":"Under 600 mg sodium per serving, before any salt you add.","label_check":"Allergies? Always read the label. Brands differ.",
+"listed_by":"Listed by {s}, checked {d}","osm_edited":"From OpenStreetMap, last edited {d}","changed_on":"details changed {d}","stale":"May be out of date. Call before you go.","call_first":"Call before you go.","report_q":"Something wrong here?","report_closed":"Closed","report_nofood":"Out of food","report_hours":"Wrong hours","report_other":"Something else","report_note":"Opens your email app with the details filled in. We only see what you send."
 }

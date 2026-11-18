@@ -6,3 +6,10 @@ export const CONFIG = {
   dataBase: isNative ? SITE : "",
   contact: "hello@plentymap.com",
 };
+
+/* Countries. Every price, budget and benefit amount is formatted through the active market's
+   currency, never a hardcoded symbol. Only the US is live; see docs/adding-a-country.md. */
+export const MARKETS = {
+  US: { currency: "USD", units: "us", prices: "data/food.json", benefits: "us" },
+};
+export const MARKET = MARKETS.US;

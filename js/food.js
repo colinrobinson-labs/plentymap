@@ -30,9 +30,44 @@ export function facts(r) {
   const veg = !/[mf]/.test(fl), vegan = veg && !/[edx]/.test(fl);
   return (r._f = { kcal: Math.round(k / r.serves / 10) * 10, pro: Math.round(p / r.serves), veg, vegan });
 }
-export function dietOk(r, d = S.diet) {
-  const f = facts(r);
-  return d === "any" || (d === "veg" && f.veg) || (d === "vegan" && f.vegan);
+/* Diet and allergen checks. Tags per ingredient (tools/diet-tags.py): G gluten, g gluten unless you buy the
+   gluten-free kind, O oats (buy certified gluten-free), D dairy, E egg, P peanut, S soy, s often soy,
+   F fish or shellfish, M meat, K often not kosher. */
+const tagsOf = r => r._t ??= r.ing.map(([id]) => F.ing[id]?.al || "").join("");
+const has = (r, id) => r.ing.some(([x]) => x === id);
+export const LOW_NA = 600; // mg per serving, before any salt you add
+export const sodium = r => r._na ??= Math.round(r.ing.reduce((s, [id, q]) => s + F.ing[id].g * q * F.ing[id].na / 100, 0) / r.serves);
+export const AVOIDS = ["gluten", "dairy", "egg", "peanut", "soy", "fish", "salt"];
+const AV = { gluten: "G", dairy: "D", egg: "E", peanut: "P", soy: "S", fish: "F" };
+export function dietOk(r, d = S.diet, avoid = S.avoid) {
+  const f = facts(r), tg = tagsOf(r);
+  if (d === "veg" && !f.veg) return false;
+  if (d === "vegan" && !f.vegan) return false;
+  if (d === "kosher" && (tg.includes("K") || (tg.includes("M") && tg.includes("D")))) return false;
+  for (const a of avoid) if (a === "salt" ? sodium(r) > LOW_NA : tg.includes(AV[a])) return false;
+  return true;
+}
+/* What the recipe contains as written (i18n keys) */
+export function contains(r) {
+  const tg = tagsOf(r), out = [];
+  if (tg.includes("G") || has(r, "soy")) out.push("al_gluten"); // soy sauce is brewed with wheat
+  for (const [k, c] of [["al_dairy", "D"], ["al_egg", "E"], ["al_peanut", "P"], ["al_soy", "S"], ["al_fish", "F"]]) if (tg.includes(c)) out.push(k);
+  return out;
+}
+/* Buying notes for the diet someone picked (i18n keys) */
+export function dietNotes(r, d = S.diet, avoid = S.avoid) {
+  const tg = tagsOf(r), out = [];
+  if (avoid.has("gluten")) {
+    if (has(r, "soy")) out.push("note_tamari");
+    if (has(r, "bouil")) out.push("note_gf_bouil");
+    if (tg.includes("O")) out.push("note_gf_oats");
+  }
+  if (avoid.has("soy") && tg.includes("s")) out.push("note_soy_label");
+  if (d === "halal" && tg.includes("M")) out.push("note_halal_meat");
+  if (d === "halal" && (has(r, "bouil") || has(r, "ramen"))) out.push("note_halal_bouil");
+  if (d === "kosher") out.push("note_kosher");
+  if (avoid.has("salt")) out.push("note_salt");
+  return out;
 }
 /* Cost of what you actually eat, per serving */
 export const perServing = r => r.ing.reduce((s, [id, q]) => s + price(id) * q, 0) / r.serves;

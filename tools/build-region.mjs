@@ -129,7 +129,7 @@ for (const e of osm) {
   if (merged.some(m => Math.abs(m.lat - lat) < 0.001 && Math.abs(m.lon - lon) < 0.001)) continue;
   const a = [t["addr:housenumber"], t["addr:street"]].filter(Boolean).join(" ");
   const oh = t.opening_hours || "";
-  merged.push({ id: `osm-${e.type[0]}${e.id}`, k: kind, n: clean(t.name), a, c: t["addr:city"] || "", z: t["addr:postcode"] || "", lat: r5(lat), lon: r5(lon), ph: phoneOf(t.phone || t["contact:phone"]), w: urlOk(t.website || t["contact:website"] || ""),
+  merged.push({ id: `osm-${e.type[0]}${e.id}`, ed: e.timestamp ? e.timestamp.slice(0, 10) : undefined, k: kind, n: clean(t.name), a, c: t["addr:city"] || "", z: t["addr:postcode"] || "", lat: r5(lat), lon: r5(lon), ph: phoneOf(t.phone || t["contact:phone"]), w: urlOk(t.website || t["contact:website"] || ""),
     d: [{ src: "osm", prog: "", when: oh, notes: "", food: "", who: "", tips: "", f: [], sc: null, conf: oh ? "osm" : "call" }] });
 }
 
@@ -192,8 +192,26 @@ const zc = {};
 for (const s of [...merged, ...stores]) if (s.z && s.c) { zc[s.z] ||= {}; zc[s.z][s.c] = (zc[s.z][s.c] || 0) + 1; }
 for (const z in zips) { const c = zc[z] && Object.entries(zc[z]).sort((a, b) => b[1] - a[1])[0][0]; if (c) zips[z].push(c); }
 
+// ---- Freshness: remember when each listing first appeared and when its details last changed ----
+// history.json lives next to the raw files in the data branch. A listing new to us gets no "changed"
+// date (we can't know when the source last edited it); after that, any change to its details sets it.
+{
+  const today = fetched.slice(0, 10);
+  const prev = (await rd("history.json")) || { since: today, sites: {} };
+  const hist = { since: prev.since || today, sites: {} };
+  const hashOf = s => { const x = JSON.stringify([s.n, s.a, s.ph, s.w, s.d.map(d => [d.src, d.when, d.notes, d.food, d.who, d.tips])]); let h = 0; for (let i = 0; i < x.length; i++) h = (h * 31 + x.charCodeAt(i)) | 0; return h; };
+  for (const s of merged) {
+    const h = hashOf(s), p = prev.sites[s.id];
+    const rec = !p ? { first: today, h } : p.h === h ? p : { first: p.first, changed: today, h };
+    hist.sites[s.id] = rec;
+    if (rec.changed) s.chg = rec.changed;
+  }
+  await writeFile(join(raw, "history.json"), JSON.stringify(hist));
+  var trackedSince = hist.since;
+}
+
 const out = {
-  v: 1, region: "san-diego", name: "San Diego County", bbox: BBOX, built: fetched,
+  v: 1, region: "san-diego", tracked: trackedSince, name: "San Diego County", bbox: BBOX, built: fetched,
   sources: {
     sdfb: { name: "San Diego Food Bank", url: "https://www.sandiegofoodbank.org/get-food/", phone: "866-350-3663" },
     fsd: { name: "Feeding San Diego", url: "https://feedingsandiego.org/find-food/", phone: "858-452-3663" },
@@ -208,5 +226,5 @@ const out = {
 await mkdir(outDir, { recursive: true });
 const json = JSON.stringify(out);
 await writeFile(join(outDir, "san-diego.json"), json);
-await writeFile(join(outDir, "index.json"), JSON.stringify({ v: 1, regions: [{ id: "san-diego", name: "San Diego County", bbox: BBOX, file: "san-diego.json", built: fetched, sites: merged.length, stores: stores.length }] }));
+await writeFile(join(outDir, "index.json"), JSON.stringify({ v: 1, regions: [{ id: "san-diego", name: "San Diego County", country: "US", currency: "USD", bbox: BBOX, file: "san-diego.json", built: fetched, sites: merged.length, stores: stores.length }] }));
 console.log(`[build] sites ${merged.length} (sdfb ${stats.sdfb}, fsd ${stats.fsd}), stores ${stores.length}, zips ${Object.keys(zips).length}, places ${places.length}, ${(json.length / 1024).toFixed(0)} KB`, stats.conf);

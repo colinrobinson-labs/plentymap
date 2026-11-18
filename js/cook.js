@@ -1,6 +1,6 @@
 /* Cook: recipes that fit your kitchen, budget, comfort level and home cooking. */
 import { S, save, t, esc, $, $$, ico, money, num, rt, recipeInLang, activeCuisine, langDefaultCuisine, shareThing, toast, announce } from "./core.js";
-import { food, canCook, dietOk, facts, perServing, missing, qty, name, rank, CUISINES, price, cuisineMatch } from "./food.js";
+import { food, canCook, dietOk, contains, dietNotes, sodium, AVOIDS, facts, perServing, missing, qty, name, rank, CUISINES, price, cuisineMatch } from "./food.js";
 import { foot } from "./app.js";
 
 let FD;
@@ -52,6 +52,8 @@ function chip(attr, v, label, on, role = "") {
   return `<button class="chip" type="button" ${attr}="${v}" aria-pressed="${on}" ${role}>${label}</button>`;
 }
 
+const fcount = () => { const n = (S.diet !== "any") + S.avoid.size; return n ? ` (${num(n)})` : ""; };
+
 function filters() {
   const cu = activeCuisine();
   return `<div class="card filters" id="filters">
@@ -66,14 +68,18 @@ function filters() {
       <div class="chips wrap" role="group" aria-labelledby="l-cost">
         ${BUDGETS.map(b => chip("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
       </div></div>
-    <details class="morefl" ${matchMedia("(min-width: 760px)").matches ? "open" : ""}><summary class="link">${esc(t("more_filters"))}</summary><div class="filters inner">
+    <details class="morefl" ${matchMedia("(min-width: 760px)").matches ? "open" : ""}><summary class="link">${esc(t("more_filters"))}<span id="flcount">${fcount()}</span></summary><div class="filters inner">
     <div><span class="lbl" id="l-lvl">${esc(t("comfort_q"))}</span>
       <div class="chips wrap" role="group" aria-labelledby="l-lvl">
         ${[1, 2, 3].map(l => chip("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
       </div></div>
     <div><span class="lbl" id="l-diet">${esc(t("diet_q"))}</span>
       <div class="chips wrap" role="group" aria-labelledby="l-diet">
-        ${["any", "veg", "vegan"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d)).join("")}
+        ${["any", "veg", "vegan", "halal", "kosher"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d)).join("")}
+      </div></div>
+    <div><span class="lbl" id="l-avoid">${esc(t("avoid_q"))}</span>
+      <div class="chips wrap" role="group" aria-labelledby="l-avoid">
+        ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a))).join("")}
       </div></div>
     <div><label class="lbl" for="cusel">${esc(t("cu_q"))}</label>
       <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}${c === langDefaultCuisine() ? " ✓" : ""}</option>`).join("")}</select>
@@ -97,7 +103,11 @@ function bindFilters() {
   });
   $$("[data-cost]").forEach(b => b.onclick = () => { S.maxCost = +b.dataset.cost; save("maxCost"); $$("[data-cost]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-lvl]").forEach(b => b.onclick = () => { S.comfort = +b.dataset.lvl; save("comfort"); $$("[data-lvl]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
-  $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
+  $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); $("#flcount").textContent = fcount(); paint(); });
+  $$("[data-avoid]").forEach(b => b.onclick = () => {
+    const a = b.dataset.avoid; S.avoid.has(a) ? S.avoid.delete(a) : S.avoid.add(a); save("avoid");
+    b.setAttribute("aria-pressed", S.avoid.has(a)); $("#flcount").textContent = fcount(); paint();
+  });
   $("#cusel").onchange = e => { S.cuisine = e.target.value === langDefaultCuisine() ? null : e.target.value; save("cuisine"); paint(); };
   $$("[data-have]").forEach(b => b.onclick = () => {
     const id = b.dataset.have; S.have.has(id) ? S.have.delete(id) : S.have.add(id); save("have");
@@ -106,6 +116,14 @@ function bindFilters() {
 }
 
 /* ---------- the recipe sheet ---------- */
+function dietBox(r) {
+  const c = contains(r), n = dietNotes(r);
+  if (!c.length && !n.length) return "";
+  return `<div class="notice dietbox">${ico("info")}<div>
+    ${c.length ? `<p><b>${esc(t("contains"))}</b> ${esc(c.map(k => t(k)).join(", "))}</p>` : ""}
+    ${n.length ? `<ul>${n.map(k => `<li>${esc(t(k))}</li>`).join("")}</ul>` : ""}
+    <p class="tiny">${esc(t("label_check"))}</p></div></div>`;
+}
 let wake = null, lastFocus = null;
 async function setWake(on, btn) {
   try {
@@ -135,7 +153,9 @@ function openSheet(id) {
         <div class="fact"><b>${esc(t("mins", { n: r.mins }))}</b><span>${esc(t("time"))}</span></div>
         <div class="fact"><b>${esc(num(f.kcal))}</b><span>${esc(t("kcal_serving"))}</span></div>
         <div class="fact"><b>${esc(num(f.pro))} g</b><span>${esc(t("protein"))}</span></div>
+        <div class="fact"><b>${esc(num(sodium(r)))} mg</b><span>${esc(t("sodium"))}</span></div>
       </div>
+      ${dietBox(r)}
       <div class="row between"><h3>${esc(t("ingredients"))}</h3>
         <span class="row"><span class="small mute" id="svl">${esc(t("servings"))}</span><span class="stepper" role="group" aria-labelledby="svl">
           <button type="button" data-sv="-1" aria-label="${esc(t("fewer"))}">−</button><output aria-live="polite">${num(sv)}</output><button type="button" data-sv="1" aria-label="${esc(t("more"))}">+</button></span></span></div>

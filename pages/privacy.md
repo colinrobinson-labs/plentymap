@@ -47,6 +47,8 @@ Plenty Map links to food banks, pantries, 211, SNAP (CalFresh in California) and
 
 If you email us, we receive your email address and whatever you write. We use it only to answer you. We don't add you to any list, and we don't share your message.
 
+The "Something wrong here?" buttons on a food site open your own email app with a message already written: the site's name, address, listing number and the problem you picked. Nothing is sent until you press send, and the app records nothing about it. We use these reports only to check and fix listings, and we may pass the site details (never your email address) to the food bank that runs the site.
+
 ## Children
 
 Plenty Map is made for families, including children and teens. Because we don't collect personal information from anyone, we don't collect it from children under 13 either.

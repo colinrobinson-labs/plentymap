@@ -65,7 +65,7 @@
 "rmp_h":"用 EBT 卡買熱食","rmp_p":"如果你領 CalFresh，並且 60 歲以上、有身心障礙或沒有住處，就可以在聖地牙哥幾百家餐廳買餐。",
 "home_h":"沒有住處時的幫助","home_p":"免費餐、收容所和 CalFresh 申請協助。2-1-1 能告訴你今晚哪裡有開。",
 "pantry_h":"食物銀行的免費雜貨","pantry_p":"大多數發放點不需要證件，也不問移民身分。有些會問收入或郵遞區號。",
-"more_h":"小知識","mm_h":"在農夫市集讓 CalFresh 加倍","mm_p":"在市集用 CalFresh 時，Market Match 會多給錢買蔬果，常常每次最多 $10。到服務台問一問。",
+"more_h":"小知識","mm_h":"在農夫市集讓 CalFresh 加倍","mm_p":"在市集用 CalFresh 時，Market Match 會多給錢買蔬果，常常每次最多 {m}。到服務台問一問。",
 "imm_h":"移民家庭","imm_p":"自 2026 年 4 月起，許多難民、獲得庇護者和假釋入境者 (parole) 不能再領 CalFresh。是公民的孩子仍然可以領。食物銀行、WIC 和學校餐對任何身分的家庭都開放。",
 "work_h":"CalFresh 新的工作規定","work_p":"自 2026 年 6 月起，18 到 64 歲、沒有 14 歲以下孩子的成年人，可能需要每月工作、受訓或做志工 80 小時才能繼續領 CalFresh。很多人可以免除，例如孕婦和不能工作的人。",
 "scam_h":"保護好你的 EBT 卡","scam_p":"申請永遠免費。絕不要告訴別人你的 PIN 碼，發現不對勁就馬上更改。如果福利被盜，立刻撥打卡片背面的電話。",
@@ -87,5 +87,7 @@
 "ab_h2":"發現錯誤？","ab_wrong":"如果某個地方關了或時間不對，告訴我們，我們會轉達：","ab_h3":"翻譯","ab_translate":"每種語言都在請母語人士校對。如果讀起來不對，請告訴我們。",
 "more_filters":"更多選項：做飯方式、飲食、家鄉菜","leftovers":"剩菜","cook_n_other":"煮 {n} 份","trip_note":"包括能用好幾週的油、調味料和常備食材。",
 "cf_likely_other":"你的收入低於 {n} 口之家每月 {g} 的上限，所以很可能符合。","cf_ask_other":"你的收入超過 {n} 口之家每月 {g} 的上限。房租和托育等開支仍可能讓你符合，值得問問。","cf_max_other":"{n} 口之家每月最多可領 {m}。",
-"app_name":"Plenty Map","ios_location":"Plenty Map 只在你的手機上使用你的位置，用來顯示附近的免費食物和商店。位置絕不會傳送出去。"
+"app_name":"Plenty Map","ios_location":"Plenty Map 只在你的手機上使用你的位置，用來顯示附近的免費食物和商店。位置絕不會傳送出去。",
+"diet_halal":"清真","diet_kosher":"猶太潔食","avoid_q":"不要","avoid_gluten":"麩質","avoid_dairy":"奶製品","avoid_egg":"雞蛋","avoid_peanut":"花生","avoid_soy":"黃豆","avoid_fish":"魚和貝類","avoid_salt":"低鈉","sodium":"每份鈉含量","contains":"含有：","al_gluten":"小麥（麩質）","al_dairy":"奶","al_egg":"蛋","al_peanut":"花生","al_soy":"黃豆","al_fish":"魚或貝類","note_tamari":"用無麩質醬油（tamari）。","note_gf_bouil":"用無麩質高湯塊。","note_gf_oats":"用標明無麩質的燕麥。","note_soy_label":"看標籤：高湯塊和泡麵常含黃豆。","note_halal_meat":"買清真雞肉或牛肉。","note_halal_bouil":"用清真或蔬菜高湯塊。","note_kosher":"買猶太潔食肉類，包裝食品認明潔食標誌。","note_salt":"每份鈉少於600毫克，不算你自己加的鹽。","label_check":"有過敏？一定要看標籤，不同品牌不一樣。",
+"listed_by":"來源：{s}，{d} 核對","osm_edited":"來自 OpenStreetMap，最後編輯於 {d}","changed_on":"{d} 資訊有變","stale":"資訊可能已過時，去之前請先打電話。","call_first":"去之前先打電話。","report_q":"這裡資訊有誤？","report_closed":"已關門","report_nofood":"沒有食物了","report_hours":"時間不對","report_other":"其他問題","report_note":"會開啟你的郵件應用程式，內容已填好。我們只看到你寄出的內容。"
 }
