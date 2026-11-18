@@ -29,13 +29,13 @@ This information is never sent to us or anyone else. You can erase it at any tim
 
 ## Your location
 
-If you allow it, Plenty Map uses your location to sort food help by distance. That happens on your device; your exact location is not sent to us or to any map company. You can say no and type a ZIP code or neighborhood instead, which is also looked up on your device.
+If you allow it, Plenty Map uses your location to sort food help by distance. That happens on your device; your exact location is not sent to us or to any map company. You can say no and type a ZIP code or town instead, which is also looked up on your device, using lookup files from our site that are grouped by the first three digits of the ZIP code or the first letter of the town.
 
 When you ask for directions, Plenty Map opens your phone's maps app with the destination address. From then on, that maps app's own privacy policy applies.
 
 ## What our web host sees
 
-The app and its food listings are served by our web host, GitHub Pages. Like any website, the host receives basic technical details needed to deliver those files: your IP address, your device and browser type, the time, and which file was requested. Listings are packaged by region, so a request shows at most the general region whose data you downloaded, never your exact location.
+The app and its food listings are served by our web host, GitHub Pages. Like any website, the host receives basic technical details needed to deliver those files: your IP address, your device and browser type, the time, and which file was requested. Listings are packaged by area (about 50 km across), so a request shows at most the general area whose data you downloaded, never your exact location.
 
 We do not use this information to identify you, and we have no access to logs of it. GitHub may keep short-term logs for security and to keep the service running, as described in the [GitHub Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 

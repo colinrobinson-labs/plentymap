@@ -181,6 +181,7 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 .locbar form .btn{flex:none}
 .locbar .in{background:var(--chalk);border-color:var(--chalk);color:var(--board);font-weight:700}
 .locbar .in::placeholder{color:#5E6E62;font-weight:500}
+@media (max-width:340px){.locbar form{flex-wrap:wrap}.locbar form .in{flex:1 1 100%}.locbar form .btn{flex:1 1 auto}}
 .hero .btn{border-color:rgba(241,235,221,.6);color:var(--chalk)}
 .hero .btn:hover{background:rgba(241,235,221,.1)}
 .hero .btn.pri{border-color:var(--yolk);color:var(--board)}

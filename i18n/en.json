@@ -320,7 +320,7 @@
  "pv_lead": "Plenty Map is built so we know nothing about you.",
  "pv_h1": "What we collect",
  "pv_1": "Nothing. There are no accounts, ads, cookies, trackers or analytics.",
- "pv_2": "Your ZIP code or location is used on your phone to sort places by distance. It is never sent anywhere.",
+ "pv_2": "Your ZIP code or location is used on your phone to sort places by distance. It is never sent anywhere. The app only downloads the lists for your general area (about 50 km across) from our site.",
  "pv_3": "The quick check for benefits runs on your phone and is never saved or sent.",
  "pv_4": "Your area, saved recipes, list and prices are stored on your phone. You can erase them any time in Settings.",
  "pv_h2": "Where the app gets its data",

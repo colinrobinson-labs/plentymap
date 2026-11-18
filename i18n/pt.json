@@ -75,7 +75,7 @@
 "senior_q":"Tenho 60 anos ou mais","senior_hint":"Mostra as cestas para idosos na lista principal.","theme":"Aparência","theme_auto":"Igual ao celular","theme_light":"Clara","theme_dark":"Escura",
 "your_data":"Seus dados","your_data_p":"Sua região, receitas salvas, lista e preços ficam só neste celular. Apagar remove tudo.","erase_all":"Apagar tudo","erase_sure":"Toque de novo para apagar",
 "pv_lead":"O Plenty Map foi feito para não sabermos nada sobre você.","pv_h1":"O que coletamos","pv_1":"Nada. Não há contas, anúncios, cookies, rastreadores nem estatísticas.",
-"pv_2":"Seu ZIP code ou localização é usado no seu celular para ordenar os lugares por distância. Nunca é enviado a lugar nenhum.","pv_3":"O teste rápido de benefícios roda no seu celular e nunca é salvo nem enviado.",
+"pv_2":"Seu ZIP code ou localização é usado no seu celular para ordenar os lugares por distância. Nunca é enviado a lugar nenhum. O app só baixa do nosso site as listas da sua região em geral (uns 50 km).","pv_3":"O teste rápido de benefícios roda no seu celular e nunca é salvo nem enviado.",
 "pv_4":"Sua região, receitas salvas, lista e preços ficam no seu celular. Você pode apagar tudo quando quiser em Configurações.","pv_h2":"De onde o app tira os dados",
 "pv_5":"Todas as listas e receitas vêm do nosso próprio site, plentymap.com, e as partes do mapa do nosso próprio servidor de mapas, tiles.plentymap.com, operado pela Cloudflare. O app não fala com mais ninguém.",
 "pv_6":"Como qualquer site, nossa hospedagem pode guardar registros técnicos por pouco tempo, como endereços IP, por segurança. Não usamos isso para rastrear ninguém.",
