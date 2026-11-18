@@ -64,8 +64,17 @@ jobs:
         run: |
           set -e
           NAME="us-$DAY-z$Z.pmtiles"
-          aws s3 cp /mnt/t/us.pmtiles "s3://$BUCKET/$NAME" --endpoint-url "$R2_ENDPOINT" \
-            --content-type application/octet-stream --cache-control "public, max-age=31536000, immutable" --no-progress
+          # R2 wants equal-size parts; big parts and fewer parallel uploads keep large files reliable
+          aws configure set default.s3.multipart_chunksize 128MB
+          aws configure set default.s3.max_concurrent_requests 4
+          for try in 1 2 3; do
+            if aws s3 cp /mnt/t/us.pmtiles "s3://$BUCKET/$NAME" --endpoint-url "$R2_ENDPOINT" \
+              --content-type application/octet-stream --cache-control "public, max-age=31536000, immutable" --no-progress; then break; fi
+            [ "$try" = 3 ] && { echo "::error::upload failed 3 times"; exit 1; }
+            echo "upload try $try failed, retrying"; sleep 20
+          done
+          # confirm the stored size matches before switching
+          [ "$(aws s3api head-object --bucket "$BUCKET" --key "$NAME" --endpoint-url "$R2_ENDPOINT" --query ContentLength --output text)" = "$(stat -c %s /mnt/t/us.pmtiles)" ] || { echo "::error::size mismatch after upload"; exit 1; }
           printf '{"file":"%s","built":"%s","source":"%s","maxzoom":%s}\n' "$NAME" "$DAY" "$SRC" "$Z" > /tmp/tiles.json
           aws s3 cp /tmp/tiles.json "s3://$BUCKET/tiles.json" --endpoint-url "$R2_ENDPOINT" \
             --content-type application/json --cache-control "no-cache"
