@@ -277,7 +277,7 @@ export async function render(main) {
     <div id="blow" role="status"></div>
     <div class="sec"><h2>${esc(t("week_h"))}</h2><button class="btn sm ghost" type="button" id="shuf">${ico("refresh", "i sm")} ${esc(t("reshuffle"))}</button></div>
     <div class="week grid2" id="week"></div>
-    <div class="sec"><h2>${esc(t("shop_h"))}</h2>
+    <div class="sec"><h2 id="shop-h" tabindex="-1">${esc(t("shop_h"))}</h2>
       <span class="row"><button class="btn sm ghost" type="button" id="sharel">${ico("share", "i sm")} ${esc(t("share"))}</button><button class="btn sm ghost" type="button" id="printl">${ico("print", "i sm")} ${esc(t("print"))}</button></span></div>
     <div id="extras"></div>
     <div class="card shop" id="shop"></div>
@@ -298,6 +298,7 @@ export async function render(main) {
   const setWeekly = (el, tidy) => { const v = parseFloat(el.value.replace(/[^0-9.]/g, "")); S.weekly = v > 0 ? Math.round(v) : null; save("weekly"); if (tidy) el.value = S.weekly ?? ""; paint(); };
   $("#wk").oninput = e => { clearTimeout(wt); wt = setTimeout(() => setWeekly(e.target, false), 450); };
   $("#wk").onchange = e => { clearTimeout(wt); setWeekly(e.target, true); };
+  if (S.jumpList) { S.jumpList = false; requestAnimationFrame(() => { const h = $("#shop-h"); h?.scrollIntoView({ block: "start" }); h?.focus({ preventScroll: true }); }); }
   $("#shuf").onclick = () => { makePlan(false); paint(); announce(t("reshuffled")); };
   $("#printl").onclick = () => window.print();
   $("#sharel").onclick = () => shareThing({ title: t("shop_h"), text: listText() });

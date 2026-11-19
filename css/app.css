@@ -522,3 +522,5 @@ legend{padding:0;margin-block-end:4px}
   .day .meal button.name{padding-block:6px}
 }
 .stack>.fg .chips.wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.toast a{color:var(--yolk);font-weight:800;text-underline-offset:3px;white-space:nowrap}
+#shop-h{scroll-margin-block-start:calc(var(--head) + 20px)}#shop-h:focus{outline:none}

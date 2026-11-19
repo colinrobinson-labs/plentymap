@@ -143,12 +143,14 @@ export const safeUrl = u => { try { const x = new URL(u); return /^https?:$/.tes
 export const telHref = p => { const d = String(p || "").replace(/[^\d+]/g, ""); return d.length >= 7 || /^[2-8]11$/.test(d) ? "tel:" + d : ""; };
 
 let toastT;
-export function toast(msg) {
+export function toast(msg, act) {
   document.querySelector(".toast")?.remove();
   const d = document.createElement("div");
   d.className = "toast"; d.setAttribute("role", "status"); d.textContent = msg;
+  // an optional link, e.g. to where the thing just went
+  if (act) { const a = document.createElement("a"); a.href = act.href; a.textContent = act.label; a.onclick = () => { act.go?.(); d.remove(); }; d.append(" ", a); }
   document.body.appendChild(d);
-  clearTimeout(toastT); toastT = setTimeout(() => d.remove(), 2600);
+  clearTimeout(toastT); toastT = setTimeout(() => d.remove(), act ? 6000 : 2600);
 }
 /* Announce to screen readers without a visual toast */
 export function announce(msg) {
