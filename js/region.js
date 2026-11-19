@@ -55,20 +55,32 @@ function cellsNear(lat, lon, km = 35) {
 /* ---------- the area around a place ---------- */
 let AREA = null, AREA_KEY = "";
 export async function region(loc = S.loc) {
-  if (loc?.lat == null) return area(await sd(), null, [], true, "CA");
+  if (loc?.lat == null) return area(await sd(), null, [], true, "CA", await extraNear(await extraIndex(), 32.85, -117.0));
   const key = cellsNear(loc.lat, loc.lon).join(",");
   if (AREA && AREA_KEY === key) return AREA;
   const nearSD = inBox(SD_BBOX, loc.lat, loc.lon, 0.5);
-  const [sdR, idx] = await Promise.all([nearSD ? sd() : null, usIndex()]);
+  const [sdR, idx, ex] = await Promise.all([nearSD ? sd() : null, usIndex(), extraIndex()]);
   const want = idx ? cellsNear(loc.lat, loc.lon).filter(k => idx.cells[k]) : [];
   const packs = (await Promise.all(want.map(k => fetchJSON(`data/us/cells/${k}.json`).catch(() => null)))).filter(Boolean);
   const partner = !!sdR && inSD(loc.lat, loc.lon);
-  AREA = area(sdR, idx, packs, partner, loc.st || (partner ? "CA" : null));
+  AREA = area(sdR, idx, packs, partner, loc.st || (partner ? "CA" : null), await extraNear(ex, loc.lat, loc.lon));
   AREA_KEY = key;
   if (!AREA.st) AREA.st = stateNear(AREA, loc.lat, loc.lon);
   return AREA;
 }
-function area(sdR, idx, packs, partner, st) {
+/* Extra layers (summer meals, gardens, little free pantries, bread outlets): same cells, every area,
+   San Diego included (built by tools/build-extra.mjs). Missing files just mean no extra layers. */
+let EX;
+async function extraIndex() {
+  if (EX === undefined) EX = await fetchJSON("data/extra/index.json").catch(() => null);
+  return EX;
+}
+async function extraNear(ex, lat, lon) {
+  if (!ex) return [];
+  const want = cellsNear(lat, lon).filter(k => ex.cells[k]);
+  return (await Promise.all(want.map(k => fetchJSON(`data/extra/cells/${k}.json`).catch(() => null)))).filter(Boolean);
+}
+function area(sdR, idx, packs, partner, st, extra = []) {
   const sites = [...(sdR?.sites || [])], stores = [...(sdR?.stores || [])], zips = { ...(sdR?.zips || {}) };
   for (const p of packs) {
     // inside San Diego County the region file is the fuller source; the packs fill in around it
@@ -76,12 +88,13 @@ function area(sdR, idx, packs, partner, st) {
     for (const s of p.stores) if (!(sdR && inSD(s.lat, s.lon))) stores.push(s);
     for (const [z, v] of Object.entries(p.zips)) zips[z] ||= v;
   }
+  for (const p of extra) { sites.push(...p.sites); stores.push(...p.stores); }
   const byId = new Map();
   for (const s of sites) byId.set(s.id, s);
   for (const s of stores) byId.set(s.id, s);
   const r = {
     sites, stores, zips, byId, partner, st,
-    sources: { ...(idx?.sources || {}), ...(sdR?.sources || {}) },
+    sources: { ...(EX?.sources || {}), ...(idx?.sources || {}), ...(sdR?.sources || {}) },
     built: partner ? sdR.built : idx?.built || sdR?.built,
     // San Diego rebuilds nightly, the US packs weekly: past this many days, the lists count as stale
     staleAfter: partner ? 7 : 10,

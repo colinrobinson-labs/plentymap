@@ -2,7 +2,8 @@
    plain-language program cards. San Diego County gets its local programs and numbers; everywhere else
    gets the state's own SNAP office, limits and links, plus the national programs. */
 import { S, t, esc, $, $$, ico, money, num, telHref, openOut, announce } from "./core.js";
-import { SNAP, WIC, SUN_BUCKS, LINKS, PHONES, AS_OF, STATES, ASSETS, fplMonth, stateName } from "./benefits.js";
+import { SNAP, WIC, SUN_BUCKS, LINKS, PHONES, AS_OF, STATES, ASSETS, fplMonth, stateName, SCHOOL_ALL, SUN_NO, HOTLINE, LIFELINE, ONLINE, SAVE_LINKS as SL } from "./benefits.js";
+import { kidsSection, bindKids } from "./kids.js";
 import { region, stateOf } from "./region.js";
 import { foot } from "./app.js";
 
@@ -37,6 +38,19 @@ function prog(id, title, odd, body, acts, note) {
   </article>`;
 }
 
+/* Cards both result lists share: summer meals, senior farmers market checks, Meals on Wheels, Lifeline */
+function extras(w, inc, n, st, snapOk) {
+  const o = [];
+  if (w.school) o.push(prog("summer", t("summer_h"), "likely", esc(t("summer_p", { tx: HOTLINE.text })),
+    `<a class="btn sm" href="#/find/in/summer">${ico("kid", "i sm")} ${esc(t("cat_summer"))}</a>` + out(SL.summer, t("learn_more"))));
+  if (w.senior) {
+    o.push(prog("sfmnp", t("sfmnp_h"), inc <= Math.round(fplMonth(n, st) * 1.85) ? "likely" : "ask", esc(t("sfmnp_p")), out(SL.sfmnp, t("learn_more"))));
+  }
+  if (w.senior || w.dis) o.push(prog("mow", t("mow_h"), "maybe", esc(t("mow_p")), out(SL.mow, t("mow_find"), "btn sm pri")));
+  if (snapOk) o.push(prog("lifeline", t("life_h"), "likely", esc(t("life_p", { m: money(LIFELINE.std), b: money(LIFELINE.tribal) })), out(SL.lifeline, t("apply_online")) + tel(LIFELINE.phone, t("call"))));
+  return o;
+}
+
 function results() {
   if (!Q) return "";
   if (!A.partner) return resultsUS();
@@ -63,6 +77,7 @@ function results() {
   }
   if (w.senior || w.dis || w.home) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(LINKS.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel(PHONES.sd211, t("call_211"), "btn sm pri")));
+  outp.push(...extras(w, inc, n, "CA", cf !== "ask"));
   outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>`));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("results_note"))}</span></p>
@@ -94,8 +109,9 @@ function resultsUS() {
   const wl = WIC.limit(n, st);
   if (w.preg || w.baby) outp.push(prog("wic", t("wic_h"), inc <= wl || cf === "likely" ? "likely" : "ask", esc(t("us_wic_p", { g: money(wl, false) })), out(US.wic, t("learn_more"))));
   if (w.school) {
-    outp.push(prog("school", t("school_h"), "likely", esc(t("us_school_p"))));
-    outp.push(prog("sunbucks", t("sun_h"), inc <= wl ? "likely" : "ask", esc(t("us_sun_p", { m: money(SUN_BUCKS, false) })), out(US.sunbucks, t("learn_more"))));
+    outp.push(prog("school", t("school_h"), "likely", esc(SCHOOL_ALL.includes(st) ? t("us_school_all", { st: S0.n }) : t("us_school_p"))));
+    if (SUN_NO.includes(st)) outp.push(prog("sunbucks", t("sun_h"), "", esc(t("us_sun_no", { st: S0.n, m: money(SUN_BUCKS, false) })), out(SL.sunareas, t("learn_more"))));
+    else outp.push(prog("sunbucks", t("sun_h"), inc <= wl ? "likely" : "ask", esc(t("us_sun_p", { m: money(SUN_BUCKS, false) })), out(US.sunbucks, t("learn_more"))));
   }
   if (w.senior) {
     outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n, st) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), out(US.csfp, t("learn_more"))));
@@ -103,6 +119,7 @@ function resultsUS() {
   }
   if ((w.senior || w.dis || w.home) && A.stores.some(s => s.k === "rmp")) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("us_rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(US.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel("211", t("call_211"), "btn sm pri")));
+  outp.push(...extras(w, inc, n, st, !S0.nap && cf !== "ask"));
   outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>` + out(US.foodbank, t("us_fb_find"))));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("us_results_note"))}</span></p>
@@ -117,6 +134,22 @@ function urgentUS() {
         ${out(US.foodbank, t("us_fb_find"), "btn")}
         <a class="btn" href="#/find/in/free">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
       </div>`;
+}
+function hotline() {
+  return `<p class="small gap-t">${esc(t("hotline_p"))}</p>
+      <div class="row">${tel(HOTLINE.call, t("hotline_call"), "btn sm")}<a class="btn sm ghost" href="sms:${HOTLINE.text.replace(/-/g, "")}">${ico("msg", "i sm")} ${esc(t("hotline_text"))}</a></div>`;
+}
+/* Ways to spend less: online EBT shopping discounts, surplus-food apps, free produce spots, Lifeline */
+function saveMore() {
+  const find = (cat, icon) => `<a class="btn sm" href="#/find/in/${cat}">${ico(icon, "i sm")} ${esc(t("cat_" + cat))}</a>`;
+  return `<div class="sec"><h2>${esc(t("save_h"))}</h2></div>
+    <div class="grid2">
+      ${prog("online", t("online_h"), "", esc(t("online_p", { a: money(ONLINE.amazon), w: money(ONLINE.walmart, false) })),
+        out(SL.amazon, "Amazon") + out(SL.walmart, "Walmart+") + out(SL.instacart, "Instacart"), esc(t("online_note")))}
+      ${prog("surplus", t("surplus_h"), "", esc(t("surplus_p")), out(SL.tgtg, "Too Good To Go") + out(SL.flashfood, "Flashfood"), esc(t("surplus_note")))}
+      ${prog("freeprod", t("freeprod_h"), "", esc(t("freeprod_p")), find("garden", "sprout") + find("givebox", "box") + find("bakery", "bread"))}
+      ${prog("lifeline2", t("life_h"), "", esc(t("life_p", { m: money(LIFELINE.std), b: money(LIFELINE.tribal) })), out(SL.lifeline, t("learn_more")))}
+    </div>`;
 }
 function moreUS() {
   return `${prog("mm", t("us_mm_h"), "", esc(t("us_mm_p")), `<a class="btn sm" href="#/find/in/market">${esc(t("cat_market"))}</a>`)}
@@ -143,6 +176,7 @@ export async function render(main) {
         ${tel(PHONES.fsd, t("call_fsd"), "btn")}
         <a class="btn" href="#/find/in/free">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
       </div>` : urgentUS()}
+      ${hotline()}
     </section>
 
     <div class="sec"><h2>${esc(t("check_h"))}</h2></div>
@@ -167,8 +201,11 @@ export async function render(main) {
       ${prog("work", t("work_h"), "", esc(t("work_p")), out(LINKS.hr1, t("learn_more")))}
       ${prog("scam", t("scam_h"), "", esc(t("scam_p")))}` : moreUS()}
     </div>
+    ${saveMore()}
+    ${await kidsSection(A.partner ? "CA" : A.st)}
     <p class="tiny mute gap-t">${esc(t("figures_asof", { d: AS_OF }))}</p>
     ${foot()}`;
+  bindKids(main, A.partner ? "CA" : A.st);
 
   $$("[data-n]").forEach(b => b.onclick = () => { q.n = Math.max(1, Math.min(16, q.n + +b.dataset.n)); $("#qn").textContent = num(q.n); });
   $("#qs").onsubmit = e => {

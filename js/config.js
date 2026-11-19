@@ -7,6 +7,7 @@ const isNative = !!window.Capacitor?.isNativePlatform?.();
 export const CONFIG = {
   dataBase: isNative ? SITE : "",
   contact: "hello@plentymap.com",
+  reportUrl: "https://report.plentymap.com/r",
 };
 
 /* Countries. Every price, budget and benefit amount is formatted through the active market's

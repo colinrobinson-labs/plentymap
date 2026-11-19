@@ -4,7 +4,7 @@ name: Site
 on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", ".github/workflows/extra-data.yml", "tools/fetch-extra.mjs", "tools/build-extra.mjs", "tools/check-reports.mjs", "tools/check-kids.mjs", "worker/**"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,7 +22,7 @@ jobs:
           set -e
           mkdir -p _site
           cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
-          mkdir -p _site/data && cp -r data/regions data/food.json _site/data/
+          mkdir -p _site/data && cp -r data/regions data/food.json data/kids.json _site/data/
           cp -r privacy support _site/ 2>/dev/null || true
           cp robots.txt sitemap.xml 404.html _site/
           echo "plentymap.com" > _site/CNAME
@@ -47,6 +47,16 @@ jobs:
             echo "::warning::no usdata branch yet; the app falls back to San Diego only"
           fi
           du -sh _site; find _site -size +90M
+      - name: Add the extra layers and apply the nightly report check (extradata branch)
+        run: |
+          set -e
+          if git fetch --depth 1 origin extradata 2>/dev/null; then
+            mkdir -p /tmp/x && git archive FETCH_HEAD | tar -x -C /tmp/x
+            [ -d /tmp/x/extra ] && cp -r /tmp/x/extra _site/data/extra && rm -f _site/data/extra/report.json
+            node tools/apply-flags.mjs _site/data /tmp/x/flags/flags.json
+          else
+            echo "::warning::no extradata branch yet; extra layers and report flags skipped"
+          fi
       - name: Publish to gh-pages
         run: |
           cd _site
