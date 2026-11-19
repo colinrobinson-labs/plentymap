@@ -106,5 +106,11 @@
  "swap_h": "Halkii “{r}”",
  "swap_more": "Fikrado kale",
  "swap_pot": "Cuntada ka harta tan sidoo kale way isbeddeleysaa.",
- "budget_low": "Kani waa usbuuca ugu jaban ee aan ku qorsheyn karno doorashooyinkaaga, qiyaastii {m}. Cuntada bilaashka ah ee kuu dhow ayaa dabooli karta inta kale."
+ "budget_low": "Kani waa usbuuca ugu jaban ee aan ku qorsheyn karno doorashooyinkaaga, qiyaastii {m}. Cuntada bilaashka ah ee kuu dhow ayaa dabooli karta inta kale.",
+ "loc_help_site": "Si aad u shiddo, guji astaanta dhinaca bidix ee cinwaanka bogga, Goobta dhig Oggolow, kadibna isku day mar kale.",
+ "loc_help_mac": "Si aad u shiddo, fur System Settings › Privacy & Security › Location Services oo u shid biraawsarkaaga.",
+ "loc_help_win": "Si aad u shiddo, fur Settings › Privacy & security › Location oo shid helitaanka goobta.",
+ "loc_help_ios": "Si aad u shiddo, fur Settings › Privacy & Security › Location Services, shid, oo Safari Websites dhig While Using.",
+ "loc_help_android": "Si aad u shiddo, ka shid Goobta dejinta degdegga ah, kadib taabo astaanta agteeda cinwaanka bogga › Permissions › Location.",
+ "loc_help_app": "Si aad u shiddo, fur Settings-ka taleefankaaga › Plenty Map › Location oo dooro While Using the App."
 }

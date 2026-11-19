@@ -73,5 +73,11 @@
  "swap_h": "Thay cho “{r}”",
  "swap_more": "Xem món khác",
  "swap_pot": "Các bữa ăn thừa từ món này cũng sẽ đổi theo.",
- "budget_low": "Đây là tuần rẻ nhất chúng tôi có thể lên kế hoạch theo lựa chọn của bạn, khoảng {m}. Thực phẩm miễn phí gần bạn có thể bù phần còn lại."
+ "budget_low": "Đây là tuần rẻ nhất chúng tôi có thể lên kế hoạch theo lựa chọn của bạn, khoảng {m}. Thực phẩm miễn phí gần bạn có thể bù phần còn lại.",
+ "loc_help_site": "Để bật, bấm vào biểu tượng bên trái địa chỉ web, đặt Vị trí thành Cho phép, rồi thử lại.",
+ "loc_help_mac": "Để bật, mở Cài đặt hệ thống › Quyền riêng tư & Bảo mật › Dịch vụ định vị và bật cho trình duyệt của bạn.",
+ "loc_help_win": "Để bật, mở Cài đặt › Quyền riêng tư & bảo mật › Vị trí và bật quyền truy cập vị trí.",
+ "loc_help_ios": "Để bật, mở Cài đặt › Quyền riêng tư & Bảo mật › Dịch vụ định vị, bật lên, và đặt Trang web Safari thành Khi dùng.",
+ "loc_help_android": "Để bật, mở Vị trí trong cài đặt nhanh, rồi chạm biểu tượng cạnh địa chỉ web › Quyền › Vị trí.",
+ "loc_help_app": "Để bật, mở Cài đặt của điện thoại › Plenty Map › Vị trí và chọn Khi dùng ứng dụng."
 }

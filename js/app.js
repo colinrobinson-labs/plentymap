@@ -127,6 +127,20 @@ export function locForm(p, value = "") {
     <button class="btn" type="button" id="${p}-gps">${ico("locate")} ${esc(t("loc_gps"))}</button>
   </div>`;
 }
+/* When location is refused: say how to turn it on, for this phone or computer.
+   If the site is allowed but it's still refused, the device itself has location off for the browser. */
+async function locHelp() {
+  if (native()) return "loc_help_app";
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "loc_help_ios";
+  if (/Android/.test(ua)) return "loc_help_android";
+  let st = "";
+  try { st = (await navigator.permissions?.query({ name: "geolocation" }))?.state || ""; } catch {}
+  if (st === "denied") return "loc_help_site";
+  if (/Mac OS X|Macintosh/.test(ua)) return "loc_help_mac";
+  if (/Windows/.test(ua)) return "loc_help_win";
+  return "loc_help_site";
+}
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
   const say = m => { const el = msg(); if (el) el.textContent = m; else toast(m); announce(m); };
@@ -152,6 +166,7 @@ export function bindLoc(p, after) {
   const pick = i => { inp.value = items[i]; close(); form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true })); };
   inp.addEventListener("input", () => {
     clearTimeout(tmr);
+    const m0 = msg(); if (m0?.textContent) m0.textContent = "";
     const q = inp.value.trim();
     if (q.length < 2 || /^\d/.test(q)) return close();
     const my = ++seq;
@@ -189,7 +204,8 @@ export function bindLoc(p, after) {
       const loc = { lat, lon, label: t("loc_here"), zip: z.zip, st: z.st || R.st, src: "gps" };
       setLoc(loc); say(""); after?.(loc);
     } catch (err) {
-      say(t(err?.code === 1 || /denied|permission/i.test(err?.message || "") ? "loc_denied" : "loc_failed"));
+      if (err?.code === 1 || /denied|permission/i.test(err?.message || "")) say(t("loc_denied") + " " + t(await locHelp()));
+      else say(t("loc_failed"));
     } finally { btn.disabled = false; }
   };
 }

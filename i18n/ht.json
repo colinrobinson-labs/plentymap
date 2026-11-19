@@ -106,5 +106,11 @@
  "swap_h": "Olye “{r}”",
  "swap_more": "Lòt ide",
  "swap_pot": "Sa chanje rès manje ki soti nan li tou.",
- "budget_low": "Sa a se semèn ki pi bon mache nou ka planifye ak chwa ou yo, anviwon {m}. Manje gratis toupre w ka kouvri rès la."
+ "budget_low": "Sa a se semèn ki pi bon mache nou ka planifye ak chwa ou yo, anviwon {m}. Manje gratis toupre w ka kouvri rès la.",
+ "loc_help_site": "Pou limen l, klike sou ti imaj ki agoch adrès sit la, mete Lokasyon sou Pèmèt, epi eseye ankò.",
+ "loc_help_mac": "Pou limen l, louvri System Settings › Privacy & Security › Location Services epi limen l pou navigatè w la.",
+ "loc_help_win": "Pou limen l, louvri Settings › Privacy & security › Location epi limen aksè lokasyon an.",
+ "loc_help_ios": "Pou limen l, louvri Settings › Privacy & Security › Location Services, limen l, epi mete Safari Websites sou While Using.",
+ "loc_help_android": "Pou limen l, limen Lokasyon nan paramèt rapid yo, epi peze ti imaj ki bò adrès sit la › Pèmisyon › Lokasyon.",
+ "loc_help_app": "Pou limen l, louvri Settings telefòn ou › Plenty Map › Lokasyon epi chwazi While Using the App."
 }

@@ -52,7 +52,7 @@
  "loc_finding": "Finding you…",
  "loc_notfound": "We couldn't find that place. Try a 5-digit ZIP code, or a city and state like Austin, TX.",
  "loc_outside": "Plenty Map covers the United States. Outside the U.S., a local food bank or community center can help.",
- "loc_denied": "Location is turned off for this app. Type your ZIP code instead.",
+ "loc_denied": "Location is turned off. Type your ZIP code instead.",
  "loc_failed": "We couldn't get your location. Type your ZIP code instead.",
  "find_h": "Free food and cheap groceries",
  "find_h_near": "Food near {p}",
@@ -393,5 +393,11 @@
  "swap_h": "Instead of “{r}”",
  "swap_more": "Show other ideas",
  "swap_pot": "This also changes the leftover meals made from it.",
- "budget_low": "This is the cheapest week we can plan with your choices, about {m}. Free food near you can cover the rest."
+ "budget_low": "This is the cheapest week we can plan with your choices, about {m}. Free food near you can cover the rest.",
+ "loc_help_site": "To turn it on, click the icon to the left of the web address, set Location to Allow, then try again.",
+ "loc_help_mac": "To turn it on, open System Settings › Privacy & Security › Location Services and switch it on for your browser.",
+ "loc_help_win": "To turn it on, open Settings › Privacy & security › Location and turn on location access.",
+ "loc_help_ios": "To turn it on, open Settings › Privacy & Security › Location Services, switch it on, and set Safari Websites to While Using.",
+ "loc_help_android": "To turn it on, switch on Location in your quick settings, then tap the icon next to the web address › Permissions › Location.",
+ "loc_help_app": "To turn it on, open your phone's Settings › Plenty Map › Location and choose While Using the App."
 }

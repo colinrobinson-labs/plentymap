@@ -372,5 +372,11 @@
  "swap_h": "Kapalit ng “{r}”",
  "swap_more": "Iba pang ideya",
  "swap_pot": "Mapapalitan din ang mga tirang pagkain mula rito.",
- "budget_low": "Ito ang pinakamurang linggong maiplano namin sa mga pinili mo, mga {m}. Ang libreng pagkain malapit sa iyo ang puwedeng sumagot sa kulang."
+ "budget_low": "Ito ang pinakamurang linggong maiplano namin sa mga pinili mo, mga {m}. Ang libreng pagkain malapit sa iyo ang puwedeng sumagot sa kulang.",
+ "loc_help_site": "Para buksan, i-click ang icon sa kaliwa ng web address, gawing Allow ang Location, saka subukan ulit.",
+ "loc_help_mac": "Para buksan, pumunta sa System Settings › Privacy & Security › Location Services at buksan ito para sa browser mo.",
+ "loc_help_win": "Para buksan, pumunta sa Settings › Privacy & security › Location at buksan ang location access.",
+ "loc_help_ios": "Para buksan, pumunta sa Settings › Privacy & Security › Location Services, buksan ito, at gawing While Using ang Safari Websites.",
+ "loc_help_android": "Para buksan, i-on ang Location sa quick settings, saka i-tap ang icon sa tabi ng web address › Permissions › Location.",
+ "loc_help_app": "Para buksan, pumunta sa Settings ng phone › Plenty Map › Location at piliin ang While Using the App."
 }

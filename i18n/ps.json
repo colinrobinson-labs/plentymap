@@ -106,5 +106,11 @@
  "swap_h": "د «{r}» پر ځای",
  "swap_more": "نور نظرونه",
  "swap_pot": "له دې خوړو پاتې شوې ډوډۍ به هم بدله شي.",
- "budget_low": "دا تر ټولو ارزانه اونۍ ده چې ستاسو د انتخابونو سره یې جوړولی شو، شاوخوا {m}. ستاسو سره نږدې وړیا خواړه کولی شي پاتې برخه پوره کړي."
+ "budget_low": "دا تر ټولو ارزانه اونۍ ده چې ستاسو د انتخابونو سره یې جوړولی شو، شاوخوا {m}. ستاسو سره نږدې وړیا خواړه کولی شي پاتې برخه پوره کړي.",
+ "loc_help_site": "د روښانه کولو لپاره، د وېب پته کې څنګ ته نښه کېکاږئ، موقعیت په «اجازه» واړوئ، بیا هڅه وکړئ.",
+ "loc_help_mac": "د روښانه کولو لپاره، System Settings › Privacy & Security › Location Services پرانیزئ او د خپل براوزر لپاره یې روښانه کړئ.",
+ "loc_help_win": "د روښانه کولو لپاره، Settings › Privacy & security › Location پرانیزئ او موقعیت ته لاسرسی روښانه کړئ.",
+ "loc_help_ios": "د روښانه کولو لپاره، Settings › Privacy & Security › Location Services پرانیزئ، روښانه یې کړئ، او Safari Websites په While Using کېږدئ.",
+ "loc_help_android": "د روښانه کولو لپاره، په چټکو تنظیماتو کې موقعیت روښانه کړئ، بیا د وېب پتې څنګ ته نښه › Permissions › Location ووهئ.",
+ "loc_help_app": "د روښانه کولو لپاره، د تلیفون Settings › Plenty Map › Location پرانیزئ او While Using the App وټاکئ."
 }

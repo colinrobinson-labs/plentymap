@@ -106,5 +106,11 @@
  "swap_h": "Em vez de “{r}”",
  "swap_more": "Ver outras ideias",
  "swap_pot": "Isso também muda as sobras feitas com esta receita.",
- "budget_low": "Esta é a semana mais barata que conseguimos planejar com suas escolhas, cerca de {m}. A comida grátis perto de você pode cobrir o resto."
+ "budget_low": "Esta é a semana mais barata que conseguimos planejar com suas escolhas, cerca de {m}. A comida grátis perto de você pode cobrir o resto.",
+ "loc_help_site": "Para ativar, clique no ícone à esquerda do endereço do site, mude Localização para Permitir e tente de novo.",
+ "loc_help_mac": "Para ativar, abra Ajustes do Sistema › Privacidade e Segurança › Serviços de Localização e ative para o seu navegador.",
+ "loc_help_win": "Para ativar, abra Configurações › Privacidade e segurança › Localização e ative o acesso à localização.",
+ "loc_help_ios": "Para ativar, abra Ajustes › Privacidade e Segurança › Serviços de Localização, ative e coloque Sites do Safari em Durante o Uso.",
+ "loc_help_android": "Para ativar, ligue a Localização nas configurações rápidas e toque no ícone ao lado do endereço do site › Permissões › Localização.",
+ "loc_help_app": "Para ativar, abra Ajustes do celular › Plenty Map › Localização e escolha Durante o Uso do App."
 }
