@@ -285,12 +285,6 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 .shop .price{background:none;border:1px dashed var(--line);border-radius:8px;padding:4px 8px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink);min-height:38px}
 
 /* ---------- help ---------- */
-.urgent{background:var(--tomato);color:#fff;border-radius:var(--r);padding:16px;display:grid;gap:10px}
-.urgent h2{color:#fff}
-.urgent .btn{border-color:#fff;color:#fff}
-.urgent .btn.pri{background:#fff;color:var(--board);border-color:#fff}
-.urgent .btn:hover{background:rgba(255,255,255,.12)}
-.urgent .btn.pri:hover{background:#f3f3f3}
 .prog{padding:14px 16px;display:grid;gap:8px}
 .prog h3{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .grid2{display:grid;gap:12px}
@@ -337,7 +331,7 @@ legend{padding:0;margin-block-end:4px}
 .shop .check .price{margin-inline-start:auto}
 /* Desktop: category chips wrap instead of scrolling off the edge */
 @media (min-width:960px){.chips{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0}}
-.findwrap>*,.list>*,.site>*,.filters>*,.urgent>*,.prog>*,.grid2>*,.qs>*,.stack>*,.hero>*{min-width:0}
+.findwrap>*,.list>*,.site>*,.filters>*,.ftoday>*,.prog>*,.grid2>*,.qs>*,.stack>*,.hero>*{min-width:0}
 .notice.dietbox{background:var(--line-2);margin-block:12px}
 .notice.dietbox .i{color:var(--ink-2)}
 .notice.dietbox p{margin:0 0 4px}
@@ -566,7 +560,7 @@ legend{padding:0;margin-block-end:4px}
    sections sit 32 apart, and the footer starts 48 below the last thing on the page. */
 :root{--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px}
 main{padding-block-start:var(--s5)}
-.pad,.kpi,.prog,.site,.rcard,.urgent{padding:var(--s4)}
+.pad,.kpi,.prog,.site,.rcard{padding:var(--s4)}
 .day{padding:var(--s3) var(--s4)}
 .shop{padding:var(--s1) var(--s4) var(--s4)}
 .hero{padding:var(--s5) var(--s4);gap:var(--s3)}
@@ -616,14 +610,6 @@ h1+.lead{margin-block-start:var(--s2)}
 .shop .ln .link{font-weight:500;color:var(--ink-2);font-size:14.5px}
 .site .addr{margin:0;font-size:15px;color:var(--mute)}
 /* Benefits: help for today is a calm card, not an alarm */
-.urgent{background:var(--card);color:var(--ink);border:1px solid var(--line);border-inline-start:4px solid var(--tomato);box-shadow:var(--shadow);gap:var(--s2)}
-.urgent h2{color:var(--ink);font-size:19px}
-.urgent p{margin:0;color:var(--ink-2)}
-.urgent .row{gap:var(--s2);margin-block-start:var(--s1)}
-.urgent .btn{min-height:42px;padding:0 13px;font-size:15px;border-radius:10px;border-color:var(--ink);color:var(--ink);background:transparent}
-.urgent .btn:hover{background:var(--line-2)}
-.urgent .btn.pri{background:var(--yolk);border-color:var(--yolk);color:var(--board)}
-.urgent .btn.pri:hover{background:var(--yolk-2)}
 /* Cook on phones: filters fold into one row that says what's set */
 .fold.allfl{border:0}
 .fold.allfl>summary{flex-wrap:wrap;column-gap:var(--s2);row-gap:2px;min-height:56px}
@@ -689,19 +675,39 @@ h1+.lead{margin-block-start:var(--s2)}
 }
 .findhero #f-msg:empty{display:none}
 
-/* categories: a tab bar with the kind's icon and how many places */
-.ktabs{display:flex;gap:var(--s1);overflow-x:auto;scrollbar-width:none;border-block-end:1px solid var(--line);margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
-[dir="rtl"] .ktabs{-webkit-mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
-.ktabs::-webkit-scrollbar{display:none}
-.ktab{flex:none;display:inline-flex;align-items:center;gap:var(--s2);min-height:48px;padding:0 var(--s3);border:0;border-block-end:3px solid transparent;margin-block-end:-1px;border-radius:0;background:none;color:var(--mute);font-weight:700;font-size:15px;white-space:nowrap}
-.ktab>span:first-child{display:grid;color:var(--kc)}
-.ktab .i{width:20px;height:20px}
-.ktab .n{min-width:24px;padding:1px 7px;border-radius:999px;background:var(--line-2);color:var(--ink-2);font-size:12.5px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
-.ktab:hover{color:var(--ink)}
-.ktab[aria-pressed="true"]{color:var(--ink);border-block-end-color:var(--ink)}
-.ktab[aria-pressed="true"] .n{background:var(--ink);color:var(--bg)}
-.ktab:focus-visible{outline-offset:-3px}
+/* categories: every option in view at once, never scrolled sideways.
+   The main kinds of place are equal tiles; the kinds inside the chosen one are chips under them. */
+.kcats{display:grid;gap:var(--s2);container-type:inline-size}
+.kgrid{display:grid;gap:var(--s2);grid-template-columns:repeat(var(--cols,1),minmax(0,1fr))}
+.kgrid[data-n="2"]{--cols:2}
+.kgrid[data-n="3"]{--cols:3}
+.kgrid[data-n="4"]{--cols:4}
+.kpick{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"icon n" "label label";align-items:center;align-content:start;gap:var(--s2);min-height:var(--tap);padding:10px 12px 12px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--ink);font-weight:700;font-size:15px;line-height:1.25;text-align:start;overflow-wrap:break-word;hyphens:auto;transition:border-color .12s,background-color .12s}
+.kpick .kic{grid-area:icon;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--kc) 14%,var(--card));color:var(--kc)}
+.kpick .kic .i{width:20px;height:20px}
+.kpick .kpl{grid-area:label;min-width:0}
+.kpick .n{grid-area:n;justify-self:end;color:var(--mute);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpick:hover{border-color:var(--ink-2)}
+.kpick[aria-pressed="true"]{background:var(--sel);border-color:var(--sel);color:var(--sel-ink)}
+.kpick[aria-pressed="true"] .kic{background:var(--card)}
+.kpick[aria-pressed="true"] .n{color:inherit;opacity:.85}
+/* not enough room side by side: four tiles go two by two, and below that each tile becomes one row */
+@container (max-width:439px){.kgrid[data-n="4"]{--cols:2}}
+@container (max-width:329px){
+  .kgrid[data-n="3"]{--cols:1}
+  .kgrid[data-n="3"] .kpick{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"icon label n";padding-block:7px}
+}
+@container (max-width:259px){
+  .kgrid[data-n="4"],.kgrid[data-n="2"]{--cols:1}
+  .kgrid .kpick{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"icon label n";padding-block:7px}
+}
+.ksubs{gap:var(--s2);padding-block:0}
+.ksub{gap:var(--s2);min-height:44px;padding-inline:12px 14px;font-size:15px;white-space:normal;text-align:start;line-height:1.25;max-width:100%}
+.ksub:not([class*="kt-"]){padding-inline:16px}
+.ksub .kic{display:grid;color:var(--kc)}
+.ksub[aria-pressed="true"] .kic{color:inherit}
+.ksub .n{color:var(--mute);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.ksub[aria-pressed="true"] .n{color:inherit;opacity:.85}
 
 /* count, sort, list/map */
 .fbar{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
@@ -779,7 +785,6 @@ h1+.lead{margin-block-start:var(--s2)}
   main.findmode{max-width:none;padding:0}
   .findapp{display:grid;grid-template-columns:clamp(440px,36vw,580px) minmax(0,1fr);align-items:start}
   .fside{padding:var(--s5) var(--s5) var(--s6);gap:var(--s4)}
-  .fside .ktabs{margin-inline:calc(-1 * var(--s5));padding-inline:var(--s5);scroll-padding-inline:var(--s5)}
   .findapp>.mapbox{position:sticky;inset-block-start:var(--head);height:calc(100dvh - var(--head));min-height:480px;border:0;border-inline-start:1px solid var(--line);border-radius:0}
   .findapp>.mapbox[hidden]{display:block}
 }
@@ -928,6 +933,12 @@ details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:
 .kids{margin-block-start:var(--s5)}
 .kids .sec h2{display:flex;gap:var(--s2);align-items:center}
 .kids>.notice,.kids>.chips{margin-block:var(--s3)}
+.kid{padding:var(--s4);display:grid;gap:var(--s2);align-content:start}
+.kid>*{margin:0;min-width:0}
+.kid .when{display:flex;gap:8px;align-items:flex-start;font-weight:600}
+.kid .when .i{margin-block-start:3px;color:var(--ok);flex:none}
+.kid .src{font-size:13.5px;color:var(--mute)}
+.kid .acts{margin-inline-start:-13px}
 .kid h3{margin:0;font-size:18px;min-width:0;overflow-wrap:anywhere}
 .kid .row.between{align-items:flex-start;gap:var(--s2)}
 .kid .row.between .badge{flex:none}
@@ -948,3 +959,44 @@ details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:
 /* the sort control never pushes the page wider than the screen (long Russian/Ukrainian option names at 280px) */
 .fsort{max-width:100%;min-width:0}
 .fsort select{min-width:0;width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+
+/* Food for today (Benefits): a small chalkboard, like the home page. The 2-1-1 call leads;
+   the other numbers read like a menu board, name ... number, with what each one is for underneath. */
+.ftoday{position:relative;display:grid;gap:var(--s5);background:var(--board);color:var(--chalk);border-radius:var(--r);padding:var(--s5) var(--s4) var(--s3);
+  box-shadow:inset 0 0 0 1px rgba(241,235,221,.06),inset 0 -40px 80px -40px rgba(0,0,0,.35)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ftoday{box-shadow:inset 0 0 0 1px rgba(241,235,221,.12)}}
+:root[data-theme="dark"] .ftoday{box-shadow:inset 0 0 0 1px rgba(241,235,221,.12)}
+.ftoday :focus-visible{outline-color:var(--yolk)}
+.ft-main{display:grid;gap:var(--s3);align-content:start;justify-items:start}
+.ft-h{font-family:var(--f-disp);font-weight:400;font-size:clamp(30px,7.5vw,44px);line-height:1.05;letter-spacing:-.005em;color:var(--chalk)}
+:lang(vi) .ft-h,:lang(ru) .ft-h,:lang(uk) .ft-h,:lang(ar) .ft-h,:lang(fa) .ft-h,:lang(ps) .ft-h,:lang(zh-Hans) .ft-h,:lang(zh-Hant) .ft-h,:lang(ko) .ft-h{font-weight:800;font-size:clamp(26px,6.5vw,36px);line-height:1.2}
+.ft-p{max-width:40ch;font-size:16.5px;line-height:1.5;color:rgba(241,235,221,.86)}
+.btn.ft-call{min-height:56px;padding-inline:26px;font-size:18px;border-radius:14px;margin-block-start:var(--s2)}
+.btn.ft-call .i{width:20px;height:20px}
+.ft-list{border-block-start:2px dashed rgba(241,235,221,.32);padding-block-start:var(--s4)}
+.ft-label{margin:0 0 var(--s1);font:800 13.5px/1.3 var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:rgba(241,235,221,.7)}
+:lang(ar) .ft-label,:lang(fa) .ft-label,:lang(ps) .ft-label,:lang(zh-Hans) .ft-label,:lang(zh-Hant) .ft-label,:lang(ko) .ft-label{letter-spacing:0;text-transform:none;font-size:15px}
+.ft-list ul{list-style:none;margin:0;padding:0;display:grid}
+.ft-line{display:grid;gap:2px;min-height:44px;padding-block:var(--s3);color:var(--chalk);text-decoration:none;border-radius:8px}
+.ft-top{display:flex;align-items:baseline;gap:var(--s2);min-width:0}
+.ft-name{min-width:0;font-weight:700;font-size:16.5px;line-height:1.3}
+.ft-line .hm-lead{border-color:rgba(241,235,221,.3);transform:translateY(-4px)}
+.ft-num{flex:none;display:inline-flex;align-items:center;font-weight:800;font-size:16.5px;color:var(--yolk);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ft-desc{font-size:14.5px;line-height:1.4;color:rgba(241,235,221,.72)}
+.ft-line:hover .ft-name{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--yolk)}
+.ft-near{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-block-start:var(--s1);font-weight:700;color:var(--chalk);text-underline-offset:3px;text-decoration-color:rgba(241,235,221,.4)}
+.ft-near:hover{text-decoration-color:var(--yolk)}
+[dir="rtl"] .ft-near svg{transform:scaleX(-1)}
+.ft-call .nw{white-space:nowrap}
+/* very narrow phones and folded screens: the number moves under the name instead of squeezing it */
+@media (max-width:359px){
+  .ftoday{padding:var(--s4) var(--s3) var(--s2)}
+  .ft-top{flex-direction:column;align-items:flex-start;gap:0}
+  .ft-line .hm-lead{display:none}
+}
+@media (min-width:600px){.ftoday{padding:var(--s6) var(--s6) var(--s5)}}
+/* tablets and up: the call on one side, the list on the other, split by the chalk rule */
+@media (min-width:840px){
+  .ftoday{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:var(--s6)}
+  .ft-list{border-block-start:0;padding-block-start:0;border-inline-start:2px dashed rgba(241,235,221,.32);padding-inline-start:var(--s6)}
+}
