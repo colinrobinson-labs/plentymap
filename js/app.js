@@ -6,9 +6,9 @@ import { region, findPlace, setLoc, covered, nearestZip, placeNames, programName
 if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch { document.documentElement.textContent = ""; } }
 
 const TABS = [
-  { id: "find", icon: "basket" },
   { id: "cook", icon: "pot" },
   { id: "budget", icon: "wallet" },
+  { id: "find", icon: "basket" },
   { id: "help", icon: "hand" },
 ];
 const VIEWS = {
@@ -43,26 +43,52 @@ function guessLang() {
 }
 const EN_NAMES = { en: "English", es: "Spanish", "zh-Hans": "Chinese, Simplified", "zh-Hant": "Chinese, Traditional", vi: "Vietnamese", fil: "Tagalog", ar: "Arabic", ht: "Haitian Creole", ko: "Korean", ru: "Russian", pt: "Portuguese", "fa-AF": "Dari", ps: "Pashto", so: "Somali", uk: "Ukrainian" };
 
+/* What Plenty Map is, said on the very first screen, before anyone has picked a language.
+   Shown in the language the phone asks for, and in English under it when that's different. */
+const INTRO = {
+  en: ["Eat well for less", "Cheap recipes, a weekly meal plan that fits your budget, stores that take EBT, free food nearby, and help with benefits. All free.", "Choose your language"],
+  es: ["Come bien gastando menos", "Recetas baratas, un plan de comidas semanal que cabe en tu presupuesto, tiendas que aceptan EBT, comida gratis cerca y ayuda con beneficios. Todo gratis.", "Elige tu idioma"],
+  "zh-Hans": ["花更少，吃更好", "省钱食谱、符合预算的每周餐单、接受 EBT 的商店、附近的免费食物，还有福利申请帮助。全部免费。", "选择你的语言"],
+  "zh-Hant": ["花更少，吃更好", "省錢食譜、符合預算的每週餐單、接受 EBT 的商店、附近的免費食物，還有福利申請協助。全部免費。", "選擇你的語言"],
+  vi: ["Ăn ngon mà tốn ít hơn", "Công thức nấu ăn rẻ, thực đơn hằng tuần vừa túi tiền, cửa hàng nhận EBT, thực phẩm miễn phí gần bạn, và giúp xin trợ cấp. Tất cả đều miễn phí.", "Chọn ngôn ngữ của bạn"],
+  fil: ["Kumain nang maayos sa mas mura", "Murang recipe, lingguhang meal plan na kasya sa budget mo, mga tindahang tumatanggap ng EBT, libreng pagkain sa malapit, at tulong sa benepisyo. Libre lahat.", "Piliin ang iyong wika"],
+  ar: ["كُل جيدًا بتكلفة أقل", "وصفات رخيصة، وخطة وجبات أسبوعية تناسب ميزانيتك، ومتاجر تقبل EBT، وطعام مجاني قريب، ومساعدة في المعونات. كل ذلك مجانًا.", "اختر لغتك"],
+  ht: ["Manje byen pou mwens lajan", "Resèt bon mache, yon plan manje pou semèn nan ki antre nan bidjè w, magazen ki aksepte EBT, manje gratis toupre, ak èd pou benefis. Tout gratis.", "Chwazi lang ou"],
+  ko: ["적게 쓰고 잘 먹기", "저렴한 레시피, 예산에 맞는 주간 식단, EBT를 받는 가게, 근처 무료 식품, 혜택 신청 도움까지. 모두 무료예요.", "언어를 선택하세요"],
+  ru: ["Хорошо питаться, тратя меньше", "Недорогие рецепты, план питания на неделю под ваш бюджет, магазины, где принимают EBT, бесплатная еда рядом и помощь с пособиями. Всё бесплатно.", "Выберите язык"],
+  pt: ["Coma bem gastando menos", "Receitas baratas, um plano semanal de refeições que cabe no seu orçamento, lojas que aceitam EBT, comida grátis por perto e ajuda com benefícios. Tudo grátis.", "Escolha seu idioma"],
+  "fa-AF": ["با پول کمتر خوب غذا بخورید", "دستور پخت‌های ارزان، برنامه غذایی هفته‌وار مطابق بودجه شما، دکان‌هایی که EBT قبول می‌کنند، غذای رایگان در نزدیکی، و کمک برای کمک‌های دولتی. همه رایگان.", "زبان خود را انتخاب کنید"],
+  ps: ["په لږو پیسو ښه خواړه وخورئ", "ارزانه پخلي، اونیز د خوړو پلان چې ستاسو بودیجې ته برابر وي، هغه دوکانونه چې EBT مني، نږدې وړیا خواړه، او د ګټو په برخه کې مرسته. ټول وړیا.", "خپله ژبه وټاکئ"],
+  so: ["Si fiican wax u cun, lacag yar", "Cunto karis jaban, qorshe cunto toddobaadle ah oo ku habboon miisaaniyaddaada, dukaamo aqbala EBT, cunto bilaash ah oo dhow, iyo caawimaad gargaarka. Dhammaan waa bilaash.", "Dooro luqaddaada"],
+  uk: ["Добре харчуватися, витрачаючи менше", "Недорогі рецепти, план харчування на тиждень під ваш бюджет, магазини, де приймають EBT, безкоштовна їжа поруч і допомога з пільгами. Усе безкоштовно.", "Оберіть мову"],
+};
+
 function showWelcome(changing = false) {
   const w = $("#welcome"), app = $("#app");
   app.hidden = true; w.hidden = false;
   const g = changing ? S.lang : guessLang();
-  const order = [LANG[g], ...LANGS.filter(l => l.code !== g)];
+  const L = LANG[g], I = INTRO[g] || INTRO.en, E = INTRO.en;
+  const others = LANGS.filter(l => l.code !== g);
+  const btn = l => `<li><button type="button" data-l="${l.code}"><span class="ln" lang="${l.code}" dir="${l.dir}">${esc(l.name)}</span>${l.name !== EN_NAMES[l.code] ? `<span class="le" lang="en">${EN_NAMES[l.code]}</span>` : ""}</button></li>`;
   w.innerHTML = `<div class="welcome">
-    <div class="mark">${MARK}</div>
-    <div class="name" lang="en">Plenty Map</div>
-    <p class="tagline" lang="en">Find food. Cook cheap. Get help.</p>
-    <p class="tagline2" lang="en">In your language.</p>
-    <h1 class="sr" lang="en">Choose your language</h1>
-    <ul class="langs" role="list">${order.map(l => `<li><button type="button" data-l="${l.code}" lang="${l.code}" dir="${l.dir}" ${l.code === g ? 'aria-current="true"' : ""}><b>${esc(l.name)}</b><small lang="en" dir="ltr">${EN_NAMES[l.code]}</small></button></li>`).join("")}</ul>
-    <p class="note" lang="en">No account. No ads. What you type stays on your phone.</p>
+    <div class="brandrow"><div class="mark">${MARK}</div><div><div class="name" lang="en" dir="ltr">Plenty Map</div>
+      <p class="tagline" lang="en" dir="ltr">Find food. Cook cheap. Get help.</p></div></div>
+    <section class="intro" aria-labelledby="w-h">
+      <h1 id="w-h" tabindex="-1" lang="${g}" dir="${L.dir}">${esc(I[0])}</h1>
+      <p lang="${g}" dir="${L.dir}">${esc(I[1])}</p>
+      ${g !== "en" ? `<p class="en" lang="en" dir="ltr"><b>${esc(E[0])}.</b> ${esc(E[1])}</p>` : ""}
+    </section>
+    <h2 class="pick" id="w-pick"><span lang="${g}" dir="${L.dir}">${esc(I[2])}</span>${g !== "en" ? `<span class="en" lang="en" dir="ltr">${esc(E[2])}</span>` : ""}</h2>
+    <button type="button" class="langmain" data-l="${g}"><span class="ln" lang="${g}" dir="${L.dir}">${esc(L.name)}</span>${ico("arrow", "i go")}</button>
+    <ul class="langs" role="list" aria-labelledby="w-pick">${others.map(btn).join("")}</ul>
+    <p class="note" lang="en" dir="ltr">No account. No ads. What you type stays on your phone.</p>
   </div>`;
   $$("[data-l]", w).forEach(b => b.onclick = async () => {
     await loadLang(b.dataset.l); save("lang");
     if (changing) { lastView = null; hideWelcome(); shell(); route(); return; }
     if (S.loc || store.get("setupDone")) { hideWelcome(); shell(); route(); } else showSetup();
   });
-  ($("[aria-current]", w) || $("button", w))?.focus({ preventScroll: true });
+  $("#w-h", w)?.focus({ preventScroll: true });
 }
 function hideWelcome() { $("#welcome").hidden = true; $("#welcome").innerHTML = ""; $("#app").hidden = false; }
 
@@ -83,7 +109,7 @@ async function showSetup() {
   $("#setup-h", w).focus();
   bindLoc("s", () => done());
   $("#s-skip", w).onclick = () => done();
-  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/find"; route(); }
+  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/cook"; route(); }
 }
 
 /* A ZIP / neighborhood box plus a GPS button. Used in setup and on Find food. */
@@ -100,6 +126,20 @@ export function locForm(p, value = "") {
     </form>
     <button class="btn" type="button" id="${p}-gps">${ico("locate")} ${esc(t("loc_gps"))}</button>
   </div>`;
+}
+/* When location is refused: say how to turn it on, for this phone or computer.
+   If the site is allowed but it's still refused, the device itself has location off for the browser. */
+async function locHelp() {
+  if (native()) return "loc_help_app";
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return "loc_help_ios";
+  if (/Android/.test(ua)) return "loc_help_android";
+  let st = "";
+  try { st = (await navigator.permissions?.query({ name: "geolocation" }))?.state || ""; } catch {}
+  if (st === "denied") return "loc_help_site";
+  if (/Mac OS X|Macintosh/.test(ua)) return "loc_help_mac";
+  if (/Windows/.test(ua)) return "loc_help_win";
+  return "loc_help_site";
 }
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
@@ -126,6 +166,7 @@ export function bindLoc(p, after) {
   const pick = i => { inp.value = items[i]; close(); form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true })); };
   inp.addEventListener("input", () => {
     clearTimeout(tmr);
+    const m0 = msg(); if (m0?.textContent) m0.textContent = "";
     const q = inp.value.trim();
     if (q.length < 2 || /^\d/.test(q)) return close();
     const my = ++seq;
@@ -163,7 +204,8 @@ export function bindLoc(p, after) {
       const loc = { lat, lon, label: t("loc_here"), zip: z.zip, st: z.st || R.st, src: "gps" };
       setLoc(loc); say(""); after?.(loc);
     } catch (err) {
-      say(t(err?.code === 1 || /denied|permission/i.test(err?.message || "") ? "loc_denied" : "loc_failed"));
+      if (err?.code === 1 || /denied|permission/i.test(err?.message || "")) say(t("loc_denied") + " " + t(await locHelp()));
+      else say(t("loc_failed"));
     } finally { btn.disabled = false; }
   };
 }
@@ -187,8 +229,8 @@ function shell() {
 let current = null, cleanup = null, lastView = null;
 export async function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
-  let view = parts[0] || "find";
-  if (!VIEWS[view]) view = "find";
+  let view = parts[0] || "cook";
+  if (!VIEWS[view]) view = "cook";
   $$("[data-tab]").forEach(a => a.dataset.tab === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   const token = {}; current = token;
   try { cleanup?.(); } catch {}

@@ -8,13 +8,13 @@ import { CONFIG } from "./config.js";
 
 const FREE = ["pantry", "senior", "meal", "fridge"];
 const CATS = [
+  { id: "store", kinds: ["store"] },
+  { id: "market", kinds: ["market"] },
   { id: "free", kinds: FREE },
   { id: "pantry", kinds: ["pantry"] },
   { id: "senior", kinds: ["senior"] },
   { id: "meal", kinds: ["meal"] },
   { id: "fridge", kinds: ["fridge"] },
-  { id: "store", kinds: ["store"] },
-  { id: "market", kinds: ["market"] },
   { id: "rmp", kinds: ["rmp"] },
 ];
 const KDOT = { pantry: "k-pantry", senior: "k-senior", meal: "k-meal", fridge: "k-fridge", store: "k-store", market: "k-market", rmp: "k-meal" };
@@ -24,7 +24,7 @@ const FA_URL = "https://www.feedingamerica.org/find-your-local-foodbank";
 const MID = { lat: 32.85, lon: -117.0 };
 
 const F = {
-  cat: store.get("fcat", "free"),
+  cat: store.get("fcat", "store"),
   today: false, walk: false, drive: false,
   sort: "near",
   shown: PAGE,
@@ -198,10 +198,18 @@ function catNote() {
     meal: t(R.partner ? "note_meal" : "us_note_meal"),
     fridge: t("note_fridge"),
   }[F.cat];
-  // outside San Diego County, free food comes from OpenStreetMap only: say so, and where to find the rest
-  const extra = !R.partner && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
+  // where we list only a few free food places nearby, say the list may be missing some, and where to find the rest
+  const extra = thinHere() && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
     ? `<div class="notice info">${ico("info")}<p>${esc(t("us_listings_note"))} <a href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${esc(t("us_fb_find"))}</a> · <a href="tel:211">${esc(t("call_211"))}</a></p></div>` : "";
   return (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
+}
+
+/* Fewer than 8 free food places within about 15 miles: the list is probably missing some */
+function thinHere() {
+  if (R.partner || S.loc?.lat == null) return !R.partner;
+  let n = 0;
+  for (const x of R.sites) if (FREE.includes(x.k) && dist(S.loc.lat, S.loc.lon, x.lat, x.lon) <= 24000 && ++n >= 8) return false;
+  return true;
 }
 
 function dataNote() {
@@ -274,7 +282,9 @@ function setView(v) {
 export async function render(main, { args }) {
   main.innerHTML = `<p class="mute">${esc(t("loading"))}</p>`;
   R = await region();
-  if (args[0]) {
+  // #/find/in/<category> opens a category, e.g. links from Budget and Benefits to free food
+  if (args[0] === "in" && CATS.some(c => c.id === args[1])) { F.cat = args[1]; store.set("fcat", F.cat); F.shown = PAGE; }
+  else if (args[0]) {
     const s = R.byId.get(args[0]);
     if (s) { focusId = s.id; F.cat = !FREE.includes(s.k) ? s.k : s.k === "senior" && !S.senior ? "senior" : "free"; F.today = F.walk = F.drive = false; }
   }
@@ -328,7 +338,7 @@ export async function render(main, { args }) {
   const paintCats = () => {
     const has = new Set([...R.sites, ...R.stores].map(s => s.k));
     const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || c.kinds.some(k => has.has(k)));
-    if (!cats.some(c => c.id === F.cat)) F.cat = "free";
+    if (!cats.some(c => c.id === F.cat)) F.cat = "store";
     $("#fcats").innerHTML = cats.map(c => chip(c.id, `<span class="dot ${KDOT[c.kinds[0]]}" aria-hidden="true"></span>${esc(t("cat_" + c.id))}`, F.cat === c.id)).join("");
     $$("[data-cat]").forEach(b => b.onclick = () => {
       F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;

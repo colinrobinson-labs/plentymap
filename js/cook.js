@@ -172,9 +172,10 @@ function openSheet(id) {
         <button class="btn" type="button" id="wake" aria-pressed="${!!wake}">${ico("screen")} ${esc(t("keep_on"))}</button>
         <button class="btn ghost" type="button" id="print">${ico("print")} ${esc(t("print"))}</button>
       </div>
-      <p class="tiny mute">${esc(t("price_note"))}</p>`;
+      <p class="tiny mute">${esc(t("price_note"))}</p>
+      <p class="soon">${ico("clock", "i sm")}<span>${esc(t("soon_prices"))}</span></p>`;
     $$("[data-sv]", el).forEach(b => b.onclick = () => { sv = Math.max(1, Math.min(24, sv + +b.dataset.sv)); paintBody(); el.querySelector(`[data-sv="${b.dataset.sv}"]`).focus(); });
-    $("#addlist", el).onclick = () => { S.extra[id] = (S.extra[id] || 0) + sv; save("extra"); toast(t("added_list")); };
+    $("#addlist", el).onclick = () => { S.extra[id] = (S.extra[id] || 0) + sv; save("extra"); toast(t("added_list"), { href: "#/budget", label: t("tab_budget") + " ›", go: () => { S.jumpList = true; } }); };
     $("#wake", el).onclick = e => setWake(!wake, e.currentTarget);
     $("#print", el).onclick = () => window.print();
   };

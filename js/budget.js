@@ -1,6 +1,6 @@
 /* Budget: a week of meals for your household, what it costs, and a shopping list by aisle. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, rt, dayName, shareThing, toast, announce, activeCuisine } from "./core.js";
-import { food, canCook, dietOk, perServing, price, name, pkgLabel, cuisineMatch } from "./food.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, rt, dayName, shareThing, toast, announce, activeCuisine, openOut, ingNameEn } from "./core.js";
+import { food, canCook, dietOk, perServing, price, name, pkgLabel, cuisineMatch, facts } from "./food.js";
 import { SNAP } from "./benefits.js";
 import { stateOf } from "./region.js";
 import { foot } from "./app.js";
@@ -33,7 +33,8 @@ function pick(pool, avoid, onList = new Set()) {
 }
 /* Cook once, eat twice: a dinner pot feeds the next day's lunch and sometimes a second dinner.
    Each slot is {id, pot, lo}: pot numbers a cooked batch, lo marks leftovers. */
-function makePlan() {
+function makePlan(keep = true) {
+  const locked = keep ? S.plan?.locked || {} : {};
   const p = pools(), por = portions(), days = [], onList = new Set(), used = { b: new Set(), l: new Set(), d: new Set() };
   const note = id => FD.byId[id]?.ing.forEach(([i]) => onList.add(i));
   let pot = null, potN = 0;
@@ -65,7 +66,33 @@ function makePlan() {
     }
     days.push(day);
   }
-  S.plan = { v: 2, days, key: planKey() }; save("plan");
+  S.plan = { v: 2, days, key: planKey(), locked: {} };
+  // meals someone picked by hand stay, when they still fit the new choices
+  for (const [k, id] of Object.entries(locked)) {
+    const i = +k[0], m = k[1];
+    if (days[i]?.[m] && !days[i][m].lo && poolFor(i, m).some(r => r.id === id)) { swapTo(i, m, id); S.plan.locked[k] = id; }
+  }
+  save("plan");
+}
+
+/* Fit the week to the budget: trade the dearest meals (not ones picked by hand) for cheaper ones
+   until the week fits or nothing cheaper is left. Returns true when it fits. */
+function fitBudget(weekly) {
+  for (let n = 0; n < 30 && totals().eat > weekly; n++) {
+    let best = null;
+    S.plan.days.forEach((d, i) => ["b", "l", "d"].forEach(m => {
+      const x = d[m]; if (!x || x.lo || S.plan.locked?.[i + m]) return;
+      const cur = perServing(FD.byId[x.id]);
+      const inPlan = new Set(S.plan.days.flatMap(dd => Object.values(dd).map(v => v.id)));
+      const alt = poolFor(i, m).filter(r => !inPlan.has(r.id) && perServing(r) < cur - 0.05).sort((a, b) => perServing(a) - perServing(b))[0];
+      if (alt && (!best || cur - perServing(alt) > best.gain)) best = { i, m, id: alt.id, gain: cur - perServing(alt) };
+    }));
+    if (!best) break;
+    swapTo(best.i, best.m, best.id);
+  }
+  S.plan.fitFor = weekly + "|" + S.plan.key;
+  save("plan");
+  return totals().eat <= weekly;
 }
 
 function totals() {
@@ -90,23 +117,75 @@ function totals() {
   return { eat, trip, items };
 }
 
-/* Swap one meal. Swapping a pot changes every meal made from it. */
-function swap(i, m) {
+/* Swapping: a few other meals to choose from (with price, time and diet), not a blind reshuffle.
+   Swapping a pot changes every meal made from it. */
+function poolFor(i, m) {
   const p = pools(), x = S.plan.days[i][m];
-  const avoid = new Set(S.plan.days.flatMap(d => Object.values(d).map(v => v.id)));
-  if (m === "b") {
-    const id = pick(p.b, avoid); if (!id) return;
-    const old = x.id; S.plan.days.forEach(d => { if (d.b?.id === old) d.b = { id }; });
-  } else if (x.pot) {
-    // keep the same number of servings so the leftovers still work out
-    const old = S.plan.days.flatMap(d => ["d"].map(k => d[k])).find(v => v?.pot === x.pot && v.batch)?.batch || 0;
-    const fits = p.d.filter(r => r.serves * Math.max(1, Math.ceil(portions() / r.serves)) >= old);
-    const id = pick(fits.length ? fits : p.d, avoid); if (!id) return;
-    S.plan.days.forEach(d => ["l", "d"].forEach(k => { if (d[k]?.pot === x.pot) d[k] = { ...d[k], id, batch: d[k].batch ? FD.byId[id].serves * Math.max(1, Math.ceil(portions() / FD.byId[id].serves)) : undefined }; }));
-  } else {
-    const id = pick(p[m], avoid); if (id) S.plan.days[i][m] = { id };
+  if (m === "b") return p.b;
+  if (!x.pot) return p[m];
+  // keep the same number of servings so the leftovers still work out
+  const old = S.plan.days.map(d => d.d).find(v => v?.pot === x.pot && v.batch)?.batch || 0;
+  const fits = p.d.filter(r => r.serves * Math.max(1, Math.ceil(portions() / r.serves)) >= old);
+  return fits.length ? fits : p.d;
+}
+function options(i, m, skip = new Set(), n = 4) {
+  const pool = poolFor(i, m), x = S.plan.days[i][m];
+  const avoid = new Set([...S.plan.days.flatMap(d => Object.values(d).map(v => v.id)), ...skip]);
+  let free = pool.filter(r => !avoid.has(r.id));
+  if (free.length < n) free = pool.filter(r => r.id !== x.id && !skip.has(r.id));
+  if (free.length < n) free = pool.filter(r => r.id !== x.id);
+  const out = [];
+  while (out.length < n && free.length) {
+    const id = pick(free, new Set()); if (!id) break;
+    out.push(id); free = free.filter(r => r.id !== id);
   }
+  return out;
+}
+function swapTo(i, m, id) {
+  const x = S.plan.days[i][m];
+  if (m === "b") { const old = x.id; S.plan.days.forEach(d => { if (d.b?.id === old) d.b = { id }; }); }
+  else if (x.pot) S.plan.days.forEach(d => ["l", "d"].forEach(k => { if (d[k]?.pot === x.pot) d[k] = { ...d[k], id, batch: d[k].batch ? FD.byId[id].serves * Math.max(1, Math.ceil(portions() / FD.byId[id].serves)) : undefined }; }));
+  else S.plan.days[i][m] = { id };
   save("plan");
+}
+function chooser(i, m, from) {
+  const x = S.plan.days[i][m], seen = new Set();
+  const el = document.createElement("div");
+  el.className = "sheet"; el.id = "swapsheet";
+  const close = () => { el.remove(); document.body.style.overflow = ""; $("#app").inert = false; from?.isConnected ? from.focus() : $(`[data-swap="${i}${m}"]`)?.focus(); };
+  const optCard = id => {
+    const r = FD.byId[id], v = r && facts(r);
+    return `<li><button class="swapopt" type="button" data-to="${id}">
+      <span class="t">${esc(rt(id).t)}</span>
+      <span class="meta"><b>${esc(money(perServing(r)))}</b> ${esc(t("per_serving"))} · ${esc(t("mins", { n: r.mins }))}${v.vegan ? ` · <span class="badge ok">${esc(t("diet_vegan"))}</span>` : v.veg ? ` · <span class="badge ok">${esc(t("diet_veg"))}</span>` : ""}</span>
+      ${ico("arrow", "i go")}</button></li>`;
+  };
+  const paintOpts = () => {
+    const ids = options(i, m, seen); ids.forEach(id => seen.add(id));
+    $(".swaplist", el).innerHTML = ids.map(optCard).join("") || `<li class="mute">${esc(t("no_meals"))}</li>`;
+    $$("[data-to]", el).forEach(b => b.onclick = () => { swapTo(i, m, b.dataset.to); (S.plan.locked ||= {})[i + m] = b.dataset.to; save("plan"); close(); paint(); $(`[data-swap="${i}${m}"]`)?.focus(); announce(rt(b.dataset.to).t); });
+  };
+  el.innerHTML = `<div class="panel swappanel" role="dialog" aria-modal="true" aria-labelledby="swap-h">
+    <div class="bar">
+      <h2 id="swap-h" tabindex="-1">${esc(t("swap_h", { r: rt(x.id).t }))}</h2>
+      <button class="iconbtn" type="button" id="swclose" aria-label="${esc(t("close"))}">${ico("x")}</button>
+    </div>
+    <div class="body">
+      <p class="small mute">${esc(dayName((i + 1) % 7))} · ${esc(t("meal_" + m))}</p>
+      ${x.pot ? `<p class="small">${ico("info", "i sm")} ${esc(t("swap_pot"))}</p>` : ""}
+      <ul class="swaplist"></ul>
+      <button class="btn sm ghost" type="button" id="swmore">${ico("refresh", "i sm")} ${esc(t("swap_more"))}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(el);
+  document.body.style.overflow = "hidden";
+  $("#app").inert = true;
+  paintOpts();
+  $("#swap-h", el).focus();
+  $("#swclose", el).onclick = close;
+  $("#swmore", el).onclick = () => { paintOpts(); $(".swapopt", el)?.focus(); };
+  el.addEventListener("click", e => { if (e.target === el) close(); });
+  el.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
 }
 
 function stepper(k, v, label, min) {
@@ -116,44 +195,81 @@ function stepper(k, v, label, min) {
 
 function paint() {
   if (!S.plan || S.plan.key !== planKey()) makePlan();
-  const tot = totals();
   const n = Math.max(1, people());
   const snapMonth = SNAP.max(n, stateOf());
   const weekly = S.weekly ?? Math.round(snapMonth / 4.33);
+  if (weekly && S.plan.fitFor !== weekly + "|" + S.plan.key && totals().eat > weekly) fitBudget(weekly);
+  const tot = totals();
   const pct = weekly ? tot.eat / weekly : 0;
+  const over = weekly && tot.eat - weekly >= 0.5;
   $("#wk").placeholder = money(Math.round(snapMonth / 4.33), false);
   $("#kpis").innerHTML = `
     <div class="card kpi"><b>${esc(money(tot.eat, false))}</b><span>${esc(t("week_cost"))}</span></div>
     <div class="card kpi"><b>${esc(money(tot.eat / Math.max(1, n) / 7))}</b><span>${esc(t("per_person_day"))}</span></div>
     <div class="card kpi"><b>${esc(money(tot.trip, false))}</b><span>${esc(t("trip_cost"))}</span><span class="tiny mute">${esc(t("trip_note"))}</span></div>
     <div class="card kpi"><b>${esc(money(weekly, false))}</b><span>${esc(t(S.weekly == null ? "budget_suggest" : "your_budget"))}</span>
-      <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(Math.min(1, pct) * 100)}" aria-label="${esc(t("of_budget", { p: num(Math.round(pct * 100)) }))}"><i class="${pct > 1 ? "over" : ""}"></i></div>
-      <span class="small">${esc(pct > 1 ? t("over_budget", { m: money(tot.eat - weekly, false) }) : t("under_budget", { m: money(weekly - tot.eat, false) }))}</span></div>`;
+      <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(Math.min(1, pct) * 100)}" aria-label="${esc(t("of_budget", { p: num(Math.round(pct * 100)) }))}"><i class="${over ? "over" : ""}"></i></div>
+      <span class="small">${esc(over ? t("over_budget", { m: money(tot.eat - weekly, false) }) : t("under_budget", { m: money(Math.max(0, weekly - tot.eat), false) }))}</span></div>`;
   $("#kpis .meter i").style.width = Math.min(100, Math.round(pct * 100)) + "%";
+  $("#blow").innerHTML = over ? `<div class="notice warn">${ico("alert")}<p>${esc(t("budget_low", { m: money(tot.eat, false) }))} <a href="#/find/in/free">${esc(t("free_near"))}</a></p></div>` : "";
 
   $("#week").innerHTML = S.plan.days.map((d, i) => `<div class="card day"><h3>${esc(dayName((i + 1) % 7))}</h3>
     ${["b", "l", "d"].filter(m => d[m]).map(m => { const x = d[m], nm = rt(x.id).t; return `<div class="meal"><span class="k">${esc(t("meal_" + m))}</span>
       <button class="name" type="button" data-open="${x.id}">${esc(nm)}${x.lo ? ` <span class="badge">${esc(t("leftovers"))}</span>` : x.batch ? ` <span class="badge yolk">${esc(t("cook_n", { n: x.batch }))}</span>` : ""}</button>
-      <button class="iconbtn" type="button" data-swap="${i}${m}" aria-label="${esc(t("swap_meal", { m: nm }))}">${ico("swap")}</button></div>`; }).join("") || `<p class="mute small">${esc(t("no_meals"))}</p>`}</div>`).join("");
+      <button class="swapbtn" type="button" data-swap="${i}${m}" aria-haspopup="dialog">${ico("swap", "i sm")}<span>${esc(t("swap_btn"))}</span><span class="sr">: ${esc(nm)}</span></button></div>`; }).join("") || `<p class="mute small">${esc(t("no_meals"))}</p>`}</div>`).join("");
   $$("[data-open]").forEach(b => b.onclick = () => { location.hash = "#/cook/" + b.dataset.open; });
   $$("[data-swap]").forEach(b => b.onclick = () => {
     const i = +b.dataset.swap[0], m = b.dataset.swap[1];
-    swap(i, m); paint(); $(`[data-swap="${i}${m}"]`)?.focus(); announce(rt(S.plan.days[i][m].id).t);
+    chooser(i, m, b);
   });
 
   const by = {}; for (const it of tot.items) (by[it.aisle] ||= []).push(it);
   $("#shop").innerHTML = AISLES.filter(a => by[a]).map(a => `<h3>${esc(t("aisle_" + a))}</h3>${by[a].sort((x, y) => name(x.id).localeCompare(name(y.id), S.lang)).map(it => `
     <div class="check ${S.got.has(it.id) ? "done" : ""}">
       <input type="checkbox" id="g-${it.id}" data-got="${it.id}" ${S.got.has(it.id) ? "checked" : ""}>
-      <label class="nm" for="g-${it.id}">${esc(name(it.id))}<small>${esc(it.have ? t("have_it") : `${num(it.n)} × ${pkgLabel(it.id)}`)}</small></label>
-      <button class="link small" type="button" data-have="${it.id}">${esc(it.have ? t("need_it") : t("have_it_btn"))}</button>
-      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}">${esc(money(it.c))}</button>`}
+      <div class="nm"><label for="g-${it.id}">${esc(name(it.id))}<small>${esc(it.have ? t("have_it") : `${num(it.n)} × ${pkgLabel(it.id)}`)}</small></label>
+        <span class="ln"><button class="link small" type="button" data-have="${it.id}">${esc(it.have ? t("need_it") : t("have_it_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>${it.have ? "" : `<button class="link small tipbtn" type="button" data-tip="${it.id}" aria-expanded="false" aria-controls="tip-${it.id}">${ico("search", "i sm")}${esc(t("tips_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>`}</span></div>
+      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}">${esc(money(it.c))}</button>
+      <div class="tip" id="tip-${it.id}" hidden></div>`}
     </div>`).join("")}`).join("") || `<p class="mute">${esc(t("list_empty"))}</p>`;
   $$("[data-got]").forEach(c => c.onchange = () => { c.checked ? S.got.add(c.dataset.got) : S.got.delete(c.dataset.got); save("got"); c.parentElement.classList.toggle("done", c.checked); });
   $$("[data-have]").forEach(b => b.onclick = () => { const id = b.dataset.have; S.have.has(id) ? S.have.delete(id) : S.have.add(id); save("have"); paint(); $(`[data-have="${id}"]`)?.focus(); });
   $$("[data-price]").forEach(b => b.onclick = () => editPrice(b.dataset.price, b));
+  $$("[data-tip]").forEach(b => b.onclick = () => {
+    const box = $("#tip-" + b.dataset.tip), open = box.hidden;
+    if (open && !box.firstChild) {
+      box.innerHTML = tipHtml(b.dataset.tip);
+      $$("a[data-out]", box).forEach(a => a.addEventListener("click", e => { e.preventDefault(); openOut(a.href); }));
+    }
+    box.hidden = !open; b.setAttribute("aria-expanded", open);
+  });
   $("#extras").innerHTML = Object.keys(S.extra).length ? `<p class="small">${esc(t("extras", { n: Object.keys(S.extra).length }))} <button class="link" type="button" id="clrx">${esc(t("clear"))}</button></p>` : "";
   $("#clrx")?.addEventListener("click", () => { S.extra = {}; save("extra"); paint(); });
+}
+
+/* ---------- buying tips and store search links ---------- */
+// which money-saving tip fits each ingredient
+const TIP = {};
+for (const [k, ids] of Object.entries({
+  bulk: "rice lentils peas_d potato onion chbr beef", dry: "dbeans",
+  lowna: "cbeans chick ctom tsauce corn bouil beets",
+  store: "pasta flour oats tpaste tuna coco eggs milk butter oil pb mayo tofu bread ftort ctort ramen salsa soy vinegar sugar bpowder",
+  block: "cheddar", plain: "yogurt", bone: "chleg", whole: "carrot cabbage garlic celery",
+  season: "sweetp pepper gonion cilantro lime ginger", frozen: "fmix fpeas fspin fbroc",
+  intl: "cumin chili curry paprika italian garpow cinn mungb buckwheat kimchi",
+})) for (const id of ids.split(" ")) TIP[id] = k;
+// items where the store's own brand is the best value: the search asks for it by name
+const OWN = new Set(["rice", "lentils", "peas_d", "dbeans", ...Object.keys(TIP).filter(id => ["store", "lowna", "frozen", "block", "plain"].includes(TIP[id]))]);
+const QUERY = { onion: "yellow onions 3 lb bag", potato: "russet potatoes 5 lb bag", dbeans: "dried pinto beans", cbeans: "canned black beans", chleg: "bone-in chicken thighs", buckwheat: "buckwheat groats", peas_d: "dried split peas" };
+const SHOPS = [
+  ["Walmart", "https://www.walmart.com/search?q=", "Great Value"],
+  ["Kroger", "https://www.kroger.com/search?query=", "Kroger"],
+  ["Target", "https://www.target.com/s?searchTerm=", "Good & Gather"],
+];
+function tipHtml(id) {
+  const q = QUERY[id] || ingNameEn(id).replace(/\s*\(.*?\)/g, "").toLowerCase();
+  const links = SHOPS.map(([n, u, own]) => `<a href="${esc(u + encodeURIComponent((OWN.has(id) ? own + " " : "") + q))}" target="_blank" rel="noopener noreferrer" data-out>${esc(n)} ${ico("ext", "i sm")}</a>`).join("");
+  return `${TIP[id] ? `<p>${esc(t("tip_" + TIP[id]))}</p>` : ""}<p class="at"><span>${esc(t("find_at"))}</span>${links}</p>`;
 }
 
 function editPrice(id, btn) {
@@ -192,13 +308,15 @@ export async function render(main) {
       </div>
       <div class="kpis" id="kpis"></div>
     </div>
+    <div id="blow" role="status"></div>
     <div class="sec"><h2>${esc(t("week_h"))}</h2><button class="btn sm ghost" type="button" id="shuf">${ico("refresh", "i sm")} ${esc(t("reshuffle"))}</button></div>
     <div class="week grid2" id="week"></div>
-    <div class="sec"><h2>${esc(t("shop_h"))}</h2>
+    <div class="sec"><h2 id="shop-h" tabindex="-1">${esc(t("shop_h"))}</h2>
       <span class="row"><button class="btn sm ghost" type="button" id="sharel">${ico("share", "i sm")} ${esc(t("share"))}</button><button class="btn sm ghost" type="button" id="printl">${ico("print", "i sm")} ${esc(t("print"))}</button></span></div>
     <div id="extras"></div>
     <div class="card shop" id="shop"></div>
     <p class="tiny mute">${esc(t("price_note"))} ${esc(t("price_edit_hint"))}</p>
+    <p class="soon">${ico("clock", "i sm")}<span>${esc(t("soon_prices"))}</span></p>
     ${foot()}`;
   $$("[data-hh]").forEach(b => b.onclick = () => {
     const k = b.dataset.hh; S.hh[k] = Math.max(k === "a" ? 1 : 0, Math.min(12, S.hh[k] + +b.dataset.v)); save("hh");
@@ -210,8 +328,13 @@ export async function render(main) {
     if (!S.meals.b && !S.meals.l && !S.meals.d) S.meals[m] = 1;
     save("meals"); $$("[data-m]").forEach(x => x.setAttribute("aria-pressed", !!S.meals[x.dataset.m])); paint();
   });
-  $("#wk").onchange = e => { const v = parseFloat(e.target.value.replace(/[^0-9.]/g, "")); S.weekly = v > 0 ? Math.round(v) : null; save("weekly"); e.target.value = S.weekly ?? ""; paint(); };
-  $("#shuf").onclick = () => { makePlan(); paint(); announce(t("reshuffled")); };
+  // the week follows the budget as it's typed (a short pause, so it doesn't jump on every digit)
+  let wt = 0;
+  const setWeekly = (el, tidy) => { const v = parseFloat(el.value.replace(/[^0-9.]/g, "")); S.weekly = v > 0 ? Math.round(v) : null; save("weekly"); if (tidy) el.value = S.weekly ?? ""; paint(); };
+  $("#wk").oninput = e => { clearTimeout(wt); wt = setTimeout(() => setWeekly(e.target, false), 450); };
+  $("#wk").onchange = e => { clearTimeout(wt); setWeekly(e.target, true); };
+  if (S.jumpList) { S.jumpList = false; requestAnimationFrame(() => { const h = $("#shop-h"); h?.scrollIntoView({ block: "start" }); h?.focus({ preventScroll: true }); }); }
+  $("#shuf").onclick = () => { makePlan(false); paint(); announce(t("reshuffled")); };
   $("#printl").onclick = () => window.print();
   $("#sharel").onclick = () => shareThing({ title: t("shop_h"), text: listText() });
   paint();
