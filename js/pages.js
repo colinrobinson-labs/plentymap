@@ -6,7 +6,7 @@ import { CONFIG } from "./config.js";
 import { AS_OF } from "./benefits.js";
 
 function settings(main) {
-  main.innerHTML = `
+  main.innerHTML = `<div class="setwrap">
     <h1 class="disp">${esc(t("settings"))}</h1>
     <div class="card pad stack gap-t">
       <div class="row between"><span><b>${esc(t("language"))}</b><br><span class="mute small" lang="${S.lang}">${esc(LANG[S.lang].name)}</span></span>
@@ -26,7 +26,7 @@ function settings(main) {
       <h2>${esc(t("your_data"))}</h2>
       <p class="mute">${esc(t("your_data_p"))}</p>
       <button class="btn" type="button" id="wipe">${ico("trash", "i sm")} ${esc(t("erase_all"))}</button>
-    </div>
+    </div></div>
     ${foot()}`;
   $("#chlang").onclick = () => showWelcome(true);
   bindLoc("st", () => { toast(t("area_saved")); settings(main); });

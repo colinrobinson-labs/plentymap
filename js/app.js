@@ -319,7 +319,6 @@ const legalA = (p, k) => `<a href="${legalUrl(p)}" target="_blank" rel="noopener
 export const legalLinks = () => [legalA("terms", "terms"), legalA("attributions", "credits"), legalA("accessibility", "a11y")].join(" · ");
 export function foot() {
   return `<footer class="foot">
-    <p class="love">${ico("heart", "i sm")}<span>${esc(t("foot_love"))}</span></p>
     <p>${esc(t("foot_a"))} <a href="#/privacy">${esc(t("privacy"))}</a> · <a href="#/about">${esc(t("about"))}</a></p>
     <p>${esc(t("foot_b"))}</p>
     <p class="legal">${legalLinks()}</p>

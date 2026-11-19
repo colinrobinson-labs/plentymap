@@ -441,7 +441,72 @@
 ],
 "tip": "Exprime limón y ponle cilantro picado en la mesa."
 },
+"soakoats": {
+"t": "Avena con cacahuate sin cocinar",
+"s": [
+"Pon la avena en una taza o un tazón y agrega unos ¾ de taza de agua potable, lo justo para cubrirla.",
+"Déjala reposar 10 minutos, hasta que esté suave. Con agua caliente, si consigues, queda lista en 2 o 3.",
+"Mezcla la crema de cacahuate, pon el plátano en rodajas encima y espolvorea la canela."
+],
+"tip": "La avena instantánea se suaviza más rápido. La avena en hojuelas también sirve y queda un poco más firme."
+},
+"beanwrap": {
+"t": "Tacos de frijol negro con limón",
+"s": [
+"Escurre los frijoles. Enjuágalos con agua limpia si puedes.",
+"Machaca más o menos la mitad con un tenedor. Exprime el limón, agrega las especias y una pizca de sal, y revuelve.",
+"Pon la mezcla en las tortillas, enróllalas y a comer."
+],
+"tip": "Con frijoles pintos o rojos queda igual de bien."
+},
+"chickwrap": {
+"t": "Garbanzos machacados sobre pan",
+"s": [
+"Escurre los garbanzos.",
+"Macháchalos con un tenedor y mezcla el aceite, el jugo del limón, el comino y una pizca de sal.",
+"Úntalos bien gruesos sobre el pan."
+],
+"tip": "Unas rodajas de cebolla cruda o unas gotas de salsa picante le dan sabor."
+},
+"tunacrack": {
+"t": "Atún con limón sobre galletas",
+"s": [
+"Abre el atún y escúrrelo.",
+"Exprime el limón, agrega el chile en polvo y mezcla con un tenedor.",
+"Sírvelo sobre las galletas y a comer."
+],
+"tip": "El atún en bolsita no necesita abrelatas ni escurrirse."
+},
+"manba": {
+"t": "Pan con crema de cacahuate picante",
+"s": [
+"Unta la crema de cacahuate en el pan.",
+"Espolvorea el chile en polvo, poquito o mucho.",
+"Cómelo con el plátano, aparte o en rodajas encima."
+],
+"tip": "En Haití, el manba (crema de cacahuate) se suele hacer picante con chile. Ponle el picor que te guste."
+},
+"sardines": {
+"t": "Sardinas sobre pan con cebolla",
+"s": [
+"Abre la lata. Guarda el aceite: tiene mucho sabor.",
+"Corta unos aros delgados de cebolla.",
+"Pon las sardinas sobre el pan, échales un poco del aceite, la cebolla encima y exprime el limón."
+],
+"tip": "Las espinas son blandas, se pueden comer y tienen mucho calcio. El resto de la cebolla aguanta bien sin refri."
+},
+"pbramen": {
+"t": "Ramen con crema de cacahuate",
+"s": [
+"Pon la sopa en un tazón o una taza grande y cúbrela con agua: caliente si consigues, pero agua limpia a temperatura ambiente también sirve.",
+"Espera a que se suavice: unos 5 minutos con agua caliente, 20 a 30 con agua fría. Tira casi toda el agua.",
+"Mezcla la crema de cacahuate, la mitad del sobre de sazonador y el chile en polvo."
+],
+"tip": "Sirve el agua caliente de una tetera, una cafetera o la llave de agua caliente de una tienda. Tapa el tazón con un plato mientras se remoja."
+},
 "ing": {
+"crackers": "Galletas saladas",
+"sardines": "Sardinas de lata",
 "rice": "Arroz blanco",
 "pasta": "Pasta",
 "flour": "Harina de trigo",

@@ -12,8 +12,11 @@ export async function food() {
 export const I = id => F.ing[id];
 export const price = id => S.prices[id] ?? F.ing[id].p;
 
-/* What a kitchen can do. kit holds any of: stove (stove + oven), hotplate, micro. Empty = no heat. */
-export function canCook(r, kit = S.kit) {
+/* What a kitchen can do. kit holds any of: stove (stove + oven), hotplate, micro. Empty = no heat.
+   Without a fridge, only recipes made entirely from things that keep at room temperature. */
+export const needsCold = r => r._c ??= r.ing.some(([id]) => F.ing[id]?.cold);
+export function canCook(r, kit = S.kit, fridge = S.fridge) {
+  if (!fridge && needsCold(r)) return false;
   if (r.req === "none") return true;
   if (r.req === "micro") return kit.includes("micro");
   if (r.req === "burner") return kit.includes("stove") || kit.includes("hotplate");

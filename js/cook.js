@@ -40,6 +40,7 @@ function paint() {
   const cu = activeCuisine();
   $("#rcount").textContent = t("recipes_n", { n: vis.length });
   if ($("#fsum")) $("#fsum").textContent = fsum();
+  if ($("#mfsum")) $("#mfsum").textContent = msum();
   $("#rlist").innerHTML = !vis.length
     ? `<div class="card empty">${ico("pot")}<p><b>${esc(t("no_recipes"))}</b></p><p class="mute">${esc(t("no_recipes_p"))}</p></div>`
     : [
@@ -64,27 +65,39 @@ const cnt = (id, n) => `<span class="cnt" id="${id}" ${n ? "" : "hidden"}>${n ? 
 const setCnt = (id, n) => { const el = $("#" + id); if (el) { el.textContent = n ? num(n) : ""; el.hidden = !n; } };
 
 function fsum() {
-  const k = S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none");
+  const k = (S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none")) + (S.fridge ? "" : ", " + t("no_fridge"));
   const c = S.maxCost ? t("under", { m: money(S.maxCost) }) : t("any_cost");
   const n = fcount() + S.have.size;
   return [k, c].join(" · ") + (n ? " · +" + num(n) : "");
 }
+/* what "More filters" is set to, shown on its folded row so nothing is hidden */
+function msum() {
+  const av = [...S.avoid].filter(a => a !== "salt");
+  const out = av.length ? t("avoid_q") + ": " + av.map(a => t("avoid_" + a)).join(", ") : "";
+  return [t("lvl_" + S.comfort), t("diet_" + S.diet), out, S.avoid.has("salt") ? t("low_na") : "", t("cu_" + activeCuisine())].filter(Boolean).join(" · ");
+}
+const foldOpen = id => { try { return sessionStorage.getItem("pm.fold." + id) === "1"; } catch { return false; } };
+const keepFold = el => el.addEventListener("toggle", () => { try { sessionStorage.setItem("pm.fold." + el.dataset.fold, el.open ? "1" : "0"); } catch { /* private mode: folds just start closed */ } });
 function filters() {
   const cu = activeCuisine();
   const grp = (id, title, body) => `<div class="fg" role="group" aria-labelledby="${id}"><div class="fg-h" id="${id}">${esc(title)}</div><div class="fg-c">${body}</div></div>`;
   const wide = matchMedia("(min-width: 760px)").matches;
   return `<div class="card filters" id="filters">
-    ${wide ? "" : `<details class="fold allfl"><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
+    ${wide ? "" : `<details class="fold allfl" data-fold="all" ${foldOpen("all") ? "open" : ""}><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
     ${grp("l-kit", t("kit_q"), `<div class="tiles">
         ${tile("stove", "flame", esc(t("kit_stove")), S.kit.includes("stove"))}
         ${tile("hotplate", "plug", esc(t("kit_hotplate")), S.kit.includes("hotplate"))}
         ${tile("micro", "micro", esc(t("kit_micro")), S.kit.includes("micro"))}
         ${tile("none", "bowl", esc(t("kit_none")), !S.kit.length)}
       </div>`)}
+    ${grp("l-fridge", t("fridge_q"), `<div class="seg n2">
+        ${segBtn("data-fridge", 1, esc(t("fridge_yes")), S.fridge)}
+        ${segBtn("data-fridge", 0, esc(t("fridge_no")), !S.fridge)}
+      </div>`)}
     ${grp("l-cost", t("budget_q"), `<div class="seg n${BUDGETS.length}">
         ${BUDGETS.map(b => segBtn("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
       </div>`)}
-    <details class="fold morefl" ${wide ? "open" : ""}><summary><span>${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}${ico("chev", "i chev")}</summary><div class="fold-b">
+    <details class="fold morefl" data-fold="more" ${foldOpen("more") ? "open" : ""}><summary><span class="fs-t">${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}<span class="msum" id="mfsum">${esc(msum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">
     ${grp("l-lvl", t("comfort_q"), `<div class="seg n3">
         ${[1, 2, 3].map(l => segBtn("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
       </div>`)}
@@ -92,7 +105,10 @@ function filters() {
         ${["any", "veg", "vegan", "halal", "kosher"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d, "opt")).join("")}
       </div>`)}
     ${grp("l-avoid", t("avoid_q"), `<div class="chips wrap">
-        ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
+        ${AVOIDS.filter(a => a !== "salt").map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
+      </div>`)}
+    ${grp("l-salt", t("salt_q"), `<div class="chips wrap">
+        ${chip("data-avoid", "salt", esc(t("low_na")), S.avoid.has("salt"), "ck")}
       </div>`)}
     <div class="fg"><label class="fg-h" for="cusel">${esc(t("cu_q"))}</label><div class="fg-c">
       <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}</option>`).join("")}</select>
@@ -106,15 +122,22 @@ function filters() {
   </div>`;
 }
 
+function setFridge(on) {
+  S.fridge = on; save("fridge");
+  $$("[data-fridge]").forEach(x => x.setAttribute("aria-pressed", (x.dataset.fridge === "1") === on));
+}
 function bindFilters() {
+  $$("#filters details[data-fold]").forEach(keepFold);
   $$("[data-kit]").forEach(b => b.onclick = () => {
     const k = b.dataset.kit;
-    if (k === "none") S.kit = [];
+    // No kitchen usually means no fridge either; the fridge answer flips with it and can be set back.
+    if (k === "none") { if (S.kit.length) setFridge(false); S.kit = []; }
     else S.kit = S.kit.includes(k) ? S.kit.filter(x => x !== k) : [...S.kit, k];
     save("kit");
     $$("[data-kit]").forEach(x => x.setAttribute("aria-pressed", x.dataset.kit === "none" ? !S.kit.length : S.kit.includes(x.dataset.kit)));
     paint();
   });
+  $$("[data-fridge]").forEach(b => b.onclick = () => { setFridge(b.dataset.fridge === "1"); paint(); });
   $$("[data-cost]").forEach(b => b.onclick = () => { S.maxCost = +b.dataset.cost; save("maxCost"); $$("[data-cost]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-lvl]").forEach(b => b.onclick = () => { S.comfort = +b.dataset.lvl; save("comfort"); $$("[data-lvl]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); setCnt("flcount", fcount()); paint(); });
@@ -137,6 +160,13 @@ function dietBox(r) {
     ${c.length ? `<p><b>${esc(t("contains"))}</b> ${esc(c.map(k => t(k)).join(", "))}</p>` : ""}
     ${n.length ? `<ul>${n.map(k => `<li>${esc(t(k))}</li>`).join("")}</ul>` : ""}
     <p class="tiny">${esc(t("label_check"))}</p></div></div>`;
+}
+/* Without a fridge or a kitchen: eat it fresh, and how to open a can without an opener */
+function keepBox(r) {
+  const out = [];
+  if (!S.fridge) out.push(t("nofridge_note"));
+  if ((!S.fridge || !S.kit.length) && r.ing.some(([id]) => FD.ing[id].u === "can")) out.push(t("canopener_tip"));
+  return out.length ? `<div class="notice dietbox">${ico("snow")}<div>${out.map(x => `<p>${esc(x)}</p>`).join("")}</div></div>` : "";
 }
 let wake = null, lastFocus = null;
 async function setWake(on, btn) {
@@ -169,6 +199,7 @@ function openSheet(id) {
         <div class="fact"><b>${esc(num(f.pro))} g</b><span>${esc(t("protein"))}</span></div>
         <div class="fact"><b>${esc(num(sodium(r)))} mg</b><span>${esc(t("sodium"))}</span></div>
       </div>
+      ${keepBox(r)}
       ${dietBox(r)}
       <div class="row between"><h3>${esc(t("ingredients"))}</h3>
         <span class="row"><span class="small mute" id="svl">${esc(t("servings"))}</span><span class="stepper" role="group" aria-labelledby="svl">

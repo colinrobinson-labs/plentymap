@@ -9,11 +9,12 @@ let FD;
 const AISLES = ["prod", "pantry", "cans", "dairy", "meat", "frozen", "bread", "spice"];
 const portions = () => S.hh.a + S.hh.k * 0.7;
 const people = () => S.hh.a + S.hh.k;
-const planKey = () => [3, S.hh.a, S.hh.k, S.diet, [...S.avoid].sort().join("+"), S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|");
+const planKey = () => [3, S.hh.a, S.hh.k, S.diet, [...S.avoid].sort().join("+"), S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|") + (S.fridge ? "" : "|nf"); // "|nf" only when set, so saved plans stay valid
 
 function pools() {
   const ok = r => canCook(r) && dietOk(r) && r.lvl <= S.comfort;
-  const dinner = r => r.serves >= 4 && !FD.slotB.has(r.id);
+  // no fridge: no big pots (leftovers can't be kept), so any main meal made fresh for the people eating it
+  const dinner = r => !FD.slotB.has(r.id) && (r.serves >= 4 || (!S.fridge && !FD.slotL.has(r.id)));
   return {
     b: FD.slots.b.map(i => FD.byId[i]).filter(Boolean).filter(ok),
     l: FD.slots.l.map(i => FD.byId[i]).filter(Boolean).filter(ok),
@@ -31,7 +32,8 @@ function pick(pool, avoid, onList = new Set()) {
   for (let i = 0; i < sorted.length; i++) { x -= w[i]; if (x <= 0) return sorted[i].id; }
   return sorted[0].id;
 }
-/* Cook once, eat twice: a dinner pot feeds the next day's lunch and sometimes a second dinner.
+/* Cook once, eat twice: a dinner pot feeds the next day's lunch and sometimes a second dinner
+   (not without a fridge: then every meal is made fresh, just enough for the people eating).
    Each slot is {id, pot, lo}: pot numbers a cooked batch, lo marks leftovers. */
 function makePlan(keep = true) {
   const locked = keep ? S.plan?.locked || {} : {};
@@ -59,7 +61,8 @@ function makePlan(keep = true) {
         if (used.d.size >= p.d.length) used.d.clear();
         const avoid = new Set([...used.d, day.l?.id, days[i - 1]?.d?.id, ...pots.map(x => x.id)].filter(Boolean));
         const id = pick(p.d, avoid, onList);
-        if (id) {
+        if (id && !S.fridge) { day.d = { id }; used.d.add(id); note(id); }
+        else if (id) {
           const r = FD.byId[id], batch = r.serves * Math.max(1, Math.ceil(por / r.serves));
           const pot = { id, n: ++potN, left: batch - por, dinners: 1, batch };
           pots.push(pot); day.d = { id, pot: pot.n, batch }; used.d.add(id); note(id);
@@ -318,7 +321,7 @@ export async function render(main) {
   FD = await food();
   main.innerHTML = `
     <h1 class="disp">${esc(t("budget_h"))}</h1>
-    <p class="lead">${esc(t("budget_p"))}</p>
+    <p class="lead">${esc(t(S.fridge ? "budget_p" : "budget_p_nf"))}</p>
     <div class="grid2 gap-t">
       <div class="card pad stack">
         ${stepper("a", S.hh.a, t("adults"), 1)}
