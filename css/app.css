@@ -656,6 +656,158 @@ h1+.lead{margin-block-start:var(--s2)}
 .rcard h3{overflow-wrap:anywhere}
 @media (max-width:360px){.rcard .tm{white-space:normal}}
 
+/* ---------- Icons, round 3 set (drawn in js/icons.js) ---------- */
+.i{stroke-width:1.75}
+.i .f,.i .fa,.i .ft,.d .f,.d .fa,.d .ft{fill:currentColor;stroke:none}
+.kn *{stroke:#000!important;stroke-width:4.6!important;fill:none!important}
+.kn .o,.kn .f,.kn .fa,.kn .ft{fill:#000!important}
+.d{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;overflow:visible;flex:none}
+.d .a{stroke:var(--yolk)}.d .fa{fill:var(--yolk)}.d .t{stroke:#E0664F}.d .ft{fill:#E0664F}
+.rcard .art svg{width:46px;height:46px}
+@media (max-width:320px){.rcard .art svg{width:36px;height:36px}}
+
+/* ---------- Find food (redesign, Nov 2026) ----------
+   One accent per screen (yolk = Go). Rows are quiet: kind tile, name, the facts that differ, one Directions.
+   Computers: list on the left, the map fills the rest of the window and stays put while the list scrolls. */
+:root{--k-pantry:#C8442D;--k-senior:#2B6CB0;--k-meal:#7C4A8B;--k-fridge:#0F7C80;--k-store:#2F6B45;--k-market:#8A5D00;--k-rmp:#8A4F99;--k-summer:#A8501A;--k-garden:#3A7340;--k-givebox:#A8433A;--k-bakery:#7E5A26}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--k-pantry:#F08A73;--k-senior:#8DB8EA;--k-meal:#CFA3DB;--k-fridge:#5CCBCF;--k-store:#8FD3A5;--k-market:#F5C04A;--k-rmp:#E2B5EA;--k-summer:#F7A35C;--k-garden:#86CC92;--k-givebox:#EE9B91;--k-bakery:#E0C29C}}
+:root[data-theme="dark"]{--k-pantry:#F08A73;--k-senior:#8DB8EA;--k-meal:#CFA3DB;--k-fridge:#5CCBCF;--k-store:#8FD3A5;--k-market:#F5C04A;--k-rmp:#E2B5EA;--k-summer:#F7A35C;--k-garden:#86CC92;--k-givebox:#EE9B91;--k-bakery:#E0C29C}
+.kt-pantry{--kc:var(--k-pantry)}.kt-senior{--kc:var(--k-senior)}.kt-meal{--kc:var(--k-meal)}.kt-fridge{--kc:var(--k-fridge)}.kt-store{--kc:var(--k-store)}.kt-market{--kc:var(--k-market)}.kt-rmp{--kc:var(--k-rmp)}.kt-summer{--kc:var(--k-summer)}.kt-garden{--kc:var(--k-garden)}.kt-givebox{--kc:var(--k-givebox)}.kt-bakery{--kc:var(--k-bakery)}
+.ktile{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--kc) 13%,var(--card));color:var(--kc)}
+.ktile .i{width:24px;height:24px}
+
+.fside{display:grid;gap:var(--s3);min-width:0}
+.fside>*{min-width:0}
+.findhero{gap:var(--s2)}
+.findhero h1{font-size:clamp(22px,4.8vw,28px)}
+.findhero #find-p{font-size:15px;line-height:1.45;margin:0}
+.findhero .locbar{flex-wrap:nowrap;margin-block-start:var(--s1)}
+.findhero #f-gps{flex:none}
+@media (max-width:599px),(min-width:960px){
+  .findhero #f-gps{width:48px;padding:0;justify-content:center}
+  .findhero #f-gps .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+.findhero #f-msg:empty{display:none}
+
+/* categories: a tab bar with the kind's icon and how many places */
+.ktabs{display:flex;gap:var(--s1);overflow-x:auto;scrollbar-width:none;border-block-end:1px solid var(--line);margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
+[dir="rtl"] .ktabs{-webkit-mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
+.ktabs::-webkit-scrollbar{display:none}
+.ktab{flex:none;display:inline-flex;align-items:center;gap:var(--s2);min-height:48px;padding:0 var(--s3);border:0;border-block-end:3px solid transparent;margin-block-end:-1px;border-radius:0;background:none;color:var(--mute);font-weight:700;font-size:15px;white-space:nowrap}
+.ktab>span:first-child{display:grid;color:var(--kc)}
+.ktab .i{width:20px;height:20px}
+.ktab .n{min-width:24px;padding:1px 7px;border-radius:999px;background:var(--line-2);color:var(--ink-2);font-size:12.5px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.ktab:hover{color:var(--ink)}
+.ktab[aria-pressed="true"]{color:var(--ink);border-block-end-color:var(--ink)}
+.ktab[aria-pressed="true"] .n{background:var(--ink);color:var(--bg)}
+.ktab:focus-visible{outline-offset:-3px}
+
+/* count, sort, list/map */
+.fbar{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
+.fcount{margin:0;margin-inline-end:auto;color:var(--mute);font-size:15px;font-variant-numeric:tabular-nums}
+.fsort{position:relative;display:inline-flex;align-items:center}
+.fsort[hidden]{display:none}
+.fsort>.i{position:absolute;inset-inline-start:11px;pointer-events:none;color:var(--ink-2)}
+.fsort::after{content:"";position:absolute;inset-inline-end:13px;inset-block-start:50%;width:7px;height:7px;margin-block-start:-6px;border-right:2px solid var(--ink-2);border-bottom:2px solid var(--ink-2);transform:rotate(45deg);pointer-events:none}
+.fsort select{appearance:none;-webkit-appearance:none;min-height:44px;padding-block:0;padding-inline:36px 34px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-weight:700;font-size:15px;cursor:pointer;max-width:100%}
+.fsort select:hover{border-color:var(--ink-2)}
+.fbar .viewtoggle.seg>button{min-height:44px;padding:0 var(--s3);font-size:15px}
+.fflt{margin:0;padding-block:0}
+.fflt[hidden]{display:none}
+#fflt .chip{min-height:40px;font-size:14.5px}
+
+/* the rows */
+.plist{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
+.place{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto;grid-template-areas:"tile main dir" "more more more";column-gap:var(--s3);align-items:start;padding:var(--s3);background:var(--card);border:1px solid var(--line);border-radius:var(--r);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.place:hover{border-color:var(--ink-2)}
+.place.hl{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.place:has(.ptap:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+.place>.ktile{grid-area:tile}
+.pmain{grid-area:main;display:grid;gap:3px;min-width:0}
+.pname{margin:0;font-size:17px;line-height:1.3;font-weight:700}
+.ptap{display:inline;padding:0;margin:0;border:0;background:none;font:inherit;color:inherit;text-align:start;cursor:pointer}
+.ptap:focus-visible{outline:none}
+.pchev{display:inline-block;vertical-align:-3px;margin-inline-start:4px;color:var(--mute);transition:transform .15s}
+.place.open .pchev{transform:rotate(180deg)}
+.pline{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;font-size:14.5px;line-height:1.4;color:var(--mute)}
+.pline .sep{opacity:.55}
+.pline .dist,.pline .next{color:var(--ink);font-weight:600}
+.pline .dist{font-variant-numeric:tabular-nums}
+.pline .open{color:var(--ok);font-weight:700}
+.plevel{color:var(--ink);font-weight:700;letter-spacing:.06em}
+.plevel .off{opacity:.28}
+.place .addr{margin:0;font-size:14.5px;line-height:1.4;color:var(--mute)}
+.ptags{display:flex;flex-wrap:wrap;gap:var(--s1);margin-block-start:var(--s1)}
+.place .notice.stale{font-size:14px;padding:6px 10px;margin:var(--s1) 0 0}
+.pdir{grid-area:dir;position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 var(--s3);border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-weight:700;font-size:14.5px;text-decoration:none;white-space:nowrap}
+.pdir:hover{border-color:var(--ink)}
+.pdir .i{color:var(--ink-2)}
+@media (max-width:479px),(min-width:960px) and (max-width:1199px){
+  .pdir{width:44px;padding:0}
+  .pdir .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+}
+.pmore{grid-area:more;position:relative;z-index:1;display:grid;gap:var(--s2);margin-block-start:var(--s3);padding-block-start:var(--s3);border-block-start:1px dashed var(--line);cursor:auto}
+.pmore[hidden]{display:none}
+.pmore .times{list-style:none;margin:0;padding:0;display:grid;gap:var(--s1);font-weight:600}
+.pmore .times li,.pmore .callahead{display:flex;gap:var(--s2);align-items:flex-start;margin:0}
+.pmore .times .i,.pmore .callahead .i{margin-block-start:2px;flex:none}
+.pmore .times .i{color:var(--ok)}
+.pmore .acts{display:flex;gap:var(--s2);flex-wrap:wrap}
+.pmore details{border-block-start:1px dashed var(--line);padding-block-start:var(--s2)}
+.pmore summary{cursor:pointer;font-weight:700;min-height:40px;display:flex;align-items:center;gap:6px;list-style:none}
+.pmore summary::-webkit-details-marker{display:none}
+.pmore summary .i{transition:transform .15s}
+.pmore details[open]>summary .i{transform:rotate(180deg)}
+.pmore dl{margin:6px 0 4px;display:grid;gap:var(--s2)}
+.pmore dt{font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+:lang(ar) .pmore dt,:lang(fa) .pmore dt,:lang(ps) .pmore dt,:lang(zh-Hans) .pmore dt,:lang(zh-Hant) .pmore dt,:lang(ko) .pmore dt{text-transform:none;letter-spacing:0}
+.pmore dd{margin:0}
+.pmore .src{font-size:13.5px;color:var(--mute);margin:0}
+.pmore details.report summary{font-size:14px;color:var(--ink-2);display:inline-flex;min-height:36px}
+.pmore details.report .acts{margin-block:6px}
+@media (prefers-reduced-motion:reduce){.place,.pchev,.pmore summary .i{transition:none}}
+
+/* phone map: tapping a pin shows this card over the map */
+.mapcard{position:absolute;z-index:3;inset-inline:var(--s3);inset-block-end:var(--s3);display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:var(--s2) var(--s3);align-items:start;padding:var(--s3);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 10px 30px -8px rgba(0,0,0,.45)}
+.mapcard .pname{margin:0;font-size:16.5px;font-weight:700;line-height:1.3}
+.mapcard .mcx{width:44px;height:44px;margin:-8px;color:var(--ink)}
+.mapcard .acts{grid-column:1/-1;display:flex;gap:var(--s2);flex-wrap:wrap}
+
+/* computers: list beside a map that fills the window */
+@media (min-width:960px){
+  main.findmode{max-width:none;padding:0}
+  .findapp{display:grid;grid-template-columns:clamp(440px,36vw,580px) minmax(0,1fr);align-items:start}
+  .fside{padding:var(--s5) var(--s5) var(--s6);gap:var(--s4)}
+  .fside .ktabs{margin-inline:calc(-1 * var(--s5));padding-inline:var(--s5);scroll-padding-inline:var(--s5)}
+  .findapp>.mapbox{position:sticky;inset-block-start:var(--head);height:calc(100dvh - var(--head));min-height:480px;border:0;border-inline-start:1px solid var(--line);border-radius:0}
+  .findapp>.mapbox[hidden]{display:block}
+}
+.pwhen{margin:0;display:flex;gap:6px;align-items:flex-start;font-size:15px;font-weight:600;color:var(--ink)}
+.pwhen .i{margin-block-start:3px;flex:none;color:var(--ink-2)}
+.pwhen.open .i,.pwhen.open b{color:var(--ok)}
+.pwhen.call{font-weight:500;color:var(--mute);font-size:14.5px}
+.pline:empty{display:none}
+#flistwrap{gap:var(--s3)}
+/* phones: the list/map switch floats above the tab bar, so the list starts sooner */
+@media (max-width:959px){
+  .findhero.has-loc #find-p{display:none}
+  .fbar .viewtoggle.seg{position:fixed;z-index:20;inset-inline-start:50%;transform:translateX(-50%);inset-block-end:calc(var(--bar) + var(--s3) + env(safe-area-inset-bottom));border-radius:999px;box-shadow:0 8px 24px -6px rgba(0,0,0,.45);border-color:var(--ink)}
+  [dir="rtl"] .fbar .viewtoggle.seg{transform:translateX(50%)}
+  .fbar .viewtoggle.seg>button{min-height:44px;padding:0 var(--s4)}
+  .mapcard{inset-block-end:calc(var(--s3) + 60px)}
+  .findmode .foot{padding-block-end:56px}
+}
+@media (max-width:959px){
+  .findapp.mapview .fside>.foot,.findapp.mapview #fflt{display:none}
+  .findapp.mapview>.mapbox{margin-block-start:var(--s3);height:calc(100dvh - var(--head) - var(--bar) - 96px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+}
+.pline{column-gap:10px}
+.pline .sep{display:none}
+.findhero .locbar{align-items:flex-start}
+.findhero #f-gps{min-height:48px;align-self:flex-start}
+.ptap{display:inline-block;padding-block:3px;margin-block:-3px}
+
 /* resources thread: report form, kids-eat-free list */
 .repform{display:grid;gap:var(--s2);margin-block:var(--s2) var(--s1)}
 .repform fieldset{border:0;padding:0;margin:0;gap:var(--s1)}

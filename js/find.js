@@ -5,19 +5,31 @@ import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
 import { CONFIG } from "./config.js";
+import { kindIcon } from "./glyphs.js";
+import * as reportMod from "./report.js";
 
-const FREE = ["pantry", "senior", "meal", "fridge"];
+const FREE = ["pantry", "senior", "meal", "fridge", "summer", "garden", "givebox"];
+// the combined "Free food" list: everything free except gardens (not a place to pick up food on a schedule)
+const FREE_ALL = ["pantry", "senior", "meal", "fridge", "summer", "givebox"];
 const CATS = [
-  { id: "store", kinds: ["store"] },
-  { id: "market", kinds: ["market"] },
-  { id: "free", kinds: FREE },
-  { id: "pantry", kinds: ["pantry"] },
-  { id: "senior", kinds: ["senior"] },
-  { id: "meal", kinds: ["meal"] },
-  { id: "fridge", kinds: ["fridge"] },
-  { id: "rmp", kinds: ["rmp"] },
+  { id: "store", kinds: ["store"], icon: "store" },
+  { id: "market", kinds: ["market"], icon: "market" },
+  { id: "free", kinds: FREE_ALL, icon: "pantry" },
+  { id: "pantry", kinds: ["pantry"], icon: "pantry" },
+  { id: "senior", kinds: ["senior"], icon: "senior" },
+  { id: "meal", kinds: ["meal"], icon: "meal" },
+  { id: "summer", kinds: ["summer"], icon: "summer" },
+  { id: "fridge", kinds: ["fridge"], icon: "fridge" },
+  { id: "givebox", kinds: ["givebox"], icon: "givebox" },
+  { id: "garden", kinds: ["garden"], icon: "garden" },
+  { id: "bakery", kinds: ["bakery"], icon: "bakery" },
+  { id: "rmp", kinds: ["rmp"], icon: "rmp" },
 ];
-const KDOT = { pantry: "k-pantry", senior: "k-senior", meal: "k-meal", fridge: "k-fridge", store: "k-store", market: "k-market", rmp: "k-meal" };
+// ways to sort, by kind of list; the first is the default
+const SORTS = { store: ["value", "cheap", "near"], sched: ["near", "soon"], plain: ["near"] };
+const SCHED = ["pantry", "senior", "meal", "summer"];
+const sortsFor = cat => cat.id === "store" ? SORTS.store : cat.kinds.some(k => SCHED.includes(k)) ? SORTS.sched : SORTS.plain;
+const TIER = { budget: 1, standard: 2, premium: 3 };
 const PAGE = 20;
 const FA_URL = "https://www.feedingamerica.org/find-your-local-foodbank";
 // county middle, used only to sort when no location is set
@@ -26,12 +38,17 @@ const MID = { lat: 32.85, lon: -117.0 };
 const F = {
   cat: store.get("fcat", "store"),
   today: false, walk: false, drive: false,
-  sort: "near",
+  sort: "",
   shown: PAGE,
   view: "list",
 };
 
-let R, mapApi = null, mapMod = null, focusId = null;
+// reportMod (imported above): the private "report a problem" form, reportUI(s) and bindReport(root)
+let R, mapApi = null, mapMod = null, focusId = null, openId = null;
+const catOf = id => CATS.find(c => c.id === id) || CATS[0];
+const isFreeCat = cat => cat.kinds.some(k => FREE.includes(k));
+const phone = () => matchMedia("(max-width: 959px)").matches;
+const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function dirUrl(s) {
   const q = `${s.lat},${s.lon}`;
@@ -66,29 +83,38 @@ function whenText(x) {
 }
 
 /* ---------- filtering and ranking ---------- */
+function pool(cat) {
+  const p = isFreeCat(cat) ? R.sites : R.stores;
+  let list = p.filter(s => cat.kinds.includes(s.k));
+  if (cat.id === "free" && !S.senior) list = list.filter(s => s.k !== "senior");
+  return list;
+}
 function candidates() {
-  const cat = CATS.find(c => c.id === F.cat) || CATS[0];
+  const cat = catOf(F.cat);
   const here = S.loc || MID;
-  const pool = cat.kinds.some(k => FREE.includes(k)) ? R.sites : R.stores;
-  let list = pool.filter(s => cat.kinds.includes(s.k));
-  // seniors-only sites stay out of the general list unless the person said they're 60+
-  if (F.cat === "free" && !S.senior) list = list.filter(s => s.k !== "senior");
+  const sort = sortsFor(cat).includes(F.sort) ? F.sort : sortsFor(cat)[0];
+  let list = pool(cat);
   for (const s of list) s._m = dist(here.lat, here.lon, s.lat, s.lon);
-  const freeCat = cat.kinds.some(k => FREE.includes(k));
+  const freeCat = isFreeCat(cat);
   if (freeCat) {
     if (F.today) list = list.filter(s => soon(s).some(x => x.today));
     if (F.walk) list = list.filter(s => s.d.some(d => d.f?.includes("walk")));
     if (F.drive) list = list.filter(s => s.d.some(d => d.f?.includes("drive")));
-    if (F.sort === "soon") {
+    if (sort === "soon") {
       const key = s => { const x = soon(s)[0]; return x ? x.date + (x.t[0] || "99") : "9999"; };
       list.sort((a, b) => key(a).localeCompare(key(b)) || a._m - b._m);
     } else list.sort((a, b) => a._m - b._m);
     list = [...list.filter(s => !stale(s)), ...list.filter(stale)];
-  } else if (F.cat === "store") {
+  } else if (F.cat === "store" && sort === "value") {
+    // cheaper stores a little farther away beat pricier ones close by; stores with your cuisine get a nudge
     const cu = activeCuisine();
     const w = { budget: 1, standard: 1.35, premium: 2.2 };
     for (const s of list) s._score = s._m * (w[s.tier] || 1.5) * (s.cu?.includes(cu) ? 0.6 : 1);
     list.sort((a, b) => a._score - b._score);
+  } else if (F.cat === "store" && sort === "cheap") {
+    // cheapest kind of store first, nearest first within each; only stores within about 15 miles
+    const near = list.filter(s => s._m <= 24000);
+    list = (near.length >= 5 ? near : list).sort((a, b) => (TIER[a.tier] || 2) - (TIER[b.tier] || 2) || a._m - b._m);
   } else list.sort((a, b) => a._m - b._m);
   return list;
 }
@@ -114,6 +140,7 @@ function stale(s) {
   if (!FREE.includes(s.k)) return false;
   if (R.built && ageDays(R.built) > R.staleAfter) return true;
   if (s.d.some(d => PARTNER(d.src))) return false;
+  if (s.k === "garden" || s.k === "givebox") return false; // rarely edited on OpenStreetMap; the nightly check drops closed ones
   return !s.ed || ageDays(s.ed) > STALE_DAYS;
 }
 /* Who to call before going: the site, else the food bank that listed it, else 211 */
@@ -123,6 +150,11 @@ function callAhead(s) {
   return src ? { ph: src.phone, who: src.name } : { ph: "211", who: "211" };
 }
 const REPORTS = ["closed", "nofood", "hours", "other"];
+function reportBlock(s) {
+  if (reportMod?.reportUI) return reportMod.reportUI(s);
+  if (!FREE.includes(s.k)) return "";
+  return `<details class="report"><summary>${ico("flag", "i sm")} ${esc(t("report_q"))}</summary><div class="acts">${reportLinks(s)}</div><p class="tiny mute">${esc(t("report_note"))}</p></details>`;
+}
 function reportLinks(s) {
   const to = CONFIG.contact;
   return REPORTS.map(k => {
@@ -141,21 +173,42 @@ function fresh(s) {
   return parts.join(" · ");
 }
 
+/* What sets this place apart in this list: a price level for stores, your cuisine, a match program, who it's for */
+function tags(s, free, flags) {
+  if (free) return flagBadges({ f: flags.filter(f => !["walk", "drive", "open"].includes(f)) });
+  const cu = activeCuisine();
+  const out = [];
+  if (s.inc) out.push(`<span class="badge yolk">${esc(t("inc_badge"))}</span>`);
+  if (s.k === "market" && R.partner) out.push(`<span class="badge yolk">${esc(t("market_match"))}</span>`);
+  if (s.k === "store" && cu && s.cu?.includes(cu)) out.push(`<span class="badge">${esc(t("cu_" + cu))}</span>`);
+  return out.join("");
+}
+function priceLevel(s) {
+  const n = TIER[s.tier];
+  if (!n) return "";
+  return `<span class="plevel" title="${esc(t("price_" + n))}"><span aria-hidden="true">${"$".repeat(n)}<span class="off">${"$".repeat(3 - n)}</span></span><span class="sr">${esc(t("price_" + n))}</span></span>`;
+}
+function statusLine(s, next, free, showKind) {
+  const parts = [];
+  if (showKind) parts.push(`<span>${esc(t("kind_" + s.k))}</span>`);
+  if (S.loc) parts.push(`<span class="dist">${esc(miles(s._m))}</span>`);
+  if (s.k === "store") { const p = priceLevel(s); if (p) parts.push(p); }
+  return parts.join(`<span class="sep" aria-hidden="true">·</span>`);
+}
+/* For free food: when it's open next, on its own line, since that's what decides whether to go */
+function whenLine(s, next) {
+  const x = next[0];
+  return x ? `<p class="pwhen ${x.now ? "open" : ""}">${ico("clock", "i sm")}<span>${x.now ? `<b>${esc(t("open_now"))}</b> · ` : ""}${esc(whenText(x))}</span></p>`
+    : `<p class="pwhen call">${ico("phone", "i sm")}<span>${esc(t(s.d?.some(d => d.when) ? "call_check" : "call_hours"))}</span></p>`;
+}
+
 function siteCard(s) {
   const free = FREE.includes(s.k);
   const next = free ? soon(s) : [];
-  const d0 = s.d?.[0];
   const callFirst = free && !next.length;
   const isEn = S.lang === "en";
   const addr = [tidyCaps(s.a), tidyCaps(s.c)].filter(Boolean).join(", ");
-  const when = free
-    ? (next.length
-      ? `<p class="when">${ico("clock", "i sm")}<span>${next.map((x, i) => `${i ? "<br>" : ""}${esc(whenText(x))}${s.d.length > 1 && (x.d.prog === "csfp" || x.d.f?.includes("senior")) ? " · " + esc(t("f_senior")) : ""}${x.now ? ` <span class="badge ok">${esc(t("open_now"))}</span>` : ""}`).join("")}</span></p>`
-      : `<p class="when">${ico("phone", "i sm")}<span>${esc(t(s.d?.some(d => d.when) ? "call_check" : "call_hours"))}</span></p>`)
-    : "";
-  const kindNote = s.k === "store" ? [s.tier === "budget" ? `<span class="badge ok">${esc(t("low_prices"))}</span>` : "", s.inc ? `<span class="badge yolk">${esc(t("inc_badge"))}</span>` : "", ...(s.cu || []).slice(0, 2).map(c => `<span class="badge yolk">${esc(t("cu_" + c))}</span>`)].join("")
-    : s.k === "market" ? (R.partner ? `<span class="badge yolk">${esc(t("market_match"))}</span>` : s.inc ? `<span class="badge yolk">${esc(t("inc_badge"))}</span>` : "")
-    : s.k === "rmp" ? `<span class="badge">${esc(t("rmp_badge"))}</span>` : "";
+  const showKind = catOf(F.cat).kinds.length > 1;
   const details = free ? s.d.map(d => {
     const rows = [
       d.prog && [t("prog"), t("prog_" + d.prog)],
@@ -171,23 +224,37 @@ function siteCard(s) {
   // a 60+ box at a pantry that also serves everyone shouldn't mark the whole place "60+ only"
   if (free && s.d.some(d => !(d.f || []).includes("senior") && d.prog !== "csfp")) flags = flags.filter(f => f !== "senior");
   const tel = telHref(s.ph), web = safeUrl(s.w);
-  return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
-    <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
-    <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}</p>
-    ${addr ? `<p class="addr"><bdi dir="ltr">${esc(addr)}</bdi></p>` : ""}
-    ${free && stale(s) ? `<p class="notice stale">${ico("alert", "i sm")}<span>${esc(t("stale"))}</span></p>` : ""}
-    ${when}
-    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <bdi dir="ltr"><a href="${esc(h)}">${esc(c.ph)}</a></bdi>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
-    ${free ? `<div class="row">${flagBadges({ f: flags })}</div>` : kindNote ? `<div class="row">${kindNote}</div>` : ""}
-    <div class="acts">
-      <a class="btn sm pri" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out>${ico("route", "i sm")} ${esc(t("directions"))}</a>
-      ${tel ? `<a class="btn sm" href="${esc(tel)}">${ico("phone", "i sm")} ${esc(t("call"))}</a>` : ""}
-      ${web ? `<a class="btn sm ghost" href="${esc(web)}" target="_blank" rel="noopener noreferrer" data-out>${ico("ext", "i sm")} ${esc(t("website"))}</a>` : ""}
-      <button class="btn sm ghost" type="button" data-share="${esc(s.id)}">${ico("share", "i sm")} ${esc(t("share"))}</button>
+  const tg = tags(s, free, flags);
+  const open = s.id === openId;
+  const id = esc(s.id);
+  const times = next.length > 1
+    ? `<ul class="times">${next.map(x => `<li>${ico("clock", "i sm")}<span>${esc(whenText(x))}${s.d.length > 1 && (x.d.prog === "csfp" || x.d.f?.includes("senior")) ? " · " + esc(t("f_senior")) : ""}${x.now ? ` <span class="badge ok">${esc(t("open_now"))}</span>` : ""}</span></li>`).join("")}</ul>` : "";
+  const call = free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <bdi dir="ltr"><a href="${esc(h)}">${esc(c.ph)}</a></bdi>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : "";
+  const access = free ? ["walk", "drive"].filter(f => flags.includes(f)).map(f => `<span class="badge">${esc(t("f_" + f))}</span>`).join("") : "";
+  return `<li class="place${s.id === focusId ? " hl" : ""}${open ? " open" : ""}" id="s-${id}" data-id="${id}">
+    <span class="ktile kt-${esc(s.k)}" aria-hidden="true">${kindIcon(s.k)}</span>
+    <div class="pmain">
+      <h2 class="pname"><button type="button" class="ptap" aria-expanded="${open}" aria-controls="sx-${id}"><span>${esc(s.n)}</span><span class="pchev" aria-hidden="true">${ico("chev", "i sm")}</span></button></h2>
+      <p class="pline">${statusLine(s, next, free, showKind)}</p>
+      ${free ? whenLine(s, next) : ""}
+      ${addr ? `<p class="addr"><bdi dir="ltr">${esc(addr)}</bdi></p>` : ""}
+      ${s.rep === "closed" || s.rep === "hours" ? `<p class="notice stale">${ico("flag", "i sm")}<span>${esc(t("rep_flag_" + s.rep))}</span></p>` : ""}
+      ${free && stale(s) ? `<p class="notice stale">${ico("alert", "i sm")}<span>${esc(t("stale"))}</span></p>` : ""}
+      ${tg ? `<div class="ptags">${tg}</div>` : ""}
     </div>
-    ${details ? `<details><summary>${ico("chev", "i sm")} ${esc(t("details"))}</summary>${!isEn ? `<p class="src">${esc(t("src_english"))}</p>` : ""}${details}</details>` : ""}
-    ${free ? `<p class="src">${esc(fresh(s))}${callFirst ? "" : " · " + esc(t("times_change"))}</p>
-    <details class="report"><summary>${ico("flag", "i sm")} ${esc(t("report_q"))}</summary><div class="acts">${reportLinks(s)}</div><p class="tiny mute">${esc(t("report_note"))}</p></details>` : ""}
+    <a class="pdir" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out aria-label="${esc(t("directions") + ": " + s.n)}">${ico("route", "i sm")}<span class="lbl" aria-hidden="true">${esc(t("directions"))}</span></a>
+    <div class="pmore" id="sx-${id}"${open ? "" : " hidden"}>
+      ${times}${call}
+      ${access ? `<div class="ptags">${access}</div>` : ""}
+      <div class="acts">
+        ${tel ? `<a class="btn sm" href="${esc(tel)}">${ico("phone", "i sm")} ${esc(t("call"))}</a>` : ""}
+        ${web ? `<a class="btn sm" href="${esc(web)}" target="_blank" rel="noopener noreferrer" data-out>${ico("ext", "i sm")} ${esc(t("website"))}</a>` : ""}
+        <button class="btn sm ghost" type="button" data-share="${id}">${ico("share", "i sm")} ${esc(t("share"))}</button>
+      </div>
+      ${details ? `<details><summary>${ico("chev", "i sm")} ${esc(t("details"))}</summary>${!isEn ? `<p class="src">${esc(t("src_english"))}</p>` : ""}${details}</details>` : ""}
+      ${free ? `<p class="src">${esc(fresh(s))}${callFirst ? "" : " · " + esc(t("times_change"))}</p>` : ""}
+      ${reportBlock(s)}
+    </div>
   </li>`;
 }
 
@@ -199,6 +266,7 @@ function catNote() {
     senior: t("note_senior"),
     meal: t(R.partner ? "note_meal" : "us_note_meal"),
     fridge: t("note_fridge"),
+    summer: t("note_summer"), garden: t("note_garden"), givebox: t("note_givebox"), bakery: t("note_bakery"),
   }[F.cat];
   // where we list only a few free food places nearby, say the list may be missing some, and where to find the rest
   const extra = thinHere() && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
@@ -226,17 +294,72 @@ function paintList() {
   if (!box) return;
   if (focusId) { const i = list.findIndex(x => x.id === focusId); if (i >= F.shown) F.shown = Math.ceil((i + 1) / PAGE) * PAGE; }
   const shown = list.slice(0, F.shown);
-  const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
+  const freeCat = isFreeCat(catOf(F.cat));
   $("#fcount").textContent = t("results", { n: list.length });
   // outside San Diego County, an empty free-food list points to the people who know every pantry
   const helpBtns = freeCat && !R.partner ? `<div class="row center"><a class="btn sm pri" href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${ico("ext", "i sm")} ${esc(t("us_fb_find"))}</a><a class="btn sm" href="tel:211">${ico("phone", "i sm")} ${esc(t("call_211"))}</a></div>` : "";
   box.innerHTML = shown.length ? shown.map(siteCard).join("") :
     `<li class="card empty">${ico("search")}<p><b>${esc(t("none_h"))}</b></p><p class="mute">${esc(t(freeCat && (F.today || F.walk || F.drive) ? "none_filters" : "none_p"))}</p>${helpBtns}</li>`;
   $("#fmore").innerHTML = list.length > F.shown ? `<button class="btn" type="button" id="more">${esc(t("show_more", { n: Math.min(PAGE, list.length - F.shown) }))}</button>` : "";
-  $("#more")?.addEventListener("click", () => { F.shown += PAGE; paintList(); $(`#flist li:nth-child(${F.shown - PAGE + 1}) a, #flist li:nth-child(${F.shown - PAGE + 1}) button`)?.focus(); });
+  $("#more")?.addEventListener("click", () => { F.shown += PAGE; paintList(); $(`#flist li:nth-child(${F.shown - PAGE + 1}) .ptap`)?.focus(); });
+  bindRows(box);
+  reportMod?.bindReport?.(box);
+  if (mapApi) { mapApi.update(list.slice(0, 150), S.loc); mapApi.select(focusId); }
+}
+
+function bindRows(box) {
   $$("[data-share]", box).forEach(b => b.onclick = () => shareSite(R.byId.get(b.dataset.share)));
   $$("a[data-out]", box).forEach(a => a.addEventListener("click", e => { e.preventDefault(); openOut(a.href); }));
-  if (mapApi) mapApi.update(list.slice(0, 150), S.loc);
+  $$(".ptap", box).forEach(b => b.onclick = () => toggleRow(b.closest(".place").dataset.id));
+  // a tap anywhere on the row that isn't a link, button or text being selected works like tapping the name
+  box.onclick = e => {
+    const li = e.target.closest(".place");
+    if (!li || e.target.closest("a,button,summary,details,input,select,.pmore") || getSelection()?.toString()) return;
+    toggleRow(li.dataset.id); li.querySelector(".ptap").focus({ preventScroll: true });
+  };
+  if (matchMedia("(hover: hover)").matches) {
+    box.onmouseover = e => { const li = e.target.closest(".place"); mapApi?.hover(li ? li.dataset.id : null); };
+    box.onmouseleave = () => mapApi?.hover(null);
+  }
+}
+function setOpen(id, on) {
+  const li = $(`#s-${CSS.escape(id)}`); if (!li) return;
+  li.classList.toggle("open", on);
+  li.querySelector(".ptap").setAttribute("aria-expanded", on);
+  li.querySelector(".pmore").hidden = !on;
+}
+function toggleRow(id) {
+  const on = openId !== id;
+  if (openId && openId !== id) setOpen(openId, false);
+  openId = on ? id : null;
+  setOpen(id, on);
+  select(id, { fly: true });
+}
+function select(id, { fly = false, scroll = false } = {}) {
+  focusId = id;
+  $$(".place.hl").forEach(x => x.classList.remove("hl"));
+  const el = id && $(`#s-${CSS.escape(id)}`);
+  if (el) { el.classList.add("hl"); if (scroll) el.scrollIntoView({ block: "nearest", behavior: calm() ? "auto" : "smooth" }); }
+  mapApi?.select(id, { fly });
+}
+/* On a phone, tapping a pin shows a small card over the map instead of jumping away from it */
+function mapCard(id) {
+  const box = $("#fmap"); if (!box) return;
+  let c = $("#fmapcard", box);
+  const s = id && R.byId.get(id);
+  if (!s) { c?.remove(); return; }
+  if (!c) { c = document.createElement("div"); c.id = "fmapcard"; c.className = "mapcard"; box.appendChild(c); }
+  const free = FREE.includes(s.k), next = free ? soon(s) : [];
+  c.innerHTML = `<span class="ktile kt-${esc(s.k)}" aria-hidden="true">${kindIcon(s.k)}</span>
+    <div class="pmain"><p class="pname">${esc(s.n)}</p><p class="pline">${statusLine(s, next, free, catOf(F.cat).kinds.length > 1)}</p>${free ? whenLine(s, next) : ""}</div>
+    <button type="button" class="iconbtn mcx" aria-label="${esc(t("close"))}">${ico("x")}</button>
+    <div class="acts">
+      <a class="btn sm pri" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out>${ico("route", "i sm")} ${esc(t("directions"))}</a>
+      <button class="btn sm" type="button" data-more>${ico("list", "i sm")} ${esc(t("details"))}</button>
+    </div>`;
+  $(".mcx", c).onclick = () => { c.remove(); select(null); };
+  $("[data-more]", c).onclick = () => { c.remove(); setView("list"); if (openId !== id) toggleRow(id); requestAnimationFrame(() => { const el = $(`#s-${CSS.escape(id)}`); el?.scrollIntoView({ block: "center" }); el?.querySelector(".ptap").focus({ preventScroll: true }); }); };
+  $("a[data-out]", c).addEventListener("click", e => { e.preventDefault(); openOut(e.currentTarget.href); });
 }
 
 function shareSite(s) {
@@ -249,6 +372,9 @@ function shareSite(s) {
 function chip(id, label, on, attr = "data-cat", kind = "") {
   return `<button class="chip ${kind}" type="button" ${attr}="${id}" aria-pressed="${on}">${kind ? mark(kind) : ""}${label}</button>`;
 }
+function tab(c, on, n) {
+  return `<button class="ktab" type="button" data-cat="${c.id}" aria-pressed="${on}"><span class="kt-${c.icon}">${kindIcon(c.icon, "i sm")}</span><span>${esc(t("cat_" + c.id))}</span><span class="n">${esc(num(n))}</span></button>`;
+}
 
 async function loadMap() {
   const box = $("#fmap");
@@ -260,10 +386,13 @@ async function loadMap() {
     mapApi = await mapMod.mountMap(box, {
       center: S.loc || MID,
       onSelect: id => {
-        if (matchMedia("(max-width: 959px)").matches) setView("list");
-        focusId = id; const el = $(`#s-${CSS.escape(id)}`);
-        $$(".site.hl").forEach(x => x.classList.remove("hl"));
-        if (el) { el.classList.add("hl"); el.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); el.querySelector("a,button")?.focus({ preventScroll: true }); }
+        if (phone()) { select(id); mapCard(id); return; }
+        // on a computer, open the row beside the map
+        let el = $(`#s-${CSS.escape(id)}`);
+        if (!el) { focusId = id; paintList(); el = $(`#s-${CSS.escape(id)}`); }
+        if (openId !== id) toggleRow(id); else select(id);
+        el = $(`#s-${CSS.escape(id)}`);
+        if (el) { el.scrollIntoView({ block: "nearest", behavior: calm() ? "auto" : "smooth" }); el.querySelector(".ptap")?.focus({ preventScroll: true }); }
       },
       label: s => s.n,
     });
@@ -276,9 +405,10 @@ async function loadMap() {
 function setView(v) {
   F.view = v;
   $$("[data-view]").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === v));
-  const phone = matchMedia("(max-width: 959px)").matches;
-  if (phone) { $("#fmap").hidden = v !== "map"; $("#flistwrap").hidden = v === "map"; }
-  if (v === "map") loadMap().then(() => { mapApi?.resize(); if (phone) $("#fmap").scrollIntoView({ block: "end" }); });
+  const ph = phone();
+  if (ph) { $("#fmap").hidden = v !== "map"; $("#flistwrap").hidden = v === "map"; if (v !== "map") mapCard(null); }
+  $(".findapp")?.classList.toggle("mapview", ph && v === "map");
+  if (v === "map") loadMap().then(() => { mapApi?.resize(); if (ph) $("#fmap").scrollIntoView({ block: "end" }); setTimeout(() => mapApi?.resize(), 300); });
 }
 
 export async function render(main, { args }) {
@@ -291,62 +421,74 @@ export async function render(main, { args }) {
     if (s) { focusId = s.id; F.cat = !FREE.includes(s.k) ? s.k : s.k === "senior" && !S.senior ? "senior" : "free"; F.today = F.walk = F.drive = false; }
   }
   const wide = matchMedia("(min-width: 960px)");
+  main.classList.add("findmode");
   main.innerHTML = `
-  <section class="hero" aria-labelledby="find-h">
-    <h1 class="disp" id="find-h">${esc(S.loc ? t("find_h_near", { p: S.loc.label }) : t("find_h"))}</h1>
-    <p id="find-p">${esc(t(R.partner ? "find_p" : "us_find_p"))}</p>
-    ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
-    <p class="small" id="f-msg" role="status"></p>
-  </section>
-  <div class="chips cats" role="group" aria-label="${esc(t("show"))}" id="fcats">
-  </div>
-  <div class="row between fbar">
-    <div class="chips wrap" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
-    <div class="viewtoggle seg" role="group" aria-label="${esc(t("view"))}">
-      <button type="button" data-view="list" aria-pressed="true">${ico("list", "i sm")} ${esc(t("view_list"))}</button>
-      <button type="button" data-view="map" aria-pressed="false">${ico("map", "i sm")} ${esc(t("view_map"))}</button>
-    </div>
-  </div>
-  <div class="findwrap withmap">
-    <div id="flistwrap" class="stack">
-      <div id="fnote"></div>
-      <p class="mute small" id="fcount" role="status"></p>
-      <ul class="list" id="flist"></ul>
-      <div class="more" id="fmore"></div>
+  <div class="findapp">
+    <div class="fside">
+      <section class="hero findhero${S.loc ? " has-loc" : ""}" aria-labelledby="find-h">
+        <h1 class="disp" id="find-h">${esc(S.loc ? t("find_h_near", { p: S.loc.label }) : t("find_h"))}</h1>
+        <p id="find-p">${esc(t(R.partner ? "find_p" : "us_find_p"))}</p>
+        ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
+        <p class="small" id="f-msg" role="status"></p>
+      </section>
+      <div class="ktabs" role="group" aria-label="${esc(t("show"))}" id="fcats"></div>
+      <div class="fbar">
+        <p class="fcount" id="fcount" role="status"></p>
+        <label class="fsort" id="fsortw"><span class="sr">${esc(t("sort_by"))}</span>${ico("swap", "i sm")}<select id="fsort"></select></label>
+        <div class="viewtoggle seg" role="group" aria-label="${esc(t("view"))}">
+          <button type="button" data-view="list" aria-pressed="true">${ico("list", "i sm")} ${esc(t("view_list"))}</button>
+          <button type="button" data-view="map" aria-pressed="false">${ico("map", "i sm")} ${esc(t("view_map"))}</button>
+        </div>
+      </div>
+      <div class="chips fflt" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
+      <div id="flistwrap" class="stack">
+        <div id="fnote"></div>
+        <ul class="plist" id="flist"></ul>
+        <div class="more" id="fmore"></div>
+        <div class="notice info" id="fdata">${dataNote()}</div>
+      </div>
+      ${foot()}
     </div>
     <div class="mapbox" id="fmap" hidden></div>
-  </div>
-  <div class="notice info" id="fdata">${dataNote()}</div>
-  ${foot()}`;
+  </div>`;
+  // on a phone, the location button shrinks to its icon so the search box gets the room
+  const gps = $("#f-gps");
+  if (gps) { gps.setAttribute("aria-label", t("loc_gps")); gps.innerHTML = `${ico("locate")}<span class="lbl" aria-hidden="true">${esc(t("loc_gps"))}</span>`; }
 
-  bindLoc("f", () => { $("#find-h").textContent = t("find_h_near", { p: S.loc.label }); });
+  bindLoc("f", () => { $("#find-h").textContent = t("find_h_near", { p: S.loc.label }); $(".findhero")?.classList.add("has-loc"); });
   const paintFilters = () => {
-    const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
+    const cat = catOf(F.cat);
+    const freeCat = isFreeCat(cat) && cat.kinds.some(k => SCHED.includes(k));
     $("#fflt").innerHTML = freeCat ? [
       chip("today", esc(t("flt_today")), F.today, "data-flt", "ck"),
       chip("walk", esc(t("f_walk")), F.walk, "data-flt", "ck"),
       chip("drive", esc(t("f_drive")), F.drive, "data-flt", "ck"),
-      chip("soon", esc(t("sort_soon")), F.sort === "soon", "data-flt", "ck"),
     ].join("") : "";
+    $("#fflt").hidden = !freeCat;
     $$("[data-flt]").forEach(b => b.onclick = () => {
-      const k = b.dataset.flt;
-      if (k === "soon") F.sort = F.sort === "soon" ? "near" : "soon"; else F[k] = !F[k];
-      b.setAttribute("aria-pressed", k === "soon" ? F.sort === "soon" : F[k]);
+      const k = b.dataset.flt; F[k] = !F[k];
+      b.setAttribute("aria-pressed", F[k]);
       F.shown = PAGE; paintList();
     });
+    const sorts = sortsFor(cat);
+    if (!sorts.includes(F.sort)) F.sort = sorts[0];
+    $("#fsort").innerHTML = sorts.map(k => `<option value="${k}"${F.sort === k ? " selected" : ""}>${esc(t("sort_" + k))}</option>`).join("");
+    $("#fsortw").hidden = sorts.length < 2;
+    $("#fsort").onchange = e => { F.sort = e.target.value; F.shown = PAGE; paintList(); announce($("#fcount").textContent); };
     $("#fnote").innerHTML = catNote();
   };
   // categories this area has nothing for (no senior box sites, no restaurant program) are left out
   const paintCats = () => {
-    const has = new Set([...R.sites, ...R.stores].map(s => s.k));
-    const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || c.kinds.some(k => has.has(k)));
+    const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || pool(c).length);
     if (!cats.some(c => c.id === F.cat)) F.cat = "store";
-    $("#fcats").innerHTML = cats.map(c => chip(c.id, `<span class="dot ${KDOT[c.kinds[0]]}" aria-hidden="true"></span>${esc(t("cat_" + c.id))}`, F.cat === c.id)).join("");
+    $("#fcats").innerHTML = cats.map(c => tab(c, F.cat === c.id, pool(c).length)).join("");
     $$("[data-cat]").forEach(b => b.onclick = () => {
+      if (F.cat !== b.dataset.cat) { F.sort = ""; openId = null; focusId = null; mapCard(null); }
       F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;
       $$("[data-cat]").forEach(x => x.setAttribute("aria-pressed", x === b));
       paintFilters(); paintList(); announce($("#fcount").textContent);
     });
+    $(`[data-cat="${F.cat}"]`)?.scrollIntoView({ block: "nearest", inline: "center" });
   };
   paintCats();
   $$("[data-view]").forEach(b => b.onclick = () => setView(b.dataset.view));
@@ -361,10 +503,11 @@ export async function render(main, { args }) {
     if (!$("#flist")) return;
     $("#find-p").textContent = t(R.partner ? "find_p" : "us_find_p");
     $("#fdata").innerHTML = dataNote();
+    openId = null; focusId = null; mapCard(null);
     paintCats(); paintFilters(); paintList(); mapApi?.recenter(S.loc);
   };
   addEventListener("pm:loc", onLoc);
-  if (focusId) requestAnimationFrame(() => { const el = $(`#s-${CSS.escape(focusId)}`); el?.scrollIntoView({ block: "center" }); });
+  if (focusId) { openId = focusId; requestAnimationFrame(() => { setOpen(focusId, true); const el = $(`#s-${CSS.escape(focusId)}`); el?.scrollIntoView({ block: "center" }); }); }
   const timer = setInterval(paintList, 5 * 60000); // "open now" stays honest if the app sits open
-  return () => { clearInterval(timer); wide.removeEventListener("change", onWide); removeEventListener("pm:loc", onLoc); mapApi?.destroy(); mapApi = null; focusId = null; };
+  return () => { clearInterval(timer); wide.removeEventListener("change", onWide); removeEventListener("pm:loc", onLoc); mapApi?.destroy(); mapApi = null; focusId = null; openId = null; main.classList.remove("findmode"); };
 }
