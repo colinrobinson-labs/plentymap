@@ -5,7 +5,7 @@ name: Map tiles
 # files are removed.
 #
 # Which countries: the repository variable TILE_COUNTRIES (Settings > Secrets and variables > Actions >
-# Variables), space-separated, default "us". Sizes at street level (z14) in Nov 2026: US ~9.7 GB,
+# Variables), space-separated, default "us gb ca" (Colin approved UK and Canada on 2026-11-19). Sizes at street level (z14) in Nov 2026: US ~9.7 GB,
 # UK ~1.3 GB, Canada ~8.4 GB (z13 4.5 GB). R2 storage past the free 10 GB is $0.015 per GB-month.
 on:
   schedule:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - id: p
         env:
-          WANT: ${{ inputs.countries || vars.TILE_COUNTRIES || 'us' }}
+          WANT: ${{ inputs.countries || vars.TILE_COUNTRIES || 'us gb ca' }}
         run: |
           list=$(echo "$WANT" | tr ' ,' '\n\n' | grep -E '^(us|gb|ca)$' | sort -u | jq -R . | jq -sc .)
           [ "$list" != "[]" ] || list='["us"]'
