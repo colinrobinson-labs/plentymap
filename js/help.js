@@ -153,7 +153,7 @@ export async function render(main) {
       <label class="field"><span>${esc(t("income_q"))}</span>
         <input class="in" id="inc" inputmode="decimal" autocomplete="off" placeholder="0" value="${esc(q.inc)}">
         <small>${esc(t("income_hint"))}</small></label>
-      <fieldset class="field"><legend><b>${esc(t("who_q"))}</b></legend>
+      <fieldset class="checks"><legend>${esc(t("who_q"))}</legend>
         ${["preg", "baby", "school", "senior", "dis", "home"].map(ck).join("")}
       </fieldset>
       <button class="btn pri block" type="submit">${esc(t("check_btn"))}</button>

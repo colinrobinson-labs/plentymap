@@ -1,6 +1,6 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
    and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
-import { S, save, t, esc, $, $$, ico, money, num, dateFmt, timeFmt, miles, dist, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
@@ -236,8 +236,8 @@ function shareSite(s) {
   shareThing({ title: s.n, text, url: location.origin + location.pathname + "#/find/" + encodeURIComponent(s.id) });
 }
 
-function chip(id, label, on, attr = "data-cat") {
-  return `<button class="chip" type="button" ${attr}="${id}" aria-pressed="${on}">${label}</button>`;
+function chip(id, label, on, attr = "data-cat", kind = "") {
+  return `<button class="chip ${kind}" type="button" ${attr}="${id}" aria-pressed="${on}">${kind ? mark(kind) : ""}${label}</button>`;
 }
 
 async function loadMap() {
@@ -286,11 +286,11 @@ export async function render(main, { args }) {
     ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
     <p class="small" id="f-msg" role="status"></p>
   </section>
-  <div class="chips" role="group" aria-label="${esc(t("show"))}" id="fcats">
+  <div class="chips cats" role="group" aria-label="${esc(t("show"))}" id="fcats">
   </div>
-  <div class="row between">
+  <div class="row between fbar">
     <div class="chips wrap" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
-    <div class="viewtoggle" role="group" aria-label="${esc(t("view"))}">
+    <div class="viewtoggle seg" role="group" aria-label="${esc(t("view"))}">
       <button type="button" data-view="list" aria-pressed="true">${ico("list", "i sm")} ${esc(t("view_list"))}</button>
       <button type="button" data-view="map" aria-pressed="false">${ico("map", "i sm")} ${esc(t("view_map"))}</button>
     </div>
@@ -311,10 +311,10 @@ export async function render(main, { args }) {
   const paintFilters = () => {
     const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
     $("#fflt").innerHTML = freeCat ? [
-      chip("today", ico("cal", "i sm") + esc(t("flt_today")), F.today, "data-flt"),
-      chip("walk", esc(t("f_walk")), F.walk, "data-flt"),
-      chip("drive", esc(t("f_drive")), F.drive, "data-flt"),
-      chip("soon", ico("clock", "i sm") + esc(t("sort_soon")), F.sort === "soon", "data-flt"),
+      chip("today", esc(t("flt_today")), F.today, "data-flt", "ck"),
+      chip("walk", esc(t("f_walk")), F.walk, "data-flt", "ck"),
+      chip("drive", esc(t("f_drive")), F.drive, "data-flt", "ck"),
+      chip("soon", esc(t("sort_soon")), F.sort === "soon", "data-flt", "ck"),
     ].join("") : "";
     $$("[data-flt]").forEach(b => b.onclick = () => {
       const k = b.dataset.flt;

@@ -194,9 +194,6 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 }
 .mapbox{height:calc(100dvh - var(--head) - var(--bar) - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));min-height:340px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--board-2);position:relative}
 .mapbox .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--chalk)}
-.viewtoggle{display:inline-flex;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
-.viewtoggle button{min-height:42px;padding:0 14px;border:0;background:none;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--ink)}
-.viewtoggle button[aria-pressed="true"]{background:var(--board);color:var(--chalk)}
 @media (min-width:960px){.viewtoggle{display:none}}
 
 .list{display:grid;gap:12px;list-style:none;margin:0;padding:0}
@@ -237,8 +234,6 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 .maplibregl-ctrl-attrib{font-size:11px}
 
 /* ---------- cook ---------- */
-.filters{display:grid;gap:12px;padding:14px 16px}
-.filters .lbl{font-weight:800;font-size:14px;color:var(--mute);margin-block-end:6px;display:block}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:12px;list-style:none;margin:0;padding:0}
 .rcard{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px;text-align:start;width:100%;border:1px solid var(--line);background:var(--card);border-radius:var(--r);color:var(--ink);box-shadow:var(--shadow)}
 .rcard:hover{border-color:var(--ink-2)}
@@ -330,8 +325,6 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 @media print{.top,.tabs,.acts,.foot,.sheet .bar .iconbtn,.btn{display:none!important}body{background:#fff;color:#000}.sheet{position:static;background:none}.sheet .panel{max-height:none;box-shadow:none}main{padding:0}}
 .gap-t{margin-block-start:16px}
 [tabindex="-1"]:focus{outline:none}
-.filters .inner{padding:8px 0 0}
-.morefl summary,.filters details summary{cursor:pointer}
 .rcard .meta{align-items:center}
 .kpi span{display:block}
 p>.i,.small>.i,.tiny>.i,.lead>.i{display:inline-block;vertical-align:-4px;margin-inline-end:4px}
@@ -368,3 +361,107 @@ legend{padding:0;margin-block-end:4px}
 .site details.report{margin-block-start:4px}
 .site details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:32px}
 .site details.report .acts{margin-block:6px}
+
+/* ---------- menus and filters ----------
+   One look for every set of choices, so they read like a printed market menu:
+   a display-type heading per group, dashed rules between groups, and a control shaped for the kind of choice.
+   .seg   pick one of a few (cost, cooking level, theme, list/map)
+   .tile  pick any, with a picture (kitchen)
+   .ck    tick any (filters, meals, what you have)         square box, ticks when on
+   .opt   pick one of many (diet)                          round dot, fills when on
+   .out   leave out (allergens)                            tomato cross, name struck through when on */
+:root{--sel:var(--board);--sel-ink:var(--chalk);--tint:color-mix(in srgb,var(--yolk) 24%,var(--card));--out:#A8361F;--out-bg:color-mix(in srgb,var(--tomato) 11%,var(--card))}
+:root[data-theme="dark"]{--sel:var(--chalk);--sel-ink:var(--board);--tint:color-mix(in srgb,var(--yolk) 17%,var(--card));--out:#F08A74;--out-bg:color-mix(in srgb,var(--tomato) 22%,var(--card))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--sel:var(--chalk);--sel-ink:var(--board);--tint:color-mix(in srgb,var(--yolk) 17%,var(--card));--out:#F08A74;--out-bg:color-mix(in srgb,var(--tomato) 22%,var(--card))}}
+
+.filters{display:block;padding:2px 18px 4px;container-type:inline-size}
+.fg{display:grid;gap:12px;padding-block:18px;border-block-start:1.5px dashed var(--line)}
+.filters>.fg:first-child{border-block-start:0}
+.fg-h{display:block;font-family:var(--f-disp);font-weight:400;font-size:19px;line-height:1.2;color:var(--ink);letter-spacing:.005em}
+:lang(vi) .fg-h,:lang(ru) .fg-h,:lang(uk) .fg-h,:lang(ar) .fg-h,:lang(fa) .fg-h,:lang(ps) .fg-h,:lang(zh-Hans) .fg-h,:lang(zh-Hant) .fg-h,:lang(ko) .fg-h{font-weight:800;letter-spacing:0;font-size:18px}
+.fg-c{min-width:0}
+@container (min-width:640px){
+  .fg{grid-template-columns:minmax(150px,200px) minmax(0,1fr);gap:24px;align-items:start}
+  .fg>.fg-h{padding-block-start:11px}
+}
+.filters>.fg:first-child{padding-block-start:16px}
+.stack>.fg{padding-block:0;border:0;gap:10px}
+
+/* folding sections: a full-width row with the count and a chevron, not an underlined link */
+.fold{border-block-start:1.5px dashed var(--line)}
+.fold>summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:60px;padding-block:8px;cursor:pointer;font-family:var(--f-disp);font-size:19px;line-height:1.2;color:var(--ink)}
+:lang(vi) .fold>summary,:lang(ru) .fold>summary,:lang(uk) .fold>summary,:lang(ar) .fold>summary,:lang(fa) .fold>summary,:lang(ps) .fold>summary,:lang(zh-Hans) .fold>summary,:lang(zh-Hant) .fold>summary,:lang(ko) .fold>summary{font-weight:800;font-size:18px}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary .chev{margin-inline-start:auto;width:26px;height:26px;padding:3px;border-radius:50%;border:1.5px solid var(--line);transition:transform .15s}
+.fold>summary:hover .chev{border-color:var(--ink-2)}
+.fold[open]>summary .chev{transform:rotate(180deg)}
+.fold-b{padding-block-end:14px}
+.fold-b>.fg:first-child{border-block-start:1.5px solid var(--line-2)}
+.cnt{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--yolk);color:var(--board);font-family:var(--f-body);font-weight:800;font-size:14px}
+.cnt[hidden]{display:none}
+
+/* segmented: one ruled bar, the chosen cell filled */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:1.5px;background:var(--ink);border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;max-width:620px}
+.seg>button{min-height:48px;padding:6px 10px;border:0;border-radius:0;background:var(--card);color:var(--ink);font-weight:700;font-size:15.5px;line-height:1.2;display:flex;align-items:center;justify-content:center;gap:6px;text-align:center}
+.seg>button:hover{background:var(--line-2)}
+.seg>button[aria-pressed="true"]{background:var(--sel);color:var(--sel-ink)}
+.seg>button:focus-visible{outline-offset:-5px}
+@media (max-width:520px){.seg.n4{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}}
+.viewtoggle.seg{display:inline-grid}
+.viewtoggle.seg>button{min-height:44px;padding:0 16px}
+@media (min-width:960px){.viewtoggle.seg{display:none}}
+
+/* tiles: a picture card per option, ticked in the corner when on */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:560px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;min-height:88px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-weight:700;font-size:15.5px;line-height:1.25;text-align:start}
+.tile>.i{width:26px;height:26px;color:var(--ink-2)}
+.tile .mk{position:absolute;inset-block-start:10px;inset-inline-end:10px}
+.tile:hover{border-color:var(--ink-2)}
+.tile[aria-pressed="true"]{border-color:var(--sel);background:var(--tint);box-shadow:inset 0 0 0 1px var(--sel)}
+.tile[aria-pressed="true"]>.i{color:var(--ink)}
+
+/* marks */
+.mk{flex:none;display:inline-grid;place-items:center;width:20px;height:20px;border:2px solid var(--mute);border-radius:6px;background:var(--card);color:var(--sel-ink)}
+.mk .i{width:14px;height:14px;stroke-width:3.2;opacity:0}
+.mk-opt{border-radius:50%}
+.mk-out{border-radius:50%;border-style:dashed}
+[aria-pressed="true"]>.mk-ck{background:var(--sel);border-color:var(--sel)}
+[aria-pressed="true"]>.mk .i{opacity:1}
+[aria-pressed="true"]>.mk-opt{border-color:var(--sel);background:var(--sel);box-shadow:inset 0 0 0 3.5px var(--card)}
+[aria-pressed="true"]>.mk-out{border:0;background:var(--out);color:#fff}
+:root[data-theme="dark"] [aria-pressed="true"]>.mk-out{color:var(--board)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) [aria-pressed="true"]>.mk-out{color:var(--board)}}
+
+/* chip kinds: squarer than the category pills, light fill when on (the dark fill is kept for "which list am I looking at") */
+.chip.ck,.chip.opt,.chip.out{border-radius:10px;padding-inline:12px 15px;gap:9px}
+.chip.opt{border-radius:999px}
+.chip.ck[aria-pressed="true"],.chip.opt[aria-pressed="true"]{background:var(--tint);border-color:var(--sel);color:var(--ink);box-shadow:inset 0 0 0 1px var(--sel)}
+.chip.out[aria-pressed="true"]{background:var(--out-bg);border-color:var(--out);color:var(--ink);box-shadow:inset 0 0 0 1px var(--out)}
+.chip.out[aria-pressed="true"]>span{text-decoration:line-through;text-decoration-color:var(--out);text-decoration-thickness:2px}
+:root[data-theme="dark"] .chip.ck[aria-pressed="true"],:root[data-theme="dark"] .chip.opt[aria-pressed="true"]{background:var(--tint);border-color:var(--sel);color:var(--ink)}
+:root[data-theme="dark"] .chip.out[aria-pressed="true"]{background:var(--out-bg);border-color:var(--out);color:var(--ink)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .chip.ck[aria-pressed="true"],:root:not([data-theme="light"]) .chip.opt[aria-pressed="true"]{background:var(--tint);border-color:var(--sel);color:var(--ink)}
+  :root:not([data-theme="light"]) .chip.out[aria-pressed="true"]{background:var(--out-bg);border-color:var(--out);color:var(--ink)}
+}
+
+/* Find: category pills sit on a ruled shelf, the quick filters under them */
+.chips.cats{padding-block:4px 12px;border-block-end:1.5px dashed var(--line);margin-block-end:4px}
+.chips.cats .chip{font-weight:700}
+.fbar{align-items:center}
+
+/* Help: "who's at home" as tick cards */
+.checks{display:grid;gap:8px}
+@media (min-width:560px){.checks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.checks>legend{font-family:var(--f-disp);font-size:19px;line-height:1.2;margin-block-end:10px;color:var(--ink)}
+:lang(vi) .checks>legend,:lang(ru) .checks>legend,:lang(uk) .checks>legend,:lang(ar) .checks>legend,:lang(fa) .checks>legend,:lang(ps) .checks>legend,:lang(zh-Hans) .checks>legend,:lang(zh-Hant) .checks>legend,:lang(ko) .checks>legend{font-weight:800;font-size:18px}
+.checks .check{align-items:center;padding:10px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);font-weight:600}
+.checks .check:hover{border-color:var(--ink-2)}
+.checks .check:has(input:checked){border-color:var(--sel);background:var(--tint);box-shadow:inset 0 0 0 1px var(--sel)}
+.checks .check input{margin:0}
+:root[data-theme="dark"] .checks .check input{accent-color:var(--yolk)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .checks .check input{accent-color:var(--yolk)}}
+.stack-s{display:grid;gap:10px}
+.chips.cats{margin-block-start:14px}
+#fflt .chip{min-height:42px;font-size:15px}

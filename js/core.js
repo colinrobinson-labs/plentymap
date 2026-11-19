@@ -221,6 +221,8 @@ const IC = {
   refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/>',
 };
 export const ico = (n, cls = "i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${IC[n] || ""}</svg>`;
+/* The little box, dot or cross at the start of a choice: tells people at a glance what kind of choice it is */
+export const mark = kind => `<span class="mk mk-${kind}" aria-hidden="true">${kind === "out" ? ico("x") : kind === "ck" ? ico("check") : ""}</span>`;
 
 /* The Plenty Map mark (main + small partner mark), drawn inline so it never needs a request. */
 export const MARK = `<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M32 62 L14.45 38.76 A22 22 0 1 1 49.55 38.76 Z" fill="#F1EBDD"/><circle cx="32" cy="25.5" r="16.5" fill="#1F3B2D"/><g fill="none" stroke-width="2.8" stroke-linecap="round"><path d="M28.55 24.61 A4.5 4.5 0 0 1 35.45 24.61" stroke="#F5C04A"/><path d="M25.49 22.04 A8.5 8.5 0 0 1 38.51 22.04" stroke="#F7CF6E"/><path d="M22.42 19.46 A12.5 12.5 0 0 1 41.58 19.46" stroke="#F9DE9C"/></g><path d="M20.5 29.5 H43.5 A11.5 8.5 0 0 1 20.5 29.5 Z" fill="#F1EBDD"/><rect x="28" y="38.8" width="8" height="2" rx="1" fill="#F1EBDD"/></svg>`;

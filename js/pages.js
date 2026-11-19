@@ -19,8 +19,8 @@ function settings(main) {
       <hr class="hr">
       <label class="switch"><span><b>${esc(t("senior_q"))}</b><br><span class="mute small">${esc(t("senior_hint"))}</span></span><input type="checkbox" role="switch" id="senior" ${S.senior ? "checked" : ""}></label>
       <hr class="hr">
-      <div><span class="lbl" id="l-th"><b>${esc(t("theme"))}</b></span>
-        <div class="chips wrap" role="group" aria-labelledby="l-th">${["auto", "light", "dark"].map(x => `<button class="chip" type="button" data-th="${x}" aria-pressed="${S.theme === x}">${esc(t("theme_" + x))}</button>`).join("")}</div></div>
+      <div class="stack-s"><span id="l-th"><b>${esc(t("theme"))}</b></span>
+        <div class="seg n3" role="group" aria-labelledby="l-th">${["auto", "light", "dark"].map(x => `<button type="button" data-th="${x}" aria-pressed="${S.theme === x}">${esc(t("theme_" + x))}</button>`).join("")}</div></div>
     </div>
     <div class="card pad stack gap-t">
       <h2>${esc(t("your_data"))}</h2>

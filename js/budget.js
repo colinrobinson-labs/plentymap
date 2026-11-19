@@ -1,5 +1,5 @@
 /* Budget: a week of meals for your household, what it costs, and a shopping list by aisle. */
-import { S, save, t, esc, $, $$, ico, money, num, rt, dayName, shareThing, toast, announce, activeCuisine } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, rt, dayName, shareThing, toast, announce, activeCuisine } from "./core.js";
 import { food, canCook, dietOk, perServing, price, name, pkgLabel, cuisineMatch } from "./food.js";
 import { SNAP } from "./benefits.js";
 import { stateOf } from "./region.js";
@@ -184,8 +184,8 @@ export async function render(main) {
       <div class="card pad stack">
         ${stepper("a", S.hh.a, t("adults"), 1)}
         ${stepper("k", S.hh.k, t("kids"), 0)}
-        <div><span class="lbl small mute" id="l-meals"><b>${esc(t("meals_q"))}</b></span>
-          <div class="chips wrap" role="group" aria-labelledby="l-meals">${["b", "l", "d"].map(m => `<button class="chip" type="button" data-m="${m}" aria-pressed="${!!S.meals[m]}">${esc(t("meal_" + m))}</button>`).join("")}</div></div>
+        <div class="fg" role="group" aria-labelledby="l-meals"><div class="fg-h" id="l-meals">${esc(t("meals_q"))}</div>
+          <div class="chips wrap">${["b", "l", "d"].map(m => `<button class="chip ck" type="button" data-m="${m}" aria-pressed="${!!S.meals[m]}">${mark("ck")}${esc(t("meal_" + m))}</button>`).join("")}</div></div>
         <label class="field"><span>${esc(t("weekly_q"))}</span>
           <input class="in" id="wk" inputmode="decimal" value="${S.weekly ?? ""}">
           <small>${esc(t("weekly_hint"))}</small></label>
