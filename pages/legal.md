@@ -23,18 +23,34 @@ Plenty Map is an independent project. It is not part of, endorsed by, or acting 
 
 ## Listings and corrections
 
-If you run a food program, store or other place in Plenty Map and want its details changed or removed, email us from your organization's address with the listing's name and what should change. We usually act within 2 working days. You can also use **Report a problem** on the listing.
+If you run a food program, store or other place in Plenty Map and want its details changed or removed, email us from your organization's address with the listing's name and what should change. **We hide or correct the listing within 48 hours** of receiving your request, and confirm by email once it's done. Phones and offline copies pick up the change the next time they refresh. You can also use **Report a problem** on the listing.
+
+We use organizations' names only to identify them. We don't display their logos, and a listing never means that an organization endorses Plenty Map.
 
 ## Copyright and trademark complaints
 
-We respect other people's rights. If you believe something in Plenty Map infringes your copyright or trademark, email [hello@plentymap.com](mailto:hello@plentymap.com) with the subject "Copyright or trademark notice" and include:
+We respect other people's rights. If you believe something in Plenty Map infringes your copyright, send a written notice to our designated agent:
 
-- your name and contact details, and the organization you represent, if any;
-- what you own (the work or trademark) and where it appears in Plenty Map (a link or a description);
-- why you believe the use isn't authorized; and
-- a statement that the information in your notice is accurate, and that you are the owner or authorized to act for the owner.
+Copyright Agent, Plenty Map
+Email: [hello@plentymap.com](mailto:hello@plentymap.com) (subject "Copyright notice")
+Mail: Plenty Map, San Diego, California, USA (full postal address on request)
 
-We'll review it promptly and remove or correct material where appropriate. If something of yours was removed and you believe that was a mistake, you can tell us the same way.
+Under the U.S. Digital Millennium Copyright Act (17 U.S.C. § 512(c)(3)), your notice must include:
+
+1. your physical or electronic signature, as the owner or a person authorized to act for the owner;
+2. a description of the copyrighted work you believe is infringed;
+3. a description of the material in Plenty Map and where it is (a link, or the listing's name and area), detailed enough for us to find it;
+4. your name, postal address, phone number and email address;
+5. a statement that you believe in good faith that the use isn't authorized by the owner, its agent or the law; and
+6. a statement that the information in your notice is accurate and, under penalty of perjury, that you are the owner or authorized to act for the owner.
+
+When we receive a valid notice, we remove or disable the material promptly, usually within 48 hours. Someone who knowingly makes false claims in a notice can be liable for damages.
+
+**Counter-notice.** If material you supplied was removed and you believe that was a mistake or a misidentification, you can send us a counter-notice that includes your signature, what was removed and where it appeared, a statement under penalty of perjury that you believe in good faith it was removed by mistake or misidentification, and your name, address and phone number, with your consent to the jurisdiction of the federal court for your address (or, outside the US, any district where Plenty Map may be found) and to accept service from the person who sent the notice. Unless that person tells us they have filed a court action, we restore the material 10 to 14 business days after we receive the counter-notice.
+
+**Repeat infringers.** Plenty Map has no accounts. In appropriate circumstances, we block anyone who repeatedly sends us infringing material from sending more.
+
+**Trademark concerns** and complaints about anything other than copyright: email us with the subject "Trademark notice," saying what you own, where it appears in Plenty Map, and why you believe the use isn't authorized. We review these promptly and correct or remove material where appropriate.
 
 ## Requests from authorities
 

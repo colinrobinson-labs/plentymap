@@ -33,7 +33,7 @@ Plenty Map is **not**:
 - **a store.** We don't sell food or take orders, and the prices we show are not offers.
 - **professional advice.** Nothing in the Service is medical, nutrition, dietary, legal, tax or financial advice.
 
-Unless we clearly say so, we have no partnership with, and receive nothing from, the food banks, programs, stores, restaurants or brands named in the Service. Their names and logos belong to them and are used only to identify them.
+Unless we clearly say so, we have no partnership with, and receive nothing from, the food banks, programs, stores, restaurants or brands named in the Service. Their names and trademarks belong to them. We use names only to identify a place or program, and we don't display other organizations' logos.
 
 ## 4. Listings: food sites, stores and other places
 
@@ -105,7 +105,7 @@ The name **Plenty Map**, our logo, and our original text, recipes, illustrations
 
 Some data in the Service comes from others under open licenses. That data is not ours to restrict, and the terms of its license apply to it. For example, data from OpenStreetMap is available under the Open Database License. See [Credits and Licenses](/attributions) for each source and its license.
 
-If you think something in the Service infringes your copyright or trademark, please tell us at the address on our [Legal page](/legal) and we will look into it promptly.
+If you think something in the Service infringes your copyright or trademark, please send a notice as described on our [Legal page](/legal). We remove or disable material when we receive a valid notice, and we block anyone who repeatedly sends us infringing material from sending more.
 
 ## 13. Other websites and apps
 
