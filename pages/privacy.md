@@ -73,11 +73,11 @@ Every listing has a **Report a problem** button. If you use it, we receive only:
 
 We don't receive your name, contact details, location, device information or account details with a report, and our report service doesn't store your IP address or browser details. To stop abuse, Cloudflare counts requests per connection for about one minute. That count isn't stored or seen by us.
 
-**Please don't put personal information in the note.** If you do, we'll delete it when we find it.
+**Please don't put personal information in the note.** Email addresses, phone numbers and links are removed from notes automatically, and if anything else personal gets through, we'll delete it when we find it. Nothing is sent until you tap Send.
 
-We use reports only to check and fix listings. A listing with reports may be checked automatically against its source and flagged or hidden. We publish a simple list of listing numbers and their status so the app can hide closed places, and a weekly public summary of the number and type of reports per listing. **Your note is never published** and is visible only to the person who runs Plenty Map. We may tell the organization that runs a listing what kind of problem was reported, but never anything about you.
+We use reports only to check and fix listings. A listing with reports may be checked automatically against its source and flagged or hidden. We publish a simple list of listing numbers and their status so the app can hide closed places, and a public summary of the number and type of reports per listing. **Your note is never published** and is visible only to the person who runs Plenty Map. We may tell the organization that runs a listing what kind of problem was reported, but never anything about you.
 
-How long we keep reports: notes are erased 90 days after a report arrives. Reports are deleted 180 days after the problem is resolved, and unresolved reports are deleted after 365 days.
+How long we keep reports: notes are erased 90 days after a report arrives, and whole reports are deleted after 180 days.
 
 ## 7. If you email us
 
