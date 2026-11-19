@@ -2,7 +2,7 @@
    plain-language program cards. San Diego County gets its local programs and numbers; everywhere else
    gets the state's own SNAP office, limits and links, plus the national programs. */
 import { S, t, esc, $, $$, ico, money, num, telHref, openOut, announce } from "./core.js";
-import { SNAP, WIC, SUN_BUCKS, LINKS, PHONES, AS_OF, STATES, ASSETS, fplMonth, stateName, SCHOOL_ALL, SUN_NO, HOTLINE, LIFELINE, ONLINE, SAVE_LINKS as SL } from "./benefits.js";
+import { SUN_BUCKS, LINKS, PHONES, AS_OF, STATES, ASSETS, stateName, HOTLINE, LIFELINE, ONLINE, SAVE_LINKS as SL, estimate, parseMoney } from "./benefits.js";
 import { kidsSection, bindKids } from "./kids.js";
 import { region, stateOf } from "./region.js";
 import { foot } from "./app.js";
@@ -27,7 +27,7 @@ let Q = null;
 
 const tel = (num, label, cls = "btn sm") => `<a class="${cls}" href="${telHref(num)}">${ico("phone", "i sm")} ${esc(label)}</a>`;
 const out = (href, label, cls = "btn sm ghost") => `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener noreferrer" data-out>${esc(label)} ${ico("ext", "i sm")}</a>`;
-const odds = k => k ? `<span class="badge ${k === "likely" ? "ok" : k === "maybe" ? "warn" : ""}">${esc(t("odds_" + k))}</span>` : "";
+const odds = k => k ? `<span class="badge ${k === "likely" ? "ok" : k === "maybe" ? "warn" : k === "no" ? "no" : ""}">${esc(t("odds_" + k))}</span>` : "";
 
 function prog(id, title, odd, body, acts, note) {
   return `<article class="card prog" id="p-${id}">
@@ -39,46 +39,50 @@ function prog(id, title, odd, body, acts, note) {
 }
 
 /* Cards both result lists share: summer meals, senior farmers market checks, Meals on Wheels, Lifeline */
-function extras(w, inc, n, st, snapOk) {
+function extras(w, E) {
   const o = [];
   if (w.school) o.push(prog("summer", t("summer_h"), "likely", esc(t("summer_p", { tx: HOTLINE.text })),
     `<a class="btn sm" href="#/find/in/summer">${ico("kid", "i sm")} ${esc(t("cat_summer"))}</a>` + out(SL.summer, t("learn_more"))));
-  if (w.senior) {
-    o.push(prog("sfmnp", t("sfmnp_h"), inc <= Math.round(fplMonth(n, st) * 1.85) ? "likely" : "ask", esc(t("sfmnp_p")), out(SL.sfmnp, t("learn_more"))));
-  }
+  if (E.sfmnp) o.push(prog("sfmnp", t("sfmnp_h"), E.sfmnp.odds, esc(E.sfmnp.odds === "no" ? t("sfmnp_over", { g: money(E.sfmnp.limit, false) }) : t("sfmnp_p")), out(SL.sfmnp, t("learn_more"))));
   if (w.senior || w.dis) o.push(prog("mow", t("mow_h"), "maybe", esc(t("mow_p")), out(SL.mow, t("mow_find"), "btn sm pri")));
-  if (snapOk) o.push(prog("lifeline", t("life_h"), "likely", esc(t("life_p", { m: money(LIFELINE.std), b: money(LIFELINE.tribal) })), out(SL.lifeline, t("apply_online")) + tel(LIFELINE.phone, t("call"))));
+  if (E.lifeline) o.push(prog("lifeline", t("life_h"), "likely", esc(t("life_p", { m: money(LIFELINE.std), b: money(LIFELINE.tribal) })), out(SL.lifeline, t("apply_online")) + tel(LIFELINE.phone, t("call"))));
   return o;
 }
+
+/* The food money card: what the home's income means, in one honest sentence, then the most it can get */
+function snapText(E, n) {
+  const s = E.snap, body = [t(s.key, { g: money(s.gross, false), g2: money(s.g2, false), n })];
+  if (s.odds !== "no") body.push(t("cf_max", { m: money(s.max, false), n }));
+  if (s.odds === "no") body.push(t("cf_no_tail"));
+  return body;
+}
+const wicText = (E, ca) => E.wic.odds === "likely" ? t(ca ? "wic_p" : "us_wic_p", { g: money(E.wic.limit, false) }) : t(ca ? "wic_over" : "us_wic_over", { g: money(E.wic.limit, false) });
+const sunText = (E, ca) => E.sun.odds === "no" ? t("sun_over", { g: money(E.sun.limit, false) }) : t(ca ? "sun_p" : "us_sun_p", { m: money(SUN_BUCKS, false) });
+const csfpText = E => E.csfp.odds === "no" ? t("csfp_over", { g: money(E.csfp.limit, false) }) : t("csfp_p");
+const pantryText = E => E.pantry.odds === "likely" ? t("pantry_p") : E.pantry.ca ? t("pantry_over", { g: money(E.pantry.limit, false) }) : t("us_pantry_over");
 
 function results() {
   if (!Q) return "";
   if (!A.partner) return resultsUS();
   const n = Math.max(1, Q.n), inc = Q.inc, w = Q.w;
-  const gross = SNAP.grossLimit(n), max = SNAP.max(n);
-  const older = w.senior || w.dis;
-  const cf = inc <= gross ? "likely" : older ? "maybe" : "ask";
+  const E = estimate({ n, inc, w, st: "CA", ca: true }), cf = E.snap.odds;
   const outp = [];
-  outp.push(prog("calfresh", t("cf_h"), cf,
-    esc(t(cf === "likely" ? "cf_likely" : cf === "maybe" ? "cf_maybe" : "cf_ask", { g: money(gross, false), n })) + " " + esc(t("cf_max", { m: money(max, false), n })),
-    out(LINKS.calfresh_apply, t("apply_online"), "btn sm pri") + out(LINKS.getcalfresh, "GetCalFresh") + tel(PHONES.county, t("call_county")),
-    esc(t(inc < 150 ? "cf_fast" : "cf_note"))));
-  if (w.preg || w.baby) {
-    const ok = inc <= WIC.limit(n) || cf === "likely";
-    outp.push(prog("wic", t("wic_h"), ok ? "likely" : "ask", esc(t("wic_p", { g: money(WIC.limit(n), false) })), out(LINKS.wic, t("apply_online"), "btn sm pri") + tel(PHONES.wic, t("call"))));
-  }
-  if (w.school) {
+  outp.push(prog("calfresh", t("cf_h"), cf, esc(snapText(E, n).join(" ")),
+    out(LINKS.calfresh_apply, t("apply_online"), cf === "no" ? "btn sm" : "btn sm pri") + out(LINKS.getcalfresh, "GetCalFresh") + tel(PHONES.county, t("call_county")),
+    cf === "no" ? "" : esc(t(inc < 150 ? "cf_fast" : "cf_note"))));
+  if (E.wic) outp.push(prog("wic", t("wic_h"), E.wic.odds, esc(wicText(E, true)), out(LINKS.wic, t("apply_online"), E.wic.odds === "no" ? "btn sm" : "btn sm pri") + tel(PHONES.wic, t("call"))));
+  if (E.school) {
     outp.push(prog("school", t("school_h"), "likely", esc(t("school_p"))));
-    outp.push(prog("sunbucks", t("sun_h"), inc <= WIC.limit(n) ? "likely" : "ask", esc(t("sun_p", { m: money(SUN_BUCKS, false) })), out(LINKS.sunbucks, t("learn_more")) + tel(PHONES.sunbucks, t("call"))));
+    outp.push(prog("sunbucks", t("sun_h"), E.sun.odds, esc(sunText(E, true)), out(LINKS.sunbucks, t("learn_more")) + tel(PHONES.sunbucks, t("call"))));
   }
-  if (w.senior) {
-    outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), `<a class="btn sm" href="#/find/in/senior">${ico("basket", "i sm")} ${esc(t("cat_senior"))}</a>`));
+  if (E.csfp) {
+    outp.push(prog("csfp", t("csfp_h"), E.csfp.odds, esc(csfpText(E)), `<a class="btn sm" href="#/find/in/senior">${ico("basket", "i sm")} ${esc(t("cat_senior"))}</a>`));
     outp.push(prog("ais", t("ais_h"), "likely", esc(t("ais_p")), tel(PHONES.ais, t("call_ais")) + out(LINKS.ais, t("learn_more"))));
   }
-  if (w.senior || w.dis || w.home) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(LINKS.rmp, t("learn_more"))));
+  if (E.rmp) outp.push(prog("rmp", t("rmp_h"), E.rmp, esc(t("rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(LINKS.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel(PHONES.sd211, t("call_211"), "btn sm pri")));
-  outp.push(...extras(w, inc, n, "CA", cf !== "ask"));
-  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>`));
+  outp.push(...extras(w, E));
+  outp.push(prog("pantry", t("pantry_h"), E.pantry.odds, esc(pantryText(E)), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>`));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("results_note"))}</span></p>
     <div class="grid2">${outp.join("")}</div>`;
@@ -87,40 +91,40 @@ function results() {
 /* ---------- everywhere outside San Diego County ---------- */
 function resultsUS() {
   const n = Math.max(1, Q.n), inc = Q.inc, w = Q.w, st = A.st, S0 = STATES[st] || {};
+  const E = estimate({ n, inc, w, st }), cf = E.snap.odds;
   const outp = [];
-  let cf = "ask";
   if (S0.nap) {
     outp.push(prog("pan", t("us_pr_h"), "", esc(t("us_pr_p")), out(S0.ap, t("learn_more"), "btn sm pri") + tel("211", t("call_211"))));
   } else {
-    const gross = SNAP.grossLimit(n, st), g2 = SNAP.grossLimit2(n, st), max = SNAP.max(n, st);
-    const older = w.senior || w.dis;
-    cf = inc <= gross ? "likely" : (g2 && inc <= g2) || older ? "maybe" : "ask";
-    const key = cf === "likely" ? "cf_likely" : cf === "ask" ? "cf_ask" : g2 && inc <= g2 ? "us_cf_alt" : "us_cf_maybe";
-    const body = [t(key, { g: money(gross, false), g2: money(g2, false), n }), t("cf_max", { m: money(max, false), n })];
-    if (st === "AK") body.push(t("us_ak_note"));
-    const notes = [t(inc < 150 ? "cf_fast" : "cf_note")];
-    if (!S0.g || S0.as === "snap") notes.push(t("us_assets", { a: money(ASSETS.base, false), b: money(ASSETS.older, false) }));
-    else if (typeof S0.as === "number") notes.push(t("us_assets_n", { a: money(S0.as, false) }));
+    const body = snapText(E, n);
+    if (st === "AK" && cf !== "no") body.push(t("us_ak_note"));
+    const notes = [];
+    if (cf !== "no") {
+      notes.push(t(inc < 150 ? "cf_fast" : "cf_note"));
+      if (!S0.g || S0.as === "snap") notes.push(t("us_assets", { a: money(ASSETS.base, false), b: money(ASSETS.older, false) }));
+      else if (typeof S0.as === "number") notes.push(t("us_assets_n", { a: money(S0.as, false) }));
+    }
     if (S0.p) notes.push(t("us_snap_called", { st: S0.n, prog: S0.p }));
     outp.push(prog("snap", t("cf_h"), cf, esc(body.join(" ")),
-      (S0.ap ? out(S0.ap, t("apply_online"), "btn sm pri") : "") + (S0.ph ? tel(S0.ph, t("us_call_snap")) : "") + out(S0.w || US.dir, t("learn_more")),
+      (S0.ap ? out(S0.ap, t("apply_online"), cf === "no" ? "btn sm" : "btn sm pri") : "") + (S0.ph ? tel(S0.ph, t("us_call_snap")) : "") + out(S0.w || US.dir, t("learn_more")),
       esc(notes.join(" "))));
   }
-  const wl = WIC.limit(n, st);
-  if (w.preg || w.baby) outp.push(prog("wic", t("wic_h"), inc <= wl || cf === "likely" ? "likely" : "ask", esc(t("us_wic_p", { g: money(wl, false) })), out(US.wic, t("learn_more"))));
-  if (w.school) {
-    outp.push(prog("school", t("school_h"), "likely", esc(SCHOOL_ALL.includes(st) ? t("us_school_all", { st: S0.n }) : t("us_school_p"))));
-    if (SUN_NO.includes(st)) outp.push(prog("sunbucks", t("sun_h"), "", esc(t("us_sun_no", { st: S0.n, m: money(SUN_BUCKS, false) })), out(SL.sunareas, t("learn_more"))));
-    else outp.push(prog("sunbucks", t("sun_h"), inc <= wl ? "likely" : "ask", esc(t("us_sun_p", { m: money(SUN_BUCKS, false) })), out(US.sunbucks, t("learn_more"))));
+  if (E.wic) outp.push(prog("wic", t("wic_h"), E.wic.odds, esc(wicText(E, false)), out(US.wic, t("learn_more"))));
+  if (E.school) {
+    const sc = E.school;
+    const txt = sc.kind === "all" ? t("us_school_all", { st: S0.n }) : sc.kind === "free" ? t("us_school_p") : sc.kind === "reduced" ? t("us_school_reduced") : t("us_school_over", { g: money(sc.reduced, false) });
+    outp.push(prog("school", t("school_h"), sc.odds, esc(txt)));
+    if (E.sun.none) outp.push(prog("sunbucks", t("sun_h"), "", esc(t("us_sun_no", { st: S0.n, m: money(SUN_BUCKS, false) })), out(SL.sunareas, t("learn_more"))));
+    else outp.push(prog("sunbucks", t("sun_h"), E.sun.odds, esc(sunText(E, false)), out(US.sunbucks, t("learn_more"))));
   }
-  if (w.senior) {
-    outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n, st) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), out(US.csfp, t("learn_more"))));
+  if (E.csfp) {
+    outp.push(prog("csfp", t("csfp_h"), E.csfp.odds, esc(csfpText(E)), out(US.csfp, t("learn_more"))));
     outp.push(prog("ais", t("ais_h"), "likely", esc(t("us_ais_p")), tel(ELDERCARE, t("us_call_eldercare")) + out(US.eldercare, t("learn_more"))));
   }
-  if ((w.senior || w.dis || w.home) && A.stores.some(s => s.k === "rmp")) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("us_rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(US.rmp, t("learn_more"))));
+  if (E.rmp && A.stores.some(s => s.k === "rmp")) outp.push(prog("rmp", t("rmp_h"), E.rmp, esc(t("us_rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(US.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel("211", t("call_211"), "btn sm pri")));
-  outp.push(...extras(w, inc, n, st, !S0.nap && cf !== "ask"));
-  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>` + out(US.foodbank, t("us_fb_find"))));
+  outp.push(...extras(w, E));
+  outp.push(prog("pantry", t("pantry_h"), E.pantry.odds, esc(pantryText(E)), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>` + out(US.foodbank, t("us_fb_find"))));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("us_results_note"))}</span></p>
     <div class="grid2">${outp.join("")}</div>`;
@@ -219,7 +223,7 @@ export async function render(main) {
     const raw = $("#inc").value;
     q.inc = raw; q.w = {};
     $$("[data-w]").forEach(c => { if (c.checked) q.w[c.dataset.w] = 1; });
-    Q = { n: q.n, inc: parseFloat(String(raw).replace(/[^0-9.]/g, "")) || 0, w: q.w, raw };
+    Q = { n: q.n, inc: parseMoney(raw), w: q.w, raw };
     $("#res").innerHTML = results(); bindOut($("#res"));
     $("#res-h")?.focus(); announce(t("results_h"));
   };
