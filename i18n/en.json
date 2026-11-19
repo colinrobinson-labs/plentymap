@@ -363,7 +363,7 @@
  "us_find_p": "Food pantries, free meals, community fridges, and stores and farmers markets that take {snap}.",
  "us_note_meal": "Few free meal sites are listed online. Dial 2-1-1 to hear about the ones near you.",
  "us_note_market": "Every market here takes EBT. Markets marked “Extra for produce” add money for fruits and vegetables when you pay with {snap}. Markets run on set days, so check before you go.",
- "us_listings_note": "Outside San Diego County, free food listings come from OpenStreetMap and can miss places. Your local food bank and 2-1-1 know every pantry near you.",
+ "us_listings_note": "We may not list every free food place near you yet. Your local food bank and 2-1-1 know every pantry nearby.",
  "us_data_note": "Stores and listings checked {d}. Plenty Map is not run by any food bank or government office.",
  "inc_badge": "Extra for produce",
  "us_urgent_p": "2-1-1 answers day and night in most of the U.S., in many languages, for free. Your local food bank knows the pantries near you.",

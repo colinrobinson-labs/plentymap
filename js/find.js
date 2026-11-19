@@ -198,10 +198,18 @@ function catNote() {
     meal: t(R.partner ? "note_meal" : "us_note_meal"),
     fridge: t("note_fridge"),
   }[F.cat];
-  // outside San Diego County, free food comes from OpenStreetMap only: say so, and where to find the rest
-  const extra = !R.partner && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
+  // where we list only a few free food places nearby, say the list may be missing some, and where to find the rest
+  const extra = thinHere() && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
     ? `<div class="notice info">${ico("info")}<p>${esc(t("us_listings_note"))} <a href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${esc(t("us_fb_find"))}</a> · <a href="tel:211">${esc(t("call_211"))}</a></p></div>` : "";
   return (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
+}
+
+/* Fewer than 8 free food places within about 15 miles: the list is probably missing some */
+function thinHere() {
+  if (R.partner || S.loc?.lat == null) return !R.partner;
+  let n = 0;
+  for (const x of R.sites) if (FREE.includes(x.k) && dist(S.loc.lat, S.loc.lon, x.lat, x.lon) <= 24000 && ++n >= 8) return false;
+  return true;
 }
 
 function dataNote() {
