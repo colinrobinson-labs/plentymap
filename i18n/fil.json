@@ -398,5 +398,12 @@
  "home": "home",
  "updated": "Na-update ang Plenty Map.",
  "refresh": "I-refresh",
- "trip_over": "{t} ang unang pamimili mo, higit sa budget mo, dahil may kasama itong mantika, pampalasa at pangunahing sangkap na tatagal nang ilang linggo. Pagkatapos, mga {m} kada linggo na lang ang pagkain."
+ "trip_over": "{t} ang unang pamimili mo, higit sa budget mo, dahil may kasama itong mantika, pampalasa at pangunahing sangkap na tatagal nang ilang linggo. Pagkatapos, mga {m} kada linggo na lang ang pagkain.",
+ "sort_by": "Ayusin",
+ "sort_value": "Pinakasulit",
+ "sort_cheap": "Pinakamurang presyo",
+ "sort_near": "Pinakamalapit",
+ "price_1": "Mas murang presyo",
+ "price_2": "Katamtamang presyo",
+ "price_3": "Mas mahal na presyo"
 }

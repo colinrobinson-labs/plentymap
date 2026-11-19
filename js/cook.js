@@ -1,5 +1,5 @@
 /* Cook: recipes that fit your kitchen, budget, comfort level and home cooking. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, rt, recipeInLang, activeCuisine, langDefaultCuisine, shareThing, toast, announce } from "./core.js";
+import { S, save, t, esc, $, $$, ico, dish, mark, money, num, rt, recipeInLang, activeCuisine, langDefaultCuisine, shareThing, toast, announce } from "./core.js";
 import { food, canCook, dietOk, contains, dietNotes, sodium, AVOIDS, facts, perServing, missing, qty, name, rank, CUISINES, price, cuisineMatch } from "./food.js";
 import { foot } from "./app.js";
 
@@ -16,7 +16,7 @@ function card(r) {
   const tx = rt(r.id), f = facts(r), miss = S.have.size ? missing(r) : -1;
   const saved = S.saved.has(r.id);
   return `<li><button class="rcard" type="button" data-r="${r.id}">
-    <span class="art">${ico(r.icon)}</span>
+    <span class="art">${dish(r.id, r.icon)}</span>
     <span>
       <h3>${esc(tx.t)}${saved ? ` <span class="sr">(${esc(t("saved"))})</span>` : ""}</h3>
       <span class="meta">

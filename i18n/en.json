@@ -419,5 +419,12 @@
  "home": "home",
  "updated": "Plenty Map was updated.",
  "refresh": "Refresh",
- "trip_over": "Your first shop is {t}, more than your budget, because it stocks oil, spices and staples that last for weeks. After that, meals cost about {m} a week."
+ "trip_over": "Your first shop is {t}, more than your budget, because it stocks oil, spices and staples that last for weeks. After that, meals cost about {m} a week.",
+ "sort_by": "Sort",
+ "sort_value": "Best value",
+ "sort_cheap": "Lowest prices",
+ "sort_near": "Nearest",
+ "price_1": "Lower prices",
+ "price_2": "Average prices",
+ "price_3": "Higher prices"
 }

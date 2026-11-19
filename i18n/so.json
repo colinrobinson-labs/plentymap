@@ -132,5 +132,12 @@
  "home": "bogga hore",
  "updated": "Plenty Map waa la cusboonaysiiyay.",
  "refresh": "Cusboonaysii",
- "trip_over": "Dukaameysigaaga ugu horreeya waa {t}, wax ka badan miisaaniyaddaada, sababtoo ah wuxuu ka kooban yahay saliid, xawaash iyo alaab aasaasi ah oo toddobaadyo socota. Intaas kadib, cuntadu waxay ku kacdaa qiyaastii {m} toddobaadkii."
+ "trip_over": "Dukaameysigaaga ugu horreeya waa {t}, wax ka badan miisaaniyaddaada, sababtoo ah wuxuu ka kooban yahay saliid, xawaash iyo alaab aasaasi ah oo toddobaadyo socota. Intaas kadib, cuntadu waxay ku kacdaa qiyaastii {m} toddobaadkii.",
+ "sort_by": "Kala soocid",
+ "sort_value": "Qiimaha ugu fiican",
+ "sort_cheap": "Qiimaha ugu jaban",
+ "sort_near": "Ugu dhow",
+ "price_1": "Qiimo jaban",
+ "price_2": "Qiimo dhexdhexaad ah",
+ "price_3": "Qiimo sare"
 }

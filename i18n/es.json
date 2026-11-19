@@ -99,5 +99,12 @@
  "home": "inicio",
  "updated": "Plenty Map se actualizó.",
  "refresh": "Actualizar",
- "trip_over": "Tu primera compra es de {t}, más que tu presupuesto, porque incluye aceite, especias y básicos que duran semanas. Después, las comidas cuestan unos {m} por semana."
+ "trip_over": "Tu primera compra es de {t}, más que tu presupuesto, porque incluye aceite, especias y básicos que duran semanas. Después, las comidas cuestan unos {m} por semana.",
+ "sort_by": "Ordenar",
+ "sort_value": "Mejor valor",
+ "sort_cheap": "Precios más bajos",
+ "sort_near": "Más cerca",
+ "price_1": "Precios más bajos",
+ "price_2": "Precios medios",
+ "price_3": "Precios más altos"
 }

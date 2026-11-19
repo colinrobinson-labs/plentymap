@@ -132,5 +132,12 @@
  "home": "akèy",
  "updated": "Plenty Map te mete ajou.",
  "refresh": "Rafrechi",
- "trip_over": "Premye makèt ou se {t}, plis pase bidjè w, paske li gen lwil, epis ak baz ki dire plizyè semèn. Apre sa, manje yo koute anviwon {m} pa semèn."
+ "trip_over": "Premye makèt ou se {t}, plis pase bidjè w, paske li gen lwil, epis ak baz ki dire plizyè semèn. Apre sa, manje yo koute anviwon {m} pa semèn.",
+ "sort_by": "Klase",
+ "sort_value": "Pi bon valè",
+ "sort_cheap": "Pri ki pi ba",
+ "sort_near": "Pi pre",
+ "price_1": "Pri pi ba",
+ "price_2": "Pri mwayen",
+ "price_3": "Pri pi wo"
 }

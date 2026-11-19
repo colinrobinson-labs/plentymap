@@ -99,5 +99,12 @@
  "home": "trang chủ",
  "updated": "Plenty Map đã được cập nhật.",
  "refresh": "Tải lại",
- "trip_over": "Lần đi chợ đầu tiên là {t}, nhiều hơn ngân sách, vì phải mua dầu, gia vị và đồ khô dùng được nhiều tuần. Sau đó, bữa ăn tốn khoảng {m} mỗi tuần."
+ "trip_over": "Lần đi chợ đầu tiên là {t}, nhiều hơn ngân sách, vì phải mua dầu, gia vị và đồ khô dùng được nhiều tuần. Sau đó, bữa ăn tốn khoảng {m} mỗi tuần.",
+ "sort_by": "Sắp xếp",
+ "sort_value": "Đáng tiền nhất",
+ "sort_cheap": "Giá thấp nhất",
+ "sort_near": "Gần nhất",
+ "price_1": "Giá thấp hơn",
+ "price_2": "Giá trung bình",
+ "price_3": "Giá cao hơn"
 }
