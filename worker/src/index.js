@@ -39,7 +39,7 @@ const res = (req, status, body, extra = {}) => new Response(body ?? null, { stat
    looks like an email address, a phone number or a web link, and control characters. */
 export function cleanNote(s) {
   if (typeof s !== "string") return null;
-  let t = s.normalize("NFC").replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩]/g, " ");
+  let t = s.normalize("NFC").replace(/[\u0000-\u001f\u007f-\u009f\u200b-\u200f\u202a-\u202e\u2066-\u2069]/g, " ");
   t = t.replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g, "[removed]")
        .replace(/https?:\/\/\S+|www\.\S+/gi, "[removed]")
        .replace(/\+?\d[\d\s().-]{6,}\d/g, "[removed]")
