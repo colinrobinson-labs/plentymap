@@ -1,0 +1,77 @@
+name: QA screenshots
+# Compares every screen with the approved screenshots (all 15 languages; phone, phone dark, desktop).
+# Data and the clock are frozen, so only design changes show up.
+#   Pull requests: a change fails this check until someone looks at the before/after images
+#     (artifact "qa-visual-diffs") and adds the label "visual-ok".
+#   After a push to main/launch: what shipped becomes the new approved look; changes are listed on the run page.
+# Approved screenshots live on the qa-baselines branch.
+on:
+  pull_request:
+    branches: [main, launch]
+    types: [opened, synchronize, reopened, labeled]
+    paths-ignore: ["README.md", "docs/**", "pages/**", "tools/**", "data/regions/**"]
+  push:
+    branches: [main, launch]
+    paths-ignore: ["README.md", "docs/**", "pages/**", "tools/**", "data/regions/**", ".github/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: qa-visual-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: qa/package-lock.json }
+      - name: Install
+        working-directory: qa
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y -q fonts-noto-core fonts-noto-cjk >/dev/null
+      - name: Build the site
+        run: bash qa/build-site.sh _site
+      - name: Get the approved screenshots
+        run: |
+          mkdir -p qa/visual-baseline
+          if git fetch -q --depth 1 origin qa-baselines 2>/dev/null; then git archive FETCH_HEAD | tar -x -C qa/visual-baseline; fi
+          echo "approved screenshots: $(find qa/visual-baseline -name '*.png' | wc -l)"
+      - name: Compare
+        working-directory: qa
+        env:
+          CI: "1"
+          QA_SITE_DIR: ${{ github.workspace }}/_site
+        run: npx playwright test --project=visual --update-snapshots=missing --output=results/visual || true
+      - name: Summary
+        id: triage
+        working-directory: qa
+        env:
+          QA_VISUAL_BLOCKS: ${{ github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'visual-ok') && '1' || '' }}
+        run: |
+          set +e
+          node scripts/triage.mjs results/report.json
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+      - name: Before/after/diff images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with: { name: qa-visual-diffs, path: qa/results/visual, retention-days: 14, if-no-files-found: ignore }
+      - name: Approve what shipped
+        if: github.event_name != 'pull_request'
+        run: |
+          set -e
+          find qa/results/visual -name '*-actual.png' | while read f; do
+            cp "$f" "qa/visual-baseline/$(basename "$f" | sed 's/-actual\.png$/.png/')"; done
+          cd qa/visual-baseline
+          git init -q -b qa-baselines
+          git config user.name "plenty-map-qa"; git config user.email "actions@users.noreply.github.com"
+          git add -A && git commit -q -m "Approved screenshots from ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" qa-baselines
+      - name: Block on unreviewed changes
+        if: steps.triage.outputs.code != '0'
+        run: |
+          echo "::error::Screens look different from the approved screenshots. Check the qa-visual-diffs artifact; if the change is intended, add the label visual-ok."
+          exit 1

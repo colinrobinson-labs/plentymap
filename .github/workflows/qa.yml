@@ -1,0 +1,153 @@
+name: QA
+# Automatic quality checks for plentymap.com. Nobody needs to run anything.
+#   Before every deploy (called by site.yml): every language at 280, 390 and 1440px, dark at 390, accessibility,
+#     first-run/error/offline states, our own links. A NEW problem of a blocking kind stops the deploy.
+#   Pull requests: the full grid (15 languages x 6 widths x light/dark). Screenshot comparison: qa-visual.yml.
+#   Nightly: the full grid, outside links, and the listing data checks. Problems become GitHub issues (label "qa").
+# Details: qa/README.md
+on:
+  pull_request:
+    branches: [main, launch]
+    paths-ignore: ["README.md", "docs/**", "pages/**"]
+  workflow_call:
+    inputs:
+      level:
+        type: string
+        default: gate
+  schedule:
+    - cron: "43 11 * * *"   # ~4am Pacific, after the nightly data refresh
+  workflow_dispatch:
+    inputs:
+      level:
+        description: "gate = quick pre-deploy set, full = every language, width and theme"
+        type: choice
+        options: [full, gate]
+        default: full
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+concurrency:
+  group: qa-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+env:
+  LEVEL: ${{ inputs.level || 'full' }}
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the site exactly as it's published
+        run: bash qa/build-site.sh _site
+      - uses: actions/upload-artifact@v4
+        with: { name: qa-site, path: _site, retention-days: 2, compression-level: 1 }
+
+  ui:
+    needs: site
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: qa/package-lock.json }
+      - name: Install
+        working-directory: qa
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y -q fonts-noto-core fonts-noto-cjk >/dev/null
+      - uses: actions/download-artifact@v4
+        with: { name: qa-site, path: _site }
+      - name: Layout, states, accessibility, links
+        working-directory: qa
+        env:
+          CI: "1"
+          QA_SITE_DIR: ${{ github.workspace }}/_site
+          QA_GATE: ${{ env.LEVEL == 'gate' && '1' || '' }}
+          QA_EXTERNAL: ${{ github.event_name == 'schedule' && '1' || '' }}
+        # the tests record problems instead of failing; triage (below) decides what blocks
+        run: npx playwright test --project=layout --project=states --project=a11y --project=links --shard=${{ matrix.shard }}/4 || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: qa-report-ui-${{ matrix.shard }}, path: qa/results/report.json, retention-days: 14 }
+
+  data:
+    # nightly, or by hand with level=full (never as part of a deploy: old data shouldn't block a code fix)
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.level == 'full')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Get the listings and the check history
+        run: |
+          mkdir -p /tmp/sd /tmp/us /tmp/h
+          git fetch -q --depth 1 origin data && git archive FETCH_HEAD raw/report.json tiles/info.json | tar -x -C /tmp/sd || true
+          git fetch -q --depth 1 origin usdata && git archive FETCH_HEAD | tar -x -C /tmp/us || true
+          git fetch -q --depth 1 origin qa-history && git archive FETCH_HEAD | tar -x -C /tmp/h || true
+      - name: Check the listings
+        run: |
+          node qa/scripts/data-checks.mjs --region data/regions --us /tmp/us/us --sd-raw /tmp/sd/raw --us-raw /tmp/us/raw --tiles /tmp/sd/tiles --history /tmp/h/history.json --online
+          node qa/scripts/user-reports.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: qa-report-data, path: "qa/results/*.json", retention-days: 14 }
+      - name: Keep the count history (for "listings dropped" alerts)
+        if: github.event_name == 'schedule'
+        run: |
+          cd /tmp/h && rm -rf .git && git init -q -b qa-history
+          git config user.name "plenty-map-qa"; git config user.email "actions@users.noreply.github.com"
+          git add -A && git commit -q -m "QA history $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" qa-history
+
+  report:
+    needs: [ui, data]
+    if: always() && needs.ui.result != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/download-artifact@v4
+        with: { pattern: qa-report-*, path: /tmp/r }
+      - name: Decide
+        id: triage
+        run: |
+          set +e
+          n=$(find /tmp/r -path '*qa-report-ui-*' -name report.json | wc -l)
+          if [ "$n" -lt 4 ]; then echo "::error::only $n of 4 test shards reported; not trusting this run"; echo "code=2" >> "$GITHUB_OUTPUT"; exit 0; fi
+          node qa/scripts/triage.mjs $(find /tmp/r -name '*.json')
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: qa-findings, path: qa/results/, retention-days: 30 }
+      - name: File and update issues
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          QA_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          QA_SCOPES: ${{ env.LEVEL == 'full' && 'layout,states,a11y,links' || '' }}${{ needs.data.result == 'success' && ',data' || '' }}
+        run: node qa/scripts/file-issues.mjs
+      - name: Save the latest findings for the weekly digest
+        if: github.event_name == 'schedule'
+        run: |
+          git fetch -q --depth 1 origin qa-history && mkdir -p /tmp/h && git archive FETCH_HEAD | tar -x -C /tmp/h || mkdir -p /tmp/h
+          cp qa/results/findings.json /tmp/h/latest-findings.json
+          node -e "const f=require('/tmp/h/latest-findings.json');const fs=require('fs');const p='/tmp/h/runs.json';const r=fs.existsSync(p)?JSON.parse(fs.readFileSync(p)):[];r.push({at:f.at,groups:f.findings.length,blocking:f.findings.filter(g=>g.blocking).length,newBlocking:f.findings.reduce((n,g)=>n+g.newBlocking,0)});fs.writeFileSync(p,JSON.stringify(r.slice(-90)))"
+          cd /tmp/h && rm -rf .git && git init -q -b qa-history
+          git config user.name "plenty-map-qa"; git config user.email "actions@users.noreply.github.com"
+          git add -A && git commit -q -m "QA findings $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" qa-history
+      - name: Block on new problems
+        if: steps.triage.outputs.code != '0'
+        run: |
+          echo "::error::New blocking problems. See the summary above and the qa-findings artifact."
+          exit 1

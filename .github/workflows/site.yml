@@ -4,15 +4,31 @@ name: Site
 on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", "qa/**", ".github/workflows/qa-visual.yml"]
   workflow_dispatch:
+    inputs:
+      skip_qa:
+        description: "Emergency only: publish without the QA checks"
+        type: boolean
+        default: false
 permissions:
   contents: write
+  issues: write
+  pull-requests: read
 concurrency:
   group: site
   cancel-in-progress: false
 jobs:
+  # QA checks (qa.yml): a new layout, language, accessibility, script or broken-file problem stops the publish.
+  qa:
+    if: ${{ !inputs.skip_qa }}
+    uses: ./.github/workflows/qa.yml
+    with:
+      level: gate
+    secrets: inherit
   publish:
+    needs: qa
+    if: ${{ always() && (needs.qa.result == 'success' || needs.qa.result == 'skipped') }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
