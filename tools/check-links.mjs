@@ -18,7 +18,8 @@ await Promise.all([...urls].map(async ([u, where], i) => {
     try {
       const r = await fetch(u, { method, redirect: "follow", headers: { "User-Agent": UA, Accept: "text/html,*/*" }, signal: AbortSignal.timeout(30000) });
       st = r.status; fin = r.url;
-      if (r.ok) break;
+      // some sites (canada.ca) answer HEAD from scripts with a redirect to their 404 page; GET is the real test
+      if (r.ok && !/\/(errors?\/)?404|page-not-found|not-found/i.test(fin)) break;
     } catch (e) { st = e.cause?.code || e.message; }
   }
   // a redirect to a "not found" page is broken too; 403/429 and dropped connections are usually a
