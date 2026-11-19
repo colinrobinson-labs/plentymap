@@ -70,10 +70,13 @@ const PLATFORMS = {
   async storepoint(src, html) {
     const id = (html.match(/storepoint\.co\/api\/v\d\/js\/([0-9a-f]+)\.js/) || html.match(/data-map-id=["']([0-9a-f]+)["']/) || [])[1];
     if (!id) throw new Error("no Storepoint map id on the page");
-    for (const u of [`https://api.storepoint.co/v1/${id}/locations`, `https://api.storepoint.co/v2/${id}/locations`]) {
+    // the map's own script names its API host (api.storepoint.co or a numbered one like api26.storepoint.co)
+    const hosts = [...new Set([...html.matchAll(/(api\d*)\.storepoint\.co/g)].map(m => m[1]).concat(["api", "api26"]))];
+    const tries = hosts.flatMap(h => [`https://${h}.storepoint.co/v1/${id}/locations`, `https://${h}.storepoint.co/v2/${id}/locations`]);
+    for (const u of tries) {
       try { const j = JSON.parse((await fetchOk(u)).text); if (j?.results?.locations?.length) return { endpoint: u, data: j }; } catch (e) { log(src.id, u, e.message); }
     }
-    throw new Error("Storepoint returned no locations");
+    throw new Error(`Storepoint returned no locations (map ${id})`);
   },
   async wpsl(src, html) {
     const ajax = decode((html.match(/"ajaxurl":"([^"]+)"/) || [])[1] || new URL("/wp-admin/admin-ajax.php", src.page).href);

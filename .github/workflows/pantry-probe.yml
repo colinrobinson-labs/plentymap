@@ -10,13 +10,14 @@ on:
       - "tools/fetch-us.mjs"
       - "tools/fetch-pantries.mjs"
       - "tools/pantry-sources.mjs"
+      - "tools/build-pantries.mjs"
       - ".github/workflows/pantry-probe.yml"
   workflow_dispatch:
 permissions:
   contents: write
 concurrency:
   group: pantry-probe
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   probe:
     runs-on: ubuntu-latest
@@ -48,7 +49,14 @@ jobs:
         run: |
           mkdir -p /tmp/r/osm
           ONLY=place,osm node tools/fetch-us.mjs /tmp/r/osm
+          cp /tmp/r/osm/place.tsv /tmp/r/probe/place.tsv || true
           rm -f /tmp/r/osm/place.tsv /tmp/r/osm/osm-regions.json
+      - name: Food bank lists to map listings (with the Census geocoder)
+        continue-on-error: true
+        timeout-minutes: 15
+        run: |
+          node tools/build-pantries.mjs /tmp/r/probe
+          rm -f /tmp/r/probe/place.tsv
       - name: Save to the pantry-research branch
         if: always()
         run: |

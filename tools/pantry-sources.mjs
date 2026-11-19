@@ -5,7 +5,8 @@
 //   - the website's terms don't forbid reuse, and the platform's terms don't either
 //     (Vivery and Plentiful forbid it: those need a partnership, see docs/pantry-sources.md)
 // Fields: id (short, stable, used in listing ids), name, st (main state); the main phone comes from Feeding America's list each run,
-//   page (the find-food page), platform, and platform options.
+//   page (the find-food page), platform, and options: ignoreHours (the structured hours are office hours, not food hours),
+//   notFood (a regex of listing names that aren't food sites).
 export const SOURCES = [
   // ---- Storepoint (the same platform as the San Diego food banks) ----
   { id: "lafb", name: "Los Angeles Regional Food Bank", st: "CA", page: "https://www.lafoodbank.org/find-food/pantry-locator/", platform: "storepoint" },
@@ -17,7 +18,7 @@ export const SOURCES = [
   { id: "ftv", name: "Feeding the Valley Food Bank", st: "GA", page: "https://feedingthevalley.org/locate-a-food-pantry-near-you/", platform: "wpsl" },
   { id: "fbnela", name: "Food Bank of Northeast Louisiana", st: "LA", page: "https://foodbanknela.org/find-food-now/", platform: "wpsl" },
   { id: "fbwm", name: "Food Bank of Western Massachusetts", st: "MA", page: "https://www.foodbankwma.org/get-help/food-finder/", platform: "wpsl" },
-  { id: "wcfb", name: "Worcester County Food Bank", st: "MA", page: "https://foodbank.org/find-food/", platform: "wpsl" },
+  { id: "wcfb", name: "Worcester County Food Bank", st: "MA", page: "https://foodbank.org/find-food/", platform: "wpsl", ignoreHours: true },   // its hours field is office hours; the description has the pantry hours
   { id: "shlv", name: "Second Harvest Food Bank of Lehigh Valley and NE Pennsylvania", st: "PA", page: "https://secondharvestlv.org/find-food/", platform: "wpsl" },
   { id: "fh", name: "Forgotten Harvest", st: "MI", page: "https://www.forgottenharvest.org/find-food/", platform: "wpsl" },
   // ---- Store Locator Plus ----
