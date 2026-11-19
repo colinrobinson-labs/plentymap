@@ -46,6 +46,15 @@ const F = {
 // reportMod (imported above): the private "report a problem" form, reportUI(s) and bindReport(root)
 let R, mapApi = null, mapMod = null, focusId = null, openId = null;
 const catOf = id => CATS.find(c => c.id === id) || CATS[0];
+// The category picker shows every option at once, no sideways scrolling: the main kinds of place as equal tiles,
+// and the kinds inside the chosen one as chips under them (only when there is more than one to pick from)
+const GROUPS = [
+  { id: "store", subs: ["bakery"] },
+  { id: "market", subs: [] },
+  { id: "free", subs: ["pantry", "senior", "meal", "summer", "fridge", "givebox", "garden"] },
+  { id: "rmp", subs: [] },
+];
+const groupOf = id => GROUPS.find(g => g.id === id || g.subs.includes(id)) || GROUPS[0];
 const isFreeCat = cat => cat.kinds.some(k => FREE.includes(k));
 const phone = () => matchMedia("(max-width: 959px)").matches;
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -372,8 +381,11 @@ function shareSite(s) {
 function chip(id, label, on, attr = "data-cat", kind = "") {
   return `<button class="chip ${kind}" type="button" ${attr}="${id}" aria-pressed="${on}">${kind ? mark(kind) : ""}${label}</button>`;
 }
-function tab(c, on, n) {
-  return `<button class="ktab" type="button" data-cat="${c.id}" aria-pressed="${on}"><span class="kt-${c.icon}">${kindIcon(c.icon, "i sm")}</span><span>${esc(t("cat_" + c.id))}</span><span class="n">${esc(num(n))}</span></button>`;
+function tile(c, on, n) {
+  return `<button class="kpick kt-${c.icon}" type="button" data-cat="${c.id}" aria-pressed="${on}"><span class="kic" aria-hidden="true">${kindIcon(c.icon, "i sm")}</span><span class="kpl">${esc(t("cat_" + c.id))}</span><span class="n">${esc(num(n))}</span></button>`;
+}
+function subChip(id, label, on, n, icon) {
+  return `<button class="chip ksub${icon ? " kt-" + icon : ""}" type="button" data-cat="${id}" aria-pressed="${on}">${icon ? `<span class="kic" aria-hidden="true">${kindIcon(icon, "i sm")}</span>` : ""}<span>${label}</span><span class="n">${esc(num(n))}</span></button>`;
 }
 
 async function loadMap() {
@@ -431,7 +443,7 @@ export async function render(main, { args }) {
         ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
         <p class="small" id="f-msg" role="status"></p>
       </section>
-      <div class="ktabs" role="group" aria-label="${esc(t("show"))}" id="fcats"></div>
+      <div class="kcats" id="fcats"></div>
       <div class="fbar">
         <p class="fcount" id="fcount" role="status"></p>
         <label class="fsort" id="fsortw"><span class="sr">${esc(t("sort_by"))}</span>${ico("swap", "i sm")}<select id="fsort"></select></label>
@@ -440,7 +452,7 @@ export async function render(main, { args }) {
           <button type="button" data-view="map" aria-pressed="false">${ico("map", "i sm")} ${esc(t("view_map"))}</button>
         </div>
       </div>
-      <div class="chips fflt" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
+      <div class="chips wrap fflt" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
       <div id="flistwrap" class="stack">
         <div id="fnote"></div>
         <ul class="plist" id="flist"></ul>
@@ -479,16 +491,24 @@ export async function render(main, { args }) {
   };
   // categories this area has nothing for (no senior box sites, no restaurant program) are left out
   const paintCats = () => {
-    const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || pool(c).length);
-    if (!cats.some(c => c.id === F.cat)) F.cat = "store";
-    $("#fcats").innerHTML = cats.map(c => tab(c, F.cat === c.id, pool(c).length)).join("");
-    $$("[data-cat]").forEach(b => b.onclick = () => {
-      if (F.cat !== b.dataset.cat) { F.sort = ""; openId = null; focusId = null; mapCard(null); }
-      F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;
-      $$("[data-cat]").forEach(x => x.setAttribute("aria-pressed", x === b));
+    const has = c => ["free", "pantry", "store"].includes(c.id) || pool(c).length;
+    if (!CATS.some(c => c.id === F.cat && has(c))) F.cat = "store";
+    const g = groupOf(F.cat), top = GROUPS.filter(x => has(catOf(x.id)));
+    const total = pool(catOf(g.id)).length;
+    const subs = g.subs.map(catOf).filter(c => pool(c).length);
+    // one kind that is the whole list (a single pantry type) needs no second row
+    const showSubs = subs.length > 1 || (subs.length === 1 && (pool(subs[0]).length !== total || F.cat !== g.id));
+    $("#fcats").innerHTML = `<div class="kgrid" role="group" aria-label="${esc(t("show"))}" data-n="${top.length}">${top.map(x => tile(catOf(x.id), g.id === x.id, pool(catOf(x.id)).length)).join("")}</div>`
+      + (showSubs ? `<div class="chips wrap ksubs" role="group" aria-label="${esc(t("cat_" + g.id))}">${subChip(g.id, esc(t("cat_all")), F.cat === g.id, total, "")}${subs.map(c => subChip(c.id, esc(t("cat_" + c.id)), F.cat === c.id, pool(c).length, c.icon)).join("")}</div>` : "");
+    $$("#fcats [data-cat]").forEach(b => b.onclick = () => {
+      const id = b.dataset.cat;
+      if (F.cat === id) return;
+      F.sort = ""; openId = null; focusId = null; mapCard(null);
+      F.cat = id; store.set("fcat", F.cat); F.shown = PAGE;
+      paintCats();
+      $(`#fcats [data-cat="${CSS.escape(id)}"]`)?.focus({ preventScroll: true });
       paintFilters(); paintList(); announce($("#fcount").textContent);
     });
-    $(`[data-cat="${F.cat}"]`)?.scrollIntoView({ block: "nearest", inline: "center" });
   };
   paintCats();
   $$("[data-view]").forEach(b => b.onclick = () => setView(b.dataset.view));
