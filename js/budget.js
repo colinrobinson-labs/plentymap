@@ -155,7 +155,11 @@ function chooser(i, m, from) {
   const x = S.plan.days[i][m], seen = new Set();
   const el = document.createElement("div");
   el.className = "sheet"; el.id = "swapsheet";
-  const close = () => { el.remove(); document.body.style.overflow = ""; $("#app").inert = false; from?.isConnected ? from.focus() : $(`[data-swap="${i}${m}"]`)?.focus(); };
+  // the phone's Back button closes the sheet (an extra history entry while it's open), like the language picker
+  let open = true;
+  const done = () => { if (!open) return; open = false; removeEventListener("popstate", onPop); el.remove(); document.body.style.overflow = ""; $("#app").inert = false; from?.isConnected ? from.focus() : $(`[data-swap="${i}${m}"]`)?.focus(); };
+  const onPop = () => done();
+  const close = () => { const had = open && history.state?.pmSwap; done(); if (had) history.back(); };
   const optCard = id => {
     const r = FD.byId[id], v = r && facts(r);
     return `<li><button class="swapopt" type="button" data-to="${id}">
@@ -183,6 +187,7 @@ function chooser(i, m, from) {
   document.body.appendChild(el);
   document.body.style.overflow = "hidden";
   $("#app").inert = true;
+  history.pushState({ pmSwap: 1 }, ""); addEventListener("popstate", onPop);
   paintOpts();
   $("#swap-h", el).focus();
   $("#swclose", el).onclick = close;

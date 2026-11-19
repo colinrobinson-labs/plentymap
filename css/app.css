@@ -928,3 +928,15 @@ details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:
 .kid .row.between .badge{flex:none}
 .kterms{margin:var(--s1) 0;padding-inline-start:20px;display:grid;gap:2px}
 .kterms li{font-size:15px}
+
+/* recipe sheet on narrow phones: the title wraps to two lines instead of cutting off after a word */
+@media (max-width:419px){
+  .sheet .bar{gap:4px;padding-inline:6px}
+  .sheet .bar h2{white-space:normal;font-size:16.5px;line-height:1.25;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
+  .sheet .bar .iconbtn{flex:none}
+}
+/* tap targets: 44px or more everywhere in the top bar and the Find filters */
+.brand{min-height:44px}
+.tbtn{min-height:44px;gap:5px;padding-inline:10px}
+#setbtn{min-width:44px}
+#fflt .chip{min-height:44px}
