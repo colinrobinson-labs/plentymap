@@ -1,0 +1,37 @@
+===== https://www.lafoodbank.org/find-food/pantry-locator/ 133677
+[^"'\s]*storepoint[^"'\s]* [
+  '#storepoint-container',
+  'div#storepoint-map',
+  'storepoint-container',
+  'https://cdn.storepoint.co/api/v1/js/163e12f02a0d79.js'
+]
+wpslSettings\s*=\s*\{[^;]{0,15 []
+wpsl[A-Za-z_]*\s*=\s*\{[^;]{0, []
+data-[a-z-]*map[a-z-]*=["'][^" [ 'data-map-id="163e12f02a0d79"' ]
+store_search[^"']{0,200} []
+admin-ajax[^"']{0,100} [ 'admin-ajax.php' ]
+===== https://feedoc.org/need-food/ 300224
+[^"'\s]*storepoint[^"'\s]* [
+  'storepoint-container',
+  'https://cdn.storepoint.co/api/v1/js/165c3ba66c7fce.js'
+]
+wpslSettings\s*=\s*\{[^;]{0,15 []
+wpsl[A-Za-z_]*\s*=\s*\{[^;]{0, []
+data-[a-z-]*map[a-z-]*=["'][^" [ 'data-map-id="165c3ba66c7fce"' ]
+store_search[^"']{0,200} []
+admin-ajax[^"']{0,100} [ 'admin-ajax.php' ]
+===== https://www.philabundance.org/find-food/ 495755
+[^"'\s]*storepoint[^"'\s]* []
+wpslSettings\s*=\s*\{[^;]{0,15 [
+  'wpslSettings = {"url":"https://www.philabundance.org/wp-content/plugins/wp-store-locator/","scriptDebug":"","api":{"provider":"gmaps","language":"en","filters":"","hasValidKey":true,"libraries":["core","maps","geocoding","marker","places"],"key":"AIzaSyBuvBHmhM1c8zxgriAxHAAU_M2iClV3rBM","geocodeComponents":[],"autoComplete":{"options":{"fields":["geometry.location"],"types":["(regions)"]},"version":"legacy"}},"map":{"type":"roadmap","typeControl":0,"streetView":0,"gestureHandling":"auto","streetViewAvailable":false,"styleSelected":"cloud_based","mapId":"DEMO_MAP_ID","scrollWheel":true,"controlPosition":"left","controls":"\\u003Cdiv id=\\"wpsl-map-controls\\" \\u003E\\u003Cbutton class=\\"wpsl-icon-reset\\" aria-label=\\"Reset the map\\" tabindex=\\"0\\"\\u003E\\u003Cspan aria-hidden=\\"true\\" title=\\"Reset the map\\"\\u003E&#xe807'
+]
+wpsl[A-Za-z_]*\s*=\s*\{[^;]{0, [
+  'wpslSettings = {"url":"https://www.philabundance.org/wp-content/plugins/wp-store-locator/","scriptDebug":"","api":{"provider":"gmaps","language":"en","filters":"","hasValidKey":true,"libraries":["core","maps","geocoding","marker","places"],"key":"AIzaSyBuvBHmhM1c8zxgriAxHAAU_M2iClV3rBM","geocodeComponents":[],"autoComplete":{"options":{"fields":["geometry.location"],"types":["(regions)"]},"version":"legacy"}},"map":{"type":"roadmap","typeControl":0,"streetView":0,"gestureHandling":"auto","streetViewAvailable":false,"styleSelected":"cloud_based","mapId":"DEMO_MAP_ID","scrollWheel":true,"controlPosition":"left"',
+  'wpslApiErrors = {"geolocation":{"denied":"The application does not have permission to use the Geolocation API.","unavailable":"Location information is unavailable.","timeout":"The geolocation request has timed out.","generalError":"An unknown error has occurred."},"gmaps":{"viewMapsDocs":"view Google Maps documentation","errorReturned":"The Google JavaScript API has returned the following error.","apiDescribed":"Make sure the API keys are set up as described in the %s.","wpslDoc":"documentation","enableBilling":"You must enable billing for your Google Cloud Project","conflictDetected":"Another plugin has alrea',
+  'wpslGeolocationErrors = {"denied":"The application does not have permission to use the Geolocation API.","unavailable":"Location information is unavailable.","timeout":"The geolocation request has timed out.","generalError":"An unknown error has occurred."}',
+  'wpslTemplateSections = {"infoWindow":"\\u003Cdiv data-store-id=\\"\\u003C%= id %\\u003E\\" class=\\"wpsl-info-window\\"\\u003E\\u003Cp\\u003E\\u003C%= typeof thumb !== \\"undefined\\" ? thumb : \\"\\" %\\u003E\\u003Cstrong class=\\"wpsl-location-name\\"\\u003E\\u003Ca tabindex=\\"0\\" href=\\"\\u003C%= permalink %\\u003E\\"\\u003E\\u003C%= store %\\u003E\\u003C/a\\u003E\\u003C/strong\\u003E\\u003Cspan class=\\"wpsl-street\\"\\u003E\\u003C%= address %\\u003E\\u003C/span\\u003E\\u003C% if ( address2 ) { %\\u003E\\u003Cspan class=\\"wpsl-street\\"\\u003E\\u003C%= address2 %\\u003E\\u003C/span\\u003E\\u003C% } %\\u003E\\u003Cspan\\u003E\\u003C%= city %\\u003E \\u003C%= state %\\u',
+  'wpslLabels = {"preloader":"Searching...","loadingDirections":"Loading directions...","noResults":"No results found\\u003Cbr\\u003E\\u003Cbr\\u003EPlease adjust your search and try again.","moreInfo":"More info","generalError":"Something went wrong, please try again!","directions":"Directions","noDirectionsFound":"No route could be found between the origin and destination","noDirectionsFoundMessage":"No route could be found between the origin and destination\\u003Cbr\\u003E\\u003Cbr\\u003EPlease adjust your search and try again.","routesApiDisabled":"The directions can only be rendered if the Routes API is %s.","rou'
+]
+data-[a-z-]*map[a-z-]*=["'][^" []
+store_search[^"']{0,200} []
+admin-ajax[^"']{0,100} [ 'admin-ajax.php' ]
