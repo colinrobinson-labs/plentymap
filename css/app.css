@@ -665,3 +665,8 @@ h1+.lead{margin-block-start:var(--s2)}
 .d .a{stroke:var(--yolk)}.d .fa{fill:var(--yolk)}.d .t{stroke:#E0664F}.d .ft{fill:#E0664F}
 .rcard .art svg{width:46px;height:46px}
 @media (max-width:320px){.rcard .art svg{width:36px;height:36px}}
+
+/* legal thread: footer legal links and the first-run agreement line */
+.foot .legal{font-size:13.5px}
+.welcome .note.agree{margin-block-start:var(--s2,8px);font-size:13px}
+.welcome .note.agree a{color:inherit;text-decoration:underline;text-underline-offset:3px}

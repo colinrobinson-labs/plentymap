@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths-ignore: ["data/regions/**", "README.md", "privacy/**", "support/**"]
+    paths-ignore: ["data/regions/**", "README.md", "privacy/**", "support/**", "terms/**", "attributions/**", "accessibility/**", "legal/**", "pages/**"]
 permissions:
   contents: read
 concurrency:

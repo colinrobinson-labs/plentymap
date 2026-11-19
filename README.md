@@ -17,7 +17,7 @@ Live at **https://plentymap.com**.
 | `js/`, `css/`, `index.html` | The app |
 | `i18n/` | Screen text and recipes per language (`tools/check-i18n.mjs` checks them) |
 | `data/regions/` | The San Diego listings file, rebuilt every night |
-| `pages/` | Privacy policy and support page (built to `privacy/` and `support/` by `tools/build-pages.py`) |
+| `pages/` | Privacy Policy, Terms of Use, Credits and Licenses, Accessibility, Legal and Support pages (built to `privacy/`, `terms/`, `attributions/`, `accessibility/`, `legal/` and `support/` by `tools/build-pages.py`) |
 | `tools/` | Data fetchers, region builder, phone app helpers |
 
 ## Automation (GitHub Actions)

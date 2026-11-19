@@ -319,7 +319,7 @@
  "erase_sure": "Tap again to erase",
  "pv_lead": "Plenty Map is built so we know nothing about you.",
  "pv_h1": "What we collect",
- "pv_1": "Nothing. There are no accounts, ads, cookies, trackers or analytics.",
+ "pv_1": "Nothing that identifies you. There are no accounts, ads, cookies, trackers or analytics.",
  "pv_2": "Your ZIP code or location is used on your device to sort places by distance. It is never sent anywhere. The app only downloads the lists for your general area (about 50 km across) from our site.",
  "pv_3": "The quick check for benefits runs on your device and is never saved or sent.",
  "pv_4": "Your area, saved recipes, list and prices are stored on your device. You can erase them any time in Settings.",
@@ -419,5 +419,14 @@
  "home": "home",
  "updated": "Plenty Map was updated.",
  "refresh": "Refresh",
- "trip_over": "Your first shop is {t}, more than your budget, because it stocks oil, spices and staples that last for weeks. After that, meals cost about {m} a week."
+ "trip_over": "Your first shop is {t}, more than your budget, because it stocks oil, spices and staples that last for weeks. After that, meals cost about {m} a week.",
+ "terms": "Terms of Use",
+ "privacy_policy": "Privacy Policy",
+ "credits": "Credits and licenses",
+ "a11y": "Accessibility",
+ "legal": "Legal",
+ "welcome_terms": "By using Plenty Map, you agree to the {terms}. Our {privacy} explains what stays on your device.",
+ "pv_11": "If you report a problem with a place, we receive only the place, the problem you picked, your note if you write one, and your app language. Notes are erased after 90 days.",
+ "pv_full": "Read the full Privacy Policy",
+ "legal_en": "The full legal pages are in English."
 }

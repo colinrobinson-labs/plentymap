@@ -74,7 +74,7 @@
 "figures_asof":"Valores conferidos em {d}.","language":"Idioma","your_area":"Sua região","no_area":"Não definida","forget_area":"Esquecer minha região","area_saved":"Região salva","area_forgot":"Região esquecida",
 "senior_q":"Tenho 60 anos ou mais","senior_hint":"Mostra as cestas para idosos na lista principal.","theme":"Aparência","theme_auto":"Igual ao aparelho","theme_light":"Clara","theme_dark":"Escura",
 "your_data":"Seus dados","your_data_p":"Sua região, receitas salvas, lista e preços ficam só neste aparelho. Apagar remove tudo.","erase_all":"Apagar tudo","erase_sure":"Toque de novo para apagar",
-"pv_lead":"O Plenty Map foi feito para não sabermos nada sobre você.","pv_h1":"O que coletamos","pv_1":"Nada. Não há contas, anúncios, cookies, rastreadores nem estatísticas.",
+"pv_lead":"O Plenty Map foi feito para não sabermos nada sobre você.","pv_h1":"O que coletamos","pv_1":"Nada que identifique você. Não há contas, anúncios, cookies, rastreadores nem estatísticas.",
 "pv_2":"Seu ZIP code ou localização é usado no seu aparelho para ordenar os lugares por distância. Nunca é enviado a lugar nenhum. O app só baixa do nosso site as listas da sua região em geral (uns 50 km).","pv_3":"O teste rápido de benefícios roda no seu aparelho e nunca é salvo nem enviado.",
 "pv_4":"Sua região, receitas salvas, lista e preços ficam no seu aparelho. Você pode apagar tudo quando quiser em Configurações.","pv_h2":"De onde o app tira os dados",
 "pv_5":"Todas as listas e receitas vêm do nosso próprio site, plentymap.com, e as partes do mapa do nosso próprio servidor de mapas, tiles.plentymap.com, operado pela Cloudflare. O app não fala com mais ninguém.",
@@ -132,5 +132,14 @@
  "home": "início",
  "updated": "O Plenty Map foi atualizado.",
  "refresh": "Atualizar",
- "trip_over": "Sua primeira compra é de {t}, mais que seu orçamento, porque inclui óleo, temperos e básicos que duram semanas. Depois, as refeições custam uns {m} por semana."
+ "trip_over": "Sua primeira compra é de {t}, mais que seu orçamento, porque inclui óleo, temperos e básicos que duram semanas. Depois, as refeições custam uns {m} por semana.",
+ "terms": "Termos de uso",
+ "privacy_policy": "Política de privacidade",
+ "credits": "Créditos e licenças",
+ "a11y": "Acessibilidade",
+ "legal": "Informações legais",
+ "welcome_terms": "Ao usar o Plenty Map, você aceita os {terms}. Nossa {privacy} explica o que fica no seu aparelho.",
+ "pv_11": "Se você relatar um problema com um lugar, recebemos apenas o lugar, o problema que você escolheu, sua nota se você escrever uma e o idioma do app. As notas são apagadas depois de 90 dias.",
+ "pv_full": "Leia a Política de privacidade completa",
+ "legal_en": "As páginas legais completas estão em inglês."
 }

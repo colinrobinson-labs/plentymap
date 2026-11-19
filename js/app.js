@@ -1,5 +1,6 @@
 /* Plenty Map: start-up, language picker, first-run setup, tabs and routing, settings and privacy. */
 import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION, VARS } from "./core.js";
+import { CONFIG } from "./config.js";
 import { region, findPlace, setLoc, covered, nearestZip, placeNames, programName } from "./region.js";
 
 /* GitHub Pages can't send frame-ancestors, so refuse to run inside someone else's frame (clickjacking). */
@@ -97,6 +98,7 @@ function showWelcome(changing = false) {
     <button type="button" class="langmain" data-l="${g}"><span class="ln" lang="${g}" dir="${L.dir}">${esc(L.name)}</span>${ico("arrow", "i go")}</button>
     <ul class="langs" role="list" aria-labelledby="w-pick">${others.map(btn).join("")}</ul>
     <p class="note" lang="${g}" dir="${L.dir}">${esc(t("foot_a"))}</p>
+    <p class="note agree" lang="${g}" dir="${L.dir}">${esc(t("welcome_terms")).replace("{terms}", legalA("terms", "terms")).replace("{privacy}", legalA("privacy", "privacy_policy"))}</p>
   </div>`;
   $$("[data-l]", w).forEach(b => b.onclick = async () => {
     await loadLang(b.dataset.l); save("lang");
@@ -285,11 +287,16 @@ export async function route() {
 }
 
 /* shared footer */
+/* The full legal pages are static English pages on the site (the phone apps open them in the browser). */
+export const legalUrl = p => `${CONFIG.dataBase}${p}/`;
+const legalA = (p, k) => `<a href="${legalUrl(p)}" target="_blank" rel="noopener">${esc(t(k))}</a>`;
+export const legalLinks = () => [legalA("terms", "terms"), legalA("attributions", "credits"), legalA("accessibility", "a11y")].join(" · ");
 export function foot() {
   return `<footer class="foot">
     <p class="love">${ico("heart", "i sm")}<span>${esc(t("foot_love"))}</span></p>
     <p>${esc(t("foot_a"))} <a href="#/privacy">${esc(t("privacy"))}</a> · <a href="#/about">${esc(t("about"))}</a></p>
     <p>${esc(t("foot_b"))}</p>
+    <p class="legal">${legalLinks()}</p>
   </footer>`;
 }
 

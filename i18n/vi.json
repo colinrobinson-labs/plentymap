@@ -53,7 +53,7 @@
 "scam_h":"Bảo vệ thẻ EBT","scam_p":"Nộp đơn luôn miễn phí. Đừng bao giờ cho ai biết mã PIN, và hãy đổi mã nếu thấy điều gì lạ. Nếu bị mất tiền trợ cấp, hãy gọi ngay số ở mặt sau thẻ.","figures_asof":"Số liệu được kiểm tra {d}.",
 "language":"Ngôn ngữ","your_area":"Khu vực của bạn","no_area":"Chưa chọn","forget_area":"Quên khu vực của tôi","area_saved":"Đã lưu khu vực","area_forgot":"Đã quên khu vực","senior_q":"Tôi từ 60 tuổi trở lên","senior_hint":"Hiện thùng thực phẩm người cao tuổi trong danh sách chính.",
 "theme":"Giao diện","theme_auto":"Theo thiết bị","theme_light":"Sáng","theme_dark":"Tối","your_data":"Dữ liệu của bạn","your_data_p":"Khu vực, công thức đã lưu, danh sách và giá chỉ được lưu trên thiết bị này. Xóa sẽ xóa hết.","erase_all":"Xóa tất cả","erase_sure":"Chạm lần nữa để xóa",
-"pv_lead":"Plenty Map được làm ra để chúng tôi không biết gì về bạn.","pv_h1":"Chúng tôi thu thập gì","pv_1":"Không gì cả. Không có tài khoản, quảng cáo, cookie, công cụ theo dõi hay phân tích.","pv_2":"Mã ZIP hoặc vị trí của bạn chỉ được dùng trên thiết bị để sắp xếp nơi gần nhất. Không bao giờ được gửi đi đâu. Ứng dụng chỉ tải từ trang của chúng tôi danh sách cho khu vực chung của bạn (khoảng 50 km).","pv_3":"Phần kiểm tra nhanh trợ cấp chạy trên thiết bị của bạn và không bao giờ được lưu hay gửi đi.","pv_4":"Khu vực, công thức đã lưu, danh sách và giá được lưu trên thiết bị của bạn. Bạn có thể xóa bất cứ lúc nào trong Cài đặt.",
+"pv_lead":"Plenty Map được làm ra để chúng tôi không biết gì về bạn.","pv_h1":"Chúng tôi thu thập gì","pv_1":"Không có gì nhận diện được bạn. Không có tài khoản, quảng cáo, cookie, công cụ theo dõi hay phân tích.","pv_2":"Mã ZIP hoặc vị trí của bạn chỉ được dùng trên thiết bị để sắp xếp nơi gần nhất. Không bao giờ được gửi đi đâu. Ứng dụng chỉ tải từ trang của chúng tôi danh sách cho khu vực chung của bạn (khoảng 50 km).","pv_3":"Phần kiểm tra nhanh trợ cấp chạy trên thiết bị của bạn và không bao giờ được lưu hay gửi đi.","pv_4":"Khu vực, công thức đã lưu, danh sách và giá được lưu trên thiết bị của bạn. Bạn có thể xóa bất cứ lúc nào trong Cài đặt.",
 "pv_h2":"Ứng dụng lấy dữ liệu từ đâu","pv_5":"Mọi danh sách và công thức đều đến từ trang của chúng tôi, plentymap.com, còn bản đồ đến từ máy chủ bản đồ của chúng tôi, tiles.plentymap.com, do Cloudflare vận hành. Ứng dụng không liên lạc với ai khác.","pv_6":"Như mọi trang web, nhà cung cấp máy chủ có thể giữ nhật ký kỹ thuật ngắn hạn, như địa chỉ IP, để bảo mật. Chúng tôi không dùng chúng để theo dõi ai.","pv_7":"Khi bạn chạm Chỉ đường, Gọi hoặc một trang web, thiết bị sẽ mở ứng dụng hoặc trang đó, và quy định riêng tư của họ được áp dụng.",
 "pv_h3":"Trẻ em","pv_8":"Plenty Map an toàn cho mọi lứa tuổi. Ứng dụng không thu thập gì từ ai, kể cả trẻ em.","pv_9":"Chúng tôi sẽ không bao giờ bán, chia sẻ hay cho thuê gì cả, vì chúng tôi không có gì để bán.","pv_h4":"Câu hỏi","pv_10":"Hãy viết cho chúng tôi bất cứ lúc nào:","pv_updated":"Cập nhật lần cuối {d}.",
 "ab_lead":"Plenty Map giúp mọi người ở Hoa Kỳ ăn ngon mà tốn ít tiền hơn: công thức nấu ăn rẻ, kế hoạch hằng tuần vừa túi tiền, cửa hàng nhận EBT, thực phẩm miễn phí gần bạn, và các khoản trợ cấp bạn đủ điều kiện nhận, bằng ngôn ngữ của bạn.","ab_h1":"Thông tin đến từ đâu","ab_sites":"Giờ phát của ngân hàng thực phẩm, cập nhật mỗi đêm (lần cuối {d}):","ab_stores":"Cửa hàng, chợ nông sản và nhà hàng nhận {snap}:","ab_osm":"Bản đồ, tên khu phố và tủ lạnh cộng đồng:","ab_prices":"Giá thực phẩm: mức trung bình của Cục Thống kê Lao động Hoa Kỳ (tháng 10 năm 2026) và giá hàng nhãn riêng thông thường (tháng 11 năm 2026). Dinh dưỡng: USDA FoodData Central.","ab_benefits":"Số tiền và giới hạn trợ cấp: USDA, HHS và các cơ quan tiểu bang, kiểm tra ngày {d}.","ab_recipes":"Mọi công thức đều được viết riêng cho Plenty Map.",
@@ -99,5 +99,14 @@
  "home": "trang chủ",
  "updated": "Plenty Map đã được cập nhật.",
  "refresh": "Tải lại",
- "trip_over": "Lần đi chợ đầu tiên là {t}, nhiều hơn ngân sách, vì phải mua dầu, gia vị và đồ khô dùng được nhiều tuần. Sau đó, bữa ăn tốn khoảng {m} mỗi tuần."
+ "trip_over": "Lần đi chợ đầu tiên là {t}, nhiều hơn ngân sách, vì phải mua dầu, gia vị và đồ khô dùng được nhiều tuần. Sau đó, bữa ăn tốn khoảng {m} mỗi tuần.",
+ "terms": "Điều khoản sử dụng",
+ "privacy_policy": "Chính sách quyền riêng tư",
+ "credits": "Nguồn và giấy phép",
+ "a11y": "Trợ năng",
+ "legal": "Pháp lý",
+ "welcome_terms": "Khi dùng Plenty Map, bạn đồng ý với {terms}. {privacy} của chúng tôi giải thích những gì được giữ trên thiết bị của bạn.",
+ "pv_11": "Nếu bạn báo lỗi về một địa điểm, chúng tôi chỉ nhận địa điểm, lỗi bạn chọn, ghi chú nếu bạn viết, và ngôn ngữ ứng dụng. Ghi chú được xóa sau 90 ngày.",
+ "pv_full": "Đọc toàn bộ Chính sách quyền riêng tư",
+ "legal_en": "Toàn bộ các trang pháp lý bằng tiếng Anh."
 }

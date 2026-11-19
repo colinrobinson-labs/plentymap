@@ -53,7 +53,7 @@
 "scam_h":"Protege tu tarjeta EBT","scam_p":"Solicitar siempre es gratis. Nunca compartas tu PIN y cámbialo si algo te parece raro. Si te roban beneficios, llama de inmediato al número que está atrás de tu tarjeta.","figures_asof":"Cifras revisadas en {d}.",
 "language":"Idioma","your_area":"Tu zona","no_area":"Sin elegir","forget_area":"Olvidar mi zona","area_saved":"Zona guardada","area_forgot":"Zona olvidada","senior_q":"Tengo 60 años o más","senior_hint":"Muestra las cajas para mayores en la lista principal.",
 "theme":"Apariencia","theme_auto":"Igual que mi dispositivo","theme_light":"Clara","theme_dark":"Oscura","your_data":"Tus datos","your_data_p":"Tu zona, recetas guardadas, lista y precios se guardan solo en este dispositivo. Al borrar se elimina todo.","erase_all":"Borrar todo","erase_sure":"Toca otra vez para borrar",
-"pv_lead":"Plenty Map está hecho para no saber nada de ti.","pv_h1":"Qué recopilamos","pv_1":"Nada. No hay cuentas, anuncios, cookies, rastreadores ni analíticas.","pv_2":"Tu código postal o tu ubicación se usan en tu dispositivo para ordenar los lugares por distancia. Nunca se envían a ningún lado. La app solo descarga de nuestro sitio las listas de tu zona en general (unos 50 km).","pv_3":"La revisión rápida de beneficios se calcula en tu dispositivo y nunca se guarda ni se envía.","pv_4":"Tu zona, recetas guardadas, lista y precios se guardan en tu dispositivo. Puedes borrarlos cuando quieras en Ajustes.",
+"pv_lead":"Plenty Map está hecho para no saber nada de ti.","pv_h1":"Qué recopilamos","pv_1":"Nada que te identifique. No hay cuentas, anuncios, cookies, rastreadores ni analíticas.","pv_2":"Tu código postal o tu ubicación se usan en tu dispositivo para ordenar los lugares por distancia. Nunca se envían a ningún lado. La app solo descarga de nuestro sitio las listas de tu zona en general (unos 50 km).","pv_3":"La revisión rápida de beneficios se calcula en tu dispositivo y nunca se guarda ni se envía.","pv_4":"Tu zona, recetas guardadas, lista y precios se guardan en tu dispositivo. Puedes borrarlos cuando quieras en Ajustes.",
 "pv_h2":"De dónde saca la app sus datos","pv_5":"Todas las listas y recetas vienen de nuestro propio sitio, plentymap.com, y las partes del mapa de nuestro propio servidor de mapas, tiles.plentymap.com, que opera Cloudflare. La app no habla con nadie más.","pv_6":"Como cualquier sitio web, nuestro proveedor puede guardar por poco tiempo registros técnicos, como direcciones IP, por seguridad. No los usamos para seguir a nadie.","pv_7":"Si tocas Cómo llegar, Llamar o un sitio web, tu dispositivo abre esa app o sitio, y se aplican sus propias reglas de privacidad.",
 "pv_h3":"Niños","pv_8":"Plenty Map es seguro para todas las edades. No recopila nada de nadie, tampoco de niños.","pv_9":"Nunca venderemos, compartiremos ni rentaremos nada, porque no tenemos nada que vender.","pv_h4":"Preguntas","pv_10":"Escríbenos cuando quieras:","pv_updated":"Última actualización: {d}.",
 "ab_lead":"Plenty Map ayuda a cualquier persona en Estados Unidos a comer bien gastando menos: recetas baratas, un plan semanal que cabe en tu presupuesto, tiendas que aceptan EBT, comida gratis cerca y los beneficios que te corresponden, en tu idioma.","ab_h1":"De dónde viene la información","ab_sites":"Horarios de bancos de comida y despensas, actualizados cada noche (último: {d}):","ab_stores":"Tiendas, mercados de agricultores y restaurantes que aceptan {snap}:","ab_osm":"Mapa, nombres de vecindarios y refris comunitarios:","ab_prices":"Precios: promedios de la Oficina de Estadísticas Laborales de EE. UU. (octubre 2026) y precios típicos de marca de la tienda (noviembre 2026). Nutrición: USDA FoodData Central.","ab_benefits":"Montos y límites de beneficios: USDA, HHS y agencias estatales, revisados {d}.","ab_recipes":"Todas las recetas fueron escritas para Plenty Map.",
@@ -99,5 +99,14 @@
  "home": "inicio",
  "updated": "Plenty Map se actualizó.",
  "refresh": "Actualizar",
- "trip_over": "Tu primera compra es de {t}, más que tu presupuesto, porque incluye aceite, especias y básicos que duran semanas. Después, las comidas cuestan unos {m} por semana."
+ "trip_over": "Tu primera compra es de {t}, más que tu presupuesto, porque incluye aceite, especias y básicos que duran semanas. Después, las comidas cuestan unos {m} por semana.",
+ "terms": "Términos de uso",
+ "privacy_policy": "Política de privacidad",
+ "credits": "Créditos y licencias",
+ "a11y": "Accesibilidad",
+ "legal": "Aviso legal",
+ "welcome_terms": "Al usar Plenty Map, aceptas los {terms}. Nuestra {privacy} explica qué se queda en tu dispositivo.",
+ "pv_11": "Si reportas un problema con un lugar, solo recibimos el lugar, el problema que elegiste, tu nota si escribes una y el idioma de tu app. Las notas se borran después de 90 días.",
+ "pv_full": "Lee la Política de privacidad completa",
+ "legal_en": "Las páginas legales completas están en inglés."
 }

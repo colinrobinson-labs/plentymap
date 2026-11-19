@@ -74,7 +74,7 @@
 "figures_asof":"Tirooyinka waxaa la hubiyay {d}.","language":"Luqadda","your_area":"Deegaankaaga","no_area":"Lama dhigin","forget_area":"Iska illow deegaankayga","area_saved":"Deegaanka waa la kaydiyay","area_forgot":"Deegaanka waa la illaaway",
 "senior_q":"Waxaan ahay 60 jir ama ka weyn","senior_hint":"Wuxuu liiska ugu muhiimsan ku tusaa sanduuqyada waayeelka.","theme":"Muuqaalka","theme_auto":"Sida qalabkayga","theme_light":"Iftiin","theme_dark":"Mugdi",
 "your_data":"Xogtaada","your_data_p":"Deegaankaaga, cuntooyinka aad kaydisay, liiska iyo qiimaha waxay ku jiraan qalabkan oo keliya. Tirtiristu way wada saaraysaa.","erase_all":"Tirtir wax walba","erase_sure":"Mar kale taabo si aad u tirtirto",
-"pv_lead":"Plenty Map waxaa loo dhisay si aynaan waxba kaa ogaan.","pv_h1":"Waxa aan uruurinno","pv_1":"Waxba. Ma jiraan akoonno, xayeysiis, cookies, raad-raacayaal ama falanqayn.",
+"pv_lead":"Plenty Map waxaa loo dhisay si aynaan waxba kaa ogaan.","pv_h1":"Waxa aan uruurinno","pv_1":"Wax ku aqoonsanaya ma jiraan. Ma jiraan akoonno, xayeysiis, cookies, raad-raacayaal ama falanqayn.",
 "pv_2":"Koodhkaaga ZIP ama goobtaada waxaa lagu isticmaalaa qalabkaaga si meelaha loogu kala horreysiiyo masaafo ahaan. Waligeed meelna looma diro. App-ku wuxuu bogga noo ka soo dejiyaa oo keliya liisaska aaggaaga guud (qiyaastii 50 km).","pv_3":"Hubinta degdega ah ee gargaarka waxay ka shaqaysaa qalabkaaga, waligeedna lama kaydiyo lamana diro.",
 "pv_4":"Deegaankaaga, cuntooyinka aad kaydisay, liiska iyo qiimaha waxay ku jiraan qalabkaaga. Waqti kasta waad ka tirtiri kartaa Dejinta.","pv_h2":"Halka app-ku xogta ka helo",
 "pv_5":"Dhammaan liisaska iyo cuntooyinka waxay ka yimaadaan boggayaga, plentymap.com, qaybaha khariidaddana server-kayaga khariidadda, tiles.plentymap.com, oo ay Cloudflare maamusho. App-ku qof kale lama hadlo.",
@@ -132,5 +132,14 @@
  "home": "bogga hore",
  "updated": "Plenty Map waa la cusboonaysiiyay.",
  "refresh": "Cusboonaysii",
- "trip_over": "Dukaameysigaaga ugu horreeya waa {t}, wax ka badan miisaaniyaddaada, sababtoo ah wuxuu ka kooban yahay saliid, xawaash iyo alaab aasaasi ah oo toddobaadyo socota. Intaas kadib, cuntadu waxay ku kacdaa qiyaastii {m} toddobaadkii."
+ "trip_over": "Dukaameysigaaga ugu horreeya waa {t}, wax ka badan miisaaniyaddaada, sababtoo ah wuxuu ka kooban yahay saliid, xawaash iyo alaab aasaasi ah oo toddobaadyo socota. Intaas kadib, cuntadu waxay ku kacdaa qiyaastii {m} toddobaadkii.",
+ "terms": "Shuruudaha Isticmaalka",
+ "privacy_policy": "Siyaasadda Asturnaanta",
+ "credits": "Ilaha iyo shatiyada",
+ "a11y": "Helitaanka",
+ "legal": "Sharci",
+ "welcome_terms": "Markaad isticmaasho Plenty Map, waxaad aqbashay {terms}. {privacy} waxay sharaxaysaa waxa ku hadha qalabkaaga.",
+ "pv_11": "Haddii aad ka warbixiso dhibaato meel ku saabsan, waxaan helnaa oo keliya meesha, dhibaatada aad dooratay, qoraalkaaga haddii aad qorto, iyo luqadda app-ka. Qoraallada waa la tirtiraa 90 maalmood kadib.",
+ "pv_full": "Akhri Siyaasadda Asturnaanta oo dhammaystiran",
+ "legal_en": "Bogagga sharciga ee dhammaystiran waa Ingiriis."
 }

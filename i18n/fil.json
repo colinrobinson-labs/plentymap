@@ -319,7 +319,7 @@
 "erase_sure": "I-tap ulit para burahin",
 "pv_lead": "Ginawa ang Plenty Map para wala kaming alam tungkol sa iyo.",
 "pv_h1": "Ano ang kinokolekta namin",
-"pv_1": "Wala. Walang account, ads, cookies, tracker o analytics.",
+"pv_1": "Walang anumang nagpapakilala sa iyo. Walang account, ads, cookies, tracker o analytics.",
 "pv_2": "Ginagamit ang ZIP code o lokasyon mo sa device mo para ayusin ang mga lugar ayon sa layo. Hindi ito ipinapadala kahit saan. Ang dina-download lang ng app mula sa site namin ay ang listahan para sa pangkalahatang lugar mo (mga 50 km).",
 "pv_3": "Tumatakbo sa device mo ang mabilisang check ng benepisyo at hindi kailanman sine-save o ipinapadala.",
 "pv_4": "Ang lugar mo, naka-save na recipe, listahan at presyo ay nasa device mo. Puwede mo itong burahin kahit kailan sa Settings.",
@@ -398,5 +398,14 @@
  "home": "home",
  "updated": "Na-update ang Plenty Map.",
  "refresh": "I-refresh",
- "trip_over": "{t} ang unang pamimili mo, higit sa budget mo, dahil may kasama itong mantika, pampalasa at pangunahing sangkap na tatagal nang ilang linggo. Pagkatapos, mga {m} kada linggo na lang ang pagkain."
+ "trip_over": "{t} ang unang pamimili mo, higit sa budget mo, dahil may kasama itong mantika, pampalasa at pangunahing sangkap na tatagal nang ilang linggo. Pagkatapos, mga {m} kada linggo na lang ang pagkain.",
+ "terms": "Mga Tuntunin ng Paggamit",
+ "privacy_policy": "Patakaran sa Privacy",
+ "credits": "Mga kredito at lisensya",
+ "a11y": "Accessibility",
+ "legal": "Legal",
+ "welcome_terms": "Sa paggamit ng Plenty Map, sumasang-ayon ka sa {terms}. Ipinapaliwanag ng aming {privacy} kung ano ang nananatili sa iyong device.",
+ "pv_11": "Kung mag-uulat ka ng problema sa isang lugar, ang natatanggap lang namin ay ang lugar, ang problemang pinili mo, ang iyong tala kung sumulat ka, at ang wika ng iyong app. Binubura ang mga tala pagkalipas ng 90 araw.",
+ "pv_full": "Basahin ang buong Patakaran sa Privacy",
+ "legal_en": "Nasa Ingles ang buong mga pahinang legal."
 }
