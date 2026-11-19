@@ -106,7 +106,7 @@ await step("osm", async () => {
   nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"](area.c);
   nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"](area.c);
 );
-out center meta;`, CC === "GB" ? 300 : 300);
+out center meta;`, CC === "GB" ? 300 : 150);   // Nov 2026: GB ~450, CA ~224
   await save("osm.json", j);
 });
 await step("osm_shops", async () => {

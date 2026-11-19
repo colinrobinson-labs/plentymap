@@ -64,6 +64,9 @@ jobs:
       - name: Check and summarize
         run: |
           cd /tmp/i
+          # a build that stopped (too few rows) may have written files: don't publish those
+          [ "${{ steps.gb.outcome }}" = success ] || rm -rf out/gb
+          [ "${{ steps.ca.outcome }}" = success ] || rm -rf out/ca
           for c in gb ca; do
             if [ -f out/$c/index.json ]; then
               echo "== $c: $(ls out/$c/cells | wc -l) cells, $(du -sh out/$c | cut -f1)"; jq -c '{built, counts}' out/$c/index.json

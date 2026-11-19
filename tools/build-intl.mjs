@@ -209,17 +209,21 @@ if (CC === "CA") {
     let m = 0;
     for (const f of van) {
       const g = f.geometry, p = f.properties || {};
-      const pt = g?.type === "Point" ? g.coordinates : (p.latitude && p.longitude ? [+p.longitude, +p.latitude] : null);
+      const pt = g?.type === "Point" ? g.coordinates : (+p.latitude && +p.longitude ? [+p.longitude, +p.latitude] : null);
       const name = pick(p, "PROGRAM_NAME", "ORGANIZATION_NAME", "NAME");
       if (!pt || !name) continue;
-      const cost = pick(p, "PROGRAM_STATUS", "COST", "PROVIDES_MEALS");
-      const meal = /meal|lunch|dinner|breakfast/i.test([name, pick(p, "MEAL_COST", "PROVIDES_MEALS", "PROGRAM_TYPE")].join(" ")) && !/hamper/i.test(name);
-      const when = [pick(p, "DAYS_OF_WEEK", "SCHEDULE"), pick(p, "HOURS", "TIME")].filter(Boolean).join(" ");
+      const yes = k => /^(true|yes|y|1)$/i.test(pick(p, k));
+      const meal = yes("PROVIDES_MEALS") && !yes("PROVIDES_HAMPERS");
+      const DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+      const open = DAYS.filter(d => yes("OPEN_" + d.toUpperCase())).map(d => d[0].toUpperCase() + d.slice(1, 3));
+      const when = pick(p, "DAYS_OPEN") || (open.length ? open.join(", ") : "");
+      const ref = yes("REQUIRES_REFERRAL");
       sites.push({
         id: `van-${pick(p, "PROGRAM_ID", "OBJECTID") || m}`, k: meal ? "meal" : "pantry", n: name, org: pick(p, "ORGANIZATION_NAME"),
-        a: pick(p, "LOCATION_ADDRESS", "ADDRESS"), c: "Vancouver", z: pick(p, "POSTAL_CODE").toUpperCase(), lat: r5(pt[1]), lon: r5(pt[0]),
-        ph: phone(pick(p, "SIGNUP_PHONE_NUMBER", "PHONE")), w: urlOk(pick(p, "SIGNUP_LINK", "WEBSITE", "URL")), reg: "BC",
-        d: [blank("vancouver", { when, notes: [pick(p, "DESCRIPTION"), pick(p, "ELIGIBILITY", "REQUIREMENTS")].filter(Boolean).join(" ").slice(0, 300), conf: when ? "osm" : "call" })],
+        a: pick(p, "ADDRESS", "LOCATION_ADDRESS").replace(/\b([A-Z])([A-Z]+)\b/g, (m, x, y) => x + y.toLowerCase()), c: "Vancouver", z: pick(p, "POSTAL_CODE").toUpperCase(), lat: r5(pt[1]), lon: r5(pt[0]),
+        ph: phone(pick(p, "SIGNUP_PHONE_NUMBER", "PHONE")), w: urlOk(pick(p, "SIGNUP_LINK", "WEBSITE", "URL")), reg: "BC", ...(ref ? { ref: 1 } : {}),
+        // days only (the city lists days, not hours), so the app shows them as notes, not as next-open times
+        d: [blank("vancouver", { notes: [when && `Open: ${when}.`, pick(p, "DESCRIPTION"), pick(p, "PROGRAM_POPULATION_SERVED") && `For: ${pick(p, "PROGRAM_POPULATION_SERVED")}.`, pick(p, "COMMENT")].filter(Boolean).join(" ").slice(0, 400) })],
       });
       m++;
     }
