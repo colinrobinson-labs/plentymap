@@ -942,3 +942,6 @@ details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:
 .tbtn{min-height:44px;gap:5px;padding-inline:10px}
 #setbtn{min-width:44px}
 #fflt .chip{min-height:44px}
+/* the sort control never pushes the page wider than the screen (long Russian/Ukrainian option names at 280px) */
+.fsort{max-width:100%;min-width:0}
+.fsort select{min-width:0;width:100%;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
