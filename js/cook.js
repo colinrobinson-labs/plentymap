@@ -40,6 +40,7 @@ function paint() {
   const cu = activeCuisine();
   $("#rcount").textContent = t("recipes_n", { n: vis.length });
   if ($("#fsum")) $("#fsum").textContent = fsum();
+  if ($("#mfsum")) $("#mfsum").textContent = msum();
   $("#rlist").innerHTML = !vis.length
     ? `<div class="card empty">${ico("pot")}<p><b>${esc(t("no_recipes"))}</b></p><p class="mute">${esc(t("no_recipes_p"))}</p></div>`
     : [
@@ -69,12 +70,20 @@ function fsum() {
   const n = fcount() + S.have.size;
   return [k, c].join(" · ") + (n ? " · +" + num(n) : "");
 }
+/* what "More filters" is set to, shown on its folded row so nothing is hidden */
+function msum() {
+  const av = [...S.avoid].filter(a => a !== "salt");
+  const out = av.length ? t("avoid_q") + ": " + av.map(a => t("avoid_" + a)).join(", ") : "";
+  return [t("lvl_" + S.comfort), t("diet_" + S.diet), out, S.avoid.has("salt") ? t("low_na") : "", t("cu_" + activeCuisine())].filter(Boolean).join(" · ");
+}
+const foldOpen = id => { try { return sessionStorage.getItem("pm.fold." + id) === "1"; } catch { return false; } };
+const keepFold = el => el.addEventListener("toggle", () => { try { sessionStorage.setItem("pm.fold." + el.dataset.fold, el.open ? "1" : "0"); } catch { /* private mode: folds just start closed */ } });
 function filters() {
   const cu = activeCuisine();
   const grp = (id, title, body) => `<div class="fg" role="group" aria-labelledby="${id}"><div class="fg-h" id="${id}">${esc(title)}</div><div class="fg-c">${body}</div></div>`;
   const wide = matchMedia("(min-width: 760px)").matches;
   return `<div class="card filters" id="filters">
-    ${wide ? "" : `<details class="fold allfl"><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
+    ${wide ? "" : `<details class="fold allfl" data-fold="all" ${foldOpen("all") ? "open" : ""}><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
     ${grp("l-kit", t("kit_q"), `<div class="tiles">
         ${tile("stove", "flame", esc(t("kit_stove")), S.kit.includes("stove"))}
         ${tile("hotplate", "plug", esc(t("kit_hotplate")), S.kit.includes("hotplate"))}
@@ -88,7 +97,7 @@ function filters() {
     ${grp("l-cost", t("budget_q"), `<div class="seg n${BUDGETS.length}">
         ${BUDGETS.map(b => segBtn("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
       </div>`)}
-    <details class="fold morefl" ${wide ? "open" : ""}><summary><span>${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}${ico("chev", "i chev")}</summary><div class="fold-b">
+    <details class="fold morefl" data-fold="more" ${foldOpen("more") ? "open" : ""}><summary><span class="fs-t">${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}<span class="msum" id="mfsum">${esc(msum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">
     ${grp("l-lvl", t("comfort_q"), `<div class="seg n3">
         ${[1, 2, 3].map(l => segBtn("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
       </div>`)}
@@ -118,6 +127,7 @@ function setFridge(on) {
   $$("[data-fridge]").forEach(x => x.setAttribute("aria-pressed", (x.dataset.fridge === "1") === on));
 }
 function bindFilters() {
+  $$("#filters details[data-fold]").forEach(keepFold);
   $$("[data-kit]").forEach(b => b.onclick = () => {
     const k = b.dataset.kit;
     // No kitchen usually means no fridge either; the fridge answer flips with it and can be set back.
