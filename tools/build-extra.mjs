@@ -102,7 +102,11 @@ if (sm?.features?.length) {
     const lat = g.y, lon = g.x;
     if (lat == null || !inUS(lat, lon)) continue;
     const from = asDate(a[fld.start]), to = asDate(a[fld.end]);
-    if (to && to < today) { ended++; continue; }
+    // only sites with a published end date that hasn't passed, and not withdrawn by the state
+    if (!to || to < today) { ended++; continue; }
+    if (["Dropped", "Expired"].some(k => /^(y|yes|true|1)$/i.test(String(a[k] ?? "").trim()))) { ended++; continue; }
+    // not more than two months ahead: a site listed for next summer would mislead today
+    if (from && from > new Date(Date.now() + 60 * 864e5).toISOString().slice(0, 10)) { ended++; continue; }
     const meals = [["Breakfast", fld.b], ["Lunch", fld.l], ["Snack", fld.sn], ["Snack", fld.s2], ["Supper", fld.d]]
       .filter(([, k]) => k && clean(a[k])).map(([lab, k]) => `${lab} ${clean(a[k])}`);
     const when = [from && to ? `${from} to ${to}` : "", clean(a[fld.days]), meals.join("; ")].filter(Boolean).join(" · ");
@@ -141,4 +145,7 @@ await writeFile(join(outDir, "index.json"), JSON.stringify({
   cells: index,
 }));
 console.log(`[build-extra] cells ${cells.size}, ${JSON.stringify(count)}, ${(bytes / 1048576).toFixed(1)} MB`);
-if ((count.garden || 0) + (count.givebox || 0) + (count.bakery || 0) < 500) { console.error("[build-extra] output looks too small; stopping"); process.exit(1); }
+// each OpenStreetMap layer must look complete, or last week's layers stay up
+const MIN = { garden: 1000, givebox: 100, bakery: 20 };
+const short = Object.entries(MIN).filter(([k, n]) => (count[k] || 0) < n);
+if (short.length) { console.error(`[build-extra] output looks too small (${short.map(([k]) => `${k} ${count[k] || 0}`).join(", ")}); stopping`); process.exit(1); }
