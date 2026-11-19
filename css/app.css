@@ -496,3 +496,29 @@ legend{padding:0;margin-block-end:4px}
 .langs .le{font-size:12.5px;opacity:.75;line-height:1.3}
 .welcome .note{margin-block-start:20px;font-size:14px;opacity:.75;text-align:center}
 @media (max-width:340px){.welcome .mark{width:52px;height:52px}.welcome .name{font-size:30px}.welcome .tagline{font-size:14.5px}.langs .ln{font-size:16px}.langs button{padding-inline:10px}}
+
+/* meal swap: a labelled button, and a sheet of a few real choices */
+.swapbtn{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font-weight:700;font-size:14px}
+.swapbtn:hover{border-color:var(--ink-2);background:var(--line-2)}
+.swappanel{max-width:560px}
+.swappanel .bar h2{white-space:normal;font-size:19px;line-height:1.25;font-family:var(--f-disp);font-weight:400}
+.swappanel .bar h2:focus{outline:none}
+.swaplist{list-style:none;margin:12px 0 10px;padding:0;display:grid;gap:8px}
+.swapopt{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"t go" "m go";gap:4px 12px;align-items:center;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);text-align:start}
+.swapopt:hover,.swapopt:focus-visible{border-color:var(--sel);background:var(--tint)}
+.swapopt .t{grid-area:t;font-weight:700;font-size:16.5px;line-height:1.3;overflow-wrap:anywhere}
+.swapopt .meta{grid-area:m;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.swapopt .meta b{color:var(--ink)}
+.swapopt .go{grid-area:go;color:var(--ink-2)}
+[dir="rtl"] .swapopt .go{transform:scaleX(-1)}
+@media (max-width:360px){.meal .k{min-width:0}.swapbtn{padding:0 10px}}
+.day{container-type:inline-size}
+.day .meal{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"k sw" "n n";gap:0 10px;align-items:center;padding-block:8px}
+.day .meal .k{grid-area:k;min-width:0}
+.day .meal button.name{grid-area:n;padding-block:2px 4px}
+.day .meal .swapbtn{grid-area:sw}
+@container (min-width:440px){
+  .day .meal{grid-template-columns:84px minmax(0,1fr) auto;grid-template-areas:"k n sw";gap:10px}
+  .day .meal button.name{padding-block:6px}
+}
+.stack>.fg .chips.wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}

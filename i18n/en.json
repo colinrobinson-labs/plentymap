@@ -388,5 +388,10 @@
  "us_work_p": "Under new federal rules, adults 18 to 64 without kids under 14 may need to work, train or volunteer 80 hours a month to keep {snap}. Many people are excused, like pregnant people and people who can't work.",
  "us_pr_h": "PAN (Puerto Rico's food money program)",
  "us_pr_p": "Puerto Rico has its own program instead of SNAP, run by ADSEF. You can apply at an ADSEF office or online.",
- "us_help_in": "Showing programs and limits for {st}."
+ "us_help_in": "Showing programs and limits for {st}.",
+ "swap_btn": "Swap",
+ "swap_h": "Instead of “{r}”",
+ "swap_more": "Show other ideas",
+ "swap_pot": "This also changes the leftover meals made from it.",
+ "budget_low": "This is the cheapest week we can plan with your choices, about {m}. Free food near you can cover the rest."
 }

@@ -101,5 +101,10 @@
 "us_wic_p":"Manje ki bon pou lasante, èd pou lèt bebe ak sipò pou tibebe. Limit revni a se {g} pa mwa pou kay ou, e nenpòt moun ki gen Medicaid oswa {snap} kalifye.","us_school_p":"Timoun nan kay ki resevwa {snap} jwenn manje lekòl gratis san fòm. Lòt fanmi ka aplike nan lekòl la, e anpil lekòl bay tout elèv manje gratis.","us_sun_p":"Anpil eta bay {m} pou chak timoun pou achte manje chak ete. Timoun ki gen {snap} oswa Medicaid souvan jwenn li otomatikman. Mande eta ou si li patisipe.","us_ais_p":"Manje midi cho nan sant pou granmoun, ak manje yo pote lakay ou si li difisil pou soti. Pou moun 60 an oswa plis. Eldercare Locator konekte ou ak biwo nan zòn ou.",
 "us_call_eldercare":"Eldercare Locator","us_rmp_p":"Si ou resevwa {snap} e ou gen 60+, yon andikap, oswa ou pa gen kay, ou ka achte repa cho ak kat EBT ou nan restoran ki patisipe pre ou.","us_mm_h":"Jwenn plis pou fwi ak legim","us_mm_p":"Anpil mache kiltivatè ak kèk magazen bay plis kòb pou fwi ak legim lè ou peye ak {snap}. Chèche “Siplis pou fwi ak legim” nan onglè Jwenn manje a.",
 "us_imm_p":"Avèk nouvo règ federal yo, anpil refijye, moun ki gen azil ak moun ki gen parol pa ka jwenn {snap} ankò. Antre kiben ak ayisyen (Cuban/Haitian entrants) toujou kalifye. Timoun ki sitwayen toujou ka jwenn li. Bank manje, WIC ak manje lekòl louvri pou fanmi nenpòt estati.","us_work_p":"Avèk nouvo règ federal yo, granmoun 18 a 64 an ki pa gen timoun piti pase 14 an ka bezwen travay, fè fòmasyon oswa fè volontarya 80 èdtan pa mwa pou kenbe {snap}. Anpil moun egzante, tankou fanm ansent ak moun ki pa ka travay.","us_pr_h":"PAN (pwogram lajan pou manje Pòtoriko)","us_pr_p":"Pòtoriko gen pwòp pwogram li olye SNAP, se ADSEF ki jere l. Ou ka aplike nan yon biwo ADSEF oswa sou entènèt.",
-"us_help_in":"N ap montre pwogram ak limit pou {st}."
+"us_help_in":"N ap montre pwogram ak limit pou {st}.",
+ "swap_btn": "Chanje",
+ "swap_h": "Olye “{r}”",
+ "swap_more": "Lòt ide",
+ "swap_pot": "Sa chanje rès manje ki soti nan li tou.",
+ "budget_low": "Sa a se semèn ki pi bon mache nou ka planifye ak chwa ou yo, anviwon {m}. Manje gratis toupre w ka kouvri rès la."
 }

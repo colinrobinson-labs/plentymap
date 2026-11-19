@@ -68,5 +68,10 @@
 "us_wic_p":"Thực phẩm lành mạnh, hỗ trợ sữa bột và chăm sóc em bé. Giới hạn thu nhập là {g} mỗi tháng cho nhà bạn, và ai có Medicaid hoặc {snap} đều đủ điều kiện.","us_school_p":"Trẻ em trong nhà có {snap} được ăn miễn phí ở trường mà không cần điền đơn. Các gia đình khác có thể nộp đơn ở trường, và nhiều trường cho mọi học sinh ăn miễn phí.","us_sun_p":"Nhiều tiểu bang cho {m} mỗi trẻ để mua thực phẩm vào mỗi mùa hè. Trẻ có {snap} hoặc Medicaid thường được nhận tự động. Hãy hỏi xem tiểu bang bạn có tham gia không.","us_ais_p":"Bữa trưa nóng ở trung tâm người cao tuổi, và bữa ăn mang đến nhà nếu bạn khó ra ngoài. Dành cho người từ 60 tuổi. Eldercare Locator sẽ kết nối bạn với văn phòng địa phương.",
 "us_call_eldercare":"Eldercare Locator","us_rmp_p":"Nếu bạn nhận {snap} và từ 60 tuổi, khuyết tật hoặc không có nhà, bạn có thể mua bữa ăn nóng bằng thẻ EBT ở các nhà hàng tham gia gần bạn.","us_mm_h":"Được thêm tiền mua trái cây và rau","us_mm_p":"Nhiều chợ nông sản và một số cửa hàng cho thêm tiền mua trái cây và rau khi bạn trả bằng {snap}. Hãy tìm dòng “Thêm tiền mua rau quả” trong mục Tìm thức ăn.",
 "us_imm_p":"Theo quy định liên bang mới, nhiều người tị nạn, người được tị nạn chính trị và người được tạm tha nhập cảnh không còn được nhận {snap}. Trẻ em là công dân vẫn được nhận. Ngân hàng thực phẩm, WIC và bữa ăn ở trường mở cho mọi gia đình, bất kể tình trạng di trú.","us_work_p":"Theo quy định liên bang mới, người lớn từ 18 đến 64 tuổi không có con dưới 14 tuổi có thể phải làm việc, học nghề hoặc làm tình nguyện 80 giờ mỗi tháng để giữ {snap}. Nhiều người được miễn, như phụ nữ mang thai và người không thể làm việc.","us_pr_h":"PAN (chương trình tiền thực phẩm của Puerto Rico)","us_pr_p":"Puerto Rico có chương trình riêng thay cho SNAP, do ADSEF quản lý. Bạn có thể nộp đơn tại văn phòng ADSEF hoặc trên mạng.",
-"us_help_in":"Đang hiện chương trình và giới hạn của {st}."
+"us_help_in":"Đang hiện chương trình và giới hạn của {st}.",
+ "swap_btn": "Đổi món",
+ "swap_h": "Thay cho “{r}”",
+ "swap_more": "Xem món khác",
+ "swap_pot": "Các bữa ăn thừa từ món này cũng sẽ đổi theo.",
+ "budget_low": "Đây là tuần rẻ nhất chúng tôi có thể lên kế hoạch theo lựa chọn của bạn, khoảng {m}. Thực phẩm miễn phí gần bạn có thể bù phần còn lại."
 }

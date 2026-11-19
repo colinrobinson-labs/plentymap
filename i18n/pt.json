@@ -101,5 +101,10 @@
 "us_wic_p":"Comida saudável, ajuda com fórmula e apoio ao bebê. O limite de renda é {g} por mês para sua casa, e quem tem Medicaid ou {snap} já tem direito.","us_school_p":"Crianças de casas que recebem {snap} têm merenda grátis sem formulário. Outras famílias podem pedir na escola, e muitas escolas dão merenda grátis a todos os alunos.","us_sun_p":"Muitos estados dão {m} por criança para comprar comida todo verão. Crianças com {snap} ou Medicaid muitas vezes recebem automaticamente. Pergunte se o seu estado participa.","us_ais_p":"Almoço quente em centros para idosos, e refeições entregues em casa se for difícil sair. Para pessoas de 60 anos ou mais. O Eldercare Locator liga você ao escritório da sua região.",
 "us_call_eldercare":"Eldercare Locator","us_rmp_p":"Se você recebe {snap} e tem 60+, deficiência ou não tem casa, pode comprar refeições quentes com o cartão EBT nos restaurantes participantes perto de você.","us_mm_h":"Ganhe mais para frutas e verduras","us_mm_p":"Muitas feiras e algumas lojas dão dinheiro a mais para frutas e verduras quando você paga com {snap}. Procure “Extra para frutas e verduras” na aba Achar comida.",
 "us_imm_p":"Com as novas regras federais, muitos refugiados, asilados e pessoas com parole não podem mais receber {snap}. Crianças cidadãs ainda podem. Bancos de alimentos, WIC e merenda escolar são para famílias de qualquer situação.","us_work_p":"Com as novas regras federais, adultos de 18 a 64 anos sem filhos menores de 14 talvez precisem trabalhar, estudar ou fazer voluntariado 80 horas por mês para continuar no {snap}. Muitas pessoas são dispensadas, como grávidas e quem não pode trabalhar.","us_pr_h":"PAN (o programa de dinheiro para comida de Porto Rico)","us_pr_p":"Porto Rico tem seu próprio programa no lugar do SNAP, administrado pela ADSEF. Você pode pedir num escritório da ADSEF ou pela internet.",
-"us_help_in":"Mostrando programas e limites de {st}."
+"us_help_in":"Mostrando programas e limites de {st}.",
+ "swap_btn": "Trocar",
+ "swap_h": "Em vez de “{r}”",
+ "swap_more": "Ver outras ideias",
+ "swap_pot": "Isso também muda as sobras feitas com esta receita.",
+ "budget_low": "Esta é a semana mais barata que conseguimos planejar com suas escolhas, cerca de {m}. A comida grátis perto de você pode cobrir o resto."
 }
