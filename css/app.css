@@ -903,3 +903,7 @@ h1+.lead{margin-block-start:var(--s2)}
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hm-board{box-shadow:inset 0 0 0 1px rgba(241,235,221,.12)}}
 :root[data-theme="dark"] .hm-board{box-shadow:inset 0 0 0 1px rgba(241,235,221,.12)}
+/* legal thread: footer legal links and the first-run agreement line */
+.foot .legal{font-size:13.5px}
+.welcome .note.agree{margin-block-start:var(--s2,8px);font-size:13px}
+.welcome .note.agree a{color:inherit;text-decoration:underline;text-underline-offset:3px}

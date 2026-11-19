@@ -1,6 +1,6 @@
 /* Settings, Privacy and About. */
 import { S, save, store, t, esc, $, ico, toast, LANG, VERSION, dateFmt } from "./core.js";
-import { foot, showWelcome, applyTheme, locForm, bindLoc } from "./app.js";
+import { foot, showWelcome, applyTheme, locForm, bindLoc, legalUrl } from "./app.js";
 import { region } from "./region.js";
 import { CONFIG } from "./config.js";
 import { AS_OF } from "./benefits.js";
@@ -51,14 +51,15 @@ function privacy(main) {
     <h1 class="disp">${esc(t("privacy"))}</h1>
     <p class="lead">${esc(t("pv_lead"))}</p>
     <h2>${esc(t("pv_h1"))}</h2>
-    <ul>${["pv_1", "pv_2", "pv_3", "pv_4"].map(li).join("")}</ul>
+    <ul>${["pv_1", "pv_2", "pv_3", "pv_4", "pv_11"].map(li).join("")}</ul>
     <h2>${esc(t("pv_h2"))}</h2>
     <ul>${["pv_5", "pv_6", "pv_7"].map(li).join("")}</ul>
     <h2>${esc(t("pv_h3"))}</h2>
     <ul>${["pv_8", "pv_9"].map(li).join("")}</ul>
     <h2>${esc(t("pv_h4"))}</h2>
     <p>${esc(t("pv_10"))} <a href="mailto:${CONFIG.contact}">${CONFIG.contact}</a></p>
-    <p class="small mute">${esc(t("pv_updated", { d: "2026-11-18" }))}</p>
+    <p><a href="${legalUrl("privacy")}" target="_blank" rel="noopener">${esc(t("pv_full"))}</a></p>
+    <p class="small mute">${esc(t("legal_en"))} ${esc(t("pv_updated", { d: dateFmt(new Date("2026-11-19T12:00:00"), { year: "numeric", month: "long", day: "numeric" }) }))}</p>
   </div>${foot()}`;
 }
 

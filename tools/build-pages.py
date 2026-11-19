@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Builds the static /privacy/ and /support/ pages from pages/*.md (app stores link to these URLs).
-Usage: python3 tools/build-pages.py   (writes privacy/index.html and support/index.html; outputs are committed)"""
+"""Builds the static legal and help pages (/privacy/, /terms/, /attributions/, /accessibility/, /legal/, /support/)
+from pages/*.md. App stores link to /privacy/ and /support/, so keep those URLs.
+Usage: python3 tools/build-pages.py   (writes <name>/index.html for each page; outputs are committed)"""
 import html, re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-EFFECTIVE = "November 18, 2026"
+EFFECTIVE = "November 19, 2026"  # change when a policy changes, and say what changed in the commit
 
 def inline(s):
     s = html.escape(s, quote=False)
@@ -21,7 +22,10 @@ def md(text):
     for line in text.splitlines():
         if not line.strip(): flush(); continue
         m = re.match(r"^(#{1,3}) (.*)", line)
-        if m: flush(); n = len(m.group(1)); out.append(f"<h{n}>{inline(m.group(2))}</h{n}>"); continue
+        if m:
+            flush(); n = len(m.group(1)); txt = m.group(2)
+            slug = re.sub(r"[^a-z0-9]+", "-", re.sub(r"^\d+\.\s*", "", txt.lower())).strip("-")
+            out.append(f'<h{n} id="{slug}">{inline(txt)}</h{n}>' if n > 1 else f"<h{n}>{inline(txt)}</h{n}>"); continue
         if line.startswith("- "):
             if para: flush()
             items.append(line[2:]); continue
@@ -47,15 +51,22 @@ TPL = """<!doctype html>
 <main class="page">
 {body}
 </main>
-<footer class="foot"><a href="../privacy/">Privacy</a> · <a href="../support/">Help and support</a> · <a href="mailto:hello@plentymap.com">hello@plentymap.com</a></footer>
+<footer class="foot"><nav aria-label="Legal and help"><a href="../terms/">Terms</a> · <a href="../privacy/">Privacy</a> · <a href="../attributions/">Credits</a> · <a href="../accessibility/">Accessibility</a> · <a href="../legal/">Legal</a> · <a href="../support/">Help</a></nav><p>Not a government website. <a href="mailto:hello@plentymap.com">hello@plentymap.com</a></p></footer>
 </body>
 </html>
 """
 
-for name, title, desc in [("privacy", "Privacy Policy", "Plenty Map collects nothing about you. No accounts, no ads, no tracking."),
-                          ("support", "Help and Support", "Help using Plenty Map, and how to reach us.")]:
+PAGES = [
+    ("privacy", "Privacy Policy", "Plenty Map keeps what you enter on your device. No accounts, no ads, no tracking."),
+    ("terms", "Terms of Use", "The rules for using Plenty Map, a free food-help app and website."),
+    ("attributions", "Credits and Licenses", "The food banks, open data and open-source software behind Plenty Map."),
+    ("accessibility", "Accessibility", "How Plenty Map works for everyone, and how to tell us about a barrier."),
+    ("legal", "Legal", "Plenty Map's legal pages, contact details and notices."),
+    ("support", "Help and Support", "Help using Plenty Map, and how to reach us."),
+]
+for name, title, desc in PAGES:
     src = (ROOT / "pages" / f"{name}.md").read_text().replace("{{EFFECTIVE_DATE}}", EFFECTIVE)
-    body = md(src).replace('href="/privacy"', 'href="../privacy/"')
+    body = re.sub(r'href="/(privacy|terms|attributions|accessibility|legal|support)"', r'href="../\1/"', md(src))
     (ROOT / name).mkdir(exist_ok=True)
     (ROOT / name / "index.html").write_text(TPL.format(title=title, desc=desc, body=body))
 print("pages built")
