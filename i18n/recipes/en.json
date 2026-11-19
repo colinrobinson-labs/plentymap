@@ -441,7 +441,72 @@
 ],
 "tip": "Squeeze in lime and add a little chopped cilantro at the table."
 },
+"soakoats": {
+"t": "No-cook peanut butter oats",
+"s": [
+"Put the oats in a cup or bowl and pour in about ¾ cup of clean drinking water, just enough to cover.",
+"Let it sit 10 minutes, until soft. Hot water, if you can get some, makes it ready in 2 or 3.",
+"Stir in the peanut butter, slice the banana on top and sprinkle on the cinnamon."
+],
+"tip": "Quick oats soften fastest. Old-fashioned oats work too and stay a little chewy."
+},
+"beanwrap": {
+"t": "Black bean and lime wraps",
+"s": [
+"Drain the beans. Rinse them with clean water if you can.",
+"Mash about half of them with a fork. Squeeze in the lime, add the spices and a pinch of salt, and stir.",
+"Spoon onto the tortillas, roll up and eat."
+],
+"tip": "Pinto or kidney beans work just as well."
+},
+"chickwrap": {
+"t": "Smashed chickpeas on bread",
+"s": [
+"Drain the chickpeas.",
+"Mash them with a fork, then stir in the oil, the lime juice, the cumin and a pinch of salt.",
+"Spread thick on the bread."
+],
+"tip": "A few slices of raw onion or a dash of hot sauce add a kick."
+},
+"tunacrack": {
+"t": "Lime tuna on crackers",
+"s": [
+"Open the tuna and pour off the liquid.",
+"Squeeze in the lime, add the chili powder and mix with a fork.",
+"Pile onto the crackers and eat."
+],
+"tip": "Tuna in a pouch needs no can opener and no draining."
+},
+"manba": {
+"t": "Spicy peanut butter bread",
+"s": [
+"Spread the peanut butter on the bread.",
+"Sprinkle on the chili powder, a little or a lot.",
+"Eat with the banana, on the side or sliced on top."
+],
+"tip": "In Haiti, manba (peanut butter) is often made spicy with hot peppers. Use as much heat as you like."
+},
+"sardines": {
+"t": "Sardines on bread with onion",
+"s": [
+"Open the tin. Keep the oil: it has lots of flavor.",
+"Cut a few thin rings of onion.",
+"Lay the sardines on the bread, drizzle on a little of the oil, top with the onion and squeeze on the lime."
+],
+"tip": "The soft bones are safe to eat and full of calcium. The rest of the onion keeps fine without a fridge."
+},
+"pbramen": {
+"t": "Peanut butter ramen",
+"s": [
+"Put the noodles in a bowl or a big cup and cover them with water: hot if you can get some, but clean cool water works too.",
+"Wait until soft: about 5 minutes in hot water, 20 to 30 in cool. Pour off most of the water.",
+"Stir in the peanut butter, half the seasoning packet and the chili powder."
+],
+"tip": "Hot water from a kettle, a coffee maker or a store's hot water tap all work. Cover the bowl with a plate while it soaks."
+},
 "ing": {
+"crackers": "Saltine crackers",
+"sardines": "Canned sardines",
 "rice": "White rice",
 "pasta": "Pasta",
 "flour": "All-purpose flour",

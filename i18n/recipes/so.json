@@ -441,7 +441,72 @@
 ],
 "tip": "Miiska liin ku tuuji oo xoogaa kabsar la jarjaray ku dar."
 },
+"soakoats": {
+"t": "Oats subagga lowska leh oo aan la karin",
+"s": [
+"Oats-ka ku shub koob ama baaquli, kuna shub ilaa ¾ koob oo biyo nadiif ah oo la cabbi karo, inta uun ku filan inay dabooshaan.",
+"U daa 10 daqiiqo ilaa uu jilco. Biyo kulul haddii aad heli karto, 2 ama 3 daqiiqo ayuu ku diyaar noqdaa.",
+"Ku walaaq subagga lowska, muuska jarjar oo dul saar, qorfaha ku saydh."
+],
+"tip": "Oats-ka degdegga ah ayaa ugu dhaqsaha badan jilcid. Oats-ka caadiga ah sidoo kale wuu shaqeeyaa, wax yar buu adkaadaa."
+},
+"beanwrap": {
+"t": "Tortilla digir madow iyo liin leh",
+"s": [
+"Digirta biyaha ka shub. Haddii aad awoodo ku dhaq biyo nadiif ah.",
+"Qiyaastii badhkeed fargeeto ku burburi. Liinta ku tuuji, ku dar xawaashka iyo cusbo yar, kadibna walaaq.",
+"Tortilla-yada dul saar, duub oo cun."
+],
+"tip": "Digirta pinto ama tan cas sidoo kale way fiican yihiin."
+},
+"chickwrap": {
+"t": "Digir garbanzo la burburiyay oo rooti lagu cuno",
+"s": [
+"Digirta garbanzo biyaha ka shub.",
+"Fargeeto ku burburi, kadib ku walaaq saliidda, casiirka liinta, kamuunka iyo cusbo yar.",
+"Si qaro weyn rootiga ugu mari."
+],
+"tip": "Dhowr jeex oo basal cayriin ah ama basbaas yar ayaa dhadhan u kordhinaya."
+},
+"tunacrack": {
+"t": "Tuuna liin leh oo buskud lagu cuno",
+"s": [
+"Fur tuunada oo biyaha ka shub.",
+"Liinta ku tuuji, ku dar budada basbaaska oo fargeeto ku walaaq.",
+"Buskudka dul saar oo cun."
+],
+"tip": "Tuunada baakadda ku jirta uma baahna fure qasac iyo biyo ka shubid."
+},
+"manba": {
+"t": "Rooti subagga lowska oo basbaas leh",
+"s": [
+"Subagga lowska rootiga mari.",
+"Budada basbaaska ku saydh, wax yar ama badan.",
+"Muuska la cun, dhinac ama jarjaran oo dul saaran."
+],
+"tip": "Haiti, manba (subagga lowska) waxaa badanaa lagu sameeyaa basbaas. Ku dar inta kulayl ee aad jeceshahay."
+},
+"sardines": {
+"t": "Saardiin rooti iyo basal lagu cuno",
+"s": [
+"Fur qasacadda. Saliidda hay: dhadhan badan bay leedahay.",
+"Jar dhowr giraan oo khafiif ah oo basal ah.",
+"Saardiinta rootiga dul saar, saliid yar ku shub, basasha dul saar oo liinta ku tuuji."
+],
+"tip": "Lafaha jilicsan waa la cuni karaa waxayna leeyihiin kaalshiyam badan. Basasha inteeda kale si fiican bay u sii jirtaa qaboojiye la'aan."
+},
+"pbramen": {
+"t": "Ramen subagga lowska leh",
+"s": [
+"Baastada ku rid baaquli ama koob weyn oo biyo ku shub ilaa ay daboolaan: kulul haddii aad heli karto, laakiin biyo nadiif ah oo qabow sidoo kale way shaqeeyaan.",
+"Sug ilaa ay jilcayso: qiyaastii 5 daqiiqo biyo kulul, 20 ilaa 30 biyo qabow. Biyaha intooda badan ka shub.",
+"Ku walaaq subagga lowska, badh baakadda xawaashka iyo budada basbaaska."
+],
+"tip": "Biyo kulul oo kildhi, mashiinka qaxwada ama tuubada biyaha kulul ee dukaan dhammaan way shaqeeyaan. Baaquliga saxan ku dabool inta uu qoyanayo."
+},
 "ing": {
+"crackers": "Buskud cusbo leh",
+"sardines": "Saardiin qasac ah",
 "rice": "Bariis cad",
 "pasta": "Baasto",
 "flour": "Bur",
