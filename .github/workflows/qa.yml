@@ -75,7 +75,10 @@ jobs:
         run: npx playwright test --project=layout --project=states --project=a11y --project=links --shard=${{ matrix.shard }}/4 || true
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: qa-report-ui-${{ matrix.shard }}, path: qa/results/report.json, retention-days: 14 }
+        with:
+          name: qa-report-ui-${{ matrix.shard }}
+          path: qa/results/report.json
+          retention-days: 14
 
   data:
     # nightly, or by hand with level=full (never as part of a deploy: old data shouldn't block a code fix)
