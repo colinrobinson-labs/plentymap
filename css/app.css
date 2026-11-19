@@ -560,3 +560,43 @@ legend{padding:0;margin-block-end:4px}
 .shop .check .tip{grid-area:3/1/auto/-1}
 .shop .ln .link{white-space:nowrap}
 .shop .check .ln{margin-block-start:-6px}
+.foot .love{display:flex;align-items:flex-start;gap:8px;color:var(--ink);font-weight:600;font-size:15.5px}
+.foot .love .i{color:var(--tomato);flex:none;margin-block-start:3px}
+
+/* ---------- spacing system: one scale for every gap and inner padding ----------
+   4 · 8 · 12 · 16 · 24 · 32 · 48. Cards pad 16, big panels pad 24, items in a list sit 12 apart,
+   sections sit 32 apart, and the footer starts 48 below the last thing on the page. */
+:root{--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px}
+main{padding-block-start:var(--s5)}
+.pad,.kpi,.prog,.site,.rcard,.urgent{padding:var(--s4)}
+.day{padding:var(--s3) var(--s4)}
+.shop{padding:var(--s1) var(--s4) var(--s4)}
+.hero{padding:var(--s5) var(--s4);gap:var(--s3)}
+@media (min-width:600px){.hero{padding:var(--s5)}}
+.notice{padding:var(--s3) var(--s4)}
+.notice+.notice{margin-block-start:var(--s3)}
+.stack>*+*{margin-block-start:var(--s3)}
+.stack>:empty+*{margin-block-start:0}
+#fnote:empty,#blow:empty{display:none}
+.sec{margin-block:var(--s6) var(--s3)}
+.list,.grid2,.kpis,.week{gap:var(--s3)}
+.site{gap:var(--s2)}
+.findwrap{gap:var(--s4);margin-block-start:var(--s4)}
+#flistwrap>.more{margin-block-start:var(--s5)}
+#flistwrap>.more:empty{display:none}
+#fdata{margin-block-start:var(--s6)}
+#blow:not(:empty){margin-block-start:var(--s4)}
+.facts{gap:var(--s2);margin-block:var(--s4)}
+.tip{margin-block-start:var(--s3)}
+.notice.dietbox{margin-block:var(--s3)}
+.gap-t{margin-block-start:var(--s4)}
+.prose h2{margin-block:var(--s6) var(--s2)}
+.prose p,.prose ul{margin-block:0 var(--s3)}
+.soon{margin-block-start:var(--s2)}
+.foot{margin-block-start:var(--s7);padding-block-start:var(--s5);gap:var(--s2)}
+h1+.lead{margin-block-start:var(--s2)}
+.lead{margin-block-end:var(--s5)}
+.hero .lead,.intro .lead{margin-block-end:0}
+.notice+.grid2,.notice+.list,.notice+.card,.grid2+.grid2,.card+.notice{margin-block-start:var(--s3)}
+@media (max-width:419px){.stack>.fg .chips.wrap{grid-template-columns:minmax(0,1fr)}}
+#rcount,#fcount{margin-block:var(--s3) 0}
