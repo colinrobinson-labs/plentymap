@@ -253,6 +253,7 @@ export async function route() {
 /* shared footer */
 export function foot() {
   return `<footer class="foot">
+    <p class="love">${ico("heart", "i sm")}<span>${esc(t("foot_love"))}</span></p>
     <p>${esc(t("foot_a"))} <a href="#/privacy">${esc(t("privacy"))}</a> · <a href="#/about">${esc(t("about"))}</a></p>
     <p>${esc(t("foot_b"))}</p>
   </footer>`;
