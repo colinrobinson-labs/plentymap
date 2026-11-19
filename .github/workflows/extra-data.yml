@@ -6,6 +6,7 @@ name: Extra data and reports
 #   issue when something needs a person, and republishes the site.
 # kids (weekly): checks each kids-eat-free source page still mentions each chain.
 # Runs from other branches only test the build and upload the result; they never write anything.
+# Every write to extradata goes through tools/save-extradata.sh, so jobs saving at the same time never undo each other.
 on:
   schedule:
     - cron: "23 12 * * 2"   # places + kids: Tuesdays ~5am Pacific
@@ -21,6 +22,7 @@ on:
       - "tools/build-extra.mjs"
       - "tools/check-reports.mjs"
       - "tools/check-kids.mjs"
+      - "tools/save-extradata.sh"
       - ".github/workflows/extra-data.yml"
 permissions:
   contents: write
@@ -35,7 +37,9 @@ env:
 
 jobs:
   places:
-    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places'))
+    # a push runs it on main only: each run reads the whole US from the shared, free Overpass servers,
+    # so test it on a branch with "Run workflow" (job: places) instead of on every push
+    if: (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places'))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -70,21 +74,18 @@ jobs:
           retention-days: 7
       - name: Save to the extradata branch (keeps flags/)
         if: env.LIVE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          cd /tmp/x/out
-          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
-            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD flags | tar -x -C . 2>/dev/null || true
-          fi
-          cp /tmp/x/raw/report.json extra/report.json
+          cp /tmp/x/raw/report.json /tmp/x/out/extra/report.json
           # keep this week's raw OpenStreetMap layers so next week can reuse one if its source fails
-          mkdir -p raw
-          for f in gardens giveboxes bakeries; do [ -f /tmp/x/raw/$f.json ] && gzip -9c /tmp/x/raw/$f.json > raw/$f.json.gz; done
-          git init -q -b extradata
-          git config user.name "plenty-map-data"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Plenty Map extra layers $(date -u +%F)"
-          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+          mkdir -p /tmp/x/out/raw
+          for f in gardens giveboxes bakeries; do [ -f /tmp/x/raw/$f.json ] && gzip -9c /tmp/x/raw/$f.json > /tmp/x/out/raw/$f.json.gz; done
+          # a layer that failed with no earlier copy keeps whatever raw copy the branch already has
+          if git fetch -q --depth=1 origin extradata 2>/dev/null; then
+            for f in gardens giveboxes bakeries; do [ -f /tmp/x/out/raw/$f.json.gz ] || git show FETCH_HEAD:raw/$f.json.gz > /tmp/x/out/raw/$f.json.gz 2>/dev/null || rm -f /tmp/x/out/raw/$f.json.gz; done
+          fi
+          tools/save-extradata.sh "Plenty Map extra layers $(date -u +%F)" /tmp/x/out extra raw
       - name: Republish the site
         if: env.LIVE == 'true'
         env:
@@ -104,18 +105,11 @@ jobs:
         run: node tools/check-kids.mjs data/kids.json /tmp/kids-check.md
       - name: Save the hide list to the extradata branch
         if: env.LIVE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/b && cd /tmp/b
-          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
-            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD | tar -x -C .
-          fi
-          mkdir -p flags && cp /tmp/kids-check-hide.json flags/kids.json
-          git init -q -b extradata
-          git config user.name "plenty-map-data"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Plenty Map kids deals check $(date -u +%F)"
-          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+          mkdir -p /tmp/b/flags && cp /tmp/kids-check-hide.json /tmp/b/flags/kids.json
+          tools/save-extradata.sh "Plenty Map kids deals check $(date -u +%F)" /tmp/b
       - name: Open an issue when a deal needs re-checking
         if: env.LIVE == 'true'
         env:
@@ -154,18 +148,11 @@ jobs:
         run: cat /tmp/f/flags.json; echo; cat /tmp/f/digest.md
       - name: Save flags to the extradata branch
         if: env.LIVE == 'true' && steps.check.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p /tmp/b && cd /tmp/b
-          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
-            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD | tar -x -C .
-          fi
-          mkdir -p flags && cp /tmp/f/flags.json flags/
-          git init -q -b extradata
-          git config user.name "plenty-map-data"
-          git config user.email "actions@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Plenty Map report flags $(date -u +%F)"
-          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+          mkdir -p /tmp/b/flags && cp /tmp/f/flags.json /tmp/b/flags/
+          tools/save-extradata.sh "Plenty Map report flags $(date -u +%F)" /tmp/b
       - name: Weekly digest (Mondays, only when something needs a person)
         if: env.LIVE == 'true' && steps.check.outputs.code == '0'
         env:

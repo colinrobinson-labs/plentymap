@@ -49,11 +49,25 @@ for (const [s, n] of [[24.4, 33], [33, 40], [40, 49.5]]) for (const [w, e] of [[
 BOXES.push([51, -180, 71.5, -129], [18.8, -160.5, 22.4, -154.7], [17.6, -67.4, 18.6, -64.5]);
 const T0 = Date.now(), BUDGET = 75 * 60000;   // stop splitting after 75 min so the job ends in time
 const quarter = ([s, w, n, e]) => { const m = r => Math.round(r * 100) / 100, y = m((s + n) / 2), x = m((w + e) / 2); return [[s, w, y, x], [s, x, y, e], [y, w, n, x], [y, x, n, e]]; };
+// Each server gives a client a few query slots; asking while none is free gets an error or a dropped
+// connection. Ask the server's status page first and wait (up to 2 min) for a free slot.
+async function waitForSlot(ep) {
+  for (let i = 0; i < 6; i++) {
+    const st = await get(ep.replace(/interpreter$/, "status"), { timeout: 15000 }, 1).then(r => r.text()).catch(() => "");
+    const waits = [...st.matchAll(/Slot available after:[^\n]*?in (-?\d+) seconds/g)].map(m => +m[1]);
+    // no status page, a free slot, or no waiting slots listed: go ahead
+    if (!st || /[1-9]\d* slots? available now/i.test(st) || !waits.length) return;
+    const s = Math.min(60, Math.max(3, Math.min(...waits) + 2));
+    log(`waiting ${s}s for a free slot on ${ep.split("/")[2]}`);
+    await new Promise(r => setTimeout(r, s * 1000));
+  }
+}
 async function readBox(name, body, b, depth, seen) {
   const q = `[out:json][timeout:170][bbox:${b.join(",")}];\n(\n${body}\n);\nout center tags meta;`;
   let last;
   for (const ep of EPS) {
     try {
+      await waitForSlot(ep);
       const j = await json(ep, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 200000 }, 1);
       if (j.remark && /runtime error|timed out|out of memory/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
       for (const e of j.elements || []) seen.set(e.type + e.id, e);
@@ -152,8 +166,9 @@ await step("summer", async () => {
 
 await save("report.json", { fetched: new Date().toISOString(), ...report });
 log(JSON.stringify(report, null, 1));
-// A layer that failed with no earlier copy is left out; build-extra.mjs then publishes the others.
-// Only stop when every OpenStreetMap layer failed outright (likely an outage), keeping last week's build.
+// A layer that failed is "failed" only when there was no earlier copy to reuse, so leaving it out loses
+// nothing that was on the map; build-extra.mjs then publishes the layers that did come in. Stop only
+// when nothing at all came in.
 const osm = ["gardens", "giveboxes", "bakeries"];
-if (osm.every(k => /^failed/.test(report[k] || ""))) { log("every OpenStreetMap layer failed; keeping last week's layers"); process.exit(1); }
+if (osm.every(k => /^failed/.test(report[k] || "")) && !report.summer_n) { log("no layer came in; keeping last week's layers"); process.exit(1); }
 if (osm.some(k => report[k] !== "ok")) log("some layers were reused or left out: " + osm.filter(k => report[k] !== "ok").join(", "));
