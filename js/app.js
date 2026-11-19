@@ -91,8 +91,11 @@ export function locForm(p, value = "") {
   return `<div class="locbar">
     <form id="${p}-form" role="search" novalidate>
       <label class="sr" for="${p}-q">${esc(t("loc_label"))}</label>
-      <input class="in" id="${p}-q" name="q" autocomplete="postal-code" inputmode="text" enterkeyhint="search" list="${p}-places" placeholder="${esc(t("loc_ph"))}" value="${esc(value)}" maxlength="60">
-      <datalist id="${p}-places"></datalist>
+      <div class="combo">
+        <input class="in" id="${p}-q" name="q" type="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="search"
+          role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="${p}-sug" placeholder="${esc(t("loc_ph"))}" value="${esc(value)}" maxlength="60">
+        <ul class="sug" id="${p}-sug" role="listbox" aria-label="${esc(t("loc_label"))}" hidden></ul>
+      </div>
       <button class="btn pri" type="submit">${esc(t("loc_go"))}</button>
     </form>
     <button class="btn" type="button" id="${p}-gps">${ico("locate")} ${esc(t("loc_gps"))}</button>
@@ -101,21 +104,51 @@ export function locForm(p, value = "") {
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
   const say = m => { const el = msg(); if (el) el.textContent = m; else toast(m); announce(m); };
-  // suggestions follow what's typed (towns across the U.S. are loaded a letter at a time)
-  let tmr = 0, last = "";
-  $(`#${p}-q`).addEventListener("input", () => {
+  // suggestions follow what's typed (towns across the U.S. are loaded a letter at a time).
+  // Our own list under the box, not a <datalist>: iPhones hide datalist choices in the keyboard bar.
+  const inp = $(`#${p}-q`), box = $(`#${p}-sug`);
+  let tmr = 0, seq = 0, items = [], act = -1;
+  const close = () => { box.hidden = true; box.innerHTML = ""; items = []; act = -1; inp.setAttribute("aria-expanded", "false"); inp.removeAttribute("aria-activedescendant"); };
+  const show = list => {
+    items = list; act = -1;
+    if (!list.length) return close();
+    box.innerHTML = list.map((n, i) => {
+      const m = n.match(/^(.*), ([A-Z]{2})$/);
+      return `<li role="option" id="${p}-o${i}" aria-selected="false" data-i="${i}">${m ? `<b>${esc(m[1])}</b><span>${esc(m[2])}</span>` : `<b>${esc(n)}</b>`}</li>`;
+    }).join("");
+    box.hidden = false; inp.setAttribute("aria-expanded", "true");
+  };
+  const hilite = i => {
+    act = i;
+    box.querySelectorAll("[role=option]").forEach((o, j) => o.setAttribute("aria-selected", j === i));
+    if (i >= 0) { inp.setAttribute("aria-activedescendant", `${p}-o${i}`); box.children[i]?.scrollIntoView({ block: "nearest" }); } else inp.removeAttribute("aria-activedescendant");
+  };
+  const pick = i => { inp.value = items[i]; close(); form.requestSubmit ? form.requestSubmit() : form.dispatchEvent(new Event("submit", { cancelable: true })); };
+  inp.addEventListener("input", () => {
     clearTimeout(tmr);
+    const q = inp.value.trim();
+    if (q.length < 2 || /^\d/.test(q)) return close();
+    const my = ++seq;
     tmr = setTimeout(async () => {
-      const q = $(`#${p}-q`)?.value || "";
-      if (q.length < 2 || q === last) return; last = q;
-      try { const list = await placeNames(q); const dl = $(`#${p}-places`); if (dl) dl.innerHTML = list.map(n => `<option value="${esc(n)}">`).join(""); } catch {}
-    }, 180);
+      try { const list = await placeNames(q); if (my === seq && document.activeElement === inp) show(list.slice(0, 8)); } catch { close(); }
+    }, 120);
   });
+  inp.addEventListener("keydown", e => {
+    if (box.hidden) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); hilite((act + 1) % items.length); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); hilite(act <= 0 ? items.length - 1 : act - 1); }
+    else if (e.key === "Enter" && act >= 0) { e.preventDefault(); pick(act); }
+    else if (e.key === "Escape") { e.preventDefault(); close(); }
+  });
+  inp.addEventListener("blur", () => setTimeout(close, 150));
+  // pointerdown, so the choice lands before the box loses focus
+  box.addEventListener("pointerdown", e => { const li = e.target.closest("[data-i]"); if (li) { e.preventDefault(); pick(+li.dataset.i); } });
   form.onsubmit = async e => {
-    e.preventDefault();
-    const q = $(`#${p}-q`).value;
+    e.preventDefault(); close(); seq++;
+    const q = inp.value;
     const r = await findPlace(q);
     if (r.error) return say(t(r.error === "outside" ? "loc_outside" : "loc_notfound"));
+    const el = msg(); if (el) el.textContent = "";
     setLoc(r); after?.(r);
   };
   $(`#${p}-gps`).onclick = async () => {

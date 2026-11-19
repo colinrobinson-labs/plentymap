@@ -9,7 +9,9 @@ const SD_BBOX = [-117.62, 32.53, -116.08, 33.51];
 const inBox = (b, lat, lon, pad = 0) => lat >= b[1] - pad && lat <= b[3] + pad && lon >= b[0] - pad && lon <= b[2] + pad;
 export const inSD = (lat, lon) => inBox(SD_BBOX, lat, lon);
 export const cellKey = (lat, lon) => `${Math.floor(lat * 2)}_${Math.floor(lon * 2)}`;
-const fold = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+// "Saint Louis" = "St. Louis", "Mount Vernon" = "Mt. Vernon", "Fort Worth" = "Ft. Worth" (tools/build-us.mjs folds the same way)
+const fold = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim()
+  .replace(/\bsainte\b/g, "ste").replace(/\bsaint\b/g, "st").replace(/\bmount\b/g, "mt").replace(/\bfort\b/g, "ft");
 
 /* ---------- San Diego region file ---------- */
 let SD = null;
@@ -158,9 +160,15 @@ export async function placeNames(q = "") {
   const k = fold(q);
   const out = [];
   if (!k || /^\d/.test(k)) return out;
+  // San Diego neighborhoods first for people there (a few), then towns across the U.S., biggest first
   const r = await sd();
-  if (stateOf() === "CA") for (const [key, p] of r.placeIdx) if (key.startsWith(k)) out.push(p.name);
-  if (await usIndex()) for (const p of await usPlaces(k[0])) { if (fold(p[0]).startsWith(k)) out.push(`${p[0]}, ${p[1]}`); if (out.length >= 40) break; }
+  if (stateOf() === "CA" && k.length >= 3) for (const [key, p] of r.placeIdx) { if (key.startsWith(k)) out.push(p.name); if (out.length >= 4) break; }
+  const seen = new Set(out.map(fold));
+  if (await usIndex()) for (const p of await usPlaces(k[0])) {
+    const f = fold(p[0]);
+    if (f.startsWith(k) && !(p[1] === "CA" && seen.has(f))) out.push(`${p[0]}, ${p[1]}`);
+    if (out.length >= 40) break;
+  }
   return [...new Set(out)].slice(0, 40);
 }
 
