@@ -2647,6 +2647,498 @@
   "81fd4371cf": {
    "key": "data-hours|data:san-diego|1 free food schedules couldn't be read into days and times (people will only see the raw text)",
    "since": "2026-11-19"
+  },
+  "469cd32ac4": {
+   "key": "broken-asset|find|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "2ee666ad8e": {
+   "key": "broken-asset|find-free|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "6a8661c11f": {
+   "key": "broken-asset|find-map|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "104a010575": {
+   "key": "broken-asset|find-place|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "cef1b9b099": {
+   "key": "broken-asset|benefits|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "00eef7659f": {
+   "key": "broken-asset|benefits-result|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "5e1b350477": {
+   "key": "broken-asset|about|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "ac87415684": {
+   "key": "h-overflow|find-free|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "b2961a8b00": {
+   "key": "off-screen|find-free|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "04cc2e4624": {
+   "key": "h-overflow|find-map|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "b3d3d9a9af": {
+   "key": "off-screen|find-map|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "4edfb00e44": {
+   "key": "h-overflow|find-place|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "d8ec3cae5e": {
+   "key": "off-screen|find-place|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "e21caad0db": {
+   "key": "broken-asset|setup-done|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "ea66f3809a": {
+   "key": "broken-asset|find-loading|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "15c8d1b001": {
+   "key": "broken-asset|find-nationwide|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "6668461d65": {
+   "key": "axe-serious|find-map|#f-gps",
+   "since": "2026-11-19"
+  },
+  "ee67244594": {
+   "key": "tap-target|budget-swap|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "1c00cd0b65": {
+   "key": "tap-target|budget|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "11257a870c": {
+   "key": "tap-target|benefits-result|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "e35ec0b91c": {
+   "key": "tap-target|benefits-result|article#p-lifeline > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "4e8dbdcb79": {
+   "key": "tap-target|benefits-result|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "b81566785d": {
+   "key": "tap-target|benefits-result|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "10718ddef1": {
+   "key": "tap-target|benefits-result|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3b4e2a53f2": {
+   "key": "tap-target|benefits-result|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "d6804c3840": {
+   "key": "tap-target|benefits-result|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "01c3896453": {
+   "key": "tap-target|benefits-result|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "36110e7148": {
+   "key": "tap-target|benefits-result|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "eede4657dd": {
+   "key": "tap-target|benefits-result|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "32d04649e9": {
+   "key": "tap-target|benefits-result|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "b783115795": {
+   "key": "tap-target|benefits-result|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0b84faaba": {
+   "key": "tap-target|benefits-result|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ce7e658040": {
+   "key": "tap-target|benefits-result|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "245b4d8c1a": {
+   "key": "tap-target|benefits-result|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "2f7a5c76b2": {
+   "key": "tap-target|benefits-result|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "ef8916f84f": {
+   "key": "tap-target|benefits-result|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "9571e2feb5": {
+   "key": "tap-target|benefits-result|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "3e675b7ce7": {
+   "key": "tap-target|benefits-result|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "95ab64e6a2": {
+   "key": "tap-target|benefits-result|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "0d5256a8b2": {
+   "key": "tap-target|benefits-result|li#d-kid-dennys > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "187c4fe4ff": {
+   "key": "tap-target|benefits-result|li#d-kid-dennys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "93b0bbbc1b": {
+   "key": "tap-target|benefits-result|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "c5e15954e4": {
+   "key": "tap-target|benefits|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3312ea46c3": {
+   "key": "tap-target|benefits|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "718aeae318": {
+   "key": "tap-target|benefits|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "7d1f2bdbdb": {
+   "key": "tap-target|benefits|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "bdbecffb09": {
+   "key": "tap-target|benefits|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "de74a86951": {
+   "key": "tap-target|benefits|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "fd7d529484": {
+   "key": "tap-target|benefits|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0a99e223e": {
+   "key": "tap-target|benefits|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "bc3f8e4b35": {
+   "key": "tap-target|benefits|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "08a129eed1": {
+   "key": "tap-target|benefits|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ab0f52c735": {
+   "key": "tap-target|benefits|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "6f8939c8ee": {
+   "key": "tap-target|benefits|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "eb4dd35e93": {
+   "key": "tap-target|benefits|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "bc71c1810b": {
+   "key": "tap-target|benefits|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "669a00a5f2": {
+   "key": "tap-target|benefits|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "06ff063da3": {
+   "key": "tap-target|benefits|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "98fa21cca2": {
+   "key": "tap-target|benefits|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "f599204209": {
+   "key": "tap-target|benefits|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "9bafbe462c": {
+   "key": "tap-target|benefits|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "2d36270d5b": {
+   "key": "tap-target|benefits|li#d-kid-dennys > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3fa9fe8420": {
+   "key": "tap-target|benefits|li#d-kid-dennys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "a1475e98fc": {
+   "key": "tap-target|benefits|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "69d1a4e696": {
+   "key": "tap-target|benefits-nationwide|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "94761b30de": {
+   "key": "tap-target|benefits-nationwide|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ad38c61aa4": {
+   "key": "tap-target|benefits-nationwide|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "71845b0d56": {
+   "key": "tap-target|benefits-nationwide|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "f18c9a9246": {
+   "key": "tap-target|benefits-nationwide|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "39619dee41": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "742d66667b": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "4e5ad291b1": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lubys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0d489e204": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "5951d75318": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "776d1bbda9": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "0c8ae8d200": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "35bbaad619": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "1a3d7f56e1": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "272bdbe08c": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "7926897adb": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "67ea1f032f": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "a1dc85e8f9": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "af08b310f6": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "cb230181bf": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "8f17bbbb2a": {
+   "key": "tap-target|benefits-nationwide|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "d1353e7c43": {
+   "key": "tap-target|find-place|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "df3260bb07": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "8903d75c2a": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "f90cbfc69a": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > details > summary",
+   "since": "2026-11-19"
+  },
+  "1bf9f174a9": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "978d365014": {
+   "key": "tap-target|find-place|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "272bed971e": {
+   "key": "tap-target|find-place|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "2e1a08c4c5": {
+   "key": "tap-target|find-place|li.place.hl > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "8ca81f519f": {
+   "key": "tap-target|find-free|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "2d4e7d30a6": {
+   "key": "tap-target|find-free|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "bf82eb16c8": {
+   "key": "tap-target|find-free|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "12efb09de5": {
+   "key": "tap-target|find-map|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "360b5cc222": {
+   "key": "tap-target|find-map|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "dd83b7cece": {
+   "key": "tap-target|find-map|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "952f585a7c": {
+   "key": "tap-target|find|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "08472c7724": {
+   "key": "tap-target|find|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "488928a831": {
+   "key": "tap-target|find|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "0c9dd2bd0d": {
+   "key": "tap-target|find-nationwide|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "bbf98574ac": {
+   "key": "tap-target|find-nationwide|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "7675fe6931": {
+   "key": "tap-target|find-nationwide|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "66f5e1272c": {
+   "key": "tap-target|settings|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "6161096b56": {
+   "key": "tap-target|cook|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "044586636d": {
+   "key": "tap-target|cook-filters|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "6aeb604d16": {
+   "key": "tap-target|recipe|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "49908f64ee": {
+   "key": "tap-target|privacy|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "a66a0da6d8": {
+   "key": "tap-target|about|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "3c9ff8c4b8": {
+   "key": "tap-target|language|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "ac112cc803": {
+   "key": "tap-target|find-data-failed|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "5a48c15752": {
+   "key": "tap-target|cook-empty|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "9debb010d7": {
+   "key": "tap-target|offline|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "0ba6e8ac71": {
+   "key": "overlap|find-free|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "448a2d0b2a": {
+   "key": "overlap|find-free|ul#flist > li.place > a.pdir > svg.i.sm",
+   "since": "2026-11-19"
+  },
+  "004386891c": {
+   "key": "overlap|find-free|div.pmain > h2.pname > button.ptap > span",
+   "since": "2026-11-19"
+  },
+  "7cddd16155": {
+   "key": "overlap|find-place|ul#flist > li.place > a.pdir > svg.i.sm",
+   "since": "2026-11-19"
+  },
+  "3c2f25d718": {
+   "key": "overlap|find-place|div.pmain > h2.pname > button.ptap > span",
+   "since": "2026-11-19"
+  },
+  "698ad6ef1b": {
+   "key": "overlap|find-place|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "d4643125ca": {
+   "key": "overlap|find|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "61be7833c0": {
+   "key": "overlap|find-map|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
   }
  }
 }
