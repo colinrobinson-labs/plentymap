@@ -4,9 +4,7 @@ name: Site
 on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", ".github/workflows/extra-data.yml", "tools/fetch-extra.mjs", "tools/build-extra.mjs", "tools/check-reports.mjs", "tools/check-kids.mjs", "worker/**"]
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", "tools/fetch-intl.mjs", "tools/build-intl.mjs", "tools/check-links.mjs", "tools/regions/**", ".github/workflows/intl-data.yml", ".github/workflows/links.yml"]
-    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", "qa/**", ".github/workflows/qa-visual.yml"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", ".github/workflows/extra-data.yml", "tools/fetch-extra.mjs", "tools/build-extra.mjs", "tools/check-reports.mjs", "tools/check-kids.mjs", "worker/**", "tools/fetch-intl.mjs", "tools/build-intl.mjs", "tools/check-links.mjs", "tools/regions/**", ".github/workflows/intl-data.yml", ".github/workflows/links.yml", "qa/**", ".github/workflows/qa-visual.yml"]
   workflow_dispatch:
     inputs:
       skip_qa:
@@ -40,10 +38,8 @@ jobs:
           set -e
           mkdir -p _site
           cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
-          mkdir -p _site/data && cp -r data/regions data/food.json _site/data/
-          cp -r privacy support terms attributions accessibility legal _site/ 2>/dev/null || true
           mkdir -p _site/data && cp -r data/regions data/food.json data/kids.json _site/data/
-          cp -r privacy support _site/ 2>/dev/null || true
+          cp -r privacy support terms attributions accessibility legal _site/ 2>/dev/null || true
           cp robots.txt sitemap.xml 404.html _site/
           echo "plentymap.com" > _site/CNAME
           touch _site/.nojekyll

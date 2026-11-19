@@ -9,7 +9,7 @@ const PRECACHE = [
   "css/app.css",
   "js/app.js", "js/core.js", "js/config.js", "js/region.js", "js/hours.js", "js/find.js", "js/food.js", "js/cook.js",
   "js/budget.js", "js/help.js", "js/benefits.js", "js/pages.js", "js/map.js", "js/icons.js", "js/glyphs.js", "js/home.js",
-  "js/budget.js", "js/help.js", "js/benefits.js", "js/pages.js", "js/map.js", "js/icons.js", "js/glyphs.js", "js/kids.js", "js/report.js",
+  "js/kids.js", "js/report.js",
   "fonts/figtree-latin.woff2", "fonts/caprasimo-latin.woff2",
   "icons/favicon.svg", "icons/icon-192.png", "icons/apple-touch-icon.png",
   "i18n/en.json", "i18n/recipes/en.json",
