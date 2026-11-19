@@ -11,7 +11,7 @@ region needs, then what a new country needs on top of that.
 - Amounts inside translated sentences use a placeholder, for example `{m}` in `mm_p`, filled with
   `money(...)`. Never type "$10" into a translation.
 - `data/food.json` and `data/regions/index.json` record `country` and `currency`.
-- Only `US` / `USD` is live.
+- Live: `US` / `USD`. Data built, app wiring in progress: `GB` / `GBP`, `CA` / `CAD`.
 
 ## A new US region (county or metro)
 
@@ -57,3 +57,43 @@ On top of the region steps:
 4. Food-site feed and freshness rules.
 5. Map tiles.
 6. Translation review, privacy review, full audit, then launch.
+
+## What's built for the United Kingdom and Canada (Nov 2026)
+
+| Piece | Where | Notes |
+|---|---|---|
+| Country registry | `js/country.js` | Currency, distance unit (mi in US/UK, km in Canada), time zone, help line, food bank finder, postcode parsing, regions, `countriesAt()` for GPS, `countriesOfPostcode()` for search |
+| Fetch | `tools/fetch-intl.mjs GB\|CA <raw>` | GB: Give Food API. CA: DataBC Food Banks, City of Vancouver free and low cost food programs. Both: OpenStreetMap (food banks, fridges, soup kitchens, branded supermarkets), GeoNames postcodes and places |
+| Build | `tools/build-intl.mjs GB\|CA <raw> <out>` | Same 0.5° cell format as `data/us`, plus `cc` and `tz` in every cell, `pc/` postcode files and `places/` |
+| Workflow | `.github/workflows/intl-data.yml` | Daily (Give Food's terms ask for fresh data). OpenStreetMap is cached and re-asked weekly. Saves to the `intldata` branch from `main` only; `site.yml` copies `gb/` and `ca/` into `/data/` |
+| Benefits | `js/benefits/gb.js`, `js/benefits/ca.js` | Data with a source and as-of date for every figure, plus a `quickCheck()` each. `.github/workflows/links.yml` checks every link monthly |
+| Map tiles | `.github/workflows/tiles.yml` | One job per country. `TILE_COUNTRIES` repository variable picks which (default `us`). Files `gb-<day>-z14.pmtiles`, `ca-<day>-z13.pmtiles`, pointers `tiles-gb.json`, `tiles-ca.json` |
+| Outlines | `tools/regions/gb.geojson`, `tools/regions/ca.geojson` | Rough polygons for the tile cut (leave out Ireland, France, the Channel Islands) |
+
+### Postcodes and privacy
+
+- **UK:** GeoNames lists every postcode; the build keeps only sector ("SW2 3") and district ("SW2")
+  centres. A full postcode typed on the phone is matched to its sector. Northern Ireland is included.
+- **Canada:** only the first three characters (the FSA) are kept and looked up. Full postal codes are
+  Canada Post's data and aren't needed: an FSA is a neighbourhood in cities.
+- Jersey, Guernsey and the Isle of Man are left out: Give Food lists them, but they're not in the UK
+  benefits system.
+
+### Differences the app has to handle
+
+1. **Referrals (UK).** Most UK food banks give food against a referral. UK pantry listings carry
+   `ref: 1`; cards should say "usually needs a referral" and point to the nation's help line.
+2. **No 211 in the UK.** Use `helpline(reg)` from `js/benefits/gb.js`: Help through Hardship (England,
+   Wales), Money Talk Team (Scotland), Make the Call (Northern Ireland). Canada has 211 everywhere.
+3. **Time zones.** Canada spans six. Each cell file has `tz`; opening hours and "open now" must use it,
+   not `America/Los_Angeles`.
+4. **Distance.** Kilometres in Canada (`distText()` in `js/country.js`; needs a `dist_km` string).
+5. **Regions, not states.** `zips` entries in cells are `[lat, lon, town, region]` where region is
+   `ENG/SCT/WLS/NIR` or a province code, so the existing nearest-ZIP logic finds the region.
+6. **Stores.** No SNAP list. Stores are branded supermarkets from OpenStreetMap with a price tier from
+   the brand (discounters first). In the UK, Healthy Start cards work in any shop that takes Mastercard
+   and sells the eligible foods, so it's a note, not a per-store badge.
+7. **Partner sources.** None yet in either country (Give Food, DataBC and Vancouver are open data, not
+   partners), so every listing is "call first".
+8. **Languages.** Quebec needs French (`i18n/fr.json`). The UK list in `js/country.js` names Welsh,
+   Polish, Urdu and others for later.

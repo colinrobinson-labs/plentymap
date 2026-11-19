@@ -5,6 +5,7 @@ on:
   push:
     branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
     paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", ".github/workflows/extra-data.yml", "tools/fetch-extra.mjs", "tools/build-extra.mjs", "tools/check-reports.mjs", "tools/check-kids.mjs", "worker/**"]
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", "tools/fetch-intl.mjs", "tools/build-intl.mjs", "tools/check-links.mjs", "tools/regions/**", ".github/workflows/intl-data.yml", ".github/workflows/links.yml"]
   workflow_dispatch:
 permissions:
   contents: write
@@ -47,6 +48,16 @@ jobs:
             ls _site/data/us/cells | wc -l
           else
             echo "::warning::no usdata branch yet; the app falls back to San Diego only"
+          fi
+      - name: Add the UK and Canada data packs from the intldata branch
+        run: |
+          set -e
+          if git fetch --depth 1 origin intldata 2>/dev/null; then
+            for c in gb ca; do
+              if git archive FETCH_HEAD $c 2>/dev/null | tar -x -C _site/data; then echo "$c: $(ls _site/data/$c/cells | wc -l) cells"; fi
+            done
+          else
+            echo "no intldata branch yet; UK and Canada not published"
           fi
           du -sh _site; find _site -size +90M
       - name: Add the extra layers and apply the nightly report check (extradata branch)
