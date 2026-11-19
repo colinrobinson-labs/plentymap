@@ -516,6 +516,7 @@
  "note_givebox": "De petites boîtes gratuites tenues par des voisins. Prenez ce dont vous avez besoin, laissez ce que vous pouvez. Le contenu change.",
  "kind_bakery": "Comptoir de pain",
  "cat_bakery": "Comptoirs de pain",
+ "cat_all": "Tout",
  "note_bakery": "Les magasins d'usine des boulangeries vendent le pain et les collations de la veille beaucoup moins cher. Beaucoup acceptent l'EBT; demandez à la caisse.",
  "rep_what": "Quel est le problème?",
  "rep_closed": "Fermé ou disparu",

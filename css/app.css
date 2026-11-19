@@ -677,19 +677,39 @@ h1+.lead{margin-block-start:var(--s2)}
 }
 .findhero #f-msg:empty{display:none}
 
-/* categories: a tab bar with the kind's icon and how many places */
-.ktabs{display:flex;gap:var(--s1);overflow-x:auto;scrollbar-width:none;border-block-end:1px solid var(--line);margin-inline:-16px;padding-inline:16px;scroll-padding-inline:16px;
-  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
-[dir="rtl"] .ktabs{-webkit-mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,transparent 0,#000 14px,#000 calc(100% - 28px),transparent)}
-.ktabs::-webkit-scrollbar{display:none}
-.ktab{flex:none;display:inline-flex;align-items:center;gap:var(--s2);min-height:48px;padding:0 var(--s3);border:0;border-block-end:3px solid transparent;margin-block-end:-1px;border-radius:0;background:none;color:var(--mute);font-weight:700;font-size:15px;white-space:nowrap}
-.ktab>span:first-child{display:grid;color:var(--kc)}
-.ktab .i{width:20px;height:20px}
-.ktab .n{min-width:24px;padding:1px 7px;border-radius:999px;background:var(--line-2);color:var(--ink-2);font-size:12.5px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
-.ktab:hover{color:var(--ink)}
-.ktab[aria-pressed="true"]{color:var(--ink);border-block-end-color:var(--ink)}
-.ktab[aria-pressed="true"] .n{background:var(--ink);color:var(--bg)}
-.ktab:focus-visible{outline-offset:-3px}
+/* categories: every option in view at once, never scrolled sideways.
+   The main kinds of place are equal tiles; the kinds inside the chosen one are chips under them. */
+.kcats{display:grid;gap:var(--s2);container-type:inline-size}
+.kgrid{display:grid;gap:var(--s2);grid-template-columns:repeat(var(--cols,1),minmax(0,1fr))}
+.kgrid[data-n="2"]{--cols:2}
+.kgrid[data-n="3"]{--cols:3}
+.kgrid[data-n="4"]{--cols:4}
+.kpick{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-areas:"icon n" "label label";align-items:center;align-content:start;gap:var(--s2);min-height:var(--tap);padding:10px 12px 12px;border:1.5px solid var(--line);border-radius:var(--r);background:var(--card);color:var(--ink);font-weight:700;font-size:15px;line-height:1.25;text-align:start;overflow-wrap:break-word;hyphens:auto;transition:border-color .12s,background-color .12s}
+.kpick .kic{grid-area:icon;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:color-mix(in srgb,var(--kc) 14%,var(--card));color:var(--kc)}
+.kpick .kic .i{width:20px;height:20px}
+.kpick .kpl{grid-area:label;min-width:0}
+.kpick .n{grid-area:n;justify-self:end;color:var(--mute);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.kpick:hover{border-color:var(--ink-2)}
+.kpick[aria-pressed="true"]{background:var(--sel);border-color:var(--sel);color:var(--sel-ink)}
+.kpick[aria-pressed="true"] .kic{background:var(--card)}
+.kpick[aria-pressed="true"] .n{color:inherit;opacity:.85}
+/* not enough room side by side: four tiles go two by two, and below that each tile becomes one row */
+@container (max-width:439px){.kgrid[data-n="4"]{--cols:2}}
+@container (max-width:329px){
+  .kgrid[data-n="3"]{--cols:1}
+  .kgrid[data-n="3"] .kpick{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"icon label n";padding-block:7px}
+}
+@container (max-width:259px){
+  .kgrid[data-n="4"],.kgrid[data-n="2"]{--cols:1}
+  .kgrid .kpick{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"icon label n";padding-block:7px}
+}
+.ksubs{gap:var(--s2);padding-block:0}
+.ksub{gap:var(--s2);min-height:44px;padding-inline:12px 14px;font-size:15px;white-space:normal;text-align:start;line-height:1.25;max-width:100%}
+.ksub:not([class*="kt-"]){padding-inline:16px}
+.ksub .kic{display:grid;color:var(--kc)}
+.ksub[aria-pressed="true"] .kic{color:inherit}
+.ksub .n{color:var(--mute);font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.ksub[aria-pressed="true"] .n{color:inherit;opacity:.85}
 
 /* count, sort, list/map */
 .fbar{display:flex;align-items:center;gap:var(--s2);flex-wrap:wrap}
@@ -767,7 +787,6 @@ h1+.lead{margin-block-start:var(--s2)}
   main.findmode{max-width:none;padding:0}
   .findapp{display:grid;grid-template-columns:clamp(440px,36vw,580px) minmax(0,1fr);align-items:start}
   .fside{padding:var(--s5) var(--s5) var(--s6);gap:var(--s4)}
-  .fside .ktabs{margin-inline:calc(-1 * var(--s5));padding-inline:var(--s5);scroll-padding-inline:var(--s5)}
   .findapp>.mapbox{position:sticky;inset-block-start:var(--head);height:calc(100dvh - var(--head));min-height:480px;border:0;border-inline-start:1px solid var(--line);border-radius:0}
   .findapp>.mapbox[hidden]{display:block}
 }
