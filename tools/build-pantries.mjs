@@ -62,6 +62,8 @@ function tidySchedule(s) {
   t = t.replace(/\b(mon|tues?|weds?|thurs?|thu|fri|sat|sun)\.?(?=\s|$|[,:;])/gi, m => FULL[m.replace(/\./g, "").toLowerCase()] || m);
   // "Pantry: Monday 10-1, Meal: Saturday 8:30-10" is two schedules, not one
   t = t.replace(/,\s*(?=(meal|pantry|soup kitchen|lunch|dinner|breakfast|produce|mobile)\s*:)/gi, "; ");
+  // "1ST/3RD Wednesday", "2nd & 4th" -> "1st and 3rd"
+  t = t.replace(/\b(\d)(st|nd|rd|th)\s*[/&,]\s*(\d)(st|nd|rd|th)\b/gi, (m, a, x, b, y) => `${a}${x.toLowerCase()} and ${b}${y.toLowerCase()}`).replace(/\b(\d)(ST|ND|RD|TH)\b/g, (m, a, x) => a + x.toLowerCase());
   // "10-12 am" means 10 am to noon
   t = t.replace(/\b(\d{1,2})(:\d\d)?\s*-\s*12(:\d\d)?\s*am\b/gi, (m, a, b, c) => +a < 12 ? `${a}${b || ""} am - 12${c || ""} pm` : m);
   // "12:00 AM - 2:00 PM" is a typo for noon
@@ -287,6 +289,10 @@ for (const src of SOURCES) {
     if (events.length) { sch.once = events; sch.rules = sch.rules.filter(x => x.nth); sch.conf = events.some(e => e.t[0][0]) ? "ok" : "notime"; }
     // a weekly rule that came only from the weekday table, while the notes name certain weeks, is not trustworthy
     if (MONTHLY.test(notesText || "") && DAYNAME.test(notesText || "") && sch.rules.some(x => !x.nth) && !/\b(every|each)\s+(mon|tue|wed|thu|fri|sat|sun)/i.test(notesText)) sch.conf = sch.rules.some(x => x.nth) ? sch.conf : "partial";
+    // the same weekday both weekly and on certain weeks ("WEEKLY Thursday, 3RD Thursday") can't be told apart: call first
+    { const W = "(mon|tues|wednes|thurs|fri|satur|sun)day"; const weekly = new Set([...when.matchAll(new RegExp(`\\b(?:weekly|every|each)\\s+${W}`, "gi"))].map(m => m[1].toLowerCase()));
+      const nth = new Set([...when.matchAll(new RegExp(`\\b(?:\\d(?:st|nd|rd|th)|first|second|third|fourth|last)\\s+${W}`, "gi"))].map(m => m[1].toLowerCase()));
+      if ([...weekly].some(d => nth.has(d))) sch.conf = "partial"; }
     const nt = resolveYears(parseNotes(notesText, src.id, REF), sch, REF);
     if (nt.unclear && sch.conf === "ok") sch.conf = "notes";
     const shown = [when, Object.keys(df.fields).length ? fieldsText(df.fields) : ""].filter(Boolean).join(". ").slice(0, 400);

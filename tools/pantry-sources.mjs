@@ -6,13 +6,13 @@
 //     (Vivery and Plentiful forbid it: those need a partnership, see docs/pantry-sources.md)
 // Fields: id (short, stable, used in listing ids), name, st (main state); the main phone comes from Feeding America's list each run,
 //   page (the find-food page), platform, and options: ignoreHours (the structured hours are office hours, not food hours),
-//   notFood (a regex of listing names that aren't food sites).
+//   notFood (a regex of listing names that aren't food sites), center ([lat, lon] to search from when the map doesn't say).
 export const SOURCES = [
   // ---- Storepoint (the same platform as the San Diego food banks) ----
   { id: "lafb", name: "Los Angeles Regional Food Bank", st: "CA", page: "https://www.lafoodbank.org/find-food/pantry-locator/", platform: "storepoint" },
   { id: "shoc", name: "Second Harvest Food Bank of Orange County", st: "CA", page: "https://feedoc.org/need-food/", platform: "storepoint" },
   // ---- WP Store Locator (WordPress plugin on the food bank's own site) ----
-  { id: "phila", name: "Philabundance", st: "PA", page: "https://www.philabundance.org/find-food/", platform: "wpsl" },
+  { id: "phila", name: "Philabundance", st: "PA", page: "https://www.philabundance.org/find-food/", platform: "wpsl", center: [39.9526, -75.1652] },
   { id: "gsfb", name: "Good Shepherd Food Bank", st: "ME", page: "https://www.gsfb.org/food-map/", platform: "wpsl" },
   { id: "cbfb", name: "Coastal Bend Food Bank", st: "TX", page: "https://coastalbendfoodbank.org/get-help/find-food/", platform: "wpsl" },
   { id: "ftv", name: "Feeding the Valley Food Bank", st: "GA", page: "https://feedingthevalley.org/locate-a-food-pantry-near-you/", platform: "wpsl" },

@@ -80,9 +80,15 @@ const PLATFORMS = {
   },
   async wpsl(src, html) {
     const ajax = decode((html.match(/"ajaxurl":"([^"]+)"/) || [])[1] || new URL("/wp-admin/admin-ajax.php", src.page).href);
-    const lat = +(html.match(/"startLatlng":"([-\d.]+),/) || [])[1] || 0, lng = +(html.match(/"startLatlng":"[-\d.]+,([-\d.]+)"/) || [])[1] || 0;
-    const u = `${ajax}?${new URLSearchParams({ action: "store_search", lat, lng, max_results: 5000, search_radius: 5000, autoload: 1 })}`;
-    const data = JSON.parse((await fetchOk(u)).text);
+    const lat = +(html.match(/"startLatlng":"([-\d.]+),/) || [])[1] || src.center?.[0] || 0, lng = +(html.match(/"startLatlng":"[-\d.]+,([-\d.]+)"/) || [])[1] || src.center?.[1] || 0;
+    // some sites only accept the result counts and radii offered in the map's own dropdowns: fall back to those
+    const maxR = Math.max(0, ...[...(html.match(/id="wpsl-results"[\s\S]{0,800}?<\/select>/) || [""])[0].matchAll(/value="(\d+)"/g)].map(m => +m[1]));
+    const maxD = Math.max(0, ...[...(html.match(/id="wpsl-radius"[\s\S]{0,800}?<\/select>/) || [""])[0].matchAll(/value="(\d+)"/g)].map(m => +m[1]));
+    let data, u;
+    for (const [mr, sr] of [[5000, 5000], [maxR || 100, maxD || 500]]) {
+      u = `${ajax}?${new URLSearchParams({ action: "store_search", lat, lng, max_results: mr, search_radius: sr, autoload: 1 })}`;
+      try { data = JSON.parse((await fetchOk(u)).text); break; } catch (e) { log(src.id, "store_search", mr, sr, e.message); }
+    }
     if (!Array.isArray(data)) throw new Error("unexpected WPSL reply");
     return { endpoint: u.split("?")[0] + "?action=store_search", data };
   },
