@@ -29,6 +29,17 @@ jobs:
         timeout-minutes: 45
         run: |
           if [ -f tools/research/run.sh ]; then bash tools/research/run.sh /tmp/r/probe; else node tools/research/probe.mjs /tmp/r/probe; fi
+      - name: Save the probe results early
+        if: always()
+        run: |
+          cd /tmp/r
+          find . -size +40M -delete
+          rm -rf .git && git init -q -b pantry-research
+          git config user.name "plenty-map-research"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Pantry source research $(date -u +%FT%H%M)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" pantry-research
       - name: OpenStreetMap, region by region
         continue-on-error: true
         timeout-minutes: 45
@@ -41,7 +52,7 @@ jobs:
         run: |
           cd /tmp/r
           find . -size +40M -delete
-          git init -q -b pantry-research
+          rm -rf .git && git init -q -b pantry-research
           git config user.name "plenty-map-research"
           git config user.email "actions@users.noreply.github.com"
           git add -A
