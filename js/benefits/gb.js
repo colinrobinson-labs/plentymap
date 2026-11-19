@@ -12,7 +12,7 @@ export const CURRENCY = "GBP";
 export const HELPLINES = {
   ENG: { name: "Help through Hardship", by: "Citizens Advice and Trussell", ph: "0808 208 2138", hours: "Mon–Fri 9am–5pm", free: true,
     does: "Free, confidential advice on money and benefits, and a referral to a food bank if you need one. Interpreters on request.",
-    url: "https://www.trussell.org.uk/get-help/help-through-hardship-helpline", src: "https://www.trussell.org.uk/get-help/help-through-hardship-helpline" },
+    url: "https://www.trussell.org.uk/help-and-advice/help-through-hardship-helpline", src: "https://www.trussell.org.uk/help-and-advice/help-through-hardship-helpline" },
   WLS: "ENG",
   SCT: { name: "Money Talk Team", by: "Citizens Advice Scotland", ph: "0800 028 1456", free: true,
     does: "A free check that you're getting all the money you're entitled to, from your local Citizens Advice.",
@@ -32,7 +32,7 @@ export const helpline = reg => { const h = HELPLINES[reg] || HELPLINES.ENG; retu
 export const FOOD_BANKS = {
   referral: true,
   how: "Most food banks give food with a referral. Ask Citizens Advice, your GP, school, housing officer or support worker, or call the helpline. Some community pantries and larders don't need one; check with them.",
-  finder: { name: "Give Food", url: "https://www.givefood.org.uk/needs/" },
+  finder: { name: "Give Food", url: "https://www.givefood.org.uk/" },
 };
 
 /* ---------- Universal Credit (England, Scotland, Wales: DWP; Northern Ireland: DfC) ----------
@@ -76,7 +76,7 @@ export const BEST_START_FOODS = {
   // weekly, 2026-27. Source: Scottish Government, Social Security Assistance in Scotland: up-rating 2026-27
   weekly: { pregnant: 5.60, child_1_to_3: 5.60, baby_under_1: 11.20 },
   note: "For pregnant people and children under 3 in families on Universal Credit (with an income limit), Pension Credit, Child Tax Credit and some other benefits. Under 18 and pregnant: no benefit needed.",
-  apply: "https://www.mygov.scot/best-start-foods",
+  apply: "https://www.mygov.scot/best-start-grant-best-start-foods",
   phone: "0800 182 2222",   // Social Security Scotland
   src: "https://www.gov.scot/publications/social-security-assistance-scotland-up-rating-inflation-2026-27/pages/7/",
   related: [
@@ -97,17 +97,17 @@ export const SCHOOL_MEALS = {
   WLS: {
     all: "Every primary school child.",
     means: "Years 7 and 8: every child in a family on Universal Credit. From Year 9: Universal Credit with household income after tax under £7,400 a year, the guarantee part of Pension Credit, or asylum support.",
-    apply: "https://www.gov.wales/free-school-meals-frequently-asked-questions", how: "Apply to your local council.",
+    apply: "https://www.gov.wales/free-school-meals-information-parents-and-carers", how: "Apply to your local council.",
   },
   SCT: {
     all: "Every child in Primary 1 to Primary 5.",
     means: "Primary 6 and 7: Universal Credit with monthly earnings of £995 or less, Scottish Child Payment, Pension Credit or asylum support. Secondary school: the same, except Scottish Child Payment.",
-    apply: "https://www.mygov.scot/school-meals", how: "Apply to your council. Many councils also pay a clothing grant with the same form.",
+    apply: "https://www.mygov.scot/primary-school-meals", how: "Apply to your council. Many councils also pay a clothing grant with the same form.",
   },
   NIR: {
     all: null,
     means: "Universal Credit with household take-home pay of £15,900 a year or less, the guarantee part of Pension Credit, or asylum support.",
-    apply: "https://www.eani.org.uk/financial-help/free-school-meals-uniform-allowance", how: "Apply to the Education Authority (the same form covers the uniform grant).",
+    apply: "https://www.eani.org.uk/financial-help/free-school-meals", how: "Apply to the Education Authority (the same form covers the uniform grant).",
   },
   src: ["https://www.gov.uk/apply-free-school-meals", "https://www.turn2us.org.uk/get-support/information-for-your-situation/free-school-meals"],
 };
@@ -118,7 +118,7 @@ export const OTHER = [
     url: "https://www.gov.uk/cost-of-living" },
   { id: "daf", name: "Discretionary Assistance Fund", regions: ["WLS"], what: "Emergency payments for food, gas or electricity from the Welsh Government.", url: "https://www.gov.wales/discretionary-assistance-fund-daf" },
   { id: "swf", name: "Scottish Welfare Fund", regions: ["SCT"], what: "Crisis grants from your council for food, heating and other essentials.", url: "https://www.mygov.scot/scottish-welfare-fund" },
-  { id: "fsp", name: "Finance Support Service", regions: ["NIR"], what: "Short-term help from the Department for Communities in an emergency.", url: "https://www.nidirect.gov.uk/articles/finance-support-service" },
+  { id: "fsp", name: "Finance Support Service", regions: ["NIR"], what: "Short-term help from the Department for Communities in an emergency.", url: "https://www.nidirect.gov.uk/campaigns/finance-support" },
   { id: "calc", name: "Benefits calculators", regions: ["ENG", "WLS", "SCT", "NIR"], what: "Free, anonymous calculators that show what you could get.", url: "https://www.gov.uk/benefits-calculators" },
 ];
 

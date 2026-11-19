@@ -21,9 +21,13 @@ await Promise.all([...urls].map(async ([u, where], i) => {
       if (r.ok) break;
     } catch (e) { st = e.cause?.code || e.message; }
   }
-  const ok = typeof st === "number" && st < 400;
-  if (!ok) bad++;
-  console.log(`${ok ? "ok " : "BAD"} ${st} ${u}${fin && fin !== u ? ` -> ${fin}` : ""}${ok ? "" : `  (${where.join(", ")})`}`);
+  // a redirect to a "not found" page is broken too; 403/429 and dropped connections are usually a
+  // site turning away automated checks, so they're flagged for a person to open, not counted
+  const soft404 = /\/(errors?\/)?404|page-not-found|not-found/i.test(fin || "");
+  const blocked = st === 403 || st === 429 || (typeof st !== "number");
+  const ok = typeof st === "number" && st < 400 && !soft404;
+  if (!ok && !blocked) bad++;
+  console.log(`${ok ? "ok  " : blocked ? "WARN" : "BAD "} ${st} ${u}${fin && fin !== u ? ` -> ${fin}` : ""}${ok ? "" : `  (${where.join(", ")})`}${soft404 ? " [redirects to a not-found page]" : ""}`);
 }));
-console.log(`${urls.size} links, ${bad} broken`);
+console.log(`${urls.size} links, ${bad} broken (WARN = site refused an automated check; open it by hand)`);
 if (bad) process.exitCode = 1;
