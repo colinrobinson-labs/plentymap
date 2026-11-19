@@ -80,6 +80,10 @@ jobs:
           name: qa-report-ui-${{ matrix.shard }}
           path: qa/results/report.json
           retention-days: 14
+      - name: Icon geometry (a bad icon blocks the deploy)
+        # tools/check-icons.mjs finds qa/node_modules/playwright itself; exits 1 on any overlap or spill
+        if: matrix.shard == 1
+        run: node tools/check-icons.mjs
 
   data:
     # nightly, or by hand with level=full (never as part of a deploy: old data shouldn't block a code fix)
