@@ -48,7 +48,7 @@ function dealCard(x) {
     x.app && t("kd_app"),
     x.code && t("kd_code", { c: x.code }),
   ].filter(Boolean);
-  const where = t("kd_where_" + (x.where || "some"));
+  const where = t({ all: "kd_w_all", many: "kd_w_lots" }[x.where] || "kd_w_some");
   const src = x.src.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer" data-out>${esc(K.sources[u]?.name || new URL(u).hostname)}</a> (${esc(dayFmt(K.sources[u]?.date || K.checked))})`).join(", ");
   const web = safeUrl(x.w);
   return `<li class="card kid" id="d-${esc(x.id)}">

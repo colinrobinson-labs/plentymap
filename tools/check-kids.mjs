@@ -7,7 +7,9 @@ import { readFile, writeFile } from "node:fs/promises";
 const [file = "data/kids.json", outFile = "kids-check.md"] = process.argv.slice(2);
 const K = JSON.parse(await readFile(file, "utf8"));
 const UA = "Mozilla/5.0 (compatible; PlentyMapCheck/1.0; +https://plentymap.com)";
-const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’'`]/g, "").replace(/&amp;/g, "&").replace(/[^a-z0-9&]+/g, " ");
+const ENT = { amp: "&", rsquo: "'", lsquo: "'", apos: "'", quot: '"', nbsp: " ", eacute: "e", ndash: "-", mdash: "-" };
+const decode = s => s.replace(/&#x([0-9a-f]+);/gi, (m, h) => String.fromCodePoint(parseInt(h, 16))).replace(/&#(\d+);/g, (m, d) => String.fromCodePoint(+d)).replace(/&([a-z]+);/gi, (m, n) => ENT[n.toLowerCase()] ?? " ");
+const norm = s => decode(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’'`]/g, "").replace(/&amp;/g, "&").replace(/[^a-z0-9&]+/g, " ");
 const pages = {};
 for (const u of Object.keys(K.sources)) {
   try {
@@ -26,7 +28,10 @@ const reachable = Object.values(pages).some(Boolean);
 for (const x of K.deals) {
   const k = key(x.n);
   const seen = x.src.filter(u => pages[u]);
-  if (reachable && seen.length && !seen.some(u => pages[u].includes(k))) {
+  // every distinctive word of the name must appear on the page ("mcl", "famous dave's" -> "famous", "daves")
+  const words = k.split(" ").filter(w => w.length >= 3 || /\d/.test(w));
+  const has = page => words.every(w => new RegExp(`(^|[^a-z0-9])${w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}([^a-z0-9]|$)`).test(page));
+  if (reachable && seen.length && words.length && !seen.some(u => has(pages[u]))) {
     // only hide when every source we could read dropped it, and at least one source was read
     hide[x.id] = "no longer listed by its sources";
     lines.push(`- **${x.n}** (\`${x.id}\`): no longer mentioned by ${seen.map(u => K.sources[u].name).join(", ")}. Hidden automatically; re-check and remove or re-source it.`);

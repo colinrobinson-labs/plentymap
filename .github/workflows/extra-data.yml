@@ -157,12 +157,12 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ] || exit 0
-          gh label create listing-reports --color C8442D --description "Weekly listing report digest" 2>/dev/null || true
+          for l in listing-reports qa qa:user-report owner:data; do gh label create "$l" --color C8442D 2>/dev/null || true; done
           # close last week's digest so only one is open
           for n in $(gh issue list --label listing-reports --state open --json number -q '.[].number'); do gh issue close "$n" --comment "Replaced by this week's digest." ; done
           if [ "$(cat /tmp/f/digest-needed)" = "yes" ]; then
-            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --assignee lightsgoblack --body-file /tmp/f/digest.md || \
-            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --body-file /tmp/f/digest.md
+            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --label qa --label qa:user-report --label owner:data --assignee lightsgoblack --body-file /tmp/f/digest.md || \
+            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --label qa --label qa:user-report --label owner:data --body-file /tmp/f/digest.md
           fi
       - name: Republish the site with the new flags
         if: env.LIVE == 'true' && steps.check.outputs.code == '0'
