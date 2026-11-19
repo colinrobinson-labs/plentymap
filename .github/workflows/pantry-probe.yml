@@ -8,6 +8,8 @@ on:
     paths:
       - "tools/research/**"
       - "tools/fetch-us.mjs"
+      - "tools/fetch-pantries.mjs"
+      - "tools/pantry-sources.mjs"
       - ".github/workflows/pantry-probe.yml"
   workflow_dispatch:
 permissions:
