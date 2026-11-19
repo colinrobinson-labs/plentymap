@@ -1,0 +1,171 @@
+name: Extra data and reports
+# places (weekly): OpenStreetMap community gardens, little free pantries and bakery outlets, plus USDA
+#   summer meal sites when a season is published -> extra/ on the extradata branch.
+# reports (nightly): reads listing-report totals from report.plentymap.com (never the notes), re-checks
+#   each reported listing, writes flags/flags.json on the extradata branch, posts a weekly digest
+#   issue when something needs a person, and republishes the site.
+# kids (weekly): checks each kids-eat-free source page still mentions each chain.
+# Runs from other branches only test the build and upload the result; they never write anything.
+on:
+  schedule:
+    - cron: "23 12 * * 2"   # places + kids: Tuesdays ~5am Pacific
+    - cron: "47 10 * * *"   # reports: nightly ~3am Pacific
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "places, reports, kids or all"
+        default: "all"
+  push:
+    paths:
+      - "tools/fetch-extra.mjs"
+      - "tools/build-extra.mjs"
+      - "tools/check-reports.mjs"
+      - "tools/check-kids.mjs"
+      - ".github/workflows/extra-data.yml"
+permissions:
+  contents: write
+  actions: write
+  issues: write
+concurrency: extra-data
+env:
+  LIVE: ${{ github.ref_name == 'main' || github.ref_name == 'launch' }}
+
+jobs:
+  places:
+    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Fetch sources
+        run: node tools/fetch-extra.mjs /tmp/x/raw
+      - name: Build the layer packs
+        run: |
+          node tools/build-extra.mjs /tmp/x/raw /tmp/x/out/extra
+          du -sh /tmp/x/out/extra; ls /tmp/x/out/extra/cells | wc -l
+          cat /tmp/x/raw/report.json
+      - name: Test run - keep the result as an artifact
+        if: env.LIVE != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: extra-test
+          path: |
+            /tmp/x/out/extra/index.json
+            /tmp/x/raw/report.json
+          retention-days: 7
+      - name: Save to the extradata branch (keeps flags/)
+        if: env.LIVE == 'true'
+        run: |
+          cd /tmp/x/out
+          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
+            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD flags | tar -x -C . 2>/dev/null || true
+          fi
+          cp /tmp/x/raw/report.json extra/report.json
+          git init -q -b extradata
+          git config user.name "plenty-map-data"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plenty Map extra layers $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+      - name: Republish the site
+        if: env.LIVE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref "${{ github.ref_name }}"
+
+  kids:
+    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'kids'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check every source page still lists each deal
+        run: node tools/check-kids.mjs data/kids.json /tmp/kids-check.md
+      - name: Save the hide list to the extradata branch
+        if: env.LIVE == 'true'
+        run: |
+          mkdir -p /tmp/b && cd /tmp/b
+          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
+            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD | tar -x -C .
+          fi
+          mkdir -p flags && cp /tmp/kids-check-hide.json flags/kids.json
+          git init -q -b extradata
+          git config user.name "plenty-map-data"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plenty Map kids deals check $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+      - name: Open an issue when a deal needs re-checking
+        if: env.LIVE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -s /tmp/kids-check.md ] || exit 0
+          gh label create kids-deals --color F5C04A --description "Kids eat free list upkeep" 2>/dev/null || true
+          gh issue create --title "Kids eat free: deals to re-check ($(date -u +%F))" --label kids-deals --body-file /tmp/kids-check.md
+
+  reports:
+    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '47 10 * * *') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'reports'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Gather the published listings
+        run: |
+          mkdir -p /tmp/d/regions && cp data/regions/san-diego.json /tmp/d/regions/ && cp data/kids.json /tmp/d/
+          if git fetch --depth 1 origin usdata 2>/dev/null; then git archive FETCH_HEAD us/cells | tar -x -C /tmp/d; fi
+          if git fetch --depth 1 origin extradata 2>/dev/null; then git archive FETCH_HEAD extra/cells | tar -x -C /tmp/d 2>/dev/null || true; fi
+          ls /tmp/d
+      - name: Check reported listings
+        id: check
+        run: |
+          set +e
+          node tools/check-reports.mjs /tmp/d /tmp/f
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ $code = 2 ]; then echo "::warning::report endpoint unavailable; flags left as they were"; exit 0; fi
+          exit $code
+      - name: Show the result (test runs)
+        if: env.LIVE != 'true' && steps.check.outputs.code == '0'
+        run: cat /tmp/f/flags.json; echo; cat /tmp/f/digest.md
+      - name: Save flags to the extradata branch
+        if: env.LIVE == 'true' && steps.check.outputs.code == '0'
+        run: |
+          mkdir -p /tmp/b && cd /tmp/b
+          if git -C "$GITHUB_WORKSPACE" fetch --depth=1 origin extradata 2>/dev/null; then
+            git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD | tar -x -C .
+          fi
+          mkdir -p flags && cp /tmp/f/flags.json flags/
+          git init -q -b extradata
+          git config user.name "plenty-map-data"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plenty Map report flags $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" extradata
+      - name: Weekly digest (Mondays, only when something needs a person)
+        if: env.LIVE == 'true' && steps.check.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ] || exit 0
+          for l in listing-reports qa qa:user-report owner:data; do gh label create "$l" --color C8442D 2>/dev/null || true; done
+          # close last week's digest so only one is open
+          for n in $(gh issue list --label listing-reports --state open --json number -q '.[].number'); do gh issue close "$n" --comment "Replaced by this week's digest." ; done
+          if [ "$(cat /tmp/f/digest-needed)" = "yes" ]; then
+            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --label qa --label qa:user-report --label owner:data --assignee lightsgoblack --body-file /tmp/f/digest.md || \
+            gh issue create --title "Listing reports: week of $(date -u +%F)" --label listing-reports --label qa --label qa:user-report --label owner:data --body-file /tmp/f/digest.md
+          fi
+      - name: Republish the site with the new flags
+        if: env.LIVE == 'true' && steps.check.outputs.code == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref "${{ github.ref_name }}"

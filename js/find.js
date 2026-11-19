@@ -6,6 +6,7 @@ import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
 import { CONFIG } from "./config.js";
 import { kindIcon } from "./glyphs.js";
+import * as reportMod from "./report.js";
 
 const FREE = ["pantry", "senior", "meal", "fridge", "summer", "garden", "givebox"];
 // the combined "Free food" list: everything free except gardens (not a place to pick up food on a schedule)
@@ -42,8 +43,8 @@ const F = {
   view: "list",
 };
 
-// reportMod: the private "report a problem" module (reportUI(s), bindReport(root)); set when it ships, else email links
-let R, mapApi = null, mapMod = null, focusId = null, openId = null, reportMod = null;
+// reportMod (imported above): the private "report a problem" form, reportUI(s) and bindReport(root)
+let R, mapApi = null, mapMod = null, focusId = null, openId = null;
 const catOf = id => CATS.find(c => c.id === id) || CATS[0];
 const isFreeCat = cat => cat.kinds.some(k => FREE.includes(k));
 const phone = () => matchMedia("(max-width: 959px)").matches;

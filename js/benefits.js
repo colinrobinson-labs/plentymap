@@ -126,3 +126,32 @@ export const PHONES = {
   wic: "888-942-9675",      // California WIC
   sunbucks: "877-328-9677", // SUN Bucks helpline
 };
+
+/* Free breakfast and lunch for every public school student, by state law, 2025-26 school year.
+   (Propel state list, Aug 2025; FoodCorps policy brief, spring 2026.) Checked 2026-11-19. */
+export const SCHOOL_ALL = ["CA", "CO", "ME", "MA", "MI", "MN", "NM", "NY", "VT"];
+/* Summer EBT (SUN Bucks), summer 2026: the states that did not take part (FRAC, Nov 2025).
+   Every other state, DC and the territories did. Check again each spring. */
+export const SUN_NO = ["AK", "FL", "GA", "ID", "IN", "MS", "OK", "SC", "SD", "TN", "TX", "WY"];
+/* USDA National Hunger Hotline, run by Hunger Free America: Mon to Fri, 8 AM to 8 PM Eastern.
+   Text line: a question with "food" or "SNAP" plus a ZIP code. fna.usda.gov/national-hunger-hotline, checked 2026-11-19. */
+export const HOTLINE = { call: "866-348-6479", text: "914-342-7744" };
+/* Lifeline: up to $9.25 a month off phone or internet (up to $34.25 on Tribal lands). USAC, checked 2026-11-19. */
+export const LIFELINE = { std: 9.25, tribal: 34.25, phone: "800-234-9473" };
+/* Shopping online with EBT, checked 2026-11-19 (each company's own page):
+   Amazon Prime Access $6.99 a month; Walmart+ Assist $49 a year; Instacart: no delivery or pickup fee at
+   participating stores for EBT orders, and 50% off Instacart+ for a year. */
+export const ONLINE = { amazon: 6.99, walmart: 49 };
+export const SAVE_LINKS = {
+  hotline: "https://www.fna.usda.gov/national-hunger-hotline",
+  amazon: "https://www.aboutamazon.com/news/retail/amazon-prime-access-discounted-membership",
+  walmart: "https://www.walmart.com/plus/assist",
+  instacart: "https://www.instacart.com/ebt-snap",
+  tgtg: "https://www.toogoodtogo.com/en-us",
+  flashfood: "https://www.flashfood.com/",
+  lifeline: "https://www.lifelinesupport.org/",
+  sfmnp: "https://www.fna.usda.gov/sfmnp",
+  mow: "https://mealsonwheelsamerica.org/find-meals",
+  summer: "https://www.fna.usda.gov/sfsp/sitefinder",
+  sunareas: "https://www.fna.usda.gov/sebt",
+};
