@@ -1,5 +1,5 @@
 /* Cook: recipes that fit your kitchen, budget, comfort level and home cooking. */
-import { S, save, t, esc, $, $$, ico, money, num, rt, recipeInLang, activeCuisine, langDefaultCuisine, shareThing, toast, announce } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, rt, recipeInLang, activeCuisine, langDefaultCuisine, shareThing, toast, announce } from "./core.js";
 import { food, canCook, dietOk, contains, dietNotes, sodium, AVOIDS, facts, perServing, missing, qty, name, rank, CUISINES, price, cuisineMatch } from "./food.js";
 import { foot } from "./app.js";
 
@@ -21,8 +21,9 @@ function card(r) {
       <h3>${esc(tx.t)}${saved ? ` <span class="sr">(${esc(t("saved"))})</span>` : ""}</h3>
       <span class="meta">
         <span class="tag">${esc(money(perServing(r)))}<small>${esc(t("per_serving"))}</small></span>
-        <span>${ico("clock", "i sm")} ${esc(t("mins", { n: r.mins }))}</span>
-        <span>${esc(t("serves", { n: r.serves }))}</span>
+        <span class="tm">${ico("clock", "i sm")}<span>${esc(t("mins", { n: r.mins }))}</span><span aria-hidden="true">·</span><span>${esc(t("serves", { n: r.serves }))}</span></span>
+      </span>
+      <span class="tags">
         ${f.vegan ? `<span class="badge ok">${esc(t("diet_vegan"))}</span>` : f.veg ? `<span class="badge ok">${esc(t("diet_veg"))}</span>` : ""}
         ${r.kid ? `<span class="badge">${esc(t("kid_ok"))}</span>` : ""}
         ${saved ? `<span class="badge yolk">${ico("heart", "i sm")}</span>` : ""}
@@ -38,6 +39,7 @@ function paint() {
   const saved = vis.filter(r => S.saved.has(r.id));
   const cu = activeCuisine();
   $("#rcount").textContent = t("recipes_n", { n: vis.length });
+  if ($("#fsum")) $("#fsum").textContent = fsum();
   $("#rlist").innerHTML = !vis.length
     ? `<div class="card empty">${ico("pot")}<p><b>${esc(t("no_recipes"))}</b></p><p class="mute">${esc(t("no_recipes_p"))}</p></div>`
     : [
@@ -48,47 +50,59 @@ function paint() {
   $$("[data-r]").forEach(b => b.onclick = () => { location.hash = "#/cook/" + b.dataset.r; });
 }
 
-function chip(attr, v, label, on, role = "") {
-  return `<button class="chip" type="button" ${attr}="${v}" aria-pressed="${on}" ${role}>${label}</button>`;
+/* Each kind of choice gets its own control, so the panel reads like a printed menu, not a wall of pills:
+   tiles = pick any (kitchen), seg = pick one of a few (cost, cooking), opt = pick one (diet),
+   ck = tick any (what you have), out = leave out (allergens). All are buttons with aria-pressed. */
+function chip(attr, v, label, on, kind = "ck") {
+  return `<button class="chip ${kind}" type="button" ${attr}="${v}" aria-pressed="${on}">${mark(kind)}<span>${label}</span></button>`;
 }
+const segBtn = (attr, v, label, on) => `<button type="button" ${attr}="${v}" aria-pressed="${on}">${label}</button>`;
+const tile = (v, icon, label, on) => `<button class="tile" type="button" data-kit="${v}" aria-pressed="${on}">${ico(icon)}<span>${label}</span>${mark("ck")}</button>`;
 
-const fcount = () => { const n = (S.diet !== "any") + S.avoid.size; return n ? ` (${num(n)})` : ""; };
+const fcount = () => (S.diet !== "any") + S.avoid.size;
+const cnt = (id, n) => `<span class="cnt" id="${id}" ${n ? "" : "hidden"}>${n ? num(n) : ""}</span>`;
+const setCnt = (id, n) => { const el = $("#" + id); if (el) { el.textContent = n ? num(n) : ""; el.hidden = !n; } };
 
+function fsum() {
+  const k = S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none");
+  const c = S.maxCost ? t("under", { m: money(S.maxCost) }) : t("any_cost");
+  const n = fcount() + S.have.size;
+  return [k, c].join(" · ") + (n ? " · +" + num(n) : "");
+}
 function filters() {
   const cu = activeCuisine();
+  const grp = (id, title, body) => `<div class="fg" role="group" aria-labelledby="${id}"><div class="fg-h" id="${id}">${esc(title)}</div><div class="fg-c">${body}</div></div>`;
+  const wide = matchMedia("(min-width: 760px)").matches;
   return `<div class="card filters" id="filters">
-    <div><span class="lbl" id="l-kit">${esc(t("kit_q"))}</span>
-      <div class="chips wrap" role="group" aria-labelledby="l-kit">
-        ${chip("data-kit", "stove", ico("flame", "i sm") + esc(t("kit_stove")), S.kit.includes("stove"))}
-        ${chip("data-kit", "hotplate", ico("plug", "i sm") + esc(t("kit_hotplate")), S.kit.includes("hotplate"))}
-        ${chip("data-kit", "micro", ico("micro", "i sm") + esc(t("kit_micro")), S.kit.includes("micro"))}
-        ${chip("data-kit", "none", esc(t("kit_none")), !S.kit.length)}
-      </div></div>
-    <div><span class="lbl" id="l-cost">${esc(t("budget_q"))}</span>
-      <div class="chips wrap" role="group" aria-labelledby="l-cost">
-        ${BUDGETS.map(b => chip("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
-      </div></div>
-    <details class="morefl" ${matchMedia("(min-width: 760px)").matches ? "open" : ""}><summary class="link">${esc(t("more_filters"))}<span id="flcount">${fcount()}</span></summary><div class="filters inner">
-    <div><span class="lbl" id="l-lvl">${esc(t("comfort_q"))}</span>
-      <div class="chips wrap" role="group" aria-labelledby="l-lvl">
-        ${[1, 2, 3].map(l => chip("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
-      </div></div>
-    <div><span class="lbl" id="l-diet">${esc(t("diet_q"))}</span>
-      <div class="chips wrap" role="group" aria-labelledby="l-diet">
-        ${["any", "veg", "vegan", "halal", "kosher"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d)).join("")}
-      </div></div>
-    <div><span class="lbl" id="l-avoid">${esc(t("avoid_q"))}</span>
-      <div class="chips wrap" role="group" aria-labelledby="l-avoid">
-        ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a))).join("")}
-      </div></div>
-    <div><label class="lbl" for="cusel">${esc(t("cu_q"))}</label>
-      <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}${c === langDefaultCuisine() ? " ✓" : ""}</option>`).join("")}</select>
-    </div>
+    ${wide ? "" : `<details class="fold allfl"><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
+    ${grp("l-kit", t("kit_q"), `<div class="tiles">
+        ${tile("stove", "flame", esc(t("kit_stove")), S.kit.includes("stove"))}
+        ${tile("hotplate", "plug", esc(t("kit_hotplate")), S.kit.includes("hotplate"))}
+        ${tile("micro", "micro", esc(t("kit_micro")), S.kit.includes("micro"))}
+        ${tile("none", "bowl", esc(t("kit_none")), !S.kit.length)}
+      </div>`)}
+    ${grp("l-cost", t("budget_q"), `<div class="seg n${BUDGETS.length}">
+        ${BUDGETS.map(b => segBtn("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
+      </div>`)}
+    <details class="fold morefl" ${wide ? "open" : ""}><summary><span>${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}${ico("chev", "i chev")}</summary><div class="fold-b">
+    ${grp("l-lvl", t("comfort_q"), `<div class="seg n3">
+        ${[1, 2, 3].map(l => segBtn("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
+      </div>`)}
+    ${grp("l-diet", t("diet_q"), `<div class="chips wrap">
+        ${["any", "veg", "vegan", "halal", "kosher"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d, "opt")).join("")}
+      </div>`)}
+    ${grp("l-avoid", t("avoid_q"), `<div class="chips wrap">
+        ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
+      </div>`)}
+    <div class="fg"><label class="fg-h" for="cusel">${esc(t("cu_q"))}</label><div class="fg-c">
+      <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}</option>`).join("")}</select>
+    </div></div>
     </div></details>
-    <details><summary class="link">${esc(t("have_q"))}${S.have.size ? ` (${num(S.have.size)})` : ""}</summary>
+    <details class="fold"><summary><span>${esc(t("have_q"))}</span>${cnt("hvcount", S.have.size)}${ico("chev", "i chev")}</summary><div class="fold-b">
       <div class="chips wrap" role="group" aria-label="${esc(t("have_q"))}">
         ${PANTRY.filter(id => FD.ing[id]).map(id => chip("data-have", id, esc(name(id)), S.have.has(id))).join("")}
-      </div></details>
+      </div></div></details>
+    ${wide ? "" : "</div></details>"}
   </div>`;
 }
 
@@ -103,15 +117,15 @@ function bindFilters() {
   });
   $$("[data-cost]").forEach(b => b.onclick = () => { S.maxCost = +b.dataset.cost; save("maxCost"); $$("[data-cost]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-lvl]").forEach(b => b.onclick = () => { S.comfort = +b.dataset.lvl; save("comfort"); $$("[data-lvl]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
-  $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); $("#flcount").textContent = fcount(); paint(); });
+  $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); setCnt("flcount", fcount()); paint(); });
   $$("[data-avoid]").forEach(b => b.onclick = () => {
     const a = b.dataset.avoid; S.avoid.has(a) ? S.avoid.delete(a) : S.avoid.add(a); save("avoid");
-    b.setAttribute("aria-pressed", S.avoid.has(a)); $("#flcount").textContent = fcount(); paint();
+    b.setAttribute("aria-pressed", S.avoid.has(a)); setCnt("flcount", fcount()); paint();
   });
   $("#cusel").onchange = e => { S.cuisine = e.target.value === langDefaultCuisine() ? null : e.target.value; save("cuisine"); paint(); };
   $$("[data-have]").forEach(b => b.onclick = () => {
     const id = b.dataset.have; S.have.has(id) ? S.have.delete(id) : S.have.add(id); save("have");
-    b.setAttribute("aria-pressed", S.have.has(id)); paint();
+    b.setAttribute("aria-pressed", S.have.has(id)); setCnt("hvcount", S.have.size); paint();
   });
 }
 
@@ -169,9 +183,10 @@ function openSheet(id) {
         <button class="btn" type="button" id="wake" aria-pressed="${!!wake}">${ico("screen")} ${esc(t("keep_on"))}</button>
         <button class="btn ghost" type="button" id="print">${ico("print")} ${esc(t("print"))}</button>
       </div>
-      <p class="tiny mute">${esc(t("price_note"))}</p>`;
+      <p class="tiny mute">${esc(t("price_note"))}</p>
+      <p class="soon">${ico("clock", "i sm")}<span>${esc(t("soon_prices"))}</span></p>`;
     $$("[data-sv]", el).forEach(b => b.onclick = () => { sv = Math.max(1, Math.min(24, sv + +b.dataset.sv)); paintBody(); el.querySelector(`[data-sv="${b.dataset.sv}"]`).focus(); });
-    $("#addlist", el).onclick = () => { S.extra[id] = (S.extra[id] || 0) + sv; save("extra"); toast(t("added_list")); };
+    $("#addlist", el).onclick = () => { S.extra[id] = (S.extra[id] || 0) + sv; save("extra"); toast(t("added_list"), { href: "#/budget", label: t("tab_budget") + " ›", go: () => { S.jumpList = true; } }); };
     $("#wake", el).onclick = e => setWake(!wake, e.currentTarget);
     $("#print", el).onclick = () => window.print();
   };

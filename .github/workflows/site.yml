@@ -24,6 +24,7 @@ jobs:
           cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
           mkdir -p _site/data && cp -r data/regions data/food.json _site/data/
           cp -r privacy support _site/ 2>/dev/null || true
+          cp robots.txt sitemap.xml 404.html _site/
           echo "plentymap.com" > _site/CNAME
           touch _site/.nojekyll
       - name: Add map tiles from the data branch

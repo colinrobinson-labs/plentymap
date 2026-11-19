@@ -19,6 +19,20 @@ const cellOf = (lat, lon) => `${Math.floor(lat * 2)}_${Math.floor(lon * 2)}`;
 const cells = new Map();
 const cell = k => { let c = cells.get(k); if (!c) cells.set(k, c = { sites: [], stores: [], zips: {} }); return c; };
 const fold = s => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+// town names as people type them: "Saint Louis" = "St. Louis", "Mount Vernon" = "Mt Vernon", "Fort Worth" = "Ft Worth"
+// (the app folds the same way: keep in step with js/region.js)
+const pfold = s => fold(s).replace(/\bsainte\b/g, "ste").replace(/\bsaint\b/g, "st").replace(/\bmount\b/g, "mt").replace(/\bfort\b/g, "ft");
+// Census names that aren't what anyone calls the place
+const ALIAS = {
+  "HI|Urban Honolulu": "Honolulu", "ID|Boise City": "Boise", "TN|Nashville-Davidson": "Nashville", "KY|Louisville/Jefferson County": "Louisville",
+  "KY|Lexington-Fayette": "Lexington", "GA|Athens-Clarke County": "Athens", "GA|Augusta-Richmond County": "Augusta", "GA|Macon-Bibb County": "Macon",
+  "GA|Columbus": "Columbus", "MT|Butte-Silver Bow": "Butte", "MT|Anaconda-Deer Lodge County": "Anaconda", "CA|San Buenaventura (Ventura)": "Ventura",
+  "KS|Kansas City": "Kansas City", "TN|Hartsville/Trousdale County": "Hartsville", "TN|Lynchburg, Moore County": "Lynchburg", "IN|Indianapolis": "Indianapolis",
+  "AK|Anchorage": "Anchorage", "AK|Juneau": "Juneau", "AK|Sitka": "Sitka",
+};
+// parts of a city people search for by name (NYC boroughs aren't Census places)
+const EXTRA = [["Brooklyn", "NY", 40.6501, -73.9496], ["Queens", "NY", 40.7282, -73.7949], ["Bronx", "NY", 40.8448, -73.8648], ["The Bronx", "NY", 40.8448, -73.8648],
+  ["Manhattan", "NY", 40.7831, -73.9712], ["Staten Island", "NY", 40.5795, -74.1502], ["Harlem", "NY", 40.8116, -73.9465]];
 
 // ---- Census places (search, and a fallback city name for ZIPs) ----
 const places = [];
@@ -31,11 +45,13 @@ const places = [];
     if (!c[iN]) continue;
     const name = c[iN]
       .replace(/\s+\(balance\)$/, "")
-      .replace(/\s+(city and borough|consolidated government|metropolitan government|unified government|urban county|city|town|village|CDP|borough|municipality|comunidad|zona urbana|plantation|corporation)$/i, "")
+      .replace(/\s+(city and borough|consolidated government|metropolitan government|metro government|unified government|urban county|city|town|village|CDP|borough|municipality|comunidad|zona urbana|plantation|corporation)$/i, "")
       .trim();
     if (!name) continue;
-    places.push({ n: name, st: c[iS], lat: r5(+c[iLa]), lon: r5(+c[iLo]), a: +c[iA] || 0 });
+    const n = ALIAS[c[iS] + "|" + name] || name.replace(/^(.+?)[-/].*\bCounty$/, "$1").replace(/^.*\((.+)\)$/, "$1");
+    places.push({ n, st: c[iS], lat: r5(+c[iLa]), lon: r5(+c[iLo]), a: +c[iA] || 0 });
   }
+  if (places.length) for (const [n, st, lat, lon] of EXTRA) places.push({ n, st, lat, lon, a: 1e12 });
 }
 // nearest place, by a coarse grid so 33k ZIPs don't each scan 32k places
 const pgrid = new Map();
@@ -75,7 +91,7 @@ for (const a of snap) {
   const rawName = clean(a.Store_Name);
   const z = (a.Zip_Code || "").toString().padStart(5, "0").slice(0, 5), city = clean(a.City);
   if (z && city) { zc[z] ||= {}; zc[z][city] = (zc[z][city] || 0) + 1; zst[z] ||= a.State; }
-  if (city) { const ck = a.State + "|" + fold(city); cityN[ck] = (cityN[ck] || 0) + 1; }
+  if (city) { const ck = a.State + "|" + pfold(city); cityN[ck] = (cityN[ck] || 0) + 1; }
   if (t !== "Farmers and Markets" && t !== "Restaurant Meals Program" && SKIP.test(rawName)) continue;
   if (t === "Other" && !CUISINE.some(([, rx]) => rx.test(rawName)) && !BUDGET.test(rawName)) continue;
   // national chains carry store codes the shared tidy-up leaves behind ("Target Store T", "Kroger J-123")
@@ -157,7 +173,7 @@ for (const [z, v] of Object.entries(zips)) (byPre[z.slice(0, 3)] ||= {})[z] = v;
 for (const [p, m] of Object.entries(byPre)) await writeFile(join(outDir, "zip", p + ".json"), JSON.stringify(m));
 // places: busiest first within a letter (by how many SNAP retailers list that city), so "Springfield"
 // suggests the larger ones first. Land area breaks ties.
-const weight = p => cityN[p.st + "|" + fold(p.n)] || 0;
+const weight = p => cityN[p.st + "|" + pfold(p.n)] || 0;
 const byL = {};
 for (const p of places.sort((a, b) => weight(b) - weight(a) || b.a - a.a)) { const l = fold(p.n)[0]; if (!l) continue; (byL[/[a-z]/.test(l) ? l : "0"] ||= []).push([p.n, p.st, p.lat, p.lon, weight(p)]); }
 for (const [l, arr] of Object.entries(byL)) await writeFile(join(outDir, "places", l + ".json"), JSON.stringify(arr));

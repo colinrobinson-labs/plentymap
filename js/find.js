@@ -1,6 +1,6 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
    and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
-import { S, save, t, esc, $, $$, ico, money, num, dateFmt, timeFmt, miles, dist, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
@@ -8,13 +8,13 @@ import { CONFIG } from "./config.js";
 
 const FREE = ["pantry", "senior", "meal", "fridge"];
 const CATS = [
+  { id: "store", kinds: ["store"] },
+  { id: "market", kinds: ["market"] },
   { id: "free", kinds: FREE },
   { id: "pantry", kinds: ["pantry"] },
   { id: "senior", kinds: ["senior"] },
   { id: "meal", kinds: ["meal"] },
   { id: "fridge", kinds: ["fridge"] },
-  { id: "store", kinds: ["store"] },
-  { id: "market", kinds: ["market"] },
   { id: "rmp", kinds: ["rmp"] },
 ];
 const KDOT = { pantry: "k-pantry", senior: "k-senior", meal: "k-meal", fridge: "k-fridge", store: "k-store", market: "k-market", rmp: "k-meal" };
@@ -24,7 +24,7 @@ const FA_URL = "https://www.feedingamerica.org/find-your-local-foodbank";
 const MID = { lat: 32.85, lon: -117.0 };
 
 const F = {
-  cat: store.get("fcat", "free"),
+  cat: store.get("fcat", "store"),
   today: false, walk: false, drive: false,
   sort: "near",
   shown: PAGE,
@@ -45,16 +45,17 @@ const nowCache = { at: 0, today: "" };
 function soon(s) {
   if (s._soonAt === nowCache.at) return s._soon;
   let all = [];
+  const at = new Date(nowCache.at), td = s.tz ? todayISO(at, s.tz) : nowCache.today;
   for (const d of s.d || []) {
     if (!d.sc || d.conf === "call" || d.conf === "none") continue;
-    for (const x of nextTimes(d.sc, new Date(nowCache.at), 3)) all.push({ ...x, d });
+    for (const x of nextTimes(d.sc, at, 3, 45, s.tz)) all.push({ ...x, d, td });
   }
   all.sort((a, b) => (a.date + (a.t[0] || "")).localeCompare(b.date + (b.t[0] || "")));
   s._soonAt = nowCache.at; s._soon = all.slice(0, 3);
   return s._soon;
 }
 function whenText(x) {
-  const today = nowCache.today;
+  const today = x.td || nowCache.today;   // "today" in the site's own time zone
   const [y, m, d] = x.date.split("-").map(Number);
   const dt = new Date(Date.UTC(y, m - 1, d, 20));
   const tomorrow = new Date(Date.UTC(...today.split("-").map((v, i) => i === 1 ? v - 1 : +v), 20) + 864e5).toISOString().slice(0, 10);
@@ -75,7 +76,7 @@ function candidates() {
   for (const s of list) s._m = dist(here.lat, here.lon, s.lat, s.lon);
   const freeCat = cat.kinds.some(k => FREE.includes(k));
   if (freeCat) {
-    if (F.today) list = list.filter(s => soon(s).some(x => x.date === nowCache.today));
+    if (F.today) list = list.filter(s => soon(s).some(x => x.today));
     if (F.walk) list = list.filter(s => s.d.some(d => d.f?.includes("walk")));
     if (F.drive) list = list.filter(s => s.d.some(d => d.f?.includes("drive")));
     if (F.sort === "soon") {
@@ -146,7 +147,7 @@ function siteCard(s) {
   const d0 = s.d?.[0];
   const callFirst = free && !next.length;
   const isEn = S.lang === "en";
-  const addr = [s.a, s.c].filter(Boolean).join(", ");
+  const addr = [tidyCaps(s.a), tidyCaps(s.c)].filter(Boolean).join(", ");
   const when = free
     ? (next.length
       ? `<p class="when">${ico("clock", "i sm")}<span>${next.map((x, i) => `${i ? "<br>" : ""}${esc(whenText(x))}${s.d.length > 1 && (x.d.prog === "csfp" || x.d.f?.includes("senior")) ? " · " + esc(t("f_senior")) : ""}${x.now ? ` <span class="badge ok">${esc(t("open_now"))}</span>` : ""}`).join("")}</span></p>`
@@ -172,10 +173,11 @@ function siteCard(s) {
   const tel = telHref(s.ph), web = safeUrl(s.w);
   return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
     <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
-    <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}<span aria-hidden="true">·</span><span>${esc(addr)}</span></p>
+    <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}</p>
+    ${addr ? `<p class="addr"><bdi dir="ltr">${esc(addr)}</bdi></p>` : ""}
     ${free && stale(s) ? `<p class="notice stale">${ico("alert", "i sm")}<span>${esc(t("stale"))}</span></p>` : ""}
     ${when}
-    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <a href="${esc(h)}" dir="ltr">${esc(c.ph)}</a>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
+    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <bdi dir="ltr"><a href="${esc(h)}">${esc(c.ph)}</a></bdi>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
     ${free ? `<div class="row">${flagBadges({ f: flags })}</div>` : kindNote ? `<div class="row">${kindNote}</div>` : ""}
     <div class="acts">
       <a class="btn sm pri" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out>${ico("route", "i sm")} ${esc(t("directions"))}</a>
@@ -198,10 +200,18 @@ function catNote() {
     meal: t(R.partner ? "note_meal" : "us_note_meal"),
     fridge: t("note_fridge"),
   }[F.cat];
-  // outside San Diego County, free food comes from OpenStreetMap only: say so, and where to find the rest
-  const extra = !R.partner && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
+  // where we list only a few free food places nearby, say the list may be missing some, and where to find the rest
+  const extra = thinHere() && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
     ? `<div class="notice info">${ico("info")}<p>${esc(t("us_listings_note"))} <a href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${esc(t("us_fb_find"))}</a> · <a href="tel:211">${esc(t("call_211"))}</a></p></div>` : "";
   return (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
+}
+
+/* Fewer than 8 free food places within about 15 miles: the list is probably missing some */
+function thinHere() {
+  if (R.partner || S.loc?.lat == null) return !R.partner;
+  let n = 0;
+  for (const x of R.sites) if (FREE.includes(x.k) && dist(S.loc.lat, S.loc.lon, x.lat, x.lon) <= 24000 && ++n >= 8) return false;
+  return true;
 }
 
 function dataNote() {
@@ -236,8 +246,8 @@ function shareSite(s) {
   shareThing({ title: s.n, text, url: location.origin + location.pathname + "#/find/" + encodeURIComponent(s.id) });
 }
 
-function chip(id, label, on, attr = "data-cat") {
-  return `<button class="chip" type="button" ${attr}="${id}" aria-pressed="${on}">${label}</button>`;
+function chip(id, label, on, attr = "data-cat", kind = "") {
+  return `<button class="chip ${kind}" type="button" ${attr}="${id}" aria-pressed="${on}">${kind ? mark(kind) : ""}${label}</button>`;
 }
 
 async function loadMap() {
@@ -274,7 +284,9 @@ function setView(v) {
 export async function render(main, { args }) {
   main.innerHTML = `<p class="mute">${esc(t("loading"))}</p>`;
   R = await region();
-  if (args[0]) {
+  // #/find/in/<category> opens a category, e.g. links from Budget and Benefits to free food
+  if (args[0] === "in" && CATS.some(c => c.id === args[1])) { F.cat = args[1]; store.set("fcat", F.cat); F.shown = PAGE; }
+  else if (args[0]) {
     const s = R.byId.get(args[0]);
     if (s) { focusId = s.id; F.cat = !FREE.includes(s.k) ? s.k : s.k === "senior" && !S.senior ? "senior" : "free"; F.today = F.walk = F.drive = false; }
   }
@@ -286,11 +298,11 @@ export async function render(main, { args }) {
     ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
     <p class="small" id="f-msg" role="status"></p>
   </section>
-  <div class="chips" role="group" aria-label="${esc(t("show"))}" id="fcats">
+  <div class="chips cats" role="group" aria-label="${esc(t("show"))}" id="fcats">
   </div>
-  <div class="row between">
+  <div class="row between fbar">
     <div class="chips wrap" role="group" aria-label="${esc(t("filters"))}" id="fflt"></div>
-    <div class="viewtoggle" role="group" aria-label="${esc(t("view"))}">
+    <div class="viewtoggle seg" role="group" aria-label="${esc(t("view"))}">
       <button type="button" data-view="list" aria-pressed="true">${ico("list", "i sm")} ${esc(t("view_list"))}</button>
       <button type="button" data-view="map" aria-pressed="false">${ico("map", "i sm")} ${esc(t("view_map"))}</button>
     </div>
@@ -311,10 +323,10 @@ export async function render(main, { args }) {
   const paintFilters = () => {
     const freeCat = CATS.find(c => c.id === F.cat).kinds.some(k => FREE.includes(k));
     $("#fflt").innerHTML = freeCat ? [
-      chip("today", ico("cal", "i sm") + esc(t("flt_today")), F.today, "data-flt"),
-      chip("walk", esc(t("f_walk")), F.walk, "data-flt"),
-      chip("drive", esc(t("f_drive")), F.drive, "data-flt"),
-      chip("soon", ico("clock", "i sm") + esc(t("sort_soon")), F.sort === "soon", "data-flt"),
+      chip("today", esc(t("flt_today")), F.today, "data-flt", "ck"),
+      chip("walk", esc(t("f_walk")), F.walk, "data-flt", "ck"),
+      chip("drive", esc(t("f_drive")), F.drive, "data-flt", "ck"),
+      chip("soon", esc(t("sort_soon")), F.sort === "soon", "data-flt", "ck"),
     ].join("") : "";
     $$("[data-flt]").forEach(b => b.onclick = () => {
       const k = b.dataset.flt;
@@ -328,7 +340,7 @@ export async function render(main, { args }) {
   const paintCats = () => {
     const has = new Set([...R.sites, ...R.stores].map(s => s.k));
     const cats = CATS.filter(c => ["free", "pantry", "store"].includes(c.id) || c.kinds.some(k => has.has(k)));
-    if (!cats.some(c => c.id === F.cat)) F.cat = "free";
+    if (!cats.some(c => c.id === F.cat)) F.cat = "store";
     $("#fcats").innerHTML = cats.map(c => chip(c.id, `<span class="dot ${KDOT[c.kinds[0]]}" aria-hidden="true"></span>${esc(t("cat_" + c.id))}`, F.cat === c.id)).join("");
     $$("[data-cat]").forEach(b => b.onclick = () => {
       F.cat = b.dataset.cat; store.set("fcat", F.cat); F.shown = PAGE;
