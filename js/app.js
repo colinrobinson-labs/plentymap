@@ -43,26 +43,52 @@ function guessLang() {
 }
 const EN_NAMES = { en: "English", es: "Spanish", "zh-Hans": "Chinese, Simplified", "zh-Hant": "Chinese, Traditional", vi: "Vietnamese", fil: "Tagalog", ar: "Arabic", ht: "Haitian Creole", ko: "Korean", ru: "Russian", pt: "Portuguese", "fa-AF": "Dari", ps: "Pashto", so: "Somali", uk: "Ukrainian" };
 
+/* What Plenty Map is, said on the very first screen, before anyone has picked a language.
+   Shown in the language the phone asks for, and in English under it when that's different. */
+const INTRO = {
+  en: ["Free food help near you", "Food banks and free meals, stores that take EBT, cheap recipes, and help getting benefits. All free.", "Choose your language"],
+  es: ["Ayuda gratis con comida cerca de ti", "Bancos de comida y comidas gratis, tiendas que aceptan EBT, recetas baratas y ayuda para recibir beneficios. Todo gratis.", "Elige tu idioma"],
+  "zh-Hans": ["你附近的免费食物援助", "食物银行和免费餐食、接受 EBT 的商店、省钱食谱，以及申请福利的帮助。全部免费。", "选择你的语言"],
+  "zh-Hant": ["你附近的免費食物援助", "食物銀行和免費餐食、接受 EBT 的商店、省錢食譜，以及申請福利的協助。全部免費。", "選擇你的語言"],
+  vi: ["Hỗ trợ thực phẩm miễn phí gần bạn", "Ngân hàng thực phẩm và bữa ăn miễn phí, cửa hàng nhận EBT, công thức nấu ăn rẻ, và giúp xin trợ cấp. Tất cả đều miễn phí.", "Chọn ngôn ngữ của bạn"],
+  fil: ["Libreng tulong sa pagkain malapit sa iyo", "Mga food bank at libreng pagkain, mga tindahang tumatanggap ng EBT, murang recipe, at tulong sa pagkuha ng benepisyo. Libre lahat.", "Piliin ang iyong wika"],
+  ar: ["مساعدة غذائية مجانية بالقرب منك", "بنوك الطعام والوجبات المجانية، والمتاجر التي تقبل بطاقة EBT، ووصفات رخيصة، ومساعدة في الحصول على المعونات. كل ذلك مجانًا.", "اختر لغتك"],
+  ht: ["Èd gratis pou manje toupre w", "Bank manje ak manje gratis, magazen ki aksepte EBT, resèt bon mache, ak èd pou jwenn benefis. Tout gratis.", "Chwazi lang ou"],
+  ko: ["가까운 곳의 무료 식품 지원", "푸드뱅크와 무료 식사, EBT를 받는 가게, 저렴한 레시피, 복지 혜택 신청 도움까지. 모두 무료예요.", "언어를 선택하세요"],
+  ru: ["Бесплатная помощь с едой рядом с вами", "Продуктовые банки и бесплатное питание, магазины, где принимают EBT, недорогие рецепты и помощь с оформлением пособий. Всё бесплатно.", "Выберите язык"],
+  pt: ["Ajuda gratuita com comida perto de você", "Bancos de alimentos e refeições grátis, lojas que aceitam EBT, receitas baratas e ajuda para conseguir benefícios. Tudo grátis.", "Escolha seu idioma"],
+  "fa-AF": ["کمک رایگان غذایی نزدیک شما", "بانک‌های غذا و غذای رایگان، دکان‌هایی که EBT قبول می‌کنند، دستور پخت‌های ارزان، و کمک برای گرفتن کمک‌های دولتی. همه رایگان.", "زبان خود را انتخاب کنید"],
+  ps: ["ستاسو سره نږدې وړیا خوراکي مرسته", "د خوړو بانکونه او وړیا ډوډۍ، هغه دوکانونه چې EBT مني، ارزانه پخلي، او د ګټو په ترلاسه کولو کې مرسته. ټول وړیا.", "خپله ژبه وټاکئ"],
+  so: ["Caawimaad cunto oo bilaash ah oo kuu dhow", "Bangiyada cuntada iyo cunto bilaash ah, dukaamada aqbala EBT, cunto karis jaban, iyo caawimaad helitaanka gargaarka. Dhammaan waa bilaash.", "Dooro luqaddaada"],
+  uk: ["Безкоштовна допомога з їжею поруч із вами", "Продуктові банки й безкоштовне харчування, магазини, де приймають EBT, недорогі рецепти та допомога з оформленням пільг. Усе безкоштовно.", "Оберіть мову"],
+};
+
 function showWelcome(changing = false) {
   const w = $("#welcome"), app = $("#app");
   app.hidden = true; w.hidden = false;
   const g = changing ? S.lang : guessLang();
-  const order = [LANG[g], ...LANGS.filter(l => l.code !== g)];
+  const L = LANG[g], I = INTRO[g] || INTRO.en, E = INTRO.en;
+  const others = LANGS.filter(l => l.code !== g);
+  const btn = l => `<li><button type="button" data-l="${l.code}"><span class="ln" lang="${l.code}" dir="${l.dir}">${esc(l.name)}</span>${l.name !== EN_NAMES[l.code] ? `<span class="le" lang="en">${EN_NAMES[l.code]}</span>` : ""}</button></li>`;
   w.innerHTML = `<div class="welcome">
-    <div class="mark">${MARK}</div>
-    <div class="name" lang="en">Plenty Map</div>
-    <p class="tagline" lang="en">Find food. Cook cheap. Get help.</p>
-    <p class="tagline2" lang="en">In your language.</p>
-    <h1 class="sr" lang="en">Choose your language</h1>
-    <ul class="langs" role="list">${order.map(l => `<li><button type="button" data-l="${l.code}" lang="${l.code}" dir="${l.dir}" ${l.code === g ? 'aria-current="true"' : ""}><b>${esc(l.name)}</b><small lang="en" dir="ltr">${EN_NAMES[l.code]}</small></button></li>`).join("")}</ul>
-    <p class="note" lang="en">No account. No ads. What you type stays on your phone.</p>
+    <div class="brandrow"><div class="mark">${MARK}</div><div><div class="name" lang="en" dir="ltr">Plenty Map</div>
+      <p class="tagline" lang="en" dir="ltr">Find food. Cook cheap. Get help.</p></div></div>
+    <section class="intro" aria-labelledby="w-h">
+      <h1 id="w-h" tabindex="-1" lang="${g}" dir="${L.dir}">${esc(I[0])}</h1>
+      <p lang="${g}" dir="${L.dir}">${esc(I[1])}</p>
+      ${g !== "en" ? `<p class="en" lang="en" dir="ltr"><b>${esc(E[0])}.</b> ${esc(E[1])}</p>` : ""}
+    </section>
+    <h2 class="pick" id="w-pick"><span lang="${g}" dir="${L.dir}">${esc(I[2])}</span>${g !== "en" ? `<span class="en" lang="en" dir="ltr">${esc(E[2])}</span>` : ""}</h2>
+    <button type="button" class="langmain" data-l="${g}"><span class="ln" lang="${g}" dir="${L.dir}">${esc(L.name)}</span>${ico("arrow", "i go")}</button>
+    <ul class="langs" role="list" aria-labelledby="w-pick">${others.map(btn).join("")}</ul>
+    <p class="note" lang="en" dir="ltr">No account. No ads. What you type stays on your phone.</p>
   </div>`;
   $$("[data-l]", w).forEach(b => b.onclick = async () => {
     await loadLang(b.dataset.l); save("lang");
     if (changing) { lastView = null; hideWelcome(); shell(); route(); return; }
     if (S.loc || store.get("setupDone")) { hideWelcome(); shell(); route(); } else showSetup();
   });
-  ($("[aria-current]", w) || $("button", w))?.focus({ preventScroll: true });
+  $("#w-h", w)?.focus({ preventScroll: true });
 }
 function hideWelcome() { $("#welcome").hidden = true; $("#welcome").innerHTML = ""; $("#app").hidden = false; }
 

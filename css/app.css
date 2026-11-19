@@ -157,17 +157,6 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 
 /* ---------- welcome / language picker ---------- */
 .welcome{min-height:100dvh;background:var(--board);color:var(--chalk);display:flex;flex-direction:column;align-items:center;padding:calc(28px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
-.welcome .mark{width:92px;height:92px;margin-block-end:12px}
-.welcome .name{font-family:"Caprasimo",Georgia,serif;font-size:40px;line-height:1}
-.welcome .tagline{margin-block:10px 4px;font-family:"Caprasimo",Georgia,serif;font-size:19px;color:var(--yolk);text-align:center}
-.welcome .tagline2{font-size:16px;opacity:.85;margin-block-end:22px}
-.langs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:10px;width:100%;max-width:760px;padding:0;margin:0;list-style:none}
-.langs button{width:100%;min-height:62px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1px;padding:8px 14px;border-radius:14px;border:1.5px solid rgba(241,235,221,.28);background:rgba(241,235,221,.04);color:var(--chalk);text-align:start}
-.langs button:hover,.langs button:focus-visible{border-color:var(--yolk);background:rgba(245,192,74,.1)}
-.langs button[aria-current="true"]{border-color:var(--yolk);background:var(--yolk);color:var(--board)}
-.langs b{font-size:19px;font-weight:700;line-height:1.25}
-.langs small{font-size:13px;opacity:.75}
-.welcome .note{margin-block-start:22px;font-size:14px;opacity:.75;text-align:center;max-width:46ch}
 .setup{width:100%;max-width:520px;background:var(--bg);color:var(--ink);border-radius:20px;padding:22px 18px;margin-block-start:8px}
 .setup h2{margin-block-end:6px}
 
@@ -480,3 +469,30 @@ legend{padding:0;margin-block-end:4px}
 .chip.ck,.chip.opt,.chip.out{white-space:normal;text-align:start;max-width:100%;line-height:1.25;padding-block:8px}
 .tile>span{min-width:0;max-width:100%;overflow-wrap:anywhere;hyphens:auto}
 @media (max-width:340px){.tile{font-size:14.5px;padding-inline:10px}}
+
+/* ---------- first screen: what this is, then languages ---------- */
+.welcome>*{width:100%;max-width:640px}
+.brandrow{display:flex;align-items:center;justify-content:center;gap:14px}
+.welcome .mark{width:64px;height:64px;flex:none}
+.welcome .name{font-family:"Caprasimo",Georgia,serif;font-size:36px;line-height:1}
+.welcome .tagline{margin:6px 0 0;font-family:"Caprasimo",Georgia,serif;font-size:16.5px;color:var(--yolk)}
+.intro{margin-block:22px 0;padding:18px 18px 16px;border-radius:16px;background:var(--chalk);color:var(--board);box-shadow:0 12px 30px -18px rgba(0,0,0,.6)}
+.intro h1{font-family:"Caprasimo",Georgia,serif;font-weight:400;font-size:clamp(23px,6.4vw,30px);line-height:1.15;color:var(--board);margin:0 0 8px}
+.intro h1:focus{outline:none}
+.intro h1:not(:lang(en)):not(:lang(es)):not(:lang(pt)):not(:lang(fil)):not(:lang(ht)):not(:lang(so)){font-family:var(--f-body);font-weight:800}
+.intro p{margin:0;font-size:16.5px;line-height:1.5;color:#2C4536}
+.intro p.en{margin-block-start:10px;padding-block-start:10px;border-block-start:1.5px dashed #CFC5AC;font-size:14.5px;color:#4A5D50}
+.welcome .pick{margin-block:24px 10px;font-family:var(--f-body);font-size:15px;font-weight:800;letter-spacing:.02em;color:var(--chalk);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.welcome .pick .en{font-weight:600;opacity:.75}
+.langmain{width:100%;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;border-radius:14px;border:0;background:var(--yolk);color:var(--board);font-weight:800;font-size:20px;text-align:start}
+.langmain:hover{background:var(--yolk-2)}
+.langmain .go{width:24px;height:24px;stroke-width:2.4}
+[dir="rtl"] .langmain .go{transform:scaleX(-1)}
+.langs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0;margin:10px 0 0;list-style:none}
+@media (min-width:600px){.langs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.langs button{width:100%;min-height:58px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;padding:8px 12px;border-radius:12px;border:1.5px solid rgba(241,235,221,.24);background:rgba(241,235,221,.05);color:var(--chalk);text-align:start}
+.langs button:hover,.langs button:focus-visible{border-color:var(--yolk);background:rgba(245,192,74,.12)}
+.langs .ln{font-size:17px;font-weight:700;line-height:1.3}
+.langs .le{font-size:12.5px;opacity:.75;line-height:1.3}
+.welcome .note{margin-block-start:20px;font-size:14px;opacity:.75;text-align:center}
+@media (max-width:340px){.welcome .mark{width:52px;height:52px}.welcome .name{font-size:30px}.welcome .tagline{font-size:14.5px}.langs .ln{font-size:16px}.langs button{padding-inline:10px}}
