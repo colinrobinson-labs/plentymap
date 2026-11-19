@@ -1,6 +1,6 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
    and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
@@ -45,16 +45,17 @@ const nowCache = { at: 0, today: "" };
 function soon(s) {
   if (s._soonAt === nowCache.at) return s._soon;
   let all = [];
+  const at = new Date(nowCache.at), td = s.tz ? todayISO(at, s.tz) : nowCache.today;
   for (const d of s.d || []) {
     if (!d.sc || d.conf === "call" || d.conf === "none") continue;
-    for (const x of nextTimes(d.sc, new Date(nowCache.at), 3)) all.push({ ...x, d });
+    for (const x of nextTimes(d.sc, at, 3, 45, s.tz)) all.push({ ...x, d, td });
   }
   all.sort((a, b) => (a.date + (a.t[0] || "")).localeCompare(b.date + (b.t[0] || "")));
   s._soonAt = nowCache.at; s._soon = all.slice(0, 3);
   return s._soon;
 }
 function whenText(x) {
-  const today = nowCache.today;
+  const today = x.td || nowCache.today;   // "today" in the site's own time zone
   const [y, m, d] = x.date.split("-").map(Number);
   const dt = new Date(Date.UTC(y, m - 1, d, 20));
   const tomorrow = new Date(Date.UTC(...today.split("-").map((v, i) => i === 1 ? v - 1 : +v), 20) + 864e5).toISOString().slice(0, 10);
@@ -75,7 +76,7 @@ function candidates() {
   for (const s of list) s._m = dist(here.lat, here.lon, s.lat, s.lon);
   const freeCat = cat.kinds.some(k => FREE.includes(k));
   if (freeCat) {
-    if (F.today) list = list.filter(s => soon(s).some(x => x.date === nowCache.today));
+    if (F.today) list = list.filter(s => soon(s).some(x => x.today));
     if (F.walk) list = list.filter(s => s.d.some(d => d.f?.includes("walk")));
     if (F.drive) list = list.filter(s => s.d.some(d => d.f?.includes("drive")));
     if (F.sort === "soon") {
@@ -146,7 +147,7 @@ function siteCard(s) {
   const d0 = s.d?.[0];
   const callFirst = free && !next.length;
   const isEn = S.lang === "en";
-  const addr = [s.a, s.c].filter(Boolean).join(", ");
+  const addr = [tidyCaps(s.a), tidyCaps(s.c)].filter(Boolean).join(", ");
   const when = free
     ? (next.length
       ? `<p class="when">${ico("clock", "i sm")}<span>${next.map((x, i) => `${i ? "<br>" : ""}${esc(whenText(x))}${s.d.length > 1 && (x.d.prog === "csfp" || x.d.f?.includes("senior")) ? " · " + esc(t("f_senior")) : ""}${x.now ? ` <span class="badge ok">${esc(t("open_now"))}</span>` : ""}`).join("")}</span></p>`
@@ -172,10 +173,11 @@ function siteCard(s) {
   const tel = telHref(s.ph), web = safeUrl(s.w);
   return `<li class="card site${s.id === focusId ? " hl" : ""}" id="s-${esc(s.id)}" data-id="${esc(s.id)}">
     <h2 class="sname"><span class="kdot ${KDOT[s.k]}" aria-hidden="true"></span> ${esc(s.n)}</h2>
-    <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}<span aria-hidden="true">·</span><span>${esc(addr)}</span></p>
+    <p class="meta"><span>${esc(t("kind_" + s.k))}</span>${S.loc ? `<span aria-hidden="true">·</span><span>${esc(miles(s._m))}</span>` : ""}</p>
+    ${addr ? `<p class="addr"><bdi dir="ltr">${esc(addr)}</bdi></p>` : ""}
     ${free && stale(s) ? `<p class="notice stale">${ico("alert", "i sm")}<span>${esc(t("stale"))}</span></p>` : ""}
     ${when}
-    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <a href="${esc(h)}" dir="ltr">${esc(c.ph)}</a>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
+    ${free ? (() => { const c = callAhead(s), h = telHref(c.ph); return h ? `<p class="callahead">${ico("phone", "i sm")}<span>${esc(t("call_first"))}${s.ph ? "" : ` <bdi dir="ltr"><a href="${esc(h)}">${esc(c.ph)}</a></bdi>`}${c.who && c.who !== "211" ? ` <span class="mute">(${esc(c.who)})</span>` : ""}</span></p>` : ""; })() : ""}
     ${free ? `<div class="row">${flagBadges({ f: flags })}</div>` : kindNote ? `<div class="row">${kindNote}</div>` : ""}
     <div class="acts">
       <a class="btn sm pri" href="${esc(dirUrl(s))}" target="_blank" rel="noopener noreferrer" data-out>${ico("route", "i sm")} ${esc(t("directions"))}</a>

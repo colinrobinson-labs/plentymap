@@ -21,8 +21,9 @@ function card(r) {
       <h3>${esc(tx.t)}${saved ? ` <span class="sr">(${esc(t("saved"))})</span>` : ""}</h3>
       <span class="meta">
         <span class="tag">${esc(money(perServing(r)))}<small>${esc(t("per_serving"))}</small></span>
-        <span>${ico("clock", "i sm")} ${esc(t("mins", { n: r.mins }))}</span>
-        <span>${esc(t("serves", { n: r.serves }))}</span>
+        <span class="tm">${ico("clock", "i sm")}<span>${esc(t("mins", { n: r.mins }))}</span><span aria-hidden="true">·</span><span>${esc(t("serves", { n: r.serves }))}</span></span>
+      </span>
+      <span class="tags">
         ${f.vegan ? `<span class="badge ok">${esc(t("diet_vegan"))}</span>` : f.veg ? `<span class="badge ok">${esc(t("diet_veg"))}</span>` : ""}
         ${r.kid ? `<span class="badge">${esc(t("kid_ok"))}</span>` : ""}
         ${saved ? `<span class="badge yolk">${ico("heart", "i sm")}</span>` : ""}
@@ -38,6 +39,7 @@ function paint() {
   const saved = vis.filter(r => S.saved.has(r.id));
   const cu = activeCuisine();
   $("#rcount").textContent = t("recipes_n", { n: vis.length });
+  if ($("#fsum")) $("#fsum").textContent = fsum();
   $("#rlist").innerHTML = !vis.length
     ? `<div class="card empty">${ico("pot")}<p><b>${esc(t("no_recipes"))}</b></p><p class="mute">${esc(t("no_recipes_p"))}</p></div>`
     : [
@@ -61,10 +63,18 @@ const fcount = () => (S.diet !== "any") + S.avoid.size;
 const cnt = (id, n) => `<span class="cnt" id="${id}" ${n ? "" : "hidden"}>${n ? num(n) : ""}</span>`;
 const setCnt = (id, n) => { const el = $("#" + id); if (el) { el.textContent = n ? num(n) : ""; el.hidden = !n; } };
 
+function fsum() {
+  const k = S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none");
+  const c = S.maxCost ? t("under", { m: money(S.maxCost) }) : t("any_cost");
+  const n = fcount() + S.have.size;
+  return [k, c].join(" · ") + (n ? " · +" + num(n) : "");
+}
 function filters() {
   const cu = activeCuisine();
   const grp = (id, title, body) => `<div class="fg" role="group" aria-labelledby="${id}"><div class="fg-h" id="${id}">${esc(title)}</div><div class="fg-c">${body}</div></div>`;
+  const wide = matchMedia("(min-width: 760px)").matches;
   return `<div class="card filters" id="filters">
+    ${wide ? "" : `<details class="fold allfl"><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
     ${grp("l-kit", t("kit_q"), `<div class="tiles">
         ${tile("stove", "flame", esc(t("kit_stove")), S.kit.includes("stove"))}
         ${tile("hotplate", "plug", esc(t("kit_hotplate")), S.kit.includes("hotplate"))}
@@ -74,7 +84,7 @@ function filters() {
     ${grp("l-cost", t("budget_q"), `<div class="seg n${BUDGETS.length}">
         ${BUDGETS.map(b => segBtn("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
       </div>`)}
-    <details class="fold morefl" ${matchMedia("(min-width: 760px)").matches ? "open" : ""}><summary><span>${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}${ico("chev", "i chev")}</summary><div class="fold-b">
+    <details class="fold morefl" ${wide ? "open" : ""}><summary><span>${esc(t("more_filters"))}</span>${cnt("flcount", fcount())}${ico("chev", "i chev")}</summary><div class="fold-b">
     ${grp("l-lvl", t("comfort_q"), `<div class="seg n3">
         ${[1, 2, 3].map(l => segBtn("data-lvl", l, esc(t("lvl_" + l)), S.comfort === l)).join("")}
       </div>`)}
@@ -85,13 +95,14 @@ function filters() {
         ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
       </div>`)}
     <div class="fg"><label class="fg-h" for="cusel">${esc(t("cu_q"))}</label><div class="fg-c">
-      <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}${c === langDefaultCuisine() ? " ✓" : ""}</option>`).join("")}</select>
+      <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}</option>`).join("")}</select>
     </div></div>
     </div></details>
     <details class="fold"><summary><span>${esc(t("have_q"))}</span>${cnt("hvcount", S.have.size)}${ico("chev", "i chev")}</summary><div class="fold-b">
       <div class="chips wrap" role="group" aria-label="${esc(t("have_q"))}">
         ${PANTRY.filter(id => FD.ing[id]).map(id => chip("data-have", id, esc(name(id)), S.have.has(id))).join("")}
       </div></div></details>
+    ${wide ? "" : "</div></details>"}
   </div>`;
 }
 

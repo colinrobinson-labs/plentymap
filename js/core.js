@@ -74,7 +74,7 @@ async function getJSON(url) {
       if (r.ok) return (cache[url] = await r.json());
     } catch { /* offline or site down: use the copy inside the app */ }
   }
-  const r = await fetch(url, { cache: "no-cache" });
+  const r = await fetch(url, { cache: "no-cache", signal: AbortSignal.timeout?.(15000) });
   if (!r.ok) throw new Error(url + " " + r.status);
   return (cache[url] = await r.json());
 }
@@ -103,6 +103,7 @@ export function t(k, v) {
   s ??= STR[k] ?? EN[k] ?? k;
   if (v) for (const x in v) s = s.split("{" + x + "}").join(x === "n" ? num(v[x]) : v[x]);
   if (s.includes("{snap}")) s = s.split("{snap}").join(VARS.snap);
+  if (LANG[S.lang]?.dir === "rtl") s = s.replace(/\d+(?:[-\u2013]\d+)+/g, m => "\u2066" + m + "\u2069");
   return s;
 }
 export const hasT = k => k in STR || k in EN;
@@ -123,7 +124,7 @@ const NF = {};
 const nfo = (o) => { const k = S.lang + JSON.stringify(o); return (NF[k] ||= new Intl.NumberFormat(S.lang + "-u-nu-latn", o)); };
 export const num = (n, d = 0) => nfo({ maximumFractionDigits: d }).format(n);
 /* Money always goes through the active market's currency (config.js), shown in the reader's language. */
-export const money = (v, cents = true) => nfo({ style: "currency", currency: MARKET.currency, minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }).format(v);
+export const money = (v, cents = true) => nfo({ style: "currency", currency: MARKET.currency, currencyDisplay: "narrowSymbol", minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }).format(v);
 export function dateFmt(d, o) { return new Intl.DateTimeFormat(S.lang + "-u-nu-latn", { timeZone: "America/Los_Angeles", ...o }).format(d); }
 export const dayName = (wd, style = "long") => dateFmt(new Date(Date.UTC(2024, 0, 7 + wd, 20)), { weekday: style }); // 2024-01-07 was a Sunday
 export function timeFmt(hhmm) {
@@ -132,10 +133,12 @@ export function timeFmt(hhmm) {
 }
 export const miles = (m) => {
   const mi = m / 1609.34;
-  return mi < 0.1 ? t("dist_here") : t("dist_mi", { d: num(mi, mi < 10 ? 1 : 0) });
+  if (mi < 0.1) return S.loc?.src === "gps" ? t("dist_here") : t("dist_mi", { d: "< " + num(0.1, 1) });
+  return t("dist_mi", { d: num(mi, mi < 10 ? 1 : 0) });
 };
 
 /* ---------- html ---------- */
+export const tidyCaps = s => !s || /[a-z]/.test(s) ? s ?? "" : s.toLowerCase().replace(/(^|[\s\-\/(#])([a-z])/g, (m, a, b) => a + b.toUpperCase()).replace(/\b(Ne|Nw|Se|Sw|Po)\b/g, m => m.toUpperCase()).replace(/\b(\d+)(St|Nd|Rd|Th)\b/g, (m, n, x) => n + x.toLowerCase());
 export const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 export const $ = (s, r = document) => r.querySelector(s);
 export const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -149,9 +152,13 @@ export function toast(msg, act) {
   const d = document.createElement("div");
   d.className = "toast"; d.setAttribute("role", "status"); d.textContent = msg;
   // an optional link, e.g. to where the thing just went
-  if (act) { const a = document.createElement("a"); a.href = act.href; a.textContent = act.label; a.onclick = () => { act.go?.(); d.remove(); }; d.append(" ", a); }
+  if (act) {
+    const a = document.createElement(act.href ? "a" : "button");
+    if (act.href) a.href = act.href; else { a.type = "button"; a.className = "link"; }
+    a.textContent = act.label; a.onclick = () => { act.go?.(); d.remove(); }; d.append(" ", a);
+  }
   document.body.appendChild(d);
-  clearTimeout(toastT); toastT = setTimeout(() => d.remove(), act ? 6000 : 2600);
+  clearTimeout(toastT); if (!act?.stay) toastT = setTimeout(() => d.remove(), act ? 6000 : 2600);
 }
 /* Announce to screen readers without a visual toast */
 export function announce(msg) {
@@ -175,6 +182,8 @@ const IC = {
   share: '<path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V12"/>',
   heart: '<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>',
   x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+  pencil: '<path d="M4 20h4L19 9l-4-4L4 16v4zM13.5 6.5l4 4"/>',
   chev: '<path d="m6 9 6 6 6-6"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   back: '<path d="M19 12H5M11 6l-6 6 6 6"/>',

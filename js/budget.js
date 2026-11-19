@@ -9,7 +9,7 @@ let FD;
 const AISLES = ["prod", "pantry", "cans", "dairy", "meat", "frozen", "bread", "spice"];
 const portions = () => S.hh.a + S.hh.k * 0.7;
 const people = () => S.hh.a + S.hh.k;
-const planKey = () => [2, S.hh.a, S.hh.k, S.diet, [...S.avoid].sort().join("+"), S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|");
+const planKey = () => [3, S.hh.a, S.hh.k, S.diet, [...S.avoid].sort().join("+"), S.kit.join("+"), S.comfort, activeCuisine(), S.meals.b, S.meals.l, S.meals.d].join("|");
 
 function pools() {
   const ok = r => canCook(r) && dietOk(r) && r.lvl <= S.comfort;
@@ -37,36 +37,39 @@ function makePlan(keep = true) {
   const locked = keep ? S.plan?.locked || {} : {};
   const p = pools(), por = portions(), days = [], onList = new Set(), used = { b: new Set(), l: new Set(), d: new Set() };
   const note = id => FD.byId[id]?.ing.forEach(([i]) => onList.add(i));
-  let pot = null, potN = 0;
+  let pots = [], potN = 0;
   const bfast = [];
   for (let i = 0; i < 2 && p.b.length; i++) { const id = pick(p.b, new Set(bfast), onList); if (id) { bfast.push(id); note(id); } }
   for (let i = 0; i < 7; i++) {
     const day = {};
     if (S.meals.b && bfast.length) day.b = { id: bfast[i % bfast.length] };
     if (S.meals.l) {
-      if (pot && pot.left >= por) { day.l = { id: pot.id, pot: pot.n, lo: 1 }; pot.left -= por; }
+      const lp = pots.find(x => x.left >= por);
+      if (lp) { day.l = { id: lp.id, pot: lp.n, lo: 1 }; lp.left -= por; }
       else if (p.l.length) {
-        const avoid = new Set([...used.l, pot?.id].filter(Boolean));
+        const avoid = new Set([...used.l, ...pots.map(x => x.id)]);
         if (used.l.size >= p.l.length) used.l.clear();
         const id = pick(p.l, avoid, onList); if (id) { day.l = { id }; used.l.add(id); note(id); }
       }
     }
     if (S.meals.d) {
-      if (pot && pot.left >= por && pot.dinners < 2) { day.d = { id: pot.id, pot: pot.n, lo: 1 }; pot.left -= por; pot.dinners++; }
+      const dp = pots.find(x => x.left >= por && x.dinners < 2 && x.id !== day.l?.id && x.id !== days[i - 1]?.d?.id);
+      if (dp) { day.d = { id: dp.id, pot: dp.n, lo: 1 }; dp.left -= por; dp.dinners++; }
       else if (p.d.length) {
         if (used.d.size >= p.d.length) used.d.clear();
-        const avoid = new Set([...used.d, day.l?.id].filter(Boolean));
+        const avoid = new Set([...used.d, day.l?.id, days[i - 1]?.d?.id, ...pots.map(x => x.id)].filter(Boolean));
         const id = pick(p.d, avoid, onList);
         if (id) {
           const r = FD.byId[id], batch = r.serves * Math.max(1, Math.ceil(por / r.serves));
-          pot = { id, n: ++potN, left: batch - por, dinners: 1, batch };
-          day.d = { id, pot: pot.n, batch }; used.d.add(id); note(id);
+          const pot = { id, n: ++potN, left: batch - por, dinners: 1, batch };
+          pots.push(pot); day.d = { id, pot: pot.n, batch }; used.d.add(id); note(id);
         }
       }
     }
     days.push(day);
+    pots = pots.filter(x => x.left >= por);
   }
-  S.plan = { v: 2, days, key: planKey(), locked: {} };
+  S.plan = { v: 3, days, key: planKey(), locked: {} };
   // meals someone picked by hand stay, when they still fit the new choices
   for (const [k, id] of Object.entries(locked)) {
     const i = +k[0], m = k[1];
@@ -200,18 +203,20 @@ function paint() {
   const weekly = S.weekly ?? Math.round(snapMonth / 4.33);
   if (weekly && S.plan.fitFor !== weekly + "|" + S.plan.key && totals().eat > weekly) fitBudget(weekly);
   const tot = totals();
-  const pct = weekly ? tot.eat / weekly : 0;
-  const over = weekly && tot.eat - weekly >= 0.5;
-  $("#wk").placeholder = money(Math.round(snapMonth / 4.33), false);
+  const pct = weekly ? tot.trip / weekly : 0;
+  const over = weekly && tot.trip - weekly >= 0.5;          // the first shop is more than the budget
+  const tight = weekly && tot.eat - weekly >= 0.5;          // even the weekly cost is more than the budget
+  $("#wkhint").textContent = t("weekly_hint", { m: money(Math.round(snapMonth / 4.33), false) });
   $("#kpis").innerHTML = `
+    <div class="card kpi"><b>${esc(money(tot.trip, false))}</b><span>${esc(t("trip_cost"))}</span><span class="tiny mute">${esc(t("trip_note"))}</span></div>
     <div class="card kpi"><b>${esc(money(tot.eat, false))}</b><span>${esc(t("week_cost"))}</span></div>
     <div class="card kpi"><b>${esc(money(tot.eat / Math.max(1, n) / 7))}</b><span>${esc(t("per_person_day"))}</span></div>
-    <div class="card kpi"><b>${esc(money(tot.trip, false))}</b><span>${esc(t("trip_cost"))}</span><span class="tiny mute">${esc(t("trip_note"))}</span></div>
     <div class="card kpi"><b>${esc(money(weekly, false))}</b><span>${esc(t(S.weekly == null ? "budget_suggest" : "your_budget"))}</span>
       <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(Math.min(1, pct) * 100)}" aria-label="${esc(t("of_budget", { p: num(Math.round(pct * 100)) }))}"><i class="${over ? "over" : ""}"></i></div>
-      <span class="small">${esc(over ? t("over_budget", { m: money(tot.eat - weekly, false) }) : t("under_budget", { m: money(Math.max(0, weekly - tot.eat), false) }))}</span></div>`;
+      <span class="small">${esc(over ? t("over_budget", { m: money(tot.trip - weekly, false) }) : t("under_budget", { m: money(Math.max(0, weekly - tot.trip), false) }))}</span></div>`;
   $("#kpis .meter i").style.width = Math.min(100, Math.round(pct * 100)) + "%";
-  $("#blow").innerHTML = over ? `<div class="notice warn">${ico("alert")}<p>${esc(t("budget_low", { m: money(tot.eat, false) }))} <a href="#/find/in/free">${esc(t("free_near"))}</a></p></div>` : "";
+  $("#blow").innerHTML = tight ? `<div class="notice warn">${ico("alert")}<p>${esc(t("budget_low", { m: money(tot.eat, false) }))} <a href="#/find/in/free">${esc(t("free_near"))}</a></p></div>`
+    : over ? `<div class="notice info">${ico("info")}<p>${esc(t("trip_over", { t: money(tot.trip, false), m: money(tot.eat, false) }))}</p></div>` : "";
 
   $("#week").innerHTML = S.plan.days.map((d, i) => `<div class="card day"><h3>${esc(dayName((i + 1) % 7))}</h3>
     ${["b", "l", "d"].filter(m => d[m]).map(m => { const x = d[m], nm = rt(x.id).t; return `<div class="meal"><span class="k">${esc(t("meal_" + m))}</span>
@@ -229,7 +234,7 @@ function paint() {
       <input type="checkbox" id="g-${it.id}" data-got="${it.id}" ${S.got.has(it.id) ? "checked" : ""}>
       <div class="nm"><label for="g-${it.id}">${esc(name(it.id))}<small>${esc(it.have ? t("have_it") : `${num(it.n)} × ${pkgLabel(it.id)}`)}</small></label>
         <span class="ln"><button class="link small" type="button" data-have="${it.id}">${esc(it.have ? t("need_it") : t("have_it_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>${it.have ? "" : `<button class="link small tipbtn" type="button" data-tip="${it.id}" aria-expanded="false" aria-controls="tip-${it.id}">${ico("search", "i sm")}${esc(t("tips_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>`}</span></div>
-      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}">${esc(money(it.c))}</button>
+      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}"><bdi>${esc(money(it.c))}</bdi>${ico("pencil", "i sm")}</button>
       <div class="tip" id="tip-${it.id}" hidden></div>`}
     </div>`).join("")}`).join("") || `<p class="mute">${esc(t("list_empty"))}</p>`;
   $$("[data-got]").forEach(c => c.onchange = () => { c.checked ? S.got.add(c.dataset.got) : S.got.delete(c.dataset.got); save("got"); c.parentElement.classList.toggle("done", c.checked); });
@@ -261,28 +266,41 @@ for (const [k, ids] of Object.entries({
 // items where the store's own brand is the best value: the search asks for it by name
 const OWN = new Set(["rice", "lentils", "peas_d", "dbeans", ...Object.keys(TIP).filter(id => ["store", "lowna", "frozen", "block", "plain"].includes(TIP[id]))]);
 const QUERY = { onion: "yellow onions 3 lb bag", potato: "russet potatoes 5 lb bag", dbeans: "dried pinto beans", cbeans: "canned black beans", chleg: "bone-in chicken thighs", buckwheat: "buckwheat groats", peas_d: "dried split peas" };
-const SHOPS = [
-  ["Walmart", "https://www.walmart.com/search?q=", "Great Value"],
-  ["Kroger", "https://www.kroger.com/search?query=", "Kroger"],
-  ["Target", "https://www.target.com/s?searchTerm=", "Good & Gather"],
-];
+const KROGER = { // state -> [store name, site]; all of them carry the Kroger store brand
+  CA: ["Ralphs", "ralphs.com"], OR: ["Fred Meyer", "fredmeyer.com"], WA: ["Fred Meyer", "fredmeyer.com"], AK: ["Fred Meyer", "fredmeyer.com"], ID: ["Fred Meyer", "fredmeyer.com"],
+  CO: ["King Soopers", "kingsoopers.com"], AZ: ["Fry's", "frysfood.com"], UT: ["Smith's", "smithsfoodanddrug.com"], NV: ["Smith's", "smithsfoodanddrug.com"],
+  NM: ["Smith's", "smithsfoodanddrug.com"], MT: ["Smith's", "smithsfoodanddrug.com"], WY: ["Smith's", "smithsfoodanddrug.com"],
+  NC: ["Harris Teeter", "harristeeter.com"], SC: ["Harris Teeter", "harristeeter.com"], MD: ["Harris Teeter", "harristeeter.com"], DE: ["Harris Teeter", "harristeeter.com"], DC: ["Harris Teeter", "harristeeter.com"],
+  KS: ["Dillons", "dillons.com"], NE: ["Baker's", "bakersplus.com"], IL: ["Mariano's", "marianos.com"], WI: ["Pick 'n Save", "picknsave.com"],
+  OH: 1, KY: 1, TN: 1, GA: 1, TX: 1, MI: 1, IN: 1, WV: 1, AL: 1, MS: 1, AR: 1, LA: 1, VA: 1, SD: 0,
+};
+function shops() {
+  const k = KROGER[stateOf()];
+  const kr = Array.isArray(k) ? [k[0], `https://www.${k[1]}/search?query=`, "Kroger"] : k === 1 ? ["Kroger", "https://www.kroger.com/search?query=", "Kroger"] : null;
+  return [["Walmart", "https://www.walmart.com/search?q=", "Great Value"], kr, ["Target", "https://www.target.com/s?searchTerm=", "Good & Gather"]].filter(Boolean);
+}
 function tipHtml(id) {
   const q = QUERY[id] || ingNameEn(id).replace(/\s*\(.*?\)/g, "").toLowerCase();
-  const links = SHOPS.map(([n, u, own]) => `<a href="${esc(u + encodeURIComponent((OWN.has(id) ? own + " " : "") + q))}" target="_blank" rel="noopener noreferrer" data-out>${esc(n)} ${ico("ext", "i sm")}</a>`).join("");
+  const links = shops().map(([n, u, own]) => `<a href="${esc(u + encodeURIComponent((OWN.has(id) ? own + " " : "") + q))}" target="_blank" rel="noopener noreferrer" data-out>${esc(n)} ${ico("ext", "i sm")}</a>`).join("");
   return `${TIP[id] ? `<p>${esc(t("tip_" + TIP[id]))}</p>` : ""}<p class="at"><span>${esc(t("find_at"))}</span>${links}</p>`;
 }
 
 function editPrice(id, btn) {
   const x = FD.ing[id];
-  const f = document.createElement("form"); f.className = "row";
+  const f = document.createElement("form"); f.className = "pedit";
+  const cur = money(0).replace(/[\d.,\s\u00a0\u200f\u200e]/g, "");
   f.innerHTML = `<label class="sr" for="pe">${esc(t("price_for", { p: pkgLabel(id) }))}</label>
-    <input class="in" id="pe" inputmode="decimal" size="6" value="${(price(id) * x.per).toFixed(2)}">
+    <span class="pbox" dir="ltr"><span class="cur" aria-hidden="true">${esc(cur)}</span><input class="in" id="pe" inputmode="decimal" autocomplete="off" value="${(price(id) * x.per).toFixed(2)}"></span>
     <button class="btn sm" type="submit">${esc(t("save"))}</button>
     ${S.prices[id] != null ? `<button class="link small" type="button" id="prs">${esc(t("reset"))}</button>` : ""}`;
   btn.replaceWith(f); const inp = $("#pe", f); inp.focus(); inp.select();
   f.onsubmit = e => { e.preventDefault(); const v = parseFloat(inp.value.replace(/[^0-9.]/g, "")); if (v > 0 && v < 500) { S.prices[id] = v / x.per; save("prices"); } paint(); $(`[data-price="${id}"]`)?.focus(); };
   $("#prs", f)?.addEventListener("click", () => { delete S.prices[id]; save("prices"); paint(); });
-  inp.onkeydown = e => { if (e.key === "Escape") paint(); };
+  inp.onkeydown = e => { if (e.key === "Escape") { done = true; paint(); $(`[data-price="${id}"]`)?.focus(); } };
+  // leaving the box keeps what was typed (unless they pressed Reset or Escape)
+  let done = false;
+  f.addEventListener("pointerdown", e => { if (e.target.id === "prs") done = true; });
+  inp.onblur = () => setTimeout(() => { if (!done && f.isConnected && !f.contains(document.activeElement)) f.requestSubmit(); }, 0);
 }
 
 function listText() {
@@ -303,8 +321,8 @@ export async function render(main) {
         <div class="fg" role="group" aria-labelledby="l-meals"><div class="fg-h" id="l-meals">${esc(t("meals_q"))}</div>
           <div class="chips wrap">${["b", "l", "d"].map(m => `<button class="chip ck" type="button" data-m="${m}" aria-pressed="${!!S.meals[m]}">${mark("ck")}${esc(t("meal_" + m))}</button>`).join("")}</div></div>
         <label class="field"><span>${esc(t("weekly_q"))}</span>
-          <input class="in" id="wk" inputmode="decimal" value="${S.weekly ?? ""}">
-          <small>${esc(t("weekly_hint"))}</small></label>
+          <input class="in" id="wk" inputmode="decimal" aria-describedby="wkhint" value="${S.weekly ?? ""}">
+          <small id="wkhint"></small></label>
       </div>
       <div class="kpis" id="kpis"></div>
     </div>

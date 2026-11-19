@@ -224,7 +224,7 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 
 /* ---------- cook ---------- */
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:12px;list-style:none;margin:0;padding:0}
-.rcard{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px;text-align:start;width:100%;border:1px solid var(--line);background:var(--card);border-radius:var(--r);color:var(--ink);box-shadow:var(--shadow)}
+.rcard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;padding:14px;text-align:start;width:100%;border:1px solid var(--line);background:var(--card);border-radius:var(--r);color:var(--ink);box-shadow:var(--shadow)}
 .rcard:hover{border-color:var(--ink-2)}
 .rcard .art{width:58px;height:58px;border-radius:12px;background:var(--board);color:var(--chalk);display:grid;place-items:center}
 .rcard .art svg{width:36px;height:36px}
@@ -600,3 +600,58 @@ h1+.lead{margin-block-start:var(--s2)}
 .notice+.grid2,.notice+.list,.notice+.card,.grid2+.grid2,.card+.notice{margin-block-start:var(--s3)}
 @media (max-width:419px){.stack>.fg .chips.wrap{grid-template-columns:minmax(0,1fr)}}
 #rcount,#fcount{margin-block:var(--s3) 0}
+/* language picker opened from the header: a sheet over the app, with a way out */
+#welcome.over{position:fixed;inset:0;z-index:60;overflow:auto;overscroll-behavior:contain;background:var(--board)}
+.welcome.changing{position:relative;padding-block-start:calc(var(--s7) + var(--s4) + env(safe-area-inset-top))}
+.welcome .wclose{position:absolute;width:46px;max-width:none;inset-block-start:calc(var(--s3) + env(safe-area-inset-top));inset-inline-end:var(--s3);color:var(--chalk);border-color:rgba(241,235,221,.35)}
+.toast .link{color:var(--yolk);font-weight:800;min-height:0;padding:0 2px}
+/* shopping list price: reads as a price (pencil says it can be changed); editing gets a real box */
+.shop .price{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:var(--s1) var(--s1) var(--s1) var(--s2);border-radius:8px;min-height:40px;cursor:pointer}
+.shop .price .i{width:15px;height:15px;color:var(--mute)}
+.shop .price:hover{background:var(--line-2)}
+.shop .check>form.pedit{grid-area:1/2/auto/-1;justify-self:end;display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--s2)}
+.pbox{display:inline-flex;align-items:center;border:1.5px solid var(--ink-2);border-radius:10px;background:var(--card);padding-inline-start:10px}
+.pbox .cur{color:var(--mute);font-weight:700}
+.pbox .in{width:7ch;min-width:7ch;border:0;background:none;padding:8px 10px 8px 4px;font-weight:700;font-variant-numeric:tabular-nums;box-shadow:none}
+.pbox:focus-within{outline:3px solid var(--yolk);outline-offset:1px}
+.pbox .in:focus{outline:none}
+.shop .ln .link{font-weight:500;color:var(--ink-2);font-size:14.5px}
+.site .addr{margin:0;font-size:15px;color:var(--mute)}
+/* Benefits: help for today is a calm card, not an alarm */
+.urgent{background:var(--card);color:var(--ink);border:1px solid var(--line);border-inline-start:4px solid var(--tomato);box-shadow:var(--shadow);gap:var(--s2)}
+.urgent h2{color:var(--ink);font-size:19px}
+.urgent p{margin:0;color:var(--ink-2)}
+.urgent .row{gap:var(--s2);margin-block-start:var(--s1)}
+.urgent .btn{min-height:42px;padding:0 13px;font-size:15px;border-radius:10px;border-color:var(--ink);color:var(--ink);background:transparent}
+.urgent .btn:hover{background:var(--line-2)}
+.urgent .btn.pri{background:var(--yolk);border-color:var(--yolk);color:var(--board)}
+.urgent .btn.pri:hover{background:var(--yolk-2)}
+/* Cook on phones: filters fold into one row that says what's set */
+.fold.allfl{border:0}
+.fold.allfl>summary{flex-wrap:wrap;column-gap:var(--s2);row-gap:2px;min-height:56px}
+.fold.allfl>summary .fs-h{display:inline-flex;align-items:center;gap:var(--s2)}
+.fold.allfl>summary .fsum{order:3;flex-basis:100%;font-family:var(--f-body);font-size:14.5px;font-weight:500;color:var(--mute);padding-inline-start:26px}
+.fold.allfl>summary .chev{order:2}
+.fold.allfl>.fold-b>.fg:first-child{border-block-start:1.5px dashed var(--line)}
+/* Leave out: the same box as every other choice; a cross fills it when picked */
+.mk-out{border-radius:6px;border-style:solid}
+/* dark mode: picked things turn a lighter board green, not olive */
+:root[data-theme="dark"]{--tint:color-mix(in srgb,var(--chalk) 12%,var(--card))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--tint:color-mix(in srgb,var(--chalk) 12%,var(--card))}}
+/* recipe card: price, then time · servings on one line; tags on their own row; cards in a row line up */
+.rcard{height:100%}
+.rcard .meta{gap:var(--s2) var(--s3)}
+.rcard .tm{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;flex-wrap:wrap;max-width:100%}
+.rcard .tm .i{flex:none}
+.rcard .tags{display:flex;flex-wrap:wrap;gap:6px;margin-block-start:var(--s2)}
+.rcard .tags:empty{display:none}
+.rgrid>li{display:flex}
+.err{display:flex;align-items:flex-start;gap:var(--s2);color:var(--out);font-weight:600;font-size:15px}
+.err .i{flex:none;margin-block-start:2px}
+.in[aria-invalid="true"]{border-color:var(--out);box-shadow:inset 0 0 0 1px var(--out)}
+.hero .err,.welcome .err{color:#FFB4A3}
+.hero .in[aria-invalid="true"],.welcome .in[aria-invalid="true"]{border-color:#FFB4A3;box-shadow:inset 0 0 0 1px #FFB4A3}
+.foot a{display:inline-block;min-height:24px;padding-block:3px}
+@media (max-width:320px){.rcard .art{width:44px;height:44px}.rcard .art svg{width:28px;height:28px}.rcard{gap:var(--s2)}}
+.rcard h3{overflow-wrap:anywhere}
+@media (max-width:360px){.rcard .tm{white-space:normal}}

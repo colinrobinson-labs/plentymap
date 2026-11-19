@@ -1,6 +1,6 @@
 /* Schedules for food distributions.
    parseSchedule() runs at build time (Node) on the food banks' own wording and turns it into rules.
-   nextTimes() runs on the phone and works out the next dates, in San Diego time.
+   nextTimes() runs on the phone and works out the next dates, in the site's time zone (s.tz, default San Diego).
    Anything we can't read with confidence is left as the original text, never guessed. */
 
 const WD = { sunday: 0, sun: 0, monday: 1, mon: 1, tuesday: 2, tue: 2, tues: 2, wednesday: 3, wed: 3, thursday: 4, thu: 4, thur: 4, thurs: 4, friday: 5, fri: 5, saturday: 6, sat: 6 };
@@ -284,10 +284,20 @@ function addRule(rules, d, times) {
   else rules.push({ wd: d.wd, nth: d.nth, t: times.map(x => [...x]) });
 }
 
-/* ---------- runtime: next dates, in America/Los_Angeles ---------- */
+/* ---------- runtime: next dates, in the site's own time zone (default America/Los_Angeles) ---------- */
 const TZ = "America/Los_Angeles";
-export function laParts(d = new Date()) {
-  const p = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23", weekday: "short" }).formatToParts(d).map(x => [x.type, x.value]));
+const FMT = new Map();
+function fmtFor(tz) {
+  if (!FMT.has(tz)) {
+    let f;
+    try { f = new Intl.DateTimeFormat("en-US", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23", weekday: "short" }); }
+    catch { f = fmtFor(TZ); }   // unknown zone name: fall back rather than break the list
+    FMT.set(tz, f);
+  }
+  return FMT.get(tz);
+}
+export function laParts(d = new Date(), tz = TZ) {
+  const p = Object.fromEntries(fmtFor(tz || TZ).formatToParts(d).map(x => [x.type, x.value]));
   return { y: +p.year, m: +p.month, d: +p.day, hm: `${p.hour}:${p.minute}`, wd: WD[p.weekday.toLowerCase()] };
 }
 const iso = (y, m, d) => `${y}-${pad(m)}-${pad(d)}`;
@@ -295,10 +305,10 @@ function nthOf(y, m, d) { return Math.ceil(d / 7); }
 function isLast(y, m, d) { return d + 7 > new Date(Date.UTC(y, m, 0)).getUTCDate(); }
 
 /* Returns up to `n` upcoming {date: "YYYY-MM-DD", t: [from,to], today, now} within `days` days. */
-export function nextTimes(sched, now = new Date(), n = 3, days = 45) {
+export function nextTimes(sched, now = new Date(), n = 3, days = 45, tz = TZ) {
   if (!sched) return [];
   const { rules = [], once = [], except = [], skip = [], add = [], moved = [], skipMonths = [] } = sched;
-  const L = laParts(now);
+  const L = laParts(now, tz);
   const today = iso(L.y, L.m, L.d);
   const cand = new Map();
   const base = Date.UTC(L.y, L.m - 1, L.d);
@@ -359,4 +369,4 @@ function dedupeSlots(arr) {
   for (const t of arr.sort((a, b) => String(a[0]).localeCompare(String(b[0])))) { const k = t.join("|"); if (!seen.has(k)) { seen.add(k); out.push(t); } }
   return out;
 }
-export const todayISO = (now = new Date()) => { const L = laParts(now); return iso(L.y, L.m, L.d); };
+export const todayISO = (now = new Date(), tz = TZ) => { const L = laParts(now, tz); return iso(L.y, L.m, L.d); };

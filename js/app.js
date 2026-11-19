@@ -63,32 +63,51 @@ const INTRO = {
   uk: ["Добре харчуватися, витрачаючи менше", "Недорогі рецепти, план харчування на тиждень під ваш бюджет, магазини, де приймають EBT, безкоштовна їжа поруч і допомога з пільгами. Усе безкоштовно.", "Оберіть мову"],
 };
 
+let pickerOpen = false;
+function closePicker(back = true) {
+  if (!pickerOpen) return;
+  pickerOpen = false; removeEventListener("popstate", onPickerPop);
+  const w = $("#welcome"); w.hidden = true; w.innerHTML = ""; w.classList.remove("over");
+  $("#app").inert = false; document.body.style.overflow = "";
+  if (back && history.state?.pmLang) history.back();
+  $("#langbtn")?.focus();
+}
+function onPickerPop() { closePicker(false); }
 function showWelcome(changing = false) {
   const w = $("#welcome"), app = $("#app");
-  app.hidden = true; w.hidden = false;
+  if (changing) {
+    pickerOpen = true; w.classList.add("over"); app.inert = true; document.body.style.overflow = "hidden";
+    history.pushState({ pmLang: 1 }, ""); addEventListener("popstate", onPickerPop);
+  } else app.hidden = true;
+  w.hidden = false;
   const g = changing ? S.lang : guessLang();
   const L = LANG[g], I = INTRO[g] || INTRO.en, E = INTRO.en;
   const others = LANGS.filter(l => l.code !== g);
   const btn = l => `<li><button type="button" data-l="${l.code}"><span class="ln" lang="${l.code}" dir="${l.dir}">${esc(l.name)}</span>${l.name !== EN_NAMES[l.code] ? `<span class="le" lang="en">${EN_NAMES[l.code]}</span>` : ""}</button></li>`;
-  w.innerHTML = `<div class="welcome">
+  w.innerHTML = `<div class="welcome${changing ? " changing" : ""}" ${changing ? `role="dialog" aria-modal="true" aria-labelledby="w-pick"` : ""}>
+    ${changing ? `<button type="button" class="iconbtn wclose" id="wclose" aria-label="${esc(t("close"))}">${ico("x")}</button>` : ""}
     <div class="brandrow"><div class="mark">${MARK}</div><div><div class="name" lang="en" dir="ltr">Plenty Map</div>
       <p class="tagline" lang="en" dir="ltr">Find food. Cook cheap. Get help.</p></div></div>
-    <section class="intro" aria-labelledby="w-h">
+    ${changing ? "" : `<section class="intro" aria-labelledby="w-h">
       <h1 id="w-h" tabindex="-1" lang="${g}" dir="${L.dir}">${esc(I[0])}</h1>
       <p lang="${g}" dir="${L.dir}">${esc(I[1])}</p>
       ${g !== "en" ? `<p class="en" lang="en" dir="ltr"><b>${esc(E[0])}.</b> ${esc(E[1])}</p>` : ""}
-    </section>
+    </section>`}
     <h2 class="pick" id="w-pick"><span lang="${g}" dir="${L.dir}">${esc(I[2])}</span>${g !== "en" ? `<span class="en" lang="en" dir="ltr">${esc(E[2])}</span>` : ""}</h2>
     <button type="button" class="langmain" data-l="${g}"><span class="ln" lang="${g}" dir="${L.dir}">${esc(L.name)}</span>${ico("arrow", "i go")}</button>
     <ul class="langs" role="list" aria-labelledby="w-pick">${others.map(btn).join("")}</ul>
-    <p class="note" lang="en" dir="ltr">No account. No ads. What you type stays on your phone.</p>
+    <p class="note" lang="${g}" dir="${L.dir}">${esc(t("foot_a"))}</p>
   </div>`;
   $$("[data-l]", w).forEach(b => b.onclick = async () => {
     await loadLang(b.dataset.l); save("lang");
-    if (changing) { lastView = null; hideWelcome(); shell(); route(); return; }
+    if (changing) { closePicker(); lastView = null; shell(); route(); return; }
     if (S.loc || store.get("setupDone")) { hideWelcome(); shell(); route(); } else showSetup();
   });
-  $("#w-h", w)?.focus({ preventScroll: true });
+  if (changing) {
+    $("#wclose", w).onclick = () => closePicker();
+    w.onkeydown = e => { if (e.key === "Escape") closePicker(); };
+    $(".langmain", w).focus({ preventScroll: true });
+  } else $("#w-h", w)?.focus({ preventScroll: true });
 }
 function hideWelcome() { $("#welcome").hidden = true; $("#welcome").innerHTML = ""; $("#app").hidden = false; }
 
@@ -143,7 +162,14 @@ async function locHelp() {
 }
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
-  const say = m => { const el = msg(); if (el) el.textContent = m; else toast(m); announce(m); };
+  // problems show as problems: an icon, warm red text, the box outlined, and tied to the box for screen readers
+  const say = (m, ok = false) => {
+    const el = msg(), inp = $(`#${p}-q`);
+    const bad = !!m && !ok;
+    if (el) { el.innerHTML = bad ? `${ico("alert", "i sm")}<span>${esc(m)}</span>` : esc(m); el.classList.toggle("err", bad); } else if (m) toast(m);
+    if (inp) { inp.setAttribute("aria-invalid", bad ? "true" : "false"); if (el) inp.setAttribute("aria-describedby", el.id); }
+    if (m) announce(m);
+  };
   // suggestions follow what's typed (towns across the U.S. are loaded a letter at a time).
   // Our own list under the box, not a <datalist>: iPhones hide datalist choices in the keyboard bar.
   const inp = $(`#${p}-q`), box = $(`#${p}-sug`);
@@ -193,7 +219,7 @@ export function bindLoc(p, after) {
     setLoc(r); after?.(r);
   };
   $(`#${p}-gps`).onclick = async () => {
-    const btn = $(`#${p}-gps`); btn.disabled = true; say(t("loc_finding"));
+    const btn = $(`#${p}-gps`); btn.disabled = true; say(t("loc_finding"), true);
     try {
       const pos = await getPosition();
       if (!(await covered(pos.lat, pos.lon))) { say(t("loc_outside")); return; }
@@ -213,7 +239,7 @@ export function bindLoc(p, after) {
 /* ---------- app shell ---------- */
 function shell() {
   $("#brand").innerHTML = `${MARK}<span lang="en">Plenty Map</span>`;
-  $("#brand").setAttribute("aria-label", "Plenty Map, " + t("tab_find"));
+  $("#brand").setAttribute("aria-label", "Plenty Map, " + t("home"));
   const tabHtml = TABS.map(x => `<a href="#/${x.id}" data-tab="${x.id}">${ico(x.icon)}<span>${esc(t("tab_" + x.id))}</span></a>`).join("");
   $("#tabs").innerHTML = tabHtml; $("#dtabs").innerHTML = tabHtml;
   $("#langbtn").innerHTML = `${ico("globe")}<span lang="${S.lang}">${esc(LANG[S.lang].name)}</span>`;
@@ -237,11 +263,19 @@ export async function route() {
   cleanup = null;
   const main = $("#main");
   let mod;
-  try { mod = await VIEWS[view](); }
-  catch { main.innerHTML = `<div class="empty card">${ico("alert")}<p>${esc(t("load_failed"))}</p><p><button class="btn sm" type="button" id="retry">${esc(t("retry"))}</button></p></div>`; $("#retry").onclick = route; return; }
+  const failed = err => {
+    console.error(err);
+    if (current !== token) return;
+    lastView = null;
+    main.innerHTML = `<div class="empty card">${ico("alert")}<p>${esc(t("load_failed"))}</p>
+      <p class="row"><button class="btn sm pri" type="button" id="retry">${ico("refresh", "i sm")} ${esc(t("retry"))}</button>
+      <a class="btn sm" href="tel:211">${ico("phone", "i sm")} ${esc(t("call_211"))}</a></p></div>${foot()}`;
+    $("#retry").onclick = route;
+  };
+  try { mod = await VIEWS[view](); } catch (e) { return failed(e); }
   if (current !== token) return;
   const changedView = view !== lastView; lastView = view;
-  cleanup = await mod.render(main, { view, args: parts.slice(1), changedView });
+  try { cleanup = await mod.render(main, { view, args: parts.slice(1), changedView }); } catch (e) { return failed(e); }
   if (current !== token) return;
   if (changedView) {
     window.scrollTo(0, 0);
@@ -282,7 +316,18 @@ async function boot() {
   addEventListener("hashchange", () => { if (!$("#app").hidden) route(); });
   addEventListener("online", net); addEventListener("offline", net); net();
   if ("serviceWorker" in navigator && !native() && (location.protocol === "https:" || location.hostname === "localhost")) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    const hadSW = !!navigator.serviceWorker.controller;
+    let touched = false, reloading = false;
+    for (const ev of ["pointerdown", "keydown", "input"]) addEventListener(ev, () => { touched = true; }, { once: true, capture: true });
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadSW || reloading) return;
+      if (!touched) { reloading = true; location.reload(); return; }
+      toast(t("updated"), { label: t("refresh"), stay: true, go: () => { reloading = true; location.reload(); } });
+    });
+    navigator.serviceWorker.register("sw.js").then(reg => {
+      // check for a new version whenever the app comes back to the front
+      addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") reg.update().catch(() => {}); });
+    }).catch(() => {});
   }
 }
 boot().catch(err => {
