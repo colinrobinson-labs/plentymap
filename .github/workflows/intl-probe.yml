@@ -1,0 +1,71 @@
+name: Intl probe
+# One-off: samples the UK and Canada sources and sizes the map tiles. Prints to the log only
+# (read-only, pushes nothing). Removed before merge.
+on:
+  push:
+    branches: [claude/project-thread-xoxzmq]
+    paths: [".github/workflows/intl-probe.yml"]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch samples
+        run: |
+          mkdir -p /tmp/p && cd /tmp/p
+          UA="PlentyMapDataBot/1.0 (free food-help app; https://plentymap.com)"
+          g() { echo "== $2"; curl -sSL -A "$UA" -m 600 -o "$1" -w '%{http_code} %{size_download}\n' "$2" || echo "FAILED $2"; }
+          g gf-foodbanks.json https://www.givefood.org.uk/api/2/foodbanks/
+          g gf-locations.json https://www.givefood.org.uk/api/2/locations/
+          g gf-foodbank-one.json "https://www.givefood.org.uk/api/2/foodbank/$(jq -r '.[0].slug' gf-foodbanks.json)/"
+          g gf-needs.json https://www.givefood.org.uk/api/2/needs/
+          g gn-GB_full.zip https://download.geonames.org/export/zip/GB_full.csv.zip
+          g gn-CA_full.zip https://download.geonames.org/export/zip/CA_full.csv.zip
+          g gn-CA.zip https://download.geonames.org/export/zip/CA.zip
+          g gn-cities-GB.zip https://download.geonames.org/export/dump/GB.zip
+          g gn-cities-CA.zip https://download.geonames.org/export/dump/CA.zip
+          g bc-package.json "https://open.canada.ca/data/api/action/package_show?id=ca0433b2-8e20-468b-9093-3bbdc1721e08"
+          i=0; for u in $(jq -r '.result.resources[].url' bc-package.json 2>/dev/null); do i=$((i+1)); g "bc-res-$i" "$u"; done
+      - name: Overpass (Canada and UK food sites, supermarkets)
+        run: |
+          cd /tmp/p
+          for c in CA GB; do
+            q="[out:json][timeout:600];area[\"ISO3166-1\"=\"$c\"][admin_level=2]->.a;(nwr[\"amenity\"~\"^(food_bank|community_fridge|food_sharing|soup_kitchen)\$\"](area.a);nwr[\"amenity\"=\"social_facility\"][\"social_facility\"~\"^(food_bank|soup_kitchen)\$\"](area.a););out center meta;"
+            curl -sS -m 900 -o "osm-$c.json" -w "osm $c %{http_code} %{size_download}\n" --data-urlencode "data=$q" https://overpass-api.de/api/interpreter || echo "osm $c failed"
+            sleep 20
+            q2="[out:json][timeout:600];area[\"ISO3166-1\"=\"$c\"][admin_level=2]->.a;(nwr[\"shop\"=\"supermarket\"](area.a););out center tags;"
+            curl -sS -m 900 -o "osm-shops-$c.json" -w "shops $c %{http_code} %{size_download}\n" --data-urlencode "data=$q2" https://overpass-api.de/api/interpreter || echo "shops $c failed"
+            sleep 20
+          done
+      - name: Size the map tiles
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          URL=$(gh release view -R protomaps/go-pmtiles --json assets --jq '.assets[] | select(.name | test("Linux_x86_64.tar.gz$")) | .url' | head -1)
+          curl -fsSL -o /tmp/pm.tgz "$URL" && tar -xzf /tmp/pm.tgz -C /tmp pmtiles
+          for d in 0 1 2 3 4 5; do day=$(date -u -d "-$d day" +%Y%m%d); curl -fsI "https://build.protomaps.com/$day.pmtiles" >/dev/null && break; done
+          for c in gb ca; do for z in 14 13 12; do
+            echo "== $c z$z" | tee -a /tmp/p/tiles-size.txt
+            /tmp/pmtiles extract "https://build.protomaps.com/$day.pmtiles" /tmp/x.pmtiles --region=tools/regions/$c.geojson --maxzoom=$z --dry-run 2>&1 | tail -6 | tee -a /tmp/p/tiles-size.txt
+          done; done
+      - name: Print samples
+        run: |
+          cd /tmp/p
+          ls -la
+          echo "== gf foodbanks count $(jq length gf-foodbanks.json)"; jq '.[0]' gf-foodbanks.json
+          echo "== gf locations count $(jq length gf-locations.json)"; jq '.[0:2]' gf-locations.json
+          echo "== gf one"; jq 'del(.nearby_foodbanks)' gf-foodbank-one.json | head -150
+          echo "== gf needs"; jq '.[0:2]' gf-needs.json | head -60
+          for z in gn-GB_full.zip gn-CA_full.zip gn-CA.zip; do echo "== $z"; unzip -l $z; unzip -p $z '*.txt' | wc -l; unzip -p $z '*.txt' | head -5; done
+          echo "GB districts: $(unzip -p gn-GB_full.zip GB_full.txt | cut -f2 | cut -d' ' -f1 | sort -u | wc -l)  NI rows: $(unzip -p gn-GB_full.zip GB_full.txt | grep -c "$(printf '^GB\tBT')")"
+          for z in gn-cities-GB.zip gn-cities-CA.zip; do echo "== $z"; unzip -p $z '*.txt' | awk -F'\t' '$7=="P"' | wc -l; unzip -p $z '*.txt' | awk -F'\t' '$7=="P" && $15>0' | wc -l; unzip -p $z '*.txt' | awk -F'\t' '$7=="P"' | head -3; done
+          echo "== bc"; jq '.result | {title, license_title, metadata_modified, resources: [.resources[] | {name, format, url}]}' bc-package.json
+          for f in bc-res-*; do echo "== $f"; file $f; head -c 2500 $f; echo; done
+          for f in osm-CA.json osm-GB.json osm-shops-CA.json osm-shops-GB.json; do echo "== $f $(jq '.elements|length' $f)"; done
+          jq -r '[.elements[].tags | (.amenity // "") + "/" + (.social_facility // "")] | group_by(.) | map("\(length) \(.[0])") | .[]' osm-CA.json; jq -r '[.elements[].tags | (.amenity // "") + "/" + (.social_facility // "")] | group_by(.) | map("\(length) \(.[0])") | .[]' osm-GB.json
+          jq '.elements[0:2]' osm-CA.json
+          for c in CA GB; do echo "== brands $c"; jq -r '[.elements[].tags.brand // empty] | group_by(.) | map([length, .[0]]) | sort | reverse | .[:50][] | "\(.[0]) \(.[1])"' osm-shops-$c.json; done
+          cat tiles-size.txt
