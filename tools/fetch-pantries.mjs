@@ -3,7 +3,7 @@
 // Runs on GitHub Actions only (the phone never calls any of these).
 // Each list is read the way the food bank's own public map reads it, after checking robots.txt.
 // Usage: node fetch-pantries.mjs <outDir> [id,id,...]
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { SOURCES } from "./pantry-sources.mjs";
 
@@ -131,19 +131,33 @@ try {
   report.feedingamerica = banks.length;
 } catch (e) { report.feedingamerica = "failed: " + e.message; log("Feeding America list:", e.message); }
 
+// last week's list (restored from the usdata branch) stands in for a food bank whose site fails this week, for up to 4 weeks
+const KEEP_DAYS = 28;
+async function lastWeek(id) {
+  try { const j = JSON.parse(await readFile(join(out, "pantries", id + ".json"), "utf8")); return (Date.now() - Date.parse(j.fetched)) / 864e5 <= KEEP_DAYS ? j : null; } catch { return null; }
+}
+const countOf = data => Array.isArray(data) ? data.length : data?.results?.locations?.length ?? data?.results?.length ?? data?.length ?? 0;
 for (const src of SOURCES) {
   if (only && !only.includes(src.id)) continue;
+  const prev = await lastWeek(src.id);
   try {
     if (!(await allowed(src.page))) throw new Error("robots.txt disallows the find-food page");
     const page = await get(src.page);
     const { endpoint, data } = await PLATFORMS[src.platform](src, page.text);
-    const n = Array.isArray(data) ? data.length : data?.results?.locations?.length ?? data?.results?.length ?? data?.length ?? 0;
+    const n = countOf(data);
+    // a list that suddenly shrinks by more than half is more likely a broken page than closed pantries
+    if (prev && countOf(prev.data) >= 20 && n < countOf(prev.data) * 0.5) throw new Error(`only ${n} listings (last time ${countOf(prev.data)})`);
     await writeFile(join(out, "pantries", src.id + ".json"), JSON.stringify({ id: src.id, fetched: report.fetched, page: src.page, endpoint, data }));
     report.sources[src.id] = { ok: true, n, endpoint };
     log(src.id, src.platform, "ok", n);
   } catch (e) {
-    report.sources[src.id] = { ok: false, error: e.message };
-    log(src.id, src.platform, "FAILED", e.message);
+    if (prev) {
+      report.sources[src.id] = { ok: true, kept: prev.fetched, n: countOf(prev.data), error: e.message };
+      log(src.id, src.platform, "FAILED, keeping the list from", prev.fetched.slice(0, 10), e.message);
+    } else {
+      report.sources[src.id] = { ok: false, error: e.message };
+      log(src.id, src.platform, "FAILED", e.message);
+    }
   }
   await sleep(2000);
 }

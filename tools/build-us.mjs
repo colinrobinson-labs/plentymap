@@ -123,6 +123,28 @@ for (const e of osm) {
     lat: r5(lat), lon: r5(lon), ph: phoneOf(t.phone || t["contact:phone"]), w: urlOk(t.website || t["contact:website"] || ""),
     d: [{ src: "osm", prog: "", when: oh, notes: clean(t.description || "").slice(0, 300), food: "", who: "", tips: "", f: [], sc: null, conf: oh ? "osm" : "call" }] });
 }
+// ---- Food bank pantry lists (tools/fetch-pantries.mjs + build-pantries.mjs) ----
+// A food bank's own list beats an OpenStreetMap pin for the same place: it has the schedule and is kept up by the food bank.
+const fb = (await rd("pantry-sites.json")) || { sources: {}, sites: [] };
+const fbSources = fb.sources || {};
+let nOsmDropped = 0;
+{
+  const STOP = new Set(["food", "pantry", "pantries", "church", "community", "center", "centre", "ministry", "ministries", "kitchen", "soup", "bank", "the", "and", "first", "united", "saint", "mission", "outreach", "program", "services", "service", "inc", "of", "st", "street"]);
+  const words = n => new Set(n.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w)));
+  const g = new Map(), gk = (la, lo) => `${Math.floor(la * 200)}_${Math.floor(lo * 200)}`;
+  for (const f of fb.sites) (g.get(gk(f.lat, f.lon)) || g.set(gk(f.lat, f.lon), []).get(gk(f.lat, f.lon))).push(f);
+  const metres = (a, b) => { const dy = (a.lat - b.lat) * 111320, dx = (a.lon - b.lon) * 111320 * Math.cos(a.lat * Math.PI / 180); return Math.hypot(dx, dy); };
+  const keep = [];
+  for (const o of sites) {
+    const y = Math.floor(o.lat * 200), x = Math.floor(o.lon * 200), ow = words(o.n);
+    const near = [-1, 0, 1].flatMap(dy => [-1, 0, 1].flatMap(dx => g.get(`${y + dy}_${x + dx}`) || []));
+    const same = near.some(f => { const m = metres(o, f); return m < 15 || (m < 150 && [...words(f.n)].some(w => ow.has(w))); });
+    if (same) { nOsmDropped++; continue; }
+    keep.push(o);
+  }
+  sites.length = 0;
+  sites.push(...keep, ...fb.sites);
+}
 // freshness: when each listing first appeared and when its details last changed (same rules as San Diego)
 const today = fetched.slice(0, 10);
 const prev = (await rd("history.json")) || { since: today, sites: {} };
@@ -183,8 +205,10 @@ await writeFile(join(outDir, "index.json"), JSON.stringify({
     snap: { name: "USDA SNAP Retailer Locator", url: "https://www.fns.usda.gov/snap/retailer-locator" },
     osm: { name: "OpenStreetMap contributors", url: "https://www.openstreetmap.org/copyright" },
     zcta: { name: "U.S. Census Bureau, Gazetteer files", url: "https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html" },
+    ...fbSources,
   },
   cells: index,
 }));
+console.log(`[build-us] food banks ${Object.keys(fbSources).length} (${fb.sites.length} sites, ${nOsmDropped} OpenStreetMap duplicates dropped)`);
 console.log(`[build-us] cells ${cells.size}, sites ${sites.length}, stores ${nStores} (+${nRmp} restaurants, ${nInc} with produce bonus), zips ${Object.keys(zips).length}, places ${places.length}, ${(bytes / 1048576).toFixed(1)} MB in cells`);
 if (nStores < 30000 || Object.keys(zips).length < 30000) { console.error("[build-us] output looks too small; stopping"); process.exit(1); }
