@@ -166,7 +166,7 @@ export async function render(main) {
   main.innerHTML = `
     <h1 class="disp">${esc(t("help_h"))}</h1>
     <p class="lead">${esc(t("help_p"))}</p>
-    ${!A.partner && stateName(A.st) ? `<p class="small mute">${ico("pin", "i sm")} ${esc(t("us_help_in", { st: stateName(A.st) }))}</p>` : ""}
+    ${!A.partner && stateName(A.st) ? `<p class="small mute hlp-where">${ico("pin", "i sm")} <span>${esc(t("us_help_in", { st: stateName(A.st) }))}</span> <a href="#/find">${esc(t("home_change"))}</a></p>` : ""}
     <section class="urgent gap-t" aria-labelledby="urg-h">
       <h2 id="urg-h">${esc(t("urgent_h"))}</h2>
       ${A.partner ? `<p>${esc(t("urgent_p"))}</p>
