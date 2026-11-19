@@ -83,7 +83,7 @@ const CUISINE = [
   ["southasian", /\b(patel brothers|apna bazar|india|indian|desi|bombay|bazaar|subzi|sabzi|punjab|nepal|bangla)\b/i],
 ];
 const snap = (await rd("snap.json")) || [];
-const zc = {}, zst = {}, cityN = {};
+const zc = {}, zst = {}, cityN = {}, zll = {};
 let nStores = 0, nRmp = 0, nInc = 0;
 for (const a of snap) {
   const t = a.Store_Type, lat = a.Latitude, lon = a.Longitude;
@@ -91,6 +91,7 @@ for (const a of snap) {
   const rawName = clean(a.Store_Name);
   const z = (a.Zip_Code || "").toString().padStart(5, "0").slice(0, 5), city = clean(a.City);
   if (z && city) { zc[z] ||= {}; zc[z][city] = (zc[z][city] || 0) + 1; zst[z] ||= a.State; }
+  if (z) (zll[z] ||= []).push([lat, lon]);
   if (city) { const ck = a.State + "|" + pfold(city); cityN[ck] = (cityN[ck] || 0) + 1; }
   if (t !== "Farmers and Markets" && t !== "Restaurant Meals Program" && SKIP.test(rawName)) continue;
   if (t === "Other" && !CUISINE.some(([, rx]) => rx.test(rawName)) && !BUDGET.test(rawName)) continue;
@@ -123,6 +124,28 @@ for (const e of osm) {
     lat: r5(lat), lon: r5(lon), ph: phoneOf(t.phone || t["contact:phone"]), w: urlOk(t.website || t["contact:website"] || ""),
     d: [{ src: "osm", prog: "", when: oh, notes: clean(t.description || "").slice(0, 300), food: "", who: "", tips: "", f: [], sc: null, conf: oh ? "osm" : "call" }] });
 }
+// ---- Food bank pantry lists (tools/fetch-pantries.mjs + build-pantries.mjs) ----
+// A food bank's own list beats an OpenStreetMap pin for the same place: it has the schedule and is kept up by the food bank.
+const fb = (await rd("pantry-sites.json")) || { sources: {}, sites: [] };
+const fbSources = fb.sources || {};
+let nOsmDropped = 0;
+{
+  const STOP = new Set(["food", "pantry", "pantries", "church", "community", "center", "centre", "ministry", "ministries", "kitchen", "soup", "bank", "the", "and", "first", "united", "saint", "mission", "outreach", "program", "services", "service", "inc", "of", "st", "street"]);
+  const words = n => new Set(n.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w.length >= 4 && !STOP.has(w)));
+  const g = new Map(), gk = (la, lo) => `${Math.floor(la * 200)}_${Math.floor(lo * 200)}`;
+  for (const f of fb.sites) (g.get(gk(f.lat, f.lon)) || g.set(gk(f.lat, f.lon), []).get(gk(f.lat, f.lon))).push(f);
+  const metres = (a, b) => { const dy = (a.lat - b.lat) * 111320, dx = (a.lon - b.lon) * 111320 * Math.cos(a.lat * Math.PI / 180); return Math.hypot(dx, dy); };
+  const keep = [];
+  for (const o of sites) {
+    const y = Math.floor(o.lat * 200), x = Math.floor(o.lon * 200), ow = words(o.n);
+    const near = [-1, 0, 1].flatMap(dy => [-1, 0, 1].flatMap(dx => g.get(`${y + dy}_${x + dx}`) || []));
+    const same = near.some(f => { const m = metres(o, f); return m < 15 || (m < 150 && [...words(f.n)].some(w => ow.has(w))); });
+    if (same) { nOsmDropped++; continue; }
+    keep.push(o);
+  }
+  sites.length = 0;
+  sites.push(...keep, ...fb.sites);
+}
 // freshness: when each listing first appeared and when its details last changed (same rules as San Diego)
 const today = fetched.slice(0, 10);
 const prev = (await rd("history.json")) || { since: today, sites: {} };
@@ -139,6 +162,7 @@ await writeFile(join(raw, "history.json"), JSON.stringify(hist));
 
 // ---- ZIP codes ----
 const zips = {};
+let nZipMoved = 0;
 {
   const txt = existsSync(join(raw, "zcta.tsv")) ? await readFile(join(raw, "zcta.tsv"), "utf8") : "";
   const lines = txt.split(/\r?\n/), head = lines[0].split(/[|\t]/).map(h => h.trim());
@@ -146,7 +170,15 @@ const zips = {};
   for (const l of lines.slice(1)) {
     const c = l.split(/[|\t]/).map(x => x.trim());
     if (!/^\d{5}$/.test(c[iz] || "")) continue;
-    const la = r5(+c[ila]), lo = r5(+c[ilo]);
+    let la = r5(+c[ila]), lo = r5(+c[ilo]);
+    // a ZIP whose Census point sits far from where its stores are (99503 Anchorage is placed in western Alaska):
+    // use the middle of its SNAP stores instead, so searching the ZIP lands where people live
+    const pts = zll[c[iz]];
+    if (pts && pts.length >= 3) {
+      const med = i => { const v = pts.map(p => p[i]).sort((a, b) => a - b); return v[v.length >> 1]; };
+      const mla = med(0), mlo = med(1);
+      if (Math.hypot((mla - la) * 111, (mlo - lo) * 111 * Math.cos(la * Math.PI / 180)) > 60) { la = r5(mla); lo = r5(mlo); nZipMoved++; }
+    }
     const top = zc[c[iz]] && Object.entries(zc[c[iz]]).sort((a, b) => b[1] - a[1])[0][0];
     const np = nearestPlace(la, lo);
     const city = top ? top.toLowerCase().replace(/\b([a-z])/g, m => m.toUpperCase()).replace(/\b(Of|And)\b/g, w => w.toLowerCase()) : np?.n || "";
@@ -161,6 +193,17 @@ for (const d of ["cells", "zip", "places"]) await mkdir(join(outDir, d), { recur
 const sortN = (a, b) => a.n.localeCompare(b.n);
 const index = {};
 let bytes = 0;
+// the same store listed twice by USDA (two retailer records, same name, a few metres apart): keep one
+let nStoreDup = 0;
+for (const c of cells.values()) {
+  const seen = new Map();
+  c.stores = c.stores.filter(s => {
+    const k = s.k + "|" + s.n.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const near = (seen.get(k) || []).some(o => Math.hypot((o.lat - s.lat) * 111320, (o.lon - s.lon) * 111320 * Math.cos(s.lat * Math.PI / 180)) < 150);
+    if (near) { nStoreDup++; nStores -= s.k === "rmp" ? 0 : 1; if (s.k === "rmp") nRmp--; return false; }
+    (seen.get(k) || seen.set(k, []).get(k)).push(s); return true;
+  });
+}
 for (const [k, c] of cells) {
   c.sites.sort(sortN); c.stores.sort(sortN);
   const s = JSON.stringify({ v: 1, c: k, ...c });
@@ -183,8 +226,11 @@ await writeFile(join(outDir, "index.json"), JSON.stringify({
     snap: { name: "USDA SNAP Retailer Locator", url: "https://www.fns.usda.gov/snap/retailer-locator" },
     osm: { name: "OpenStreetMap contributors", url: "https://www.openstreetmap.org/copyright" },
     zcta: { name: "U.S. Census Bureau, Gazetteer files", url: "https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html" },
+    ...fbSources,
   },
   cells: index,
 }));
+console.log(`[build-us] ${nStoreDup} duplicate SNAP records dropped, ${nZipMoved} ZIP centers moved to where their stores are`);
+console.log(`[build-us] food banks ${Object.keys(fbSources).length} (${fb.sites.length} sites, ${nOsmDropped} OpenStreetMap duplicates dropped)`);
 console.log(`[build-us] cells ${cells.size}, sites ${sites.length}, stores ${nStores} (+${nRmp} restaurants, ${nInc} with produce bonus), zips ${Object.keys(zips).length}, places ${places.length}, ${(bytes / 1048576).toFixed(1)} MB in cells`);
 if (nStores < 30000 || Object.keys(zips).length < 30000) { console.error("[build-us] output looks too small; stopping"); process.exit(1); }

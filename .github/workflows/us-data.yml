@@ -1,6 +1,6 @@
 name: US data
 # Weekly: pulls the national public sources (USDA SNAP retailers, OpenStreetMap food sites,
-# Census ZIP and place centers), builds the small per-area packs the app reads outside
+# Census ZIP and place centers) and food banks' own public pantry lists (tools/pantry-sources.mjs), builds the small per-area packs the app reads outside
 # San Diego County, saves them to the usdata branch, and republishes the site.
 # The phone never calls any of these sources.
 on:
@@ -13,6 +13,10 @@ on:
       - "tools/fetch-us.mjs"
       - "tools/build-us.mjs"
       - "tools/lib-food.mjs"
+      - "tools/fetch-pantries.mjs"
+      - "tools/build-pantries.mjs"
+      - "tools/pantry-sources.mjs"
+      - "js/hours.js"
       - ".github/workflows/us-data.yml"
 permissions:
   contents: write
@@ -21,21 +25,28 @@ concurrency: us-data
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Get the current usdata branch (keeps the freshness history)
+      - name: Get the current usdata branch (keeps the freshness history, last week's OpenStreetMap pull, food bank lists and geocoder cache)
         run: |
           mkdir -p /tmp/u/raw
           if git fetch --depth=1 origin usdata 2>/dev/null; then
             git archive FETCH_HEAD raw/history.json | tar -x -C /tmp/u 2>/dev/null || true
+            git archive FETCH_HEAD raw/osm-regions.json | tar -x -C /tmp/u 2>/dev/null || true
+            git archive FETCH_HEAD raw/geocache.json | tar -x -C /tmp/u 2>/dev/null || true
+            git archive FETCH_HEAD raw/pantries | tar -x -C /tmp/u 2>/dev/null || true
           fi
           ls -la /tmp/u/raw
       - name: Fetch national sources
         run: node tools/fetch-us.mjs /tmp/u/raw
+      - name: Fetch food bank pantry lists
+        run: node tools/fetch-pantries.mjs /tmp/u/raw
+      - name: Turn food bank lists into listings
+        run: node tools/build-pantries.mjs /tmp/u/raw
       - name: Build the packs
         run: |
           node tools/build-us.mjs /tmp/u/raw /tmp/u/us
@@ -44,7 +55,7 @@ jobs:
         run: |
           cd /tmp/u
           # keep the branch small: the history and report, not the big raw downloads
-          mkdir -p keep && mv raw/history.json raw/report.json keep/ && rm -rf raw && mv keep raw
+          mkdir -p keep && mv raw/history.json raw/report.json keep/ && { mv raw/osm-regions.json raw/geocache.json raw/pantries keep/ 2>/dev/null || true; } && rm -rf raw && mv keep raw
           git init -q -b usdata
           git config user.name "plenty-map-data"
           git config user.email "actions@users.noreply.github.com"

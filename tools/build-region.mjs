@@ -5,7 +5,7 @@ import { existsSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseSchedule, parseNotes, resolveYears } from "../js/hours.js";
-import { r5, clean, none, tidyName, phoneOf, firstPhoneIn, urlOk } from "./lib-food.mjs";
+import { r5, clean, none, tidyName, phoneOf, firstPhoneIn, urlOk, flagsFrom } from "./lib-food.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const [raw = "raw", outDir = join(here, "../data/regions")] = process.argv.slice(2);
@@ -22,28 +22,6 @@ function splitAddr(a) {
   if (!m) return { a, c: "", z: (a.match(/\b9\d{4}\b/) || [""])[0] };
   return { a: m[1].trim(), c: m[2].trim(), z: m[3] || "" };
 }
-/* Short, translatable facts pulled from the food banks' English notes. The English stays visible too. */
-function flagsFrom(...texts) {
-  const s = texts.filter(Boolean).join(" ").toLowerCase();
-  const f = [];
-  if (/all are welcome|open to (the )?(public|all)|no eligibility|anyone/.test(s)) f.push("open");
-  if (/appointment/.test(s)) f.push("appt");
-  if (/call first|call ahead|call before/.test(s)) f.push("call");
-  if (/\bid\b|identification/.test(s) && !/food bank id card/.test(s.replace(/[^a-z ]/g, " ").replace(/\s+/g, " ")) || /\bid (and|is|required)|photo id|id required/.test(s)) f.push("id");
-  if (/proof of (address|residen)|utility bill|residents of|residents only|serves zip|zip codes?:/.test(s)) f.push("area");
-  if (/income guidelines|proof of income|income/.test(s)) f.push("income");
-  if (/senior|60\+|60 and older|65 and older/.test(s) && /only|senior food program/.test(s)) f.push("senior");
-  if (/student/.test(s) && /only|current students|enrollment/.test(s)) f.push("student");
-  if (/military|veteran/.test(s) && /only|required|families only/.test(s)) f.push("military");
-  if (/drive[- ]?thr(u|ough)/.test(s)) f.push("drive");
-  if (/walk[- ]?up/.test(s)) f.push("walk");
-  if (/register|registration|intake/.test(s)) f.push("register");
-  if (/food bank id card/.test(s)) f.push("fbid");
-  if (/produce/.test(s)) f.push("produce");
-  if (/diaper/.test(s)) f.push("diapers");
-  return [...new Set(f)];
-}
-
 const sites = [];
 const stats = { sdfb: 0, fsd: 0, conf: {} };
 // ---- San Diego Food Bank ----
