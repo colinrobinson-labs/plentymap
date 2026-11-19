@@ -64,7 +64,7 @@ const cnt = (id, n) => `<span class="cnt" id="${id}" ${n ? "" : "hidden"}>${n ? 
 const setCnt = (id, n) => { const el = $("#" + id); if (el) { el.textContent = n ? num(n) : ""; el.hidden = !n; } };
 
 function fsum() {
-  const k = S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none");
+  const k = (S.kit.length ? S.kit.map(x => t("kit_" + x)).join(", ") : t("kit_none")) + (S.fridge ? "" : ", " + t("no_fridge"));
   const c = S.maxCost ? t("under", { m: money(S.maxCost) }) : t("any_cost");
   const n = fcount() + S.have.size;
   return [k, c].join(" · ") + (n ? " · +" + num(n) : "");
@@ -81,6 +81,10 @@ function filters() {
         ${tile("micro", "micro", esc(t("kit_micro")), S.kit.includes("micro"))}
         ${tile("none", "bowl", esc(t("kit_none")), !S.kit.length)}
       </div>`)}
+    ${grp("l-fridge", t("fridge_q"), `<div class="seg n2">
+        ${segBtn("data-fridge", 1, esc(t("fridge_yes")), S.fridge)}
+        ${segBtn("data-fridge", 0, esc(t("fridge_no")), !S.fridge)}
+      </div>`)}
     ${grp("l-cost", t("budget_q"), `<div class="seg n${BUDGETS.length}">
         ${BUDGETS.map(b => segBtn("data-cost", b, esc(b ? t("under", { m: money(b) }) : t("any_cost")), S.maxCost === b)).join("")}
       </div>`)}
@@ -92,7 +96,10 @@ function filters() {
         ${["any", "veg", "vegan", "halal", "kosher"].map(d => chip("data-diet", d, esc(t("diet_" + d)), S.diet === d, "opt")).join("")}
       </div>`)}
     ${grp("l-avoid", t("avoid_q"), `<div class="chips wrap">
-        ${AVOIDS.map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
+        ${AVOIDS.filter(a => a !== "salt").map(a => chip("data-avoid", a, esc(t("avoid_" + a)), S.avoid.has(a), "out")).join("")}
+      </div>`)}
+    ${grp("l-salt", t("salt_q"), `<div class="chips wrap">
+        ${chip("data-avoid", "salt", esc(t("low_na")), S.avoid.has("salt"), "ck")}
       </div>`)}
     <div class="fg"><label class="fg-h" for="cusel">${esc(t("cu_q"))}</label><div class="fg-c">
       <select class="in" id="cusel">${CUISINES.map(c => `<option value="${c}" ${c === cu ? "selected" : ""}>${esc(t("cu_" + c))}</option>`).join("")}</select>
@@ -106,15 +113,21 @@ function filters() {
   </div>`;
 }
 
+function setFridge(on) {
+  S.fridge = on; save("fridge");
+  $$("[data-fridge]").forEach(x => x.setAttribute("aria-pressed", (x.dataset.fridge === "1") === on));
+}
 function bindFilters() {
   $$("[data-kit]").forEach(b => b.onclick = () => {
     const k = b.dataset.kit;
-    if (k === "none") S.kit = [];
+    // No kitchen usually means no fridge either; the fridge answer flips with it and can be set back.
+    if (k === "none") { if (S.kit.length) setFridge(false); S.kit = []; }
     else S.kit = S.kit.includes(k) ? S.kit.filter(x => x !== k) : [...S.kit, k];
     save("kit");
     $$("[data-kit]").forEach(x => x.setAttribute("aria-pressed", x.dataset.kit === "none" ? !S.kit.length : S.kit.includes(x.dataset.kit)));
     paint();
   });
+  $$("[data-fridge]").forEach(b => b.onclick = () => { setFridge(b.dataset.fridge === "1"); paint(); });
   $$("[data-cost]").forEach(b => b.onclick = () => { S.maxCost = +b.dataset.cost; save("maxCost"); $$("[data-cost]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-lvl]").forEach(b => b.onclick = () => { S.comfort = +b.dataset.lvl; save("comfort"); $$("[data-lvl]").forEach(x => x.setAttribute("aria-pressed", x === b)); paint(); });
   $$("[data-diet]").forEach(b => b.onclick = () => { S.diet = b.dataset.diet; save("diet"); $$("[data-diet]").forEach(x => x.setAttribute("aria-pressed", x === b)); setCnt("flcount", fcount()); paint(); });
@@ -137,6 +150,13 @@ function dietBox(r) {
     ${c.length ? `<p><b>${esc(t("contains"))}</b> ${esc(c.map(k => t(k)).join(", "))}</p>` : ""}
     ${n.length ? `<ul>${n.map(k => `<li>${esc(t(k))}</li>`).join("")}</ul>` : ""}
     <p class="tiny">${esc(t("label_check"))}</p></div></div>`;
+}
+/* Without a fridge or a kitchen: eat it fresh, and how to open a can without an opener */
+function keepBox(r) {
+  const out = [];
+  if (!S.fridge) out.push(t("nofridge_note"));
+  if ((!S.fridge || !S.kit.length) && r.ing.some(([id]) => FD.ing[id].u === "can")) out.push(t("canopener_tip"));
+  return out.length ? `<div class="notice dietbox">${ico("snow")}<div>${out.map(x => `<p>${esc(x)}</p>`).join("")}</div></div>` : "";
 }
 let wake = null, lastFocus = null;
 async function setWake(on, btn) {
@@ -169,6 +189,7 @@ function openSheet(id) {
         <div class="fact"><b>${esc(num(f.pro))} g</b><span>${esc(t("protein"))}</span></div>
         <div class="fact"><b>${esc(num(sodium(r)))} mg</b><span>${esc(t("sodium"))}</span></div>
       </div>
+      ${keepBox(r)}
       ${dietBox(r)}
       <div class="row between"><h3>${esc(t("ingredients"))}</h3>
         <span class="row"><span class="small mute" id="svl">${esc(t("servings"))}</span><span class="stepper" role="group" aria-labelledby="svl">

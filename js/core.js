@@ -37,6 +37,7 @@ export const S = {
   lang: store.get("lang"),
   loc: store.get("loc"),                // {zip, lat, lon, label, src: "zip"|"gps"|"place"}
   kit: store.get("kit", ["stove", "micro"]), // stove (stove + oven), hotplate, micro. [] = no heat
+  fridge: store.get("fridge", true),   // false = no way to keep food cold: only shelf-stable recipes
   maxCost: store.get("maxCost", 0),     // per serving, 0 = any
   comfort: store.get("comfort", 2),     // 1 easy, 2 some cooking, 3 likes to cook
   cuisine: store.get("cuisine", null),  // null = use the language default

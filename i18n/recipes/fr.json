@@ -441,7 +441,72 @@
 ],
 "tip": "À table, ajoutez un filet de lime et un peu de coriandre hachée."
 },
+"soakoats": {
+"t": "Gruau sans cuisson au beurre d'arachide",
+"s": [
+"Mettez l'avoine dans une tasse ou un bol et versez environ ¾ de tasse d'eau potable, juste assez pour la couvrir.",
+"Laissez reposer 10 minutes, jusqu'à ce qu'elle soit tendre. Avec de l'eau chaude, si vous en trouvez, c'est prêt en 2 ou 3.",
+"Ajoutez le beurre d'arachide, la banane en rondelles par-dessus et saupoudrez de cannelle."
+],
+"tip": "L'avoine à cuisson rapide ramollit plus vite. Les gros flocons marchent aussi et restent un peu croquants."
+},
+"beanwrap": {
+"t": "Roulés aux haricots noirs et à la lime",
+"s": [
+"Égouttez les haricots. Rincez-les à l'eau propre si possible.",
+"Écrasez-en environ la moitié à la fourchette. Pressez la lime, ajoutez les épices et une pincée de sel, puis mélangez.",
+"Étalez sur les tortillas, roulez et mangez."
+],
+"tip": "Les haricots pinto ou rouges marchent tout aussi bien."
+},
+"chickwrap": {
+"t": "Pois chiches écrasés sur pain",
+"s": [
+"Égouttez les pois chiches.",
+"Écrasez-les à la fourchette, puis ajoutez l'huile, le jus de lime, le cumin et une pincée de sel.",
+"Tartinez généreusement sur le pain."
+],
+"tip": "Quelques tranches d'oignon cru ou un peu de sauce piquante relèvent le tout."
+},
+"tunacrack": {
+"t": "Thon à la lime sur biscuits soda",
+"s": [
+"Ouvrez le thon et jetez le liquide.",
+"Pressez la lime, ajoutez l'assaisonnement au chili et mélangez à la fourchette.",
+"Déposez sur les biscuits et mangez."
+],
+"tip": "Le thon en sachet n'a besoin ni d'ouvre-boîte ni d'être égoutté."
+},
+"manba": {
+"t": "Pain au beurre d'arachide épicé",
+"s": [
+"Tartinez le beurre d'arachide sur le pain.",
+"Saupoudrez d'assaisonnement au chili, un peu ou beaucoup.",
+"Mangez avec la banane, à côté ou en rondelles par-dessus."
+],
+"tip": "En Haïti, le manba (beurre d'arachide) est souvent épicé avec du piment. Mettez-en autant que vous aimez."
+},
+"sardines": {
+"t": "Sardines sur pain avec oignon",
+"s": [
+"Ouvrez la boîte. Gardez l'huile: elle a beaucoup de goût.",
+"Coupez quelques fines rondelles d'oignon.",
+"Posez les sardines sur le pain, arrosez d'un peu d'huile, ajoutez l'oignon et pressez la lime."
+],
+"tip": "Les arêtes sont tendres, se mangent sans danger et sont riches en calcium. Le reste de l'oignon se garde bien sans frigo."
+},
+"pbramen": {
+"t": "Ramen au beurre d'arachide",
+"s": [
+"Mettez les nouilles dans un bol ou une grande tasse et couvrez d'eau: chaude si vous en trouvez, mais l'eau propre et froide marche aussi.",
+"Attendez qu'elles ramollissent: environ 5 minutes dans l'eau chaude, 20 à 30 dans l'eau froide. Jetez presque toute l'eau.",
+"Ajoutez le beurre d'arachide, la moitié du sachet d'assaisonnement et l'assaisonnement au chili."
+],
+"tip": "L'eau chaude d'une bouilloire, d'une cafetière ou du robinet d'eau chaude d'un dépanneur fait l'affaire. Couvrez le bol d'une assiette pendant le trempage."
+},
 "ing": {
+"crackers": "Biscuits soda",
+"sardines": "Sardines en conserve",
 "rice": "Riz blanc",
 "pasta": "Pâtes",
 "flour": "Farine tout usage",
