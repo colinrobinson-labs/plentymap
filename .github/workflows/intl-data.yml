@@ -1,0 +1,96 @@
+name: UK and Canada data
+# Daily: pulls the public sources for the United Kingdom (Give Food, updated several times a day,
+# whose terms ask us to keep it fresh) and Canada (DataBC, City of Vancouver), plus OpenStreetMap
+# and GeoNames, builds the small per-area packs the app reads, saves them to the intldata branch,
+# and republishes the site. OpenStreetMap is cached and re-asked once a week.
+# The phone never calls any of these sources.
+on:
+  schedule:
+    - cron: "23 5 * * *"   # ~5am UK, ~midnight Toronto
+  workflow_dispatch:
+  push:
+    branches: [main, launch, "claude/**"]
+    paths:
+      - "tools/fetch-intl.mjs"
+      - "tools/build-intl.mjs"
+      - "tools/lib-food.mjs"
+      - ".github/workflows/intl-data.yml"
+permissions:
+  contents: write
+  actions: write
+concurrency: intl-data
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Week number (OpenStreetMap cache key)
+        run: echo "WEEK=$(date -u +%G-%V)" >> "$GITHUB_ENV"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            /tmp/i/raw-gb/osm.json
+            /tmp/i/raw-gb/osm-shops.json
+            /tmp/i/raw-ca/osm.json
+            /tmp/i/raw-ca/osm-shops.json
+          key: intl-osm-${{ env.WEEK }}
+          restore-keys: intl-osm-
+      - name: Get the current intldata branch (keeps the freshness history, and last good packs)
+        run: |
+          mkdir -p /tmp/i/raw-gb /tmp/i/raw-ca /tmp/i/prev
+          if git fetch --depth=1 origin intldata 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C /tmp/i/prev
+            for c in gb ca; do cp /tmp/i/prev/raw/$c-history.json /tmp/i/raw-$c/history.json 2>/dev/null || true; done
+          fi
+          # cached OpenStreetMap files count as fresh only for the week they were fetched in
+          find /tmp/i/raw-* -name 'osm*.json' -mtime +6 -delete 2>/dev/null || true
+          ls -la /tmp/i/raw-gb /tmp/i/raw-ca
+      - name: United Kingdom
+        id: gb
+        continue-on-error: true
+        run: |
+          node tools/fetch-intl.mjs GB /tmp/i/raw-gb
+          node tools/build-intl.mjs GB /tmp/i/raw-gb /tmp/i/out/gb
+      - name: Canada
+        id: ca
+        continue-on-error: true
+        run: |
+          node tools/fetch-intl.mjs CA /tmp/i/raw-ca
+          node tools/build-intl.mjs CA /tmp/i/raw-ca /tmp/i/out/ca
+      - name: Check and summarize
+        run: |
+          cd /tmp/i
+          for c in gb ca; do
+            if [ -f out/$c/index.json ]; then
+              echo "== $c: $(ls out/$c/cells | wc -l) cells, $(du -sh out/$c | cut -f1)"; jq -c '{built, counts}' out/$c/index.json
+              jq -r '.sources | keys | join(", ")' out/$c/index.json
+              big=$(ls -S out/$c/cells | head -1); echo "biggest cell $big $(stat -c %s out/$c/cells/$big) bytes"; jq -c '{tz, sites: (.sites|length), stores: (.stores|length), zips: (.zips|length), first: .sites[0]}' out/$c/cells/$big
+            elif [ -f prev/$c/index.json ]; then
+              echo "::warning::$c build failed; keeping the last good packs from $(jq -r .built prev/$c/index.json)"
+              mkdir -p out && cp -r prev/$c out/$c
+            else
+              echo "::warning::$c build failed and there are no earlier packs"
+            fi
+          done
+          [ -d out/gb ] || [ -d out/ca ] || { echo "::error::no country built"; exit 1; }
+      - name: Save to the intldata branch
+        if: github.ref_name == 'main' || github.ref_name == 'launch'
+        run: |
+          cd /tmp/i/out
+          mkdir -p raw
+          for c in gb ca; do cp ../raw-$c/history.json raw/$c-history.json 2>/dev/null || cp ../prev/raw/$c-history.json raw/ 2>/dev/null || true; cp ../raw-$c/report.json raw/$c-report.json 2>/dev/null || true; done
+          git init -q -b intldata
+          git config user.name "plenty-map-data"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plenty Map UK and Canada data $(date -u +%F)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" intldata
+      - name: Republish the site
+        if: github.ref_name == 'main' || github.ref_name == 'launch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run site.yml --ref "${{ github.ref_name }}"
