@@ -2,7 +2,7 @@
 // sites, store sites) are checked too when QA_EXTERNAL=1 (nightly), since those sites are slower and sometimes block robots.
 // Phone links must be dialable numbers.
 import { test } from "@playwright/test";
-import { langs, LOC_US, BASE } from "../lib/matrix.mjs";
+import { langs, LOC_US, BASE, GATE } from "../lib/matrix.mjs";
 import { screens } from "../lib/screens.mjs";
 import { seed, waitReady, openRoute, attach } from "../lib/harness.mjs";
 
@@ -11,7 +11,9 @@ test("links", async ({ browser, request }, testInfo) => {
   test.setTimeout(600_000);
   const found = new Map(); // url -> first screen seen
   const problems = [];
-  for (const L of langs()) for (const loc of [undefined, LOC_US]) {
+  // before a deploy, English and Arabic cover every link the app builds; nightly checks every language
+  const list = GATE ? langs().filter(l => ["en", "ar"].includes(l.code)) : langs();
+  for (const L of list) for (const loc of [undefined, LOC_US]) {
     if (loc && !["en", "es"].includes(L.code)) continue;
     const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, serviceWorkers: "block" });
     await seed(context, { lang: L.code, ...(loc ? { loc } : {}) });

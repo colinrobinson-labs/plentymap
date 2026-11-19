@@ -12,7 +12,7 @@ export const LABEL = {
   untranslated: "English showing in another language", "raw-key": "Translation key showing instead of words", placeholder: "Unfilled {placeholder}",
   "bad-value": "undefined/NaN on screen", "broken-image": "Image didn't load", "console-error": "Console error", "js-error": "Script error",
   "broken-asset": "Missing file", "third-party-request": "Request to another company's server", "screen-failed": "Screen didn't open",
-  "axe-critical": "Accessibility (critical)", "axe-serious": "Accessibility (serious)", "axe-moderate": "Accessibility (moderate)", "axe-minor": "Accessibility (minor)",
+  "axe-critical": "Accessibility (critical)", "axe-serious": "Accessibility (serious)", "axe-moderate": "Accessibility (moderate)", "axe-minor": "Accessibility (minor)", "axe-target-size": "Tap targets too small or crowded (axe)",
   "broken-link": "Broken link", "external-link": "Outside link may be broken", "visual-diff": "Looks different from the approved screenshot",
   "first-run-failed": "First-run screen didn't work", "state-failed": "Loading/error/empty state didn't work",
   "data-schema": "Listing data is malformed", "data-coords": "Listing pin in the wrong place", "data-duplicate": "Duplicate listings",

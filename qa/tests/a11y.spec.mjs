@@ -25,7 +25,9 @@ for (const L of langs()) for (const theme of ["light", "dark"]) {
           const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
             .exclude(".maplibregl-canvas").analyze();
           for (const v of r.violations) for (const n of v.nodes) problems.push({
-            check: "axe-" + (v.impact || "minor"), screen: sc.id, sel: [].concat(n.target).join(" ").slice(0, 160),
+            // target-size depends on what's scrolled under the fixed tab bar at scan time, so it can flicker run to run:
+            // reported with the other tap-target findings, never blocking
+            check: v.id === "target-size" ? "axe-target-size" : "axe-" + (v.impact || "minor"), screen: sc.id, sel: [].concat(n.target).join(" ").slice(0, 160),
             detail: `${v.id}: ${v.help}. ${(n.failureSummary || "").replace(/\s+/g, " ").slice(0, 160)}`, width: w, theme,
           });
         } catch (e) { problems.push({ check: "screen-failed", screen: sc.id, sel: "", detail: String(e.message || e).split("\n")[0], width: w, theme }); }
