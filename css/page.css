@@ -1,0 +1,22 @@
+/* Static pages (privacy, support): same chalkboard look as the app, no scripts. */
+@font-face{font-family:"Caprasimo";src:url(../fonts/caprasimo-latin.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Figtree";src:url(../fonts/figtree-latin.woff2) format("woff2");font-weight:300 900;font-display:swap}
+:root{--board:#1F3B2D;--chalk:#F1EBDD;--yolk:#F5C04A;--bg:#F5F0E3;--card:#FFFDF8;--ink:#1F3B2D;--ink-2:#4A5D50;--line:#DDD3BC;--link:#9B3320;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#13241B;--card:#1A2F23;--ink:#F1EBDD;--ink-2:#C9C2B2;--line:#2E4A3A;--link:#F7CF6E}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Figtree,system-ui,sans-serif;overflow-wrap:break-word}
+.bar{background:var(--board);color:var(--chalk);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(10px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left))}
+.brand{display:flex;align-items:center;gap:9px;color:var(--chalk);text-decoration:none;font-family:Caprasimo,Georgia,serif;font-size:22px}
+.open{color:var(--board);background:var(--yolk);text-decoration:none;font-weight:700;padding:10px 16px;border-radius:999px;white-space:nowrap}
+.page{max-width:720px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-left)) 40px}
+h1{font-family:Caprasimo,Georgia,serif;font-weight:400;font-size:clamp(30px,6vw,42px);line-height:1.15;margin:8px 0 16px}
+h2{font-size:21px;margin:32px 0 8px;line-height:1.3}
+p,ul{margin:0 0 14px}
+ul{padding-inline-start:22px}
+li{margin-bottom:6px}
+a{color:var(--link);text-underline-offset:3px}
+a:focus-visible{outline:3px solid var(--yolk);outline-offset:2px;border-radius:4px}
+.foot{border-top:1px solid var(--line);color:var(--ink-2);text-align:center;font-size:15px;padding:20px 16px calc(24px + env(safe-area-inset-bottom))}
+.foot a{color:inherit}
+@media (max-width:360px){.open{padding:9px 12px;font-size:15px}.brand{font-size:19px}}

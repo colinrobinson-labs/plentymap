@@ -1,0 +1,94 @@
+name: Site
+# Publishes plentymap.com: the app, the privacy and support pages, and the map tiles
+# from the data branch, to the gh-pages branch that GitHub Pages serves.
+on:
+  push:
+    branches: [main, launch]   # launch: first publish while the launch pull request is reviewed
+    paths-ignore: ["README.md", ".github/workflows/apps.yml", ".github/workflows/data.yml", ".github/workflows/tiles.yml", ".github/workflows/us-data.yml", "tools/us-region.geojson", "tools/fetch-us.mjs", "tools/build-us.mjs", ".github/workflows/extra-data.yml", "tools/fetch-extra.mjs", "tools/build-extra.mjs", "tools/check-reports.mjs", "tools/check-kids.mjs", "worker/**", "tools/fetch-intl.mjs", "tools/build-intl.mjs", "tools/check-links.mjs", "tools/regions/**", ".github/workflows/intl-data.yml", ".github/workflows/links.yml", "qa/**", ".github/workflows/qa-visual.yml"]
+  workflow_dispatch:
+    inputs:
+      skip_qa:
+        description: "Emergency only: publish without the QA checks"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
+concurrency:
+  group: site
+  cancel-in-progress: false
+jobs:
+  # QA checks (qa.yml): a new layout, language, accessibility, script or broken-file problem stops the publish.
+  qa:
+    if: ${{ !inputs.skip_qa }}
+    uses: ./.github/workflows/qa.yml
+    with:
+      level: gate
+    secrets: inherit
+  publish:
+    needs: qa
+    if: ${{ always() && (needs.qa.result == 'success' || needs.qa.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the site folder
+        run: |
+          set -e
+          mkdir -p _site
+          cp -r index.html manifest.webmanifest sw.js favicon.ico css js i18n icons fonts vendor _site/
+          mkdir -p _site/data && cp -r data/regions data/food.json data/kids.json _site/data/
+          cp -r privacy support terms attributions accessibility legal _site/ 2>/dev/null || true
+          cp robots.txt sitemap.xml 404.html _site/
+          echo "plentymap.com" > _site/CNAME
+          touch _site/.nojekyll
+      - name: Add map tiles from the data branch
+        run: |
+          set -e
+          git fetch --depth 1 origin data
+          mkdir -p /tmp/d _site/data/tiles
+          git archive FETCH_HEAD tiles | tar -x -C /tmp/d
+          day=$(jq -r '.built' /tmp/d/tiles/info.json | cut -c1-10 | tr -d '-')
+          cp /tmp/d/tiles/san-diego.pmtiles "_site/data/tiles/san-diego-$day.pmtiles"
+          cp -r /tmp/d/tiles/fonts _site/data/tiles/fonts
+          printf '{"file":"san-diego-%s.pmtiles","built":"%s"}\n' "$day" "$day" > _site/data/tiles/tiles.json
+      - name: Add the nationwide data packs from the usdata branch
+        run: |
+          set -e
+          if git fetch --depth 1 origin usdata 2>/dev/null; then
+            git archive FETCH_HEAD us | tar -x -C _site/data
+            ls _site/data/us/cells | wc -l
+          else
+            echo "::warning::no usdata branch yet; the app falls back to San Diego only"
+          fi
+      - name: Add the UK and Canada data packs from the intldata branch
+        run: |
+          set -e
+          if git fetch --depth 1 origin intldata 2>/dev/null; then
+            for c in gb ca; do
+              if git archive FETCH_HEAD $c 2>/dev/null | tar -x -C _site/data; then echo "$c: $(ls _site/data/$c/cells | wc -l) cells"; fi
+            done
+          else
+            echo "no intldata branch yet; UK and Canada not published"
+          fi
+          du -sh _site; find _site -size +90M
+      - name: Add the extra layers and apply the nightly report check (extradata branch)
+        run: |
+          set -e
+          if git fetch --depth 1 origin extradata 2>/dev/null; then
+            mkdir -p /tmp/x && git archive FETCH_HEAD | tar -x -C /tmp/x
+            [ -d /tmp/x/extra ] && cp -r /tmp/x/extra _site/data/extra && rm -f _site/data/extra/report.json
+            node tools/apply-flags.mjs _site/data /tmp/x/flags/flags.json
+          else
+            echo "::warning::no extradata branch yet; extra layers and report flags skipped"
+          fi
+      - name: Publish to gh-pages
+        run: |
+          cd _site
+          git init -q -b gh-pages
+          git config user.name "plentymap-site"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Site from ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages

@@ -1,0 +1,126 @@
+name: Map tiles
+# Cuts each country's street map from the latest Protomaps build (OpenStreetMap data) and uploads it
+# to our Cloudflare R2 bucket, served at tiles.plentymap.com. Runs monthly and on request.
+# Each build gets a new file name; tiles.json (US) or tiles-<cc>.json names the current one and older
+# files are removed.
+#
+# Which countries: the repository variable TILE_COUNTRIES (Settings > Secrets and variables > Actions >
+# Variables), space-separated, default "us gb ca" (Colin approved UK and Canada on 2026-11-19). Sizes at street level (z14) in Nov 2026: US ~9.7 GB,
+# UK ~1.3 GB, Canada ~8.4 GB (z13 4.5 GB). R2 storage past the free 10 GB is $0.015 per GB-month.
+on:
+  schedule:
+    - cron: "17 9 3 * *"   # 3rd of each month
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: "Countries to cut, space-separated (us gb ca). Empty = the TILE_COUNTRIES variable"
+        type: string
+        default: ""
+  push:
+    branches: [main, launch]
+    paths: [".github/workflows/tiles.yml", "tools/us-region.geojson", "tools/regions/*.geojson"]
+permissions:
+  contents: read
+concurrency:
+  group: tiles
+  cancel-in-progress: false
+env:
+  BUCKET: plentymap-tiles
+  R2_ENDPOINT: https://2aae18188c7719b5c585a2d2b09e464f.r2.cloudflarestorage.com
+  AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: auto
+  AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+  AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+jobs:
+  pick:
+    runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.p.outputs.list }}
+    steps:
+      - id: p
+        env:
+          WANT: ${{ inputs.countries || vars.TILE_COUNTRIES || 'us gb ca' }}
+        run: |
+          list=$(echo "$WANT" | tr ' ,' '\n\n' | grep -E '^(us|gb|ca)$' | sort -u | jq -R . | jq -sc .)
+          [ "$list" != "[]" ] || list='["us"]'
+          echo "countries: $list"; echo "list=$list" >> "$GITHUB_OUTPUT"
+  tiles:
+    needs: pick
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        cc: ${{ fromJSON(needs.pick.outputs.list) }}
+    runs-on: ubuntu-latest
+    env:
+      CC: ${{ matrix.cc }}
+      # Most detailed zoom that fits under this size, per country. US street level (z14) is ~9.7 GB;
+      # with the previous month kept during the swap, storage runs a few cents a month over the free 10 GB.
+      # Canada starts at z13 (4.5 GB); street level (z14) would be 8.4 GB.
+      MAX_BYTES: ${{ matrix.cc == 'us' && '12000000000' || matrix.cc == 'ca' && '5000000000' || '2000000000' }}
+      ZOOMS: ${{ matrix.cc == 'ca' && '13 12' || '14 13 12' }}
+      REGION: ${{ matrix.cc == 'us' && 'tools/us-region.geojson' || format('tools/regions/{0}.geojson', matrix.cc) }}
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the upload keys
+        run: |
+          [ -n "$AWS_ACCESS_KEY_ID" ] && [ -n "$AWS_SECRET_ACCESS_KEY" ] || { echo "::error::R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY secrets are missing"; exit 1; }
+          aws s3 ls "s3://$BUCKET/" --endpoint-url "$R2_ENDPOINT" >/dev/null && echo "keys work"
+      - name: Get the pmtiles tool and the latest build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          URL=$(gh release view -R protomaps/go-pmtiles --json assets --jq '.assets[] | select(.name | test("Linux_x86_64.tar.gz$")) | .url' | head -1)
+          curl -fsSL -o /tmp/pm.tgz "$URL" && tar -xzf /tmp/pm.tgz -C /tmp pmtiles
+          for d in 0 1 2 3 4 5 6 7 8 9; do
+            day=$(date -u -d "-$d day" +%Y%m%d)
+            if curl -fsI "https://build.protomaps.com/$day.pmtiles" >/dev/null; then echo "SRC=https://build.protomaps.com/$day.pmtiles" >> "$GITHUB_ENV"; echo "DAY=$day" >> "$GITHUB_ENV"; exit 0; fi
+          done
+          echo "::error::no Protomaps build found in the last 10 days"; exit 1
+      - name: Cut the ${{ matrix.cc }} map
+        run: |
+          set -e
+          sudo mkdir -p /mnt/t && sudo chown "$USER" /mnt/t && df -h /mnt
+          for z in $ZOOMS; do
+            /tmp/pmtiles extract "$SRC" /mnt/t/$CC.pmtiles --region="$REGION" --maxzoom=$z --download-threads=8
+            SIZE=$(stat -c %s /mnt/t/$CC.pmtiles)
+            echo "maxzoom $z: $SIZE bytes"
+            if [ "$SIZE" -le "$MAX_BYTES" ]; then echo "Z=$z" >> "$GITHUB_ENV"; break; fi
+            rm /mnt/t/$CC.pmtiles
+          done
+          [ -f /mnt/t/$CC.pmtiles ] || { echo "::error::map too big at every zoom"; exit 1; }
+          /tmp/pmtiles show /mnt/t/$CC.pmtiles | head -20
+      - name: Upload, switch, and remove old files
+        run: |
+          set -e
+          NAME="$CC-$DAY-z$Z.pmtiles"
+          POINTER=$([ "$CC" = us ] && echo tiles.json || echo "tiles-$CC.json")
+          # R2 wants equal-size parts; big parts and fewer parallel uploads keep large files reliable
+          aws configure set default.s3.multipart_chunksize 128MB
+          aws configure set default.s3.max_concurrent_requests 4
+          for try in 1 2 3; do
+            if aws s3 cp /mnt/t/$CC.pmtiles "s3://$BUCKET/$NAME" --endpoint-url "$R2_ENDPOINT" \
+              --content-type application/octet-stream --cache-control "public, max-age=31536000, immutable" --no-progress; then break; fi
+            [ "$try" = 3 ] && { echo "::error::upload failed 3 times"; exit 1; }
+            echo "upload try $try failed, retrying"; sleep 20
+          done
+          # confirm the stored size matches before switching
+          [ "$(aws s3api head-object --bucket "$BUCKET" --key "$NAME" --endpoint-url "$R2_ENDPOINT" --query ContentLength --output text)" = "$(stat -c %s /mnt/t/$CC.pmtiles)" ] || { echo "::error::size mismatch after upload"; exit 1; }
+          printf '{"file":"%s","built":"%s","source":"%s","maxzoom":%s}\n' "$NAME" "$DAY" "$SRC" "$Z" > /tmp/tiles.json
+          aws s3 cp /tmp/tiles.json "s3://$BUCKET/$POINTER" --endpoint-url "$R2_ENDPOINT" \
+            --content-type application/json --cache-control "no-cache"
+          # keep the new file and the one before it (phones may still be mid-session on it)
+          aws s3 ls "s3://$BUCKET/" --endpoint-url "$R2_ENDPOINT" | awk '{print $4}' | grep -E "^$CC-[0-9]{8}-z[0-9]+\.pmtiles\$" | sort -r | tail -n +3 | while read -r f; do
+            echo "removing $f"; aws s3 rm "s3://$BUCKET/$f" --endpoint-url "$R2_ENDPOINT"
+          done
+          aws s3 ls "s3://$BUCKET/" --endpoint-url "$R2_ENDPOINT"
+      - name: Check it is served
+        run: |
+          sleep 5
+          P=$([ "$CC" = us ] && echo tiles.json || echo "tiles-$CC.json")
+          curl -fsS "https://tiles.plentymap.com/$P" || echo "::warning::tiles.plentymap.com not answering yet (certificate may still be issuing)"
+          F=$(jq -r .file /tmp/tiles.json)
+          curl -fsS -o /dev/null -w 'range status %{http_code}\n' -H 'Range: bytes=0-126' -H 'Origin: https://plentymap.com' "https://tiles.plentymap.com/$F" || true

@@ -1,0 +1,3148 @@
+{
+ "items": {
+  "2477571564": {
+   "key": "tap-target|budget-swap|button#sharel",
+   "since": "2026-11-19"
+  },
+  "4212671042": {
+   "key": "tap-target|budget-swap|input#g-bpowder",
+   "since": "2026-11-19"
+  },
+  "2c68f5257b": {
+   "key": "broken-asset|setup|404 /data/us/zip/000.json",
+   "since": "2026-11-19"
+  },
+  "0652153688": {
+   "key": "axe-serious|find-map|button[data-flt=\"drive\"]",
+   "since": "2026-11-19"
+  },
+  "3455c3db6e": {
+   "key": "state-failed|back-budget-swap|#swap-h",
+   "since": "2026-11-19"
+  },
+  "c4ca6f83d2": {
+   "key": "data-count|data:us|state:MS",
+   "since": "2026-11-19"
+  },
+  "6167323f42": {
+   "key": "data-coords|data:us|snap-1606950",
+   "since": "2026-11-19"
+  },
+  "7d5f0c5d19": {
+   "key": "data-coords|data:us|snap-1456686",
+   "since": "2026-11-19"
+  },
+  "2c81d86e57": {
+   "key": "data-coords|data:us|snap-1384513",
+   "since": "2026-11-19"
+  },
+  "54dd69b6b1": {
+   "key": "data-coords|data:us|snap-1648121",
+   "since": "2026-11-19"
+  },
+  "e3079dc4fc": {
+   "key": "data-coords|data:us|snap-776779",
+   "since": "2026-11-19"
+  },
+  "e80b2bd071": {
+   "key": "data-coords|data:us|snap-1508121",
+   "since": "2026-11-19"
+  },
+  "0a296af006": {
+   "key": "data-coords|data:us|snap-1266504",
+   "since": "2026-11-19"
+  },
+  "6cc426e259": {
+   "key": "data-coords|data:us|snap-515344",
+   "since": "2026-11-19"
+  },
+  "d9ad62ddef": {
+   "key": "data-coords|data:us|snap-269442",
+   "since": "2026-11-19"
+  },
+  "75b1531b7c": {
+   "key": "data-coords|data:us|snap-1231574",
+   "since": "2026-11-19"
+  },
+  "477cbd30d5": {
+   "key": "data-coords|data:us|snap-1062162",
+   "since": "2026-11-19"
+  },
+  "d030bdc847": {
+   "key": "data-coords|data:us|snap-485091",
+   "since": "2026-11-19"
+  },
+  "83587d2e20": {
+   "key": "data-coords|data:us|snap-481629",
+   "since": "2026-11-19"
+  },
+  "a86758d2d1": {
+   "key": "data-coords|data:us|snap-1194596",
+   "since": "2026-11-19"
+  },
+  "b1c49aba5d": {
+   "key": "data-coords|data:us|snap-336906",
+   "since": "2026-11-19"
+  },
+  "3362799dc6": {
+   "key": "data-coords|data:us|snap-1344442",
+   "since": "2026-11-19"
+  },
+  "0c78d17d22": {
+   "key": "data-coords|data:us|snap-1325273",
+   "since": "2026-11-19"
+  },
+  "1ecde08350": {
+   "key": "data-coords|data:us|snap-743473",
+   "since": "2026-11-19"
+  },
+  "ab27fb98a0": {
+   "key": "data-coords|data:us|snap-1325591",
+   "since": "2026-11-19"
+  },
+  "a6330b7b29": {
+   "key": "data-coords|data:us|snap-1229029",
+   "since": "2026-11-19"
+  },
+  "f68ec0ea36": {
+   "key": "data-coords|data:us|snap-649843",
+   "since": "2026-11-19"
+  },
+  "26b17913e7": {
+   "key": "data-coords|data:us|snap-474799",
+   "since": "2026-11-19"
+  },
+  "012a48c4de": {
+   "key": "data-coords|data:us|snap-329194",
+   "since": "2026-11-19"
+  },
+  "e8863b1422": {
+   "key": "data-coords|data:us|snap-279686",
+   "since": "2026-11-19"
+  },
+  "00d7610430": {
+   "key": "data-coords|data:us|snap-721634",
+   "since": "2026-11-19"
+  },
+  "80ec4156fa": {
+   "key": "data-coords|data:us|snap-752950",
+   "since": "2026-11-19"
+  },
+  "d4fbdd2044": {
+   "key": "data-coords|data:us|snap-626041",
+   "since": "2026-11-19"
+  },
+  "9f437baed6": {
+   "key": "data-coords|data:us|snap-1710313",
+   "since": "2026-11-19"
+  },
+  "d701f5da56": {
+   "key": "data-coords|data:us|snap-1197267",
+   "since": "2026-11-19"
+  },
+  "ab4d0ec5e5": {
+   "key": "data-coords|data:us|snap-401940",
+   "since": "2026-11-19"
+  },
+  "cf619a4b31": {
+   "key": "data-coords|data:us|snap-574187",
+   "since": "2026-11-19"
+  },
+  "6b51d19438": {
+   "key": "data-coords|data:us|snap-1500023",
+   "since": "2026-11-19"
+  },
+  "2f0f6095fa": {
+   "key": "data-coords|data:us|snap-473896",
+   "since": "2026-11-19"
+  },
+  "897953c71d": {
+   "key": "data-coords|data:us|snap-352912",
+   "since": "2026-11-19"
+  },
+  "bf038a3197": {
+   "key": "data-coords|data:us|snap-881104",
+   "since": "2026-11-19"
+  },
+  "68f1298c71": {
+   "key": "data-coords|data:us|snap-281161",
+   "since": "2026-11-19"
+  },
+  "c5c804a7c4": {
+   "key": "data-coords|data:us|snap-623134",
+   "since": "2026-11-19"
+  },
+  "a31e93a4f4": {
+   "key": "data-coords|data:us|snap-1113514",
+   "since": "2026-11-19"
+  },
+  "77a1696f64": {
+   "key": "data-coords|data:us|snap-1247154",
+   "since": "2026-11-19"
+  },
+  "85cdcddb9a": {
+   "key": "data-coords|data:us|snap-1597657",
+   "since": "2026-11-19"
+  },
+  "0ec5334a55": {
+   "key": "data-coords|data:us|snap-1297461",
+   "since": "2026-11-19"
+  },
+  "dfcd035590": {
+   "key": "data-coords|data:us|snap-1475180",
+   "since": "2026-11-19"
+  },
+  "665f2e4413": {
+   "key": "data-coords|data:us|snap-1606867",
+   "since": "2026-11-19"
+  },
+  "0d62901d53": {
+   "key": "data-coords|data:us|snap-1425767",
+   "since": "2026-11-19"
+  },
+  "5638d66bcc": {
+   "key": "data-coords|data:us|snap-1428875",
+   "since": "2026-11-19"
+  },
+  "dd48a3f465": {
+   "key": "data-coords|data:us|snap-1152441",
+   "since": "2026-11-19"
+  },
+  "95aa4f2bcf": {
+   "key": "data-coords|data:us|snap-1028783",
+   "since": "2026-11-19"
+  },
+  "a58890898c": {
+   "key": "data-coords|data:us|snap-1596435",
+   "since": "2026-11-19"
+  },
+  "045eedf6b2": {
+   "key": "data-coords|data:us|snap-1682418",
+   "since": "2026-11-19"
+  },
+  "f710060a8f": {
+   "key": "data-coords|data:us|snap-1031349",
+   "since": "2026-11-19"
+  },
+  "cd38f88180": {
+   "key": "data-coords|data:us|snap-561764",
+   "since": "2026-11-19"
+  },
+  "7a6cdf1f1e": {
+   "key": "data-coords|data:us|snap-1512558",
+   "since": "2026-11-19"
+  },
+  "f20f8826fa": {
+   "key": "data-coords|data:us|snap-848728",
+   "since": "2026-11-19"
+  },
+  "7c1b28e78f": {
+   "key": "data-coords|data:us|snap-1088036",
+   "since": "2026-11-19"
+  },
+  "43cbb0ad1a": {
+   "key": "data-coords|data:us|snap-1436978",
+   "since": "2026-11-19"
+  },
+  "211a971410": {
+   "key": "data-coords|data:us|snap-836731",
+   "since": "2026-11-19"
+  },
+  "bc8676ae9f": {
+   "key": "data-coords|data:us|snap-1441389",
+   "since": "2026-11-19"
+  },
+  "da168f9cea": {
+   "key": "data-coords|data:us|snap-1247152",
+   "since": "2026-11-19"
+  },
+  "bdd8157c2e": {
+   "key": "data-coords|data:us|snap-1030110",
+   "since": "2026-11-19"
+  },
+  "b38bdc5704": {
+   "key": "data-coords|data:us|snap-1343195",
+   "since": "2026-11-19"
+  },
+  "4d6a971a3d": {
+   "key": "data-coords|data:us|snap-1518332",
+   "since": "2026-11-19"
+  },
+  "9a86fe48e7": {
+   "key": "data-coords|data:us|snap-1356870",
+   "since": "2026-11-19"
+  },
+  "25b37b7d69": {
+   "key": "data-coords|data:us|snap-1219948",
+   "since": "2026-11-19"
+  },
+  "459ef2a20e": {
+   "key": "data-coords|data:us|snap-463197",
+   "since": "2026-11-19"
+  },
+  "8063150cb8": {
+   "key": "data-coords|data:us|snap-1105188",
+   "since": "2026-11-19"
+  },
+  "92cc5cab0d": {
+   "key": "data-coords|data:us|snap-1141617",
+   "since": "2026-11-19"
+  },
+  "9ac4089877": {
+   "key": "data-coords|data:us|snap-932102",
+   "since": "2026-11-19"
+  },
+  "b7938b7413": {
+   "key": "data-coords|data:us|snap-1442216",
+   "since": "2026-11-19"
+  },
+  "65f18954d0": {
+   "key": "data-coords|data:us|snap-432039",
+   "since": "2026-11-19"
+  },
+  "965e8fbe2a": {
+   "key": "data-coords|data:us|snap-1351900",
+   "since": "2026-11-19"
+  },
+  "6fe0c0d901": {
+   "key": "data-coords|data:us|snap-1508896",
+   "since": "2026-11-19"
+  },
+  "814002a2bd": {
+   "key": "data-coords|data:us|snap-1477981",
+   "since": "2026-11-19"
+  },
+  "7049709ae5": {
+   "key": "data-coords|data:us|snap-987582",
+   "since": "2026-11-19"
+  },
+  "2d02986d63": {
+   "key": "data-coords|data:us|snap-1203651",
+   "since": "2026-11-19"
+  },
+  "3a753fec89": {
+   "key": "data-coords|data:us|snap-1495672",
+   "since": "2026-11-19"
+  },
+  "7238088f98": {
+   "key": "data-coords|data:us|snap-1384274",
+   "since": "2026-11-19"
+  },
+  "b78bd746d8": {
+   "key": "data-coords|data:us|snap-1649277",
+   "since": "2026-11-19"
+  },
+  "65dfc4e060": {
+   "key": "data-coords|data:us|snap-301405",
+   "since": "2026-11-19"
+  },
+  "11951b7a2c": {
+   "key": "data-coords|data:us|snap-936314",
+   "since": "2026-11-19"
+  },
+  "ea300249a5": {
+   "key": "data-coords|data:us|snap-1382456",
+   "since": "2026-11-19"
+  },
+  "a5c3f8eab5": {
+   "key": "data-coords|data:us|snap-240232",
+   "since": "2026-11-19"
+  },
+  "757cfc644e": {
+   "key": "data-coords|data:us|snap-389760",
+   "since": "2026-11-19"
+  },
+  "6e91f99d23": {
+   "key": "data-coords|data:us|snap-1030111",
+   "since": "2026-11-19"
+  },
+  "19c92617df": {
+   "key": "data-coords|data:us|snap-1618654",
+   "since": "2026-11-19"
+  },
+  "900586ee27": {
+   "key": "data-coords|data:us|snap-1154260",
+   "since": "2026-11-19"
+  },
+  "c70a953571": {
+   "key": "data-coords|data:us|snap-828142",
+   "since": "2026-11-19"
+  },
+  "c1a1f77557": {
+   "key": "data-coords|data:us|snap-1190130",
+   "since": "2026-11-19"
+  },
+  "885c50291a": {
+   "key": "data-coords|data:us|snap-1337797",
+   "since": "2026-11-19"
+  },
+  "422d4378b9": {
+   "key": "data-coords|data:us|snap-1634713",
+   "since": "2026-11-19"
+  },
+  "4426d9d55f": {
+   "key": "data-coords|data:us|snap-1679889",
+   "since": "2026-11-19"
+  },
+  "feea54ea7c": {
+   "key": "data-coords|data:us|snap-269892",
+   "since": "2026-11-19"
+  },
+  "142c76419c": {
+   "key": "data-coords|data:us|snap-1698495",
+   "since": "2026-11-19"
+  },
+  "cb8fde5c24": {
+   "key": "data-coords|data:us|snap-1313528",
+   "since": "2026-11-19"
+  },
+  "cb5a3b5f14": {
+   "key": "data-coords|data:us|snap-270399",
+   "since": "2026-11-19"
+  },
+  "dc75af1648": {
+   "key": "data-coords|data:us|snap-1236032",
+   "since": "2026-11-19"
+  },
+  "8569d5239d": {
+   "key": "data-coords|data:us|snap-838581",
+   "since": "2026-11-19"
+  },
+  "f58f72948d": {
+   "key": "data-coords|data:us|snap-1376371",
+   "since": "2026-11-19"
+  },
+  "5bc32ff2ec": {
+   "key": "data-coords|data:us|snap-1048143",
+   "since": "2026-11-19"
+  },
+  "8b87aeec71": {
+   "key": "data-coords|data:us|snap-1061749",
+   "since": "2026-11-19"
+  },
+  "87e47747df": {
+   "key": "data-coords|data:us|snap-410711",
+   "since": "2026-11-19"
+  },
+  "de94de97a3": {
+   "key": "data-coords|data:us|snap-1577028",
+   "since": "2026-11-19"
+  },
+  "909f6a8d45": {
+   "key": "data-coords|data:us|snap-1469674",
+   "since": "2026-11-19"
+  },
+  "9ce5d06a37": {
+   "key": "data-coords|data:us|snap-1228997",
+   "since": "2026-11-19"
+  },
+  "a1cf64f8b4": {
+   "key": "data-coords|data:us|snap-653413",
+   "since": "2026-11-19"
+  },
+  "beeae2b334": {
+   "key": "data-coords|data:us|snap-1455627",
+   "since": "2026-11-19"
+  },
+  "2e988e62ee": {
+   "key": "data-coords|data:us|snap-1239476",
+   "since": "2026-11-19"
+  },
+  "870dc6c014": {
+   "key": "data-coords|data:us|snap-1528176",
+   "since": "2026-11-19"
+  },
+  "28e216eed4": {
+   "key": "data-coords|data:us|snap-1385080",
+   "since": "2026-11-19"
+  },
+  "d657565352": {
+   "key": "data-coords|data:us|snap-1481801",
+   "since": "2026-11-19"
+  },
+  "9be8590672": {
+   "key": "data-coords|data:us|snap-1506673",
+   "since": "2026-11-19"
+  },
+  "d5f93800ca": {
+   "key": "data-coords|data:us|snap-316217",
+   "since": "2026-11-19"
+  },
+  "295a48a4c7": {
+   "key": "data-coords|data:us|snap-1258283",
+   "since": "2026-11-19"
+  },
+  "8f7ec5c53a": {
+   "key": "data-coords|data:us|snap-1509862",
+   "since": "2026-11-19"
+  },
+  "e5f392cf85": {
+   "key": "data-coords|data:us|snap-769708",
+   "since": "2026-11-19"
+  },
+  "95f7993515": {
+   "key": "data-coords|data:us|snap-1528939",
+   "since": "2026-11-19"
+  },
+  "fbbd1d62b0": {
+   "key": "data-coords|data:us|snap-1671169",
+   "since": "2026-11-19"
+  },
+  "3dd545bbdd": {
+   "key": "data-coords|data:us|snap-1631742",
+   "since": "2026-11-19"
+  },
+  "0cf56b0633": {
+   "key": "data-coords|data:us|snap-1652825",
+   "since": "2026-11-19"
+  },
+  "9af38bfc66": {
+   "key": "data-coords|data:us|snap-1652695",
+   "since": "2026-11-19"
+  },
+  "635dc5696b": {
+   "key": "data-coords|data:us|snap-739833",
+   "since": "2026-11-19"
+  },
+  "7b575b30ed": {
+   "key": "data-coords|data:us|snap-1368811",
+   "since": "2026-11-19"
+  },
+  "d12cb8d507": {
+   "key": "data-coords|data:us|snap-1486929",
+   "since": "2026-11-19"
+  },
+  "47d7da2ada": {
+   "key": "data-coords|data:us|snap-824552",
+   "since": "2026-11-19"
+  },
+  "d991883a3c": {
+   "key": "data-coords|data:us|snap-1705878",
+   "since": "2026-11-19"
+  },
+  "fce6bca3f2": {
+   "key": "data-coords|data:us|snap-998598",
+   "since": "2026-11-19"
+  },
+  "5f1c56a3ee": {
+   "key": "data-coords|data:us|snap-798064",
+   "since": "2026-11-19"
+  },
+  "bfbb1c198f": {
+   "key": "data-coords|data:us|snap-496511",
+   "since": "2026-11-19"
+  },
+  "f06fb0ef27": {
+   "key": "data-coords|data:us|snap-1281193",
+   "since": "2026-11-19"
+  },
+  "00380ca969": {
+   "key": "data-coords|data:us|snap-1614242",
+   "since": "2026-11-19"
+  },
+  "f3fe264fba": {
+   "key": "data-coords|data:us|snap-1644951",
+   "since": "2026-11-19"
+  },
+  "02d740bebc": {
+   "key": "data-coords|data:us|snap-995922",
+   "since": "2026-11-19"
+  },
+  "6d0e2e5c60": {
+   "key": "data-coords|data:us|snap-247942",
+   "since": "2026-11-19"
+  },
+  "e0fc748689": {
+   "key": "data-coords|data:us|snap-1251623",
+   "since": "2026-11-19"
+  },
+  "c8ef9579e6": {
+   "key": "data-coords|data:us|snap-1097174",
+   "since": "2026-11-19"
+  },
+  "e4f6a08ed5": {
+   "key": "data-coords|data:us|snap-1316264",
+   "since": "2026-11-19"
+  },
+  "be87a0030e": {
+   "key": "data-coords|data:us|snap-378292",
+   "since": "2026-11-19"
+  },
+  "148802e6a0": {
+   "key": "data-coords|data:us|snap-1070996",
+   "since": "2026-11-19"
+  },
+  "35ec3e21eb": {
+   "key": "data-coords|data:us|snap-1415222",
+   "since": "2026-11-19"
+  },
+  "fed83cd41b": {
+   "key": "data-coords|data:us|snap-1253203",
+   "since": "2026-11-19"
+  },
+  "7c43b0e722": {
+   "key": "data-coords|data:us|snap-997419",
+   "since": "2026-11-19"
+  },
+  "9a9cbb57a3": {
+   "key": "data-coords|data:us|snap-1631171",
+   "since": "2026-11-19"
+  },
+  "fab571c0d6": {
+   "key": "data-coords|data:us|snap-1310689",
+   "since": "2026-11-19"
+  },
+  "1b18cd6ef6": {
+   "key": "data-coords|data:us|snap-1074407",
+   "since": "2026-11-19"
+  },
+  "041339f2a6": {
+   "key": "data-coords|data:us|snap-1061815",
+   "since": "2026-11-19"
+  },
+  "78c1eafacf": {
+   "key": "data-coords|data:us|snap-1352525",
+   "since": "2026-11-19"
+  },
+  "c7e38f7a74": {
+   "key": "data-coords|data:us|snap-1518892",
+   "since": "2026-11-19"
+  },
+  "3edebe64b4": {
+   "key": "data-coords|data:us|snap-1505418",
+   "since": "2026-11-19"
+  },
+  "e2a2ded658": {
+   "key": "data-coords|data:us|snap-1249771",
+   "since": "2026-11-19"
+  },
+  "723a10382a": {
+   "key": "data-coords|data:us|snap-1327381",
+   "since": "2026-11-19"
+  },
+  "c602134ffe": {
+   "key": "data-coords|data:us|snap-979277",
+   "since": "2026-11-19"
+  },
+  "b37b4fea69": {
+   "key": "data-coords|data:us|snap-1093000",
+   "since": "2026-11-19"
+  },
+  "2fdfd22eda": {
+   "key": "data-coords|data:us|snap-645565",
+   "since": "2026-11-19"
+  },
+  "695114d448": {
+   "key": "data-coords|data:us|snap-703270",
+   "since": "2026-11-19"
+  },
+  "94ad94ff11": {
+   "key": "data-coords|data:us|snap-399335",
+   "since": "2026-11-19"
+  },
+  "9838f9fda5": {
+   "key": "data-coords|data:us|snap-497041",
+   "since": "2026-11-19"
+  },
+  "326a2f3812": {
+   "key": "data-coords|data:us|snap-540540",
+   "since": "2026-11-19"
+  },
+  "ec0c6e8fd0": {
+   "key": "data-coords|data:us|snap-1190275",
+   "since": "2026-11-19"
+  },
+  "d50db747a0": {
+   "key": "data-coords|data:us|snap-1677633",
+   "since": "2026-11-19"
+  },
+  "947e4f6ffd": {
+   "key": "data-coords|data:us|snap-862047",
+   "since": "2026-11-19"
+  },
+  "b829b3dcdc": {
+   "key": "data-coords|data:us|snap-1591204",
+   "since": "2026-11-19"
+  },
+  "30e40fa801": {
+   "key": "data-coords|data:us|snap-892252",
+   "since": "2026-11-19"
+  },
+  "53dfb835a8": {
+   "key": "data-coords|data:us|snap-1156105",
+   "since": "2026-11-19"
+  },
+  "5e54eac8ee": {
+   "key": "data-coords|data:us|snap-1579104",
+   "since": "2026-11-19"
+  },
+  "f1fcc2d012": {
+   "key": "data-coords|data:us|snap-1117399",
+   "since": "2026-11-19"
+  },
+  "5db3bb686b": {
+   "key": "data-coords|data:us|snap-637716",
+   "since": "2026-11-19"
+  },
+  "51440412c5": {
+   "key": "data-coords|data:us|snap-1574284",
+   "since": "2026-11-19"
+  },
+  "434a7ef796": {
+   "key": "data-coords|data:us|snap-1186226",
+   "since": "2026-11-19"
+  },
+  "7191317674": {
+   "key": "data-coords|data:us|snap-1216370",
+   "since": "2026-11-19"
+  },
+  "5ab87fcace": {
+   "key": "data-coords|data:us|snap-1125295",
+   "since": "2026-11-19"
+  },
+  "4ead8f10a4": {
+   "key": "data-coords|data:us|snap-1674387",
+   "since": "2026-11-19"
+  },
+  "0cf65b0eb2": {
+   "key": "data-coords|data:us|snap-1709135",
+   "since": "2026-11-19"
+  },
+  "22e1c955e9": {
+   "key": "data-coords|data:us|snap-641499",
+   "since": "2026-11-19"
+  },
+  "8041dfd28a": {
+   "key": "data-coords|data:us|snap-415726",
+   "since": "2026-11-19"
+  },
+  "07e41f9b9a": {
+   "key": "data-coords|data:us|snap-1120529",
+   "since": "2026-11-19"
+  },
+  "5f4a4d1284": {
+   "key": "data-coords|data:us|snap-546413",
+   "since": "2026-11-19"
+  },
+  "6e067fc7e7": {
+   "key": "data-coords|data:us|snap-1251804",
+   "since": "2026-11-19"
+  },
+  "a628aab2c7": {
+   "key": "data-coords|data:us|snap-1605842",
+   "since": "2026-11-19"
+  },
+  "2c3e76a363": {
+   "key": "data-coords|data:us|snap-1663174",
+   "since": "2026-11-19"
+  },
+  "aca5a721f2": {
+   "key": "data-coords|data:us|snap-1456956",
+   "since": "2026-11-19"
+  },
+  "2e4c2c634b": {
+   "key": "data-coords|data:us|snap-401766",
+   "since": "2026-11-19"
+  },
+  "5a4fbda870": {
+   "key": "data-coords|data:us|rmp-1555466",
+   "since": "2026-11-19"
+  },
+  "a82f0f4934": {
+   "key": "data-coords|data:us|snap-1672263",
+   "since": "2026-11-19"
+  },
+  "cb85a54f0e": {
+   "key": "data-coords|data:us|snap-1387097",
+   "since": "2026-11-19"
+  },
+  "b66ab4d3e5": {
+   "key": "data-coords|data:us|snap-1308860",
+   "since": "2026-11-19"
+  },
+  "58e16e163a": {
+   "key": "data-coords|data:us|snap-1680268",
+   "since": "2026-11-19"
+  },
+  "ac12b29e3e": {
+   "key": "data-coords|data:us|snap-1683178",
+   "since": "2026-11-19"
+  },
+  "c67b51ef96": {
+   "key": "data-coords|data:us|snap-1321990",
+   "since": "2026-11-19"
+  },
+  "50e2adabfc": {
+   "key": "data-coords|data:us|snap-1549408",
+   "since": "2026-11-19"
+  },
+  "c22a0e7409": {
+   "key": "data-coords|data:us|snap-1073628",
+   "since": "2026-11-19"
+  },
+  "36a7bf2bfa": {
+   "key": "data-coords|data:us|snap-1544894",
+   "since": "2026-11-19"
+  },
+  "a219191d8e": {
+   "key": "data-coords|data:us|snap-1057746",
+   "since": "2026-11-19"
+  },
+  "1b29c2e2c3": {
+   "key": "data-coords|data:us|snap-791439",
+   "since": "2026-11-19"
+  },
+  "8c11a7675b": {
+   "key": "data-coords|data:us|snap-1633301",
+   "since": "2026-11-19"
+  },
+  "cd9832c33b": {
+   "key": "data-coords|data:us|snap-1676344",
+   "since": "2026-11-19"
+  },
+  "e056513a9d": {
+   "key": "data-coords|data:us|snap-877617",
+   "since": "2026-11-19"
+  },
+  "49a9d80b34": {
+   "key": "data-duplicate|data:us|snap-1644967",
+   "since": "2026-11-19"
+  },
+  "8707a08c47": {
+   "key": "data-duplicate|data:us|snap-1620706",
+   "since": "2026-11-19"
+  },
+  "803207d477": {
+   "key": "data-duplicate|data:us|snap-1575850",
+   "since": "2026-11-19"
+  },
+  "9a96f36674": {
+   "key": "data-duplicate|data:us|snap-1471296",
+   "since": "2026-11-19"
+  },
+  "bf027d2fd3": {
+   "key": "data-duplicate|data:us|snap-1342058",
+   "since": "2026-11-19"
+  },
+  "e7a7878f0d": {
+   "key": "data-duplicate|data:us|snap-1223418",
+   "since": "2026-11-19"
+  },
+  "b7c62f98a5": {
+   "key": "data-duplicate|data:us|snap-1718343",
+   "since": "2026-11-19"
+  },
+  "fc7b0ec624": {
+   "key": "data-duplicate|data:us|snap-1210567",
+   "since": "2026-11-19"
+  },
+  "d8545a7490": {
+   "key": "data-duplicate|data:us|snap-1155821",
+   "since": "2026-11-19"
+  },
+  "a361c12384": {
+   "key": "data-duplicate|data:us|snap-1673711",
+   "since": "2026-11-19"
+  },
+  "72877fc6bc": {
+   "key": "data-duplicate|data:us|snap-1713729",
+   "since": "2026-11-19"
+  },
+  "9e13ba925e": {
+   "key": "data-duplicate|data:us|snap-1599066",
+   "since": "2026-11-19"
+  },
+  "0b3106c044": {
+   "key": "data-duplicate|data:us|snap-1268491",
+   "since": "2026-11-19"
+  },
+  "666e410f03": {
+   "key": "data-duplicate|data:us|rmp-1600738",
+   "since": "2026-11-19"
+  },
+  "c95c160ef7": {
+   "key": "data-duplicate|data:us|rmp-1600746",
+   "since": "2026-11-19"
+  },
+  "d9c5bb5521": {
+   "key": "data-duplicate|data:us|snap-1717939",
+   "since": "2026-11-19"
+  },
+  "5f8104567c": {
+   "key": "data-duplicate|data:us|snap-1424613",
+   "since": "2026-11-19"
+  },
+  "930d02d616": {
+   "key": "data-duplicate|data:us|rmp-1363782",
+   "since": "2026-11-19"
+  },
+  "11c38f5c60": {
+   "key": "data-duplicate|data:us|rmp-1130573",
+   "since": "2026-11-19"
+  },
+  "21522b2c84": {
+   "key": "data-duplicate|data:us|snap-1716393",
+   "since": "2026-11-19"
+  },
+  "f205945dff": {
+   "key": "data-duplicate|data:us|rmp-1605835",
+   "since": "2026-11-19"
+  },
+  "fe362758d1": {
+   "key": "data-duplicate|data:us|rmp-1387836",
+   "since": "2026-11-19"
+  },
+  "57b2b8f2ea": {
+   "key": "data-duplicate|data:us|snap-1504636",
+   "since": "2026-11-19"
+  },
+  "1f21c87be5": {
+   "key": "data-duplicate|data:us|rmp-1710630",
+   "since": "2026-11-19"
+  },
+  "4f3a9aab3e": {
+   "key": "data-duplicate|data:us|rmp-1717749",
+   "since": "2026-11-19"
+  },
+  "d196868c22": {
+   "key": "data-duplicate|data:us|osm-n3707422332",
+   "since": "2026-11-19"
+  },
+  "e8afee6ff0": {
+   "key": "data-duplicate|data:us|rmp-1288805",
+   "since": "2026-11-19"
+  },
+  "636efa0df1": {
+   "key": "data-duplicate|data:us|rmp-1288529",
+   "since": "2026-11-19"
+  },
+  "796b4ee809": {
+   "key": "data-duplicate|data:us|rmp-1420697",
+   "since": "2026-11-19"
+  },
+  "b0df521678": {
+   "key": "data-duplicate|data:us|rmp-1420701",
+   "since": "2026-11-19"
+  },
+  "16a3184ca9": {
+   "key": "data-duplicate|data:us|rmp-1422167",
+   "since": "2026-11-19"
+  },
+  "e2c88fb36f": {
+   "key": "data-duplicate|data:us|rmp-1599686",
+   "since": "2026-11-19"
+  },
+  "cf54cafd79": {
+   "key": "data-duplicate|data:us|snap-1717396",
+   "since": "2026-11-19"
+  },
+  "932bd61be8": {
+   "key": "data-duplicate|data:us|rmp-931033",
+   "since": "2026-11-19"
+  },
+  "7546490c91": {
+   "key": "data-duplicate|data:us|snap-1280805",
+   "since": "2026-11-19"
+  },
+  "8b62ad0a40": {
+   "key": "data-duplicate|data:us|snap-912212",
+   "since": "2026-11-19"
+  },
+  "e157381071": {
+   "key": "data-duplicate|data:us|snap-1071390",
+   "since": "2026-11-19"
+  },
+  "941bfd3dd4": {
+   "key": "data-duplicate|data:us|snap-1717116",
+   "since": "2026-11-19"
+  },
+  "7d02101667": {
+   "key": "data-duplicate|data:us|snap-1605064",
+   "since": "2026-11-19"
+  },
+  "1146a691ad": {
+   "key": "data-duplicate|data:us|snap-1456530",
+   "since": "2026-11-19"
+  },
+  "f68b2346ce": {
+   "key": "data-duplicate|data:us|snap-498602",
+   "since": "2026-11-19"
+  },
+  "b8276ed7f9": {
+   "key": "data-duplicate|data:us|osm-w1259830185",
+   "since": "2026-11-19"
+  },
+  "39a565bb64": {
+   "key": "data-duplicate|data:us|snap-1700385",
+   "since": "2026-11-19"
+  },
+  "f2275f317d": {
+   "key": "data-duplicate|data:us|osm-w704711920",
+   "since": "2026-11-19"
+  },
+  "d8c43a102a": {
+   "key": "data-duplicate|data:us|rmp-1674937",
+   "since": "2026-11-19"
+  },
+  "f3913f8e51": {
+   "key": "data-duplicate|data:us|rmp-1397975",
+   "since": "2026-11-19"
+  },
+  "0fdc9e7c7b": {
+   "key": "data-duplicate|data:us|rmp-1397959",
+   "since": "2026-11-19"
+  },
+  "dcb785c2cc": {
+   "key": "data-duplicate|data:us|snap-1718344",
+   "since": "2026-11-19"
+  },
+  "ba7e336853": {
+   "key": "data-duplicate|data:us|rmp-1666503",
+   "since": "2026-11-19"
+  },
+  "470b0298f6": {
+   "key": "data-duplicate|data:us|rmp-1645410",
+   "since": "2026-11-19"
+  },
+  "2283fb0625": {
+   "key": "data-duplicate|data:us|rmp-1645404",
+   "since": "2026-11-19"
+  },
+  "800ed4d44a": {
+   "key": "data-duplicate|data:us|rmp-1645413",
+   "since": "2026-11-19"
+  },
+  "381a1e7c22": {
+   "key": "data-duplicate|data:us|rmp-1645421",
+   "since": "2026-11-19"
+  },
+  "486f4984fb": {
+   "key": "data-duplicate|data:us|rmp-1664574",
+   "since": "2026-11-19"
+  },
+  "e5e6e0c967": {
+   "key": "data-duplicate|data:us|rmp-1515254",
+   "since": "2026-11-19"
+  },
+  "62995bb091": {
+   "key": "data-duplicate|data:us|snap-1703240",
+   "since": "2026-11-19"
+  },
+  "a9cc54db0d": {
+   "key": "data-duplicate|data:us|rmp-1625809",
+   "since": "2026-11-19"
+  },
+  "53cd9b5bfb": {
+   "key": "data-duplicate|data:us|snap-1072368",
+   "since": "2026-11-19"
+  },
+  "da89325740": {
+   "key": "data-duplicate|data:us|rmp-1686090",
+   "since": "2026-11-19"
+  },
+  "cf96f60d98": {
+   "key": "data-duplicate|data:us|snap-998351",
+   "since": "2026-11-19"
+  },
+  "7949c81d7c": {
+   "key": "data-duplicate|data:us|snap-1718347",
+   "since": "2026-11-19"
+  },
+  "6c57922fa6": {
+   "key": "data-duplicate|data:us|snap-1718511",
+   "since": "2026-11-19"
+  },
+  "43bb3d0704": {
+   "key": "data-duplicate|data:us|snap-557748",
+   "since": "2026-11-19"
+  },
+  "017d9eb9b4": {
+   "key": "data-duplicate|data:us|snap-1664469",
+   "since": "2026-11-19"
+  },
+  "8d93454e28": {
+   "key": "data-duplicate|data:us|snap-1497740",
+   "since": "2026-11-19"
+  },
+  "8e8c743f8f": {
+   "key": "data-duplicate|data:us|snap-703222",
+   "since": "2026-11-19"
+  },
+  "c7f0c52093": {
+   "key": "data-duplicate|data:us|osm-w762549386",
+   "since": "2026-11-19"
+  },
+  "8942fc0d48": {
+   "key": "data-duplicate|data:us|snap-1499897",
+   "since": "2026-11-19"
+  },
+  "b04d2514fe": {
+   "key": "data-duplicate|data:us|snap-1403907",
+   "since": "2026-11-19"
+  },
+  "bd32164bda": {
+   "key": "data-duplicate|data:us|snap-1409709",
+   "since": "2026-11-19"
+  },
+  "64413b0486": {
+   "key": "data-duplicate|data:us|snap-1692686",
+   "since": "2026-11-19"
+  },
+  "689753e1d8": {
+   "key": "data-duplicate|data:us|rmp-1686642",
+   "since": "2026-11-19"
+  },
+  "f429b83476": {
+   "key": "data-duplicate|data:us|snap-1662682",
+   "since": "2026-11-19"
+  },
+  "e77534aba8": {
+   "key": "data-duplicate|data:us|snap-1618614",
+   "since": "2026-11-19"
+  },
+  "3b6ccb2574": {
+   "key": "data-duplicate|data:us|rmp-1508345",
+   "since": "2026-11-19"
+  },
+  "3211dd858e": {
+   "key": "data-duplicate|data:us|snap-1532423",
+   "since": "2026-11-19"
+  },
+  "af84774255": {
+   "key": "data-duplicate|data:us|snap-1718231",
+   "since": "2026-11-19"
+  },
+  "89b3c11f59": {
+   "key": "data-duplicate|data:us|snap-1665990",
+   "since": "2026-11-19"
+  },
+  "c8c07ca5fd": {
+   "key": "data-duplicate|data:us|snap-1511942",
+   "since": "2026-11-19"
+  },
+  "d194d4e276": {
+   "key": "data-duplicate|data:us|snap-1705229",
+   "since": "2026-11-19"
+  },
+  "dc98aa23cb": {
+   "key": "data-duplicate|data:us|snap-1687253",
+   "since": "2026-11-19"
+  },
+  "a82b3d9d5b": {
+   "key": "data-duplicate|data:us|snap-1718477",
+   "since": "2026-11-19"
+  },
+  "8479b2f375": {
+   "key": "data-duplicate|data:us|snap-702612",
+   "since": "2026-11-19"
+  },
+  "027ff0fbb1": {
+   "key": "data-duplicate|data:us|snap-1718442",
+   "since": "2026-11-19"
+  },
+  "6f82ed128a": {
+   "key": "data-duplicate|data:us|snap-1529562",
+   "since": "2026-11-19"
+  },
+  "cc73c2b429": {
+   "key": "data-duplicate|data:us|snap-1702226",
+   "since": "2026-11-19"
+  },
+  "96bfdd52fb": {
+   "key": "data-duplicate|data:us|snap-735712",
+   "since": "2026-11-19"
+  },
+  "0acc5aebe5": {
+   "key": "data-duplicate|data:us|snap-1714630",
+   "since": "2026-11-19"
+  },
+  "b7157ba447": {
+   "key": "data-duplicate|data:us|snap-1713528",
+   "since": "2026-11-19"
+  },
+  "2e8b801e01": {
+   "key": "data-duplicate|data:us|rmp-1678886",
+   "since": "2026-11-19"
+  },
+  "6df501b8aa": {
+   "key": "data-duplicate|data:us|snap-1711179",
+   "since": "2026-11-19"
+  },
+  "eeb67721f6": {
+   "key": "data-duplicate|data:us|snap-1711211",
+   "since": "2026-11-19"
+  },
+  "3456ecd955": {
+   "key": "data-duplicate|data:us|snap-1673110",
+   "since": "2026-11-19"
+  },
+  "ea1c561c6b": {
+   "key": "data-duplicate|data:us|snap-1559721",
+   "since": "2026-11-19"
+  },
+  "ea3f9b4353": {
+   "key": "data-duplicate|data:us|snap-1694802",
+   "since": "2026-11-19"
+  },
+  "075ec8c581": {
+   "key": "data-duplicate|data:us|snap-1682406",
+   "since": "2026-11-19"
+  },
+  "c6550905a6": {
+   "key": "data-duplicate|data:us|snap-1682440",
+   "since": "2026-11-19"
+  },
+  "db90ec34af": {
+   "key": "data-duplicate|data:us|snap-312571",
+   "since": "2026-11-19"
+  },
+  "15574ab794": {
+   "key": "data-duplicate|data:us|snap-1451937",
+   "since": "2026-11-19"
+  },
+  "a790cb2e50": {
+   "key": "data-duplicate|data:us|osm-r14387229",
+   "since": "2026-11-19"
+  },
+  "5dec80c6bf": {
+   "key": "data-duplicate|data:us|osm-n9111800017",
+   "since": "2026-11-19"
+  },
+  "23e46e13ac": {
+   "key": "data-duplicate|data:us|snap-1709668",
+   "since": "2026-11-19"
+  },
+  "b63da9d03f": {
+   "key": "data-duplicate|data:us|snap-1422795",
+   "since": "2026-11-19"
+  },
+  "b1281c2b91": {
+   "key": "data-duplicate|data:us|snap-1539809",
+   "since": "2026-11-19"
+  },
+  "5697bdc444": {
+   "key": "data-duplicate|data:us|snap-1682684",
+   "since": "2026-11-19"
+  },
+  "9353794219": {
+   "key": "data-duplicate|data:us|snap-1712814",
+   "since": "2026-11-19"
+  },
+  "be750ee1b6": {
+   "key": "data-duplicate|data:us|snap-1710998",
+   "since": "2026-11-19"
+  },
+  "d954410f60": {
+   "key": "data-duplicate|data:us|snap-1716117",
+   "since": "2026-11-19"
+  },
+  "9c05894f5f": {
+   "key": "data-duplicate|data:us|snap-1718345",
+   "since": "2026-11-19"
+  },
+  "fec0ecaa4d": {
+   "key": "data-duplicate|data:us|snap-1625707",
+   "since": "2026-11-19"
+  },
+  "2e82faf846": {
+   "key": "data-duplicate|data:us|snap-1627488",
+   "since": "2026-11-19"
+  },
+  "3b2a01c9b2": {
+   "key": "data-duplicate|data:us|snap-1630473",
+   "since": "2026-11-19"
+  },
+  "1e71cf1aee": {
+   "key": "data-duplicate|data:us|snap-1395680",
+   "since": "2026-11-19"
+  },
+  "01d459bb0d": {
+   "key": "data-duplicate|data:us|snap-1718353",
+   "since": "2026-11-19"
+  },
+  "83f75f5b51": {
+   "key": "data-duplicate|data:us|snap-1719082",
+   "since": "2026-11-19"
+  },
+  "9bf011a7db": {
+   "key": "data-duplicate|data:us|snap-1314080",
+   "since": "2026-11-19"
+  },
+  "44bb325a68": {
+   "key": "data-duplicate|data:us|snap-1687826",
+   "since": "2026-11-19"
+  },
+  "66b44ae4ae": {
+   "key": "data-duplicate|data:us|snap-1693253",
+   "since": "2026-11-19"
+  },
+  "112b0609ba": {
+   "key": "data-duplicate|data:us|snap-1242987",
+   "since": "2026-11-19"
+  },
+  "9b03df99a7": {
+   "key": "data-duplicate|data:us|snap-1718052",
+   "since": "2026-11-19"
+  },
+  "c6863289cc": {
+   "key": "data-duplicate|data:us|snap-1514150",
+   "since": "2026-11-19"
+  },
+  "f6cdc0bec6": {
+   "key": "data-duplicate|data:us|snap-1654067",
+   "since": "2026-11-19"
+  },
+  "93d70c5ed6": {
+   "key": "data-duplicate|data:us|snap-952163",
+   "since": "2026-11-19"
+  },
+  "6b5ca8c49c": {
+   "key": "data-duplicate|data:us|osm-w830866817",
+   "since": "2026-11-19"
+  },
+  "bf1b4855e9": {
+   "key": "data-duplicate|data:us|osm-n12057369179",
+   "since": "2026-11-19"
+  },
+  "04023ad0d4": {
+   "key": "data-duplicate|data:us|snap-1288481",
+   "since": "2026-11-19"
+  },
+  "00c2553947": {
+   "key": "data-duplicate|data:us|snap-1542936",
+   "since": "2026-11-19"
+  },
+  "9368872fdd": {
+   "key": "data-duplicate|data:us|osm-w1530220702",
+   "since": "2026-11-19"
+  },
+  "44080f966d": {
+   "key": "data-duplicate|data:us|snap-1646328",
+   "since": "2026-11-19"
+  },
+  "434545af97": {
+   "key": "data-duplicate|data:us|snap-1695727",
+   "since": "2026-11-19"
+  },
+  "a4c79507a4": {
+   "key": "data-duplicate|data:us|snap-1547924",
+   "since": "2026-11-19"
+  },
+  "7f33afcd98": {
+   "key": "data-duplicate|data:us|snap-1537211",
+   "since": "2026-11-19"
+  },
+  "39117b7f2a": {
+   "key": "data-duplicate|data:us|snap-1397527",
+   "since": "2026-11-19"
+  },
+  "7ce281ffd6": {
+   "key": "data-duplicate|data:us|snap-1364912",
+   "since": "2026-11-19"
+  },
+  "a63677557c": {
+   "key": "data-duplicate|data:us|snap-1678812",
+   "since": "2026-11-19"
+  },
+  "62d05cd585": {
+   "key": "data-duplicate|data:us|snap-1540928",
+   "since": "2026-11-19"
+  },
+  "1313129bb2": {
+   "key": "data-duplicate|data:us|snap-421927",
+   "since": "2026-11-19"
+  },
+  "cc4a712817": {
+   "key": "data-duplicate|data:us|osm-w1298277525",
+   "since": "2026-11-19"
+  },
+  "a056a87824": {
+   "key": "data-duplicate|data:us|snap-1429137",
+   "since": "2026-11-19"
+  },
+  "b823efbe9a": {
+   "key": "data-duplicate|data:us|snap-1313820",
+   "since": "2026-11-19"
+  },
+  "fca85a362a": {
+   "key": "data-duplicate|data:us|snap-1698654",
+   "since": "2026-11-19"
+  },
+  "5547bb189a": {
+   "key": "tap-target|budget-swap|a#brand",
+   "since": "2026-11-19"
+  },
+  "18f05f360b": {
+   "key": "tap-target|budget-swap|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "8446ae0257": {
+   "key": "tap-target|budget-swap|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "3d226c65c5": {
+   "key": "tap-target|budget-swap|button#shuf",
+   "since": "2026-11-19"
+  },
+  "9f6c0eca72": {
+   "key": "tap-target|budget-swap|div#week > div.card.day > div.meal > button.swapbtn",
+   "since": "2026-11-19"
+  },
+  "35c3af5e18": {
+   "key": "tap-target|budget-swap|div#week > div.card.day > div.meal > button.name",
+   "since": "2026-11-19"
+  },
+  "6e6408753c": {
+   "key": "tap-target|budget-swap|button#printl",
+   "since": "2026-11-19"
+  },
+  "d867a41cf3": {
+   "key": "tap-target|budget-swap|input#g-banana",
+   "since": "2026-11-19"
+  },
+  "0001a114fb": {
+   "key": "tap-target|budget-swap|div.check > div.nm > span.ln > button.link.small",
+   "since": "2026-11-19"
+  },
+  "3e32839fb4": {
+   "key": "tap-target|budget-swap|div#shop > div.check > button.price",
+   "since": "2026-11-19"
+  },
+  "fe16545adc": {
+   "key": "tap-target|budget-swap|input#g-carrot",
+   "since": "2026-11-19"
+  },
+  "82a8c1dfba": {
+   "key": "tap-target|budget-swap|input#g-celery",
+   "since": "2026-11-19"
+  },
+  "68668784e8": {
+   "key": "tap-target|budget-swap|input#g-cilantro",
+   "since": "2026-11-19"
+  },
+  "88b84b8e12": {
+   "key": "tap-target|budget-swap|input#g-garlic",
+   "since": "2026-11-19"
+  },
+  "ddcade97cb": {
+   "key": "tap-target|budget-swap|input#g-cabbage",
+   "since": "2026-11-19"
+  },
+  "522228b7de": {
+   "key": "tap-target|budget-swap|input#g-lime",
+   "since": "2026-11-19"
+  },
+  "7b09a4acb9": {
+   "key": "tap-target|budget-swap|input#g-onion",
+   "since": "2026-11-19"
+  },
+  "3831f015c1": {
+   "key": "tap-target|budget-swap|input#g-potato",
+   "since": "2026-11-19"
+  },
+  "9ecaa0dbd3": {
+   "key": "tap-target|budget-swap|input#g-flour",
+   "since": "2026-11-19"
+  },
+  "fe36d61504": {
+   "key": "tap-target|budget-swap|input#g-lentils",
+   "since": "2026-11-19"
+  },
+  "e88de27b85": {
+   "key": "tap-target|budget-swap|input#g-peas_d",
+   "since": "2026-11-19"
+  },
+  "8643a18035": {
+   "key": "tap-target|budget-swap|input#g-oil",
+   "since": "2026-11-19"
+  },
+  "a03d6090f4": {
+   "key": "tap-target|budget-swap|input#g-rice",
+   "since": "2026-11-19"
+  },
+  "1993a8c5b0": {
+   "key": "tap-target|budget-swap|input#g-cbeans",
+   "since": "2026-11-19"
+  },
+  "4cb3087ecf": {
+   "key": "tap-target|budget-swap|input#g-chick",
+   "since": "2026-11-19"
+  },
+  "3c42638399": {
+   "key": "tap-target|budget-swap|input#g-corn",
+   "since": "2026-11-19"
+  },
+  "b47fa262a2": {
+   "key": "tap-target|budget-swap|input#g-ctom",
+   "since": "2026-11-19"
+  },
+  "7a3c966323": {
+   "key": "tap-target|budget-swap|input#g-pb",
+   "since": "2026-11-19"
+  },
+  "1bf2008739": {
+   "key": "tap-target|budget-swap|input#g-salsa",
+   "since": "2026-11-19"
+  },
+  "4d59c79995": {
+   "key": "tap-target|budget-swap|input#g-tpaste",
+   "since": "2026-11-19"
+  },
+  "a636f215a7": {
+   "key": "tap-target|budget-swap|input#g-cheddar",
+   "since": "2026-11-19"
+  },
+  "66b76334a1": {
+   "key": "tap-target|budget-swap|input#g-eggs",
+   "since": "2026-11-19"
+  },
+  "97233b36e0": {
+   "key": "tap-target|budget-swap|input#g-milk",
+   "since": "2026-11-19"
+  },
+  "e7a10ead45": {
+   "key": "tap-target|budget-swap|input#g-fspin",
+   "since": "2026-11-19"
+  },
+  "1286b1c6b3": {
+   "key": "tap-target|budget-swap|input#g-bread",
+   "since": "2026-11-19"
+  },
+  "e4b948f56b": {
+   "key": "tap-target|budget-swap|input#g-ftort",
+   "since": "2026-11-19"
+  },
+  "cef07f76f8": {
+   "key": "tap-target|budget-swap|input#g-bouil",
+   "since": "2026-11-19"
+  },
+  "72c1044fc8": {
+   "key": "tap-target|budget-swap|input#g-cinn",
+   "since": "2026-11-19"
+  },
+  "34e628505f": {
+   "key": "tap-target|budget-swap|input#g-curry",
+   "since": "2026-11-19"
+  },
+  "cddfb0f425": {
+   "key": "tap-target|budget-swap|input#g-cumin",
+   "since": "2026-11-19"
+  },
+  "c5a982cdac": {
+   "key": "tap-target|budget-swap|input#g-sugar",
+   "since": "2026-11-19"
+  },
+  "cdb8de0b38": {
+   "key": "tap-target|budget-swap|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "d5e95846b8": {
+   "key": "tap-target|budget-swap|button#swmore",
+   "since": "2026-11-19"
+  },
+  "c71c69f247": {
+   "key": "tap-target|budget-swap|input#g-gonion",
+   "since": "2026-11-19"
+  },
+  "c77b69c3d5": {
+   "key": "tap-target|budget-swap|input#g-soy",
+   "since": "2026-11-19"
+  },
+  "75fe725b10": {
+   "key": "tap-target|budget-swap|input#g-tofu",
+   "since": "2026-11-19"
+  },
+  "2e9122652c": {
+   "key": "tap-target|budget-swap|input#g-yogurt",
+   "since": "2026-11-19"
+  },
+  "68576d121e": {
+   "key": "tap-target|budget-swap|input#g-fmix",
+   "since": "2026-11-19"
+  },
+  "dad2bdcb00": {
+   "key": "tap-target|budget-swap|input#g-pasta",
+   "since": "2026-11-19"
+  },
+  "d08ef225d2": {
+   "key": "tap-target|budget-swap|input#g-oats",
+   "since": "2026-11-19"
+  },
+  "1a3e5872f0": {
+   "key": "tap-target|budget-swap|input#g-vinegar",
+   "since": "2026-11-19"
+  },
+  "bc4cc3190d": {
+   "key": "tap-target|budget-swap|input#g-pepper",
+   "since": "2026-11-19"
+  },
+  "3b7323f9a7": {
+   "key": "tap-target|budget-swap|input#g-ginger",
+   "since": "2026-11-19"
+  },
+  "fc54812792": {
+   "key": "tap-target|budget-swap|input#g-chleg",
+   "since": "2026-11-19"
+  },
+  "d6ddd073f0": {
+   "key": "tap-target|budget-swap|input#g-fbroc",
+   "since": "2026-11-19"
+  },
+  "82b1b068c2": {
+   "key": "tap-target|budget-swap|input#g-chili",
+   "since": "2026-11-19"
+  },
+  "4600f514a1": {
+   "key": "tap-target|budget-swap|input#g-paprika",
+   "since": "2026-11-19"
+  },
+  "d78a711aef": {
+   "key": "tap-target|budget-swap|input#g-tsauce",
+   "since": "2026-11-19"
+  },
+  "698be50585": {
+   "key": "tap-target|budget-swap|input#g-mungb",
+   "since": "2026-11-19"
+  },
+  "847456f3b6": {
+   "key": "tap-target|budget-swap|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "f18639a17f": {
+   "key": "tap-target|budget-swap|input#g-buckwheat",
+   "since": "2026-11-19"
+  },
+  "5897499f56": {
+   "key": "tap-target|budget-swap|input#g-butter",
+   "since": "2026-11-19"
+  },
+  "121279b092": {
+   "key": "tap-target|budget-swap|input#g-tuna",
+   "since": "2026-11-19"
+  },
+  "2405fdfb88": {
+   "key": "tap-target|budget-swap|input#g-italian",
+   "since": "2026-11-19"
+  },
+  "e5f3e738e0": {
+   "key": "tap-target|budget-swap|input#g-sweetp",
+   "since": "2026-11-19"
+  },
+  "de19a9467c": {
+   "key": "tap-target|budget-swap|input#g-ctort",
+   "since": "2026-11-19"
+  },
+  "3a1ddc5475": {
+   "key": "tap-target|budget-swap|input#g-fpeas",
+   "since": "2026-11-19"
+  },
+  "7cc5bc3eab": {
+   "key": "tap-target|budget-swap|input#g-beets",
+   "since": "2026-11-19"
+  },
+  "2e2b3353c1": {
+   "key": "tap-target|budget-swap|input#g-beef",
+   "since": "2026-11-19"
+  },
+  "e3a8e10854": {
+   "key": "tap-target|budget-swap|input#g-ramen",
+   "since": "2026-11-19"
+  },
+  "f284574a80": {
+   "key": "tap-target|budget-swap|input#g-mayo",
+   "since": "2026-11-19"
+  },
+  "2bf771c764": {
+   "key": "tap-target|budget-swap|input#g-garpow",
+   "since": "2026-11-19"
+  },
+  "e55371a53b": {
+   "key": "tap-target|budget-swap|input#g-coco",
+   "since": "2026-11-19"
+  },
+  "fef199f401": {
+   "key": "tap-target|budget|a#brand",
+   "since": "2026-11-19"
+  },
+  "3e3b812c62": {
+   "key": "tap-target|budget|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "b05d7f3b95": {
+   "key": "tap-target|budget|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "4122c2a809": {
+   "key": "tap-target|budget|button#shuf",
+   "since": "2026-11-19"
+  },
+  "d2284fafbe": {
+   "key": "tap-target|budget|div#week > div.card.day > div.meal > button.swapbtn",
+   "since": "2026-11-19"
+  },
+  "dfa956c3c5": {
+   "key": "tap-target|budget|div#week > div.card.day > div.meal > button.name",
+   "since": "2026-11-19"
+  },
+  "3f6fcceeaf": {
+   "key": "tap-target|budget|button#sharel",
+   "since": "2026-11-19"
+  },
+  "18fb57dd01": {
+   "key": "tap-target|budget|button#printl",
+   "since": "2026-11-19"
+  },
+  "9cf2e90f7b": {
+   "key": "tap-target|budget|input#g-banana",
+   "since": "2026-11-19"
+  },
+  "ec08044316": {
+   "key": "tap-target|budget|div.check > div.nm > span.ln > button.link.small",
+   "since": "2026-11-19"
+  },
+  "ca9e756e32": {
+   "key": "tap-target|budget|div#shop > div.check > button.price",
+   "since": "2026-11-19"
+  },
+  "d3bc142a53": {
+   "key": "tap-target|budget|input#g-carrot",
+   "since": "2026-11-19"
+  },
+  "112fb06d57": {
+   "key": "tap-target|budget|input#g-celery",
+   "since": "2026-11-19"
+  },
+  "dac01aaf02": {
+   "key": "tap-target|budget|input#g-cilantro",
+   "since": "2026-11-19"
+  },
+  "4b8f795835": {
+   "key": "tap-target|budget|input#g-garlic",
+   "since": "2026-11-19"
+  },
+  "2c0e71c99e": {
+   "key": "tap-target|budget|input#g-cabbage",
+   "since": "2026-11-19"
+  },
+  "1a9580b117": {
+   "key": "tap-target|budget|input#g-lime",
+   "since": "2026-11-19"
+  },
+  "b72cca5cff": {
+   "key": "tap-target|budget|input#g-onion",
+   "since": "2026-11-19"
+  },
+  "499276b74a": {
+   "key": "tap-target|budget|input#g-potato",
+   "since": "2026-11-19"
+  },
+  "551fc9a45f": {
+   "key": "tap-target|budget|input#g-flour",
+   "since": "2026-11-19"
+  },
+  "5095239c22": {
+   "key": "tap-target|budget|input#g-lentils",
+   "since": "2026-11-19"
+  },
+  "124dee3c4f": {
+   "key": "tap-target|budget|input#g-peas_d",
+   "since": "2026-11-19"
+  },
+  "63cc2bfe5f": {
+   "key": "tap-target|budget|input#g-oil",
+   "since": "2026-11-19"
+  },
+  "8048bdb4ee": {
+   "key": "tap-target|budget|input#g-rice",
+   "since": "2026-11-19"
+  },
+  "10ca317e32": {
+   "key": "tap-target|budget|input#g-cbeans",
+   "since": "2026-11-19"
+  },
+  "e4f95f4c6e": {
+   "key": "tap-target|budget|input#g-chick",
+   "since": "2026-11-19"
+  },
+  "733d2daf89": {
+   "key": "tap-target|budget|input#g-corn",
+   "since": "2026-11-19"
+  },
+  "e21e9b7477": {
+   "key": "tap-target|budget|input#g-ctom",
+   "since": "2026-11-19"
+  },
+  "31c12e7b86": {
+   "key": "tap-target|budget|input#g-pb",
+   "since": "2026-11-19"
+  },
+  "0544f7d06d": {
+   "key": "tap-target|budget|input#g-salsa",
+   "since": "2026-11-19"
+  },
+  "54241e4614": {
+   "key": "tap-target|budget|input#g-tpaste",
+   "since": "2026-11-19"
+  },
+  "fe63be20a3": {
+   "key": "tap-target|budget|input#g-cheddar",
+   "since": "2026-11-19"
+  },
+  "6db8a5260d": {
+   "key": "tap-target|budget|input#g-eggs",
+   "since": "2026-11-19"
+  },
+  "8a4e936da2": {
+   "key": "tap-target|budget|input#g-milk",
+   "since": "2026-11-19"
+  },
+  "2bb02db377": {
+   "key": "tap-target|budget|input#g-fspin",
+   "since": "2026-11-19"
+  },
+  "3b53cc58d6": {
+   "key": "tap-target|budget|input#g-bread",
+   "since": "2026-11-19"
+  },
+  "f6a2665694": {
+   "key": "tap-target|budget|input#g-ftort",
+   "since": "2026-11-19"
+  },
+  "1ba75a78f8": {
+   "key": "tap-target|budget|input#g-bpowder",
+   "since": "2026-11-19"
+  },
+  "2a8d4fa1cb": {
+   "key": "tap-target|budget|input#g-bouil",
+   "since": "2026-11-19"
+  },
+  "cf8626ad17": {
+   "key": "tap-target|budget|input#g-cinn",
+   "since": "2026-11-19"
+  },
+  "418ea02d6d": {
+   "key": "tap-target|budget|input#g-curry",
+   "since": "2026-11-19"
+  },
+  "98f12f3bcf": {
+   "key": "tap-target|budget|input#g-cumin",
+   "since": "2026-11-19"
+  },
+  "c6b3ac54d0": {
+   "key": "tap-target|budget|input#g-sugar",
+   "since": "2026-11-19"
+  },
+  "85ef8b318f": {
+   "key": "tap-target|budget|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "0870a70049": {
+   "key": "tap-target|budget|input#g-gonion",
+   "since": "2026-11-19"
+  },
+  "171aea37dd": {
+   "key": "tap-target|budget|input#g-soy",
+   "since": "2026-11-19"
+  },
+  "297cf07acd": {
+   "key": "tap-target|budget|input#g-tofu",
+   "since": "2026-11-19"
+  },
+  "d2dc909346": {
+   "key": "tap-target|budget|input#g-yogurt",
+   "since": "2026-11-19"
+  },
+  "eb8da9a215": {
+   "key": "tap-target|budget|input#g-fmix",
+   "since": "2026-11-19"
+  },
+  "66e5c6e338": {
+   "key": "tap-target|budget|input#g-pasta",
+   "since": "2026-11-19"
+  },
+  "83f8149ede": {
+   "key": "tap-target|budget|input#g-oats",
+   "since": "2026-11-19"
+  },
+  "75fb8c4c75": {
+   "key": "tap-target|budget|input#g-vinegar",
+   "since": "2026-11-19"
+  },
+  "c3ea4f456a": {
+   "key": "tap-target|budget|input#g-pepper",
+   "since": "2026-11-19"
+  },
+  "e05ad5da75": {
+   "key": "tap-target|budget|input#g-ginger",
+   "since": "2026-11-19"
+  },
+  "c2ae4309cd": {
+   "key": "tap-target|budget|input#g-chleg",
+   "since": "2026-11-19"
+  },
+  "0c31c52638": {
+   "key": "tap-target|budget|input#g-fbroc",
+   "since": "2026-11-19"
+  },
+  "0c41ea4a98": {
+   "key": "tap-target|budget|input#g-chili",
+   "since": "2026-11-19"
+  },
+  "7d768da09f": {
+   "key": "tap-target|budget|input#g-paprika",
+   "since": "2026-11-19"
+  },
+  "d866676562": {
+   "key": "tap-target|budget|input#g-tsauce",
+   "since": "2026-11-19"
+  },
+  "b3109f6964": {
+   "key": "tap-target|budget|input#g-mungb",
+   "since": "2026-11-19"
+  },
+  "cc8dc868da": {
+   "key": "tap-target|budget|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "b22e6e54db": {
+   "key": "tap-target|budget|input#g-buckwheat",
+   "since": "2026-11-19"
+  },
+  "4510db10a9": {
+   "key": "tap-target|budget|input#g-butter",
+   "since": "2026-11-19"
+  },
+  "a5c6e9d387": {
+   "key": "tap-target|budget|input#g-tuna",
+   "since": "2026-11-19"
+  },
+  "fd78771201": {
+   "key": "tap-target|budget|input#g-italian",
+   "since": "2026-11-19"
+  },
+  "f2d66f56d7": {
+   "key": "tap-target|budget|input#g-sweetp",
+   "since": "2026-11-19"
+  },
+  "77822b873e": {
+   "key": "tap-target|budget|input#g-ctort",
+   "since": "2026-11-19"
+  },
+  "e1672cef89": {
+   "key": "tap-target|budget|input#g-fpeas",
+   "since": "2026-11-19"
+  },
+  "1b0fcda5fd": {
+   "key": "tap-target|budget|input#g-beets",
+   "since": "2026-11-19"
+  },
+  "d039e0e0ab": {
+   "key": "tap-target|budget|input#g-beef",
+   "since": "2026-11-19"
+  },
+  "dbff8eab1b": {
+   "key": "tap-target|budget|input#g-ramen",
+   "since": "2026-11-19"
+  },
+  "b54113d69f": {
+   "key": "tap-target|budget|input#g-mayo",
+   "since": "2026-11-19"
+  },
+  "f84d22ddf3": {
+   "key": "tap-target|budget|input#g-garpow",
+   "since": "2026-11-19"
+  },
+  "a9173d4483": {
+   "key": "tap-target|budget|input#g-coco",
+   "since": "2026-11-19"
+  },
+  "6f853f4c7a": {
+   "key": "tap-target|find-free|a#brand",
+   "since": "2026-11-19"
+  },
+  "24b4135c21": {
+   "key": "tap-target|find-free|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "a5c36481c8": {
+   "key": "tap-target|find-free|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "e7a05604a3": {
+   "key": "tap-target|find-free|div#fflt > button.chip.ck",
+   "since": "2026-11-19"
+  },
+  "f9f2f716b1": {
+   "key": "tap-target|find-free|p.callahead > span > bdi > a",
+   "since": "2026-11-19"
+  },
+  "71a3ae7fcb": {
+   "key": "tap-target|find-free|ul#flist > li.card.site > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "21af149913": {
+   "key": "tap-target|find-free|ul#flist > li.card.site > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "926dc8e723": {
+   "key": "tap-target|find-free|ul#flist > li.card.site > details > summary",
+   "since": "2026-11-19"
+  },
+  "8709b25576": {
+   "key": "tap-target|find-free|ul#flist > li.card.site > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "4e6f7666b8": {
+   "key": "tap-target|find-free|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "6c8c3ec786": {
+   "key": "tap-target|find-free|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "05c81a0aea": {
+   "key": "tap-target|find-free|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-in",
+   "since": "2026-11-19"
+  },
+  "d2f032427e": {
+   "key": "tap-target|find-free|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-out",
+   "since": "2026-11-19"
+  },
+  "04c8c7cd8a": {
+   "key": "tap-target|find-map|a#brand",
+   "since": "2026-11-19"
+  },
+  "438eb8467f": {
+   "key": "tap-target|find-map|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "ebd8966a98": {
+   "key": "tap-target|find-map|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "e13a2c390e": {
+   "key": "tap-target|find-map|div#fflt > button.chip.ck",
+   "since": "2026-11-19"
+  },
+  "b68fbae055": {
+   "key": "tap-target|find-map|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-in",
+   "since": "2026-11-19"
+  },
+  "3b01384d59": {
+   "key": "tap-target|find-map|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-out",
+   "since": "2026-11-19"
+  },
+  "f475642edb": {
+   "key": "tap-target|find-map|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "392853d1ea": {
+   "key": "tap-target|find-map|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "3cf961d90f": {
+   "key": "tap-target|find-map|p.callahead > span > bdi > a",
+   "since": "2026-11-19"
+  },
+  "c6d5e3f2b6": {
+   "key": "tap-target|find-map|ul#flist > li.card.site > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "a29d7bf6d2": {
+   "key": "tap-target|find-map|ul#flist > li.card.site > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "278564dd75": {
+   "key": "tap-target|find-map|ul#flist > li.card.site > details > summary",
+   "since": "2026-11-19"
+  },
+  "73079e0a17": {
+   "key": "tap-target|find-map|ul#flist > li.card.site > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "2e53d0686e": {
+   "key": "tap-target|find-place|a#brand",
+   "since": "2026-11-19"
+  },
+  "360a4c6137": {
+   "key": "tap-target|find-place|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "dcd77726eb": {
+   "key": "tap-target|find-place|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "42d931cb38": {
+   "key": "tap-target|find-place|div#fflt > button.chip.ck",
+   "since": "2026-11-19"
+  },
+  "4d6af89d7b": {
+   "key": "tap-target|find-place|p.callahead > span > bdi > a",
+   "since": "2026-11-19"
+  },
+  "ee1b0a0663": {
+   "key": "tap-target|find-place|ul#flist > li.card.site > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "5b5898337f": {
+   "key": "tap-target|find-place|ul#flist > li.card.site > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "75bd5446e7": {
+   "key": "tap-target|find-place|ul#flist > li.card.site > details > summary",
+   "since": "2026-11-19"
+  },
+  "4c2d08cf3e": {
+   "key": "tap-target|find-place|ul#flist > li.card.site > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "2608724ae5": {
+   "key": "tap-target|find-place|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "225172d4a1": {
+   "key": "tap-target|find-place|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "4c43ef4321": {
+   "key": "tap-target|find-place|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-in",
+   "since": "2026-11-19"
+  },
+  "f090ca5a7a": {
+   "key": "tap-target|find-place|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-out",
+   "since": "2026-11-19"
+  },
+  "538cb25b6d": {
+   "key": "tap-target|benefits-result|a#brand",
+   "since": "2026-11-19"
+  },
+  "5f03b80213": {
+   "key": "tap-target|benefits-result|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "3f7336d8db": {
+   "key": "tap-target|benefits-result|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "4f4db11c0a": {
+   "key": "tap-target|benefits-result|main#main > section.urgent.gap-t > div.row > a.btn.pri",
+   "since": "2026-11-19"
+  },
+  "0e5e91dc49": {
+   "key": "tap-target|benefits-result|main#main > section.urgent.gap-t > div.row > a.btn",
+   "since": "2026-11-19"
+  },
+  "ba58ed8a95": {
+   "key": "tap-target|benefits-result|article#p-calfresh > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "df6f9d7a2c": {
+   "key": "tap-target|benefits-result|article#p-pantry > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3ae94eba1a": {
+   "key": "tap-target|benefits-result|article#p-mm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "0b322d5971": {
+   "key": "tap-target|benefits-result|article#p-imm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "1005cf90f1": {
+   "key": "tap-target|benefits-result|article#p-work > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "43caa2d574": {
+   "key": "tap-target|benefits-result|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "54f03e7086": {
+   "key": "tap-target|benefits-result|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "8edef41465": {
+   "key": "tap-target|benefits|a#brand",
+   "since": "2026-11-19"
+  },
+  "0c36cea52c": {
+   "key": "tap-target|benefits|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "83aea8a483": {
+   "key": "tap-target|benefits|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "1a9551294f": {
+   "key": "tap-target|benefits|main#main > section.urgent.gap-t > div.row > a.btn.pri",
+   "since": "2026-11-19"
+  },
+  "3da1f7aba4": {
+   "key": "tap-target|benefits|main#main > section.urgent.gap-t > div.row > a.btn",
+   "since": "2026-11-19"
+  },
+  "d5c80422cd": {
+   "key": "tap-target|benefits|article#p-mm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ebf8fc237c": {
+   "key": "tap-target|benefits|article#p-imm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "fd54ccb265": {
+   "key": "tap-target|benefits|article#p-work > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "cc17897bed": {
+   "key": "tap-target|benefits|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "a917e6e698": {
+   "key": "tap-target|benefits|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "c83c507c32": {
+   "key": "tap-target|benefits-nationwide|a#brand",
+   "since": "2026-11-19"
+  },
+  "6806548a08": {
+   "key": "tap-target|benefits-nationwide|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "25c707dcd2": {
+   "key": "tap-target|benefits-nationwide|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "eff20e6209": {
+   "key": "tap-target|benefits-nationwide|main#main > section.urgent.gap-t > div.row > a.btn.pri",
+   "since": "2026-11-19"
+  },
+  "c04236637f": {
+   "key": "tap-target|benefits-nationwide|main#main > section.urgent.gap-t > div.row > a.btn",
+   "since": "2026-11-19"
+  },
+  "bddb08ce31": {
+   "key": "tap-target|benefits-nationwide|article#p-mm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "f05bf8a01b": {
+   "key": "tap-target|benefits-nationwide|article#p-imm > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "db8e348429": {
+   "key": "tap-target|benefits-nationwide|article#p-work > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "4bfcee175f": {
+   "key": "tap-target|benefits-nationwide|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "4f2e3a17b2": {
+   "key": "tap-target|benefits-nationwide|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "eed0dd432f": {
+   "key": "tap-target|find|a#brand",
+   "since": "2026-11-19"
+  },
+  "fd285092a1": {
+   "key": "tap-target|find|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "a297c2a7e3": {
+   "key": "tap-target|find|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "11c5fc591b": {
+   "key": "tap-target|find|ul#flist > li.card.site > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "566e1d2180": {
+   "key": "tap-target|find|ul#flist > li.card.site > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "e458f9feca": {
+   "key": "tap-target|find|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "4b342489c4": {
+   "key": "tap-target|find|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "b1e3b75b03": {
+   "key": "tap-target|find|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-in",
+   "since": "2026-11-19"
+  },
+  "de6347c670": {
+   "key": "tap-target|find|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-out",
+   "since": "2026-11-19"
+  },
+  "911860ba92": {
+   "key": "tap-target|find-nationwide|a#brand",
+   "since": "2026-11-19"
+  },
+  "3a96bb8a1c": {
+   "key": "tap-target|find-nationwide|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "47db0ac7fb": {
+   "key": "tap-target|find-nationwide|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "2c15b673cd": {
+   "key": "tap-target|find-nationwide|ul#flist > li.card.site > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "5a3684457c": {
+   "key": "tap-target|find-nationwide|ul#flist > li.card.site > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "7882b7034b": {
+   "key": "tap-target|find-nationwide|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "7a93333e0a": {
+   "key": "tap-target|find-nationwide|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "658e14bdf7": {
+   "key": "tap-target|find-nationwide|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-in",
+   "since": "2026-11-19"
+  },
+  "20597e2ca7": {
+   "key": "tap-target|find-nationwide|div.maplibregl-control-container > div.maplibregl-ctrl-top-right > div.maplibregl-ctrl.maplibregl-ctrl-group > button.maplibregl-ctrl-zoom-out",
+   "since": "2026-11-19"
+  },
+  "891b506aec": {
+   "key": "tap-target|settings|a#brand",
+   "since": "2026-11-19"
+  },
+  "df570a30c4": {
+   "key": "tap-target|settings|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "adf6518013": {
+   "key": "tap-target|settings|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "e055740a5d": {
+   "key": "tap-target|settings|button#chlang",
+   "since": "2026-11-19"
+  },
+  "f7a45af7a9": {
+   "key": "tap-target|settings|button#clrloc",
+   "since": "2026-11-19"
+  },
+  "a36d0ed4f2": {
+   "key": "tap-target|settings|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "edbc43bcc9": {
+   "key": "tap-target|settings|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "f0d8162aa9": {
+   "key": "tap-target|cook|a#brand",
+   "since": "2026-11-19"
+  },
+  "cd1147a6f2": {
+   "key": "tap-target|cook|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "64dbe02461": {
+   "key": "tap-target|cook|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "e93fc0e346": {
+   "key": "tap-target|cook|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "4f9ad81a2e": {
+   "key": "tap-target|cook|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "756c406818": {
+   "key": "tap-target|cook-filters|a#brand",
+   "since": "2026-11-19"
+  },
+  "b50ee6b175": {
+   "key": "tap-target|cook-filters|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "86ffb3081a": {
+   "key": "tap-target|cook-filters|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "85e3abac6d": {
+   "key": "tap-target|cook-filters|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "43b0f3c351": {
+   "key": "tap-target|cook-filters|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "7d1e7725e1": {
+   "key": "tap-target|recipe|a#brand",
+   "since": "2026-11-19"
+  },
+  "e69351676e": {
+   "key": "tap-target|recipe|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "33f1d304c1": {
+   "key": "tap-target|recipe|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "ccaecad8db": {
+   "key": "tap-target|recipe|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "b07f21a90c": {
+   "key": "tap-target|recipe|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "df3f7dc168": {
+   "key": "tap-target|privacy|a#brand",
+   "since": "2026-11-19"
+  },
+  "dbb4896e82": {
+   "key": "tap-target|privacy|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "965cbeb0f5": {
+   "key": "tap-target|privacy|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "182fbf1cdf": {
+   "key": "tap-target|privacy|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "b34c91788c": {
+   "key": "tap-target|privacy|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "4aedbe2041": {
+   "key": "tap-target|about|a#brand",
+   "since": "2026-11-19"
+  },
+  "3be2c889da": {
+   "key": "tap-target|about|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "81c8ad67ae": {
+   "key": "tap-target|about|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "5c65f30fdf": {
+   "key": "tap-target|about|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "4331fa4991": {
+   "key": "tap-target|about|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "f7536d06f3": {
+   "key": "tap-target|language|a#brand",
+   "since": "2026-11-19"
+  },
+  "95582bd66e": {
+   "key": "tap-target|language|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "c8d36591d3": {
+   "key": "tap-target|language|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "8387c71d14": {
+   "key": "tap-target|language|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "b2c8c604c1": {
+   "key": "tap-target|language|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "7ae58dc11c": {
+   "key": "tap-target|find-data-failed|a#brand",
+   "since": "2026-11-19"
+  },
+  "3e27274add": {
+   "key": "tap-target|find-data-failed|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "704f3733fb": {
+   "key": "tap-target|find-data-failed|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "8e62758325": {
+   "key": "tap-target|find-data-failed|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "723d7cf658": {
+   "key": "tap-target|find-data-failed|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "e67787f607": {
+   "key": "tap-target|cook-empty|a#brand",
+   "since": "2026-11-19"
+  },
+  "c094353a27": {
+   "key": "tap-target|cook-empty|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "425dcad63d": {
+   "key": "tap-target|cook-empty|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "4046c5ebd8": {
+   "key": "tap-target|cook-empty|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "1d4dce06a1": {
+   "key": "tap-target|cook-empty|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "391ee95613": {
+   "key": "tap-target|offline|a#brand",
+   "since": "2026-11-19"
+  },
+  "ad26570f4a": {
+   "key": "tap-target|offline|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "cf6c6e7219": {
+   "key": "tap-target|offline|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "5f859a640f": {
+   "key": "tap-target|offline|main#main > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "c6d91f5842": {
+   "key": "tap-target|offline|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "26303d2445": {
+   "key": "tap-target|find-loading|a#brand",
+   "since": "2026-11-19"
+  },
+  "84ad07121d": {
+   "key": "tap-target|find-loading|button#langbtn",
+   "since": "2026-11-19"
+  },
+  "8a58ed47d9": {
+   "key": "tap-target|find-loading|a#setbtn",
+   "since": "2026-11-19"
+  },
+  "0d9f967880": {
+   "key": "tap-target|find-loading|nav#dtabs > a",
+   "since": "2026-11-19"
+  },
+  "e5413b302e": {
+   "key": "clipped-text|recipe|h2#sheet-h",
+   "since": "2026-11-19"
+  },
+  "c105e1d359": {
+   "key": "clipped-text|recipe|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "6a0055d9a1": {
+   "key": "tap-target|privacy/|header.bar > a",
+   "since": "2026-11-19"
+  },
+  "1e46367169": {
+   "key": "tap-target|privacy/|header.bar > a.brand",
+   "since": "2026-11-19"
+  },
+  "3daabc0c3f": {
+   "key": "tap-target|support/|header.bar > a",
+   "since": "2026-11-19"
+  },
+  "0ea908d5bf": {
+   "key": "tap-target|support/|header.bar > a.brand",
+   "since": "2026-11-19"
+  },
+  "981b3c266e": {
+   "key": "tap-target|this-page-does-not-exist|header.bar > a",
+   "since": "2026-11-19"
+  },
+  "8afc85af77": {
+   "key": "tap-target|this-page-does-not-exist|header.bar > a.brand",
+   "since": "2026-11-19"
+  },
+  "8a7d2004aa": {
+   "key": "clipped-hint|settings|input#st-q",
+   "since": "2026-11-19"
+  },
+  "599a2b0017": {
+   "key": "clipped-text|cook|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "3430bcd7f3": {
+   "key": "clipped-text|cook-filters|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "d76d9d59c1": {
+   "key": "clipped-text|budget|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "d09e39b144": {
+   "key": "clipped-text|budget-swap|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "77b007197a": {
+   "key": "clipped-text|find|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "a51fcce728": {
+   "key": "clipped-text|find-free|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "85518bd3b3": {
+   "key": "clipped-text|find-map|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "7d32c7dad4": {
+   "key": "clipped-text|find-place|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "13db3188ad": {
+   "key": "clipped-text|benefits|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "1a239b16f1": {
+   "key": "clipped-text|benefits-result|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "90c0f0e49f": {
+   "key": "clipped-text|settings|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "7295fddb25": {
+   "key": "clipped-text|privacy|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "cf8cd64e85": {
+   "key": "clipped-text|about|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "586835b66f": {
+   "key": "clipped-text|language|button#langbtn > span",
+   "since": "2026-11-19"
+  },
+  "6d58a54b9c": {
+   "key": "tap-target|setup|button#s-skip",
+   "since": "2026-11-19"
+  },
+  "8601319df5": {
+   "key": "tap-target|setup-bad-zip|button#s-skip",
+   "since": "2026-11-19"
+  },
+  "c088b9a489": {
+   "key": "clipped-hint|setup|input#s-q",
+   "since": "2026-11-19"
+  },
+  "32ff444dbf": {
+   "key": "data-duplicate|data:san-diego|fsd-67242786",
+   "since": "2026-11-19"
+  },
+  "81fd4371cf": {
+   "key": "data-hours|data:san-diego|1 free food schedules couldn't be read into days and times (people will only see the raw text)",
+   "since": "2026-11-19"
+  },
+  "469cd32ac4": {
+   "key": "broken-asset|find|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "2ee666ad8e": {
+   "key": "broken-asset|find-free|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "6a8661c11f": {
+   "key": "broken-asset|find-map|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "104a010575": {
+   "key": "broken-asset|find-place|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "cef1b9b099": {
+   "key": "broken-asset|benefits|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "00eef7659f": {
+   "key": "broken-asset|benefits-result|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "5e1b350477": {
+   "key": "broken-asset|about|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "ac87415684": {
+   "key": "h-overflow|find-free|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "b2961a8b00": {
+   "key": "off-screen|find-free|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "04cc2e4624": {
+   "key": "h-overflow|find-map|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "b3d3d9a9af": {
+   "key": "off-screen|find-map|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "4edfb00e44": {
+   "key": "h-overflow|find-place|page is Npx wide in a Npx window",
+   "since": "2026-11-19"
+  },
+  "d8ec3cae5e": {
+   "key": "off-screen|find-place|label#fsortw",
+   "since": "2026-11-19"
+  },
+  "e21caad0db": {
+   "key": "broken-asset|setup-done|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "ea66f3809a": {
+   "key": "broken-asset|find-loading|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "15c8d1b001": {
+   "key": "broken-asset|find-nationwide|404 /data/extra/index.json",
+   "since": "2026-11-19"
+  },
+  "6668461d65": {
+   "key": "axe-serious|find-map|#f-gps",
+   "since": "2026-11-19"
+  },
+  "ee67244594": {
+   "key": "tap-target|budget-swap|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "1c00cd0b65": {
+   "key": "tap-target|budget|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "11257a870c": {
+   "key": "tap-target|benefits-result|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "e35ec0b91c": {
+   "key": "tap-target|benefits-result|article#p-lifeline > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "4e8dbdcb79": {
+   "key": "tap-target|benefits-result|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "b81566785d": {
+   "key": "tap-target|benefits-result|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "10718ddef1": {
+   "key": "tap-target|benefits-result|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3b4e2a53f2": {
+   "key": "tap-target|benefits-result|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "d6804c3840": {
+   "key": "tap-target|benefits-result|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "01c3896453": {
+   "key": "tap-target|benefits-result|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "36110e7148": {
+   "key": "tap-target|benefits-result|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "eede4657dd": {
+   "key": "tap-target|benefits-result|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "32d04649e9": {
+   "key": "tap-target|benefits-result|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "b783115795": {
+   "key": "tap-target|benefits-result|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0b84faaba": {
+   "key": "tap-target|benefits-result|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ce7e658040": {
+   "key": "tap-target|benefits-result|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "245b4d8c1a": {
+   "key": "tap-target|benefits-result|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "2f7a5c76b2": {
+   "key": "tap-target|benefits-result|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "ef8916f84f": {
+   "key": "tap-target|benefits-result|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "9571e2feb5": {
+   "key": "tap-target|benefits-result|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "3e675b7ce7": {
+   "key": "tap-target|benefits-result|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "95ab64e6a2": {
+   "key": "tap-target|benefits-result|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "0d5256a8b2": {
+   "key": "tap-target|benefits-result|li#d-kid-dennys > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "187c4fe4ff": {
+   "key": "tap-target|benefits-result|li#d-kid-dennys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "93b0bbbc1b": {
+   "key": "tap-target|benefits-result|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "c5e15954e4": {
+   "key": "tap-target|benefits|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3312ea46c3": {
+   "key": "tap-target|benefits|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "718aeae318": {
+   "key": "tap-target|benefits|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "7d1f2bdbdb": {
+   "key": "tap-target|benefits|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "bdbecffb09": {
+   "key": "tap-target|benefits|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "de74a86951": {
+   "key": "tap-target|benefits|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "fd7d529484": {
+   "key": "tap-target|benefits|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0a99e223e": {
+   "key": "tap-target|benefits|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "bc3f8e4b35": {
+   "key": "tap-target|benefits|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "08a129eed1": {
+   "key": "tap-target|benefits|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ab0f52c735": {
+   "key": "tap-target|benefits|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "6f8939c8ee": {
+   "key": "tap-target|benefits|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "eb4dd35e93": {
+   "key": "tap-target|benefits|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "bc71c1810b": {
+   "key": "tap-target|benefits|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "669a00a5f2": {
+   "key": "tap-target|benefits|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "06ff063da3": {
+   "key": "tap-target|benefits|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "98fa21cca2": {
+   "key": "tap-target|benefits|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "f599204209": {
+   "key": "tap-target|benefits|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "9bafbe462c": {
+   "key": "tap-target|benefits|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "2d36270d5b": {
+   "key": "tap-target|benefits|li#d-kid-dennys > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "3fa9fe8420": {
+   "key": "tap-target|benefits|li#d-kid-dennys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "a1475e98fc": {
+   "key": "tap-target|benefits|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "69d1a4e696": {
+   "key": "tap-target|benefits-nationwide|main#main > section.urgent.gap-t > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "94761b30de": {
+   "key": "tap-target|benefits-nationwide|article#p-online > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "ad38c61aa4": {
+   "key": "tap-target|benefits-nationwide|article#p-surplus > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "71845b0d56": {
+   "key": "tap-target|benefits-nationwide|article#p-freeprod > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "f18c9a9246": {
+   "key": "tap-target|benefits-nationwide|article#p-lifeline2 > div.row > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "39619dee41": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lunagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "742d66667b": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lunagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "4e5ad291b1": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-lubys > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "e0d489e204": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-wabagrill > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "5951d75318": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-wabagrill > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "776d1bbda9": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-cicis > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "0c8ae8d200": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-cicis > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "35bbaad619": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-fogo > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "1a3d7f56e1": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-fogo > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "272bdbe08c": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-goldencorral > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "7926897adb": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-goldencorral > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "67ea1f032f": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-habit > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "a1dc85e8f9": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-habit > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "af08b310f6": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-tucanos > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "cb230181bf": {
+   "key": "tap-target|benefits-nationwide|li#d-kid-tucanos > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "8f17bbbb2a": {
+   "key": "tap-target|benefits-nationwide|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "d1353e7c43": {
+   "key": "tap-target|find-place|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "df3260bb07": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > div.acts > a.btn.sm",
+   "since": "2026-11-19"
+  },
+  "8903d75c2a": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > div.acts > button.btn.sm",
+   "since": "2026-11-19"
+  },
+  "f90cbfc69a": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > details > summary",
+   "since": "2026-11-19"
+  },
+  "1bf9f174a9": {
+   "key": "tap-target|find-place|li.place.hl > div.pmore > details.report > summary",
+   "since": "2026-11-19"
+  },
+  "978d365014": {
+   "key": "tap-target|find-place|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "272bed971e": {
+   "key": "tap-target|find-place|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "2e1a08c4c5": {
+   "key": "tap-target|find-place|li.place.hl > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "8ca81f519f": {
+   "key": "tap-target|find-free|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "2d4e7d30a6": {
+   "key": "tap-target|find-free|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "bf82eb16c8": {
+   "key": "tap-target|find-free|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "12efb09de5": {
+   "key": "tap-target|find-map|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "360b5cc222": {
+   "key": "tap-target|find-map|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "dd83b7cece": {
+   "key": "tap-target|find-map|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "952f585a7c": {
+   "key": "tap-target|find|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "08472c7724": {
+   "key": "tap-target|find|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "488928a831": {
+   "key": "tap-target|find|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "0c9dd2bd0d": {
+   "key": "tap-target|find-nationwide|li.place > div.pmain > h2.pname > button.ptap",
+   "since": "2026-11-19"
+  },
+  "bbf98574ac": {
+   "key": "tap-target|find-nationwide|div.fside > footer.foot > p > a",
+   "since": "2026-11-19"
+  },
+  "7675fe6931": {
+   "key": "tap-target|find-nationwide|div.fside > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "66f5e1272c": {
+   "key": "tap-target|settings|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "6161096b56": {
+   "key": "tap-target|cook|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "044586636d": {
+   "key": "tap-target|cook-filters|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "6aeb604d16": {
+   "key": "tap-target|recipe|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "49908f64ee": {
+   "key": "tap-target|privacy|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "a66a0da6d8": {
+   "key": "tap-target|about|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "3c9ff8c4b8": {
+   "key": "tap-target|language|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "ac112cc803": {
+   "key": "tap-target|find-data-failed|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "5a48c15752": {
+   "key": "tap-target|cook-empty|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "9debb010d7": {
+   "key": "tap-target|offline|main#main > footer.foot > p.legal > a",
+   "since": "2026-11-19"
+  },
+  "0ba6e8ac71": {
+   "key": "overlap|find-free|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "448a2d0b2a": {
+   "key": "overlap|find-free|ul#flist > li.place > a.pdir > svg.i.sm",
+   "since": "2026-11-19"
+  },
+  "004386891c": {
+   "key": "overlap|find-free|div.pmain > h2.pname > button.ptap > span",
+   "since": "2026-11-19"
+  },
+  "7cddd16155": {
+   "key": "overlap|find-place|ul#flist > li.place > a.pdir > svg.i.sm",
+   "since": "2026-11-19"
+  },
+  "3c2f25d718": {
+   "key": "overlap|find-place|div.pmain > h2.pname > button.ptap > span",
+   "since": "2026-11-19"
+  },
+  "698ad6ef1b": {
+   "key": "overlap|find-place|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "d4643125ca": {
+   "key": "overlap|find|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "61be7833c0": {
+   "key": "overlap|find-map|div.fside > div.fbar > div.viewtoggle.seg > button",
+   "since": "2026-11-19"
+  },
+  "1157fa4205": {
+   "key": "axe-serious|benefits-result|input[data-w=\"preg\"]",
+   "since": "2026-11-19"
+  }
+ }
+}

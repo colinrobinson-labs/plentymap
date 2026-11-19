@@ -2,7 +2,7 @@
 
 Find food. Cook cheap. Get help. In your language.
 
-Plenty Map is a free web app and phone app for San Diego County. It shows free food (food banks, pantries, senior boxes, community fridges), stores and farmers markets that take CalFresh, cheap recipes that fit your kitchen, a weekly meal plan with a shopping list, and a quick check for CalFresh, WIC and other help. It works in 15 languages, with no accounts, no ads and no tracking.
+Plenty Map helps anyone in the United States eat well for less. It has cheap recipes that fit your kitchen, a weekly meal plan and shopping list that fit your budget, stores and farmers markets that take SNAP/EBT, free food nearby (food banks, pantries, senior boxes, community fridges), and a quick check for SNAP, WIC and other benefits. It works in 15 languages, with no accounts, no ads and no tracking.
 
 Live at **https://plentymap.com**.
 
@@ -17,7 +17,7 @@ Live at **https://plentymap.com**.
 | `js/`, `css/`, `index.html` | The app |
 | `i18n/` | Screen text and recipes per language (`tools/check-i18n.mjs` checks them) |
 | `data/regions/` | The San Diego listings file, rebuilt every night |
-| `pages/` | Privacy policy and support page (built to `privacy/` and `support/` by `tools/build-pages.py`) |
+| `pages/` | Privacy Policy, Terms of Use, Credits and Licenses, Accessibility, Legal and Support pages (built to `privacy/`, `terms/`, `attributions/`, `accessibility/`, `legal/` and `support/` by `tools/build-pages.py`) |
 | `tools/` | Data fetchers, region builder, phone app helpers |
 
 ## Automation (GitHub Actions)
