@@ -65,11 +65,31 @@ jobs:
         with: { node-version: 22, cache: npm, cache-dependency-path: qa/package-lock.json }
       - name: Install
         working-directory: qa
-        timeout-minutes: 12
+        timeout-minutes: 6
+        run: npm ci --no-audit --no-fund
+      # the browser is cached per Playwright version, so most runs skip the download
+      - uses: actions/cache@v4
+        id: pw
+        with:
+          path: ~/.cache/ms-playwright
+          key: pw-${{ runner.os }}-${{ hashFiles('qa/package-lock.json') }}
+      - name: Browser
+        if: steps.pw.outputs.cache-hit != 'true'
+        working-directory: qa
+        timeout-minutes: 6
+        run: npx playwright install chromium
+      # system libraries and fonts come from apt, whose mirrors sometimes stall: each try gets 4 minutes, 3 tries
+      - name: System libraries and fonts
+        working-directory: qa
+        timeout-minutes: 14
         run: |
-          npm ci --no-audit --no-fund
-          npx playwright install --with-deps chromium
-          sudo apt-get install -y -q -o Acquire::Retries=3 -o Acquire::http::Timeout=30 fonts-noto-core fonts-noto-cjk >/dev/null
+          for i in 1 2 3; do
+            timeout 240 npx playwright install-deps chromium >/dev/null \
+              && timeout 240 sudo apt-get install -y -q -o Acquire::Retries=3 -o Acquire::http::Timeout=30 fonts-noto-core fonts-noto-cjk >/dev/null \
+              && exit 0
+            echo "::warning::apt try $i stalled or failed; retrying"; sleep 10
+          done
+          exit 1
       - uses: actions/download-artifact@v4
         with: { name: qa-site, path: _site }
       - name: Layout, states, accessibility, links
