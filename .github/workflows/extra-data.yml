@@ -9,7 +9,8 @@ name: Extra data and reports
 # Every write to extradata goes through tools/save-extradata.sh, so jobs saving at the same time never undo each other.
 on:
   schedule:
-    - cron: "23 12 * * 2"   # places + kids: Tuesdays ~5am Pacific
+    - cron: "23 3 * * 2"    # places + kids: Monday nights ~8pm Pacific, when the free map servers are quiet
+    - cron: "37 3 * * *"    # places catch-up: nightly, only while a map layer is missing
     - cron: "47 10 * * *"   # reports: nightly ~3am Pacific
   workflow_dispatch:
     inputs:
@@ -36,10 +37,28 @@ env:
   LIVE: ${{ github.ref_name == 'main' || github.ref_name == 'launch' }}
 
 jobs:
+  # The nightly catch-up runs places only while a layer has never come in (the free Overpass servers are
+  # often too busy), so a missing layer is retried every quiet night instead of waiting a week.
+  places-due:
+    if: github.event_name == 'schedule' && github.event.schedule == '37 3 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      due: ${{ steps.c.outputs.due }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: c
+        run: |
+          due=false
+          git fetch -q --depth=1 origin extradata 2>/dev/null || due=true
+          for f in gardens giveboxes bakeries; do git cat-file -e FETCH_HEAD:raw/$f.json.gz 2>/dev/null || due=true; done
+          echo "due=$due" | tee -a "$GITHUB_OUTPUT"
+
   places:
+    needs: places-due
     # a push runs it on main only: each run reads the whole US from the shared, free Overpass servers,
     # so test it on a branch with "Run workflow" (job: places) instead of on every push
-    if: (github.event_name == 'push' && github.ref_name == 'main') || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places'))
+    if: always() && ((github.event_name == 'push' && github.ref_name == 'main') || needs.places-due.outputs.due == 'true' || (github.event_name == 'schedule' && github.event.schedule == '23 3 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places')))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -93,7 +112,7 @@ jobs:
         run: gh workflow run site.yml --ref "${{ github.ref_name }}"
 
   kids:
-    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'kids'))
+    if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 3 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'kids'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
