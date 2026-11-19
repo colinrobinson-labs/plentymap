@@ -2,13 +2,13 @@
    - App shell, English text and San Diego data are stored on install.
    - The person's own language, the map code and any map area they've looked at are stored as they use them.
    - Everything comes from our own site, plus the street map from our own tiles host. */
-const V = "pm-1.0.0-16";
+const V = "pm-1.0.0-17";
 const SHELL = `${V}-shell`, DATA = `${V}-data`, MAP = "pm-map-1", TILES = "pm-tiles-1";
 const PRECACHE = [
   "./", "index.html", "manifest.webmanifest", "favicon.ico",
   "css/app.css",
   "js/app.js", "js/core.js", "js/config.js", "js/region.js", "js/hours.js", "js/find.js", "js/food.js", "js/cook.js",
-  "js/budget.js", "js/help.js", "js/benefits.js", "js/pages.js", "js/map.js", "js/icons.js",
+  "js/budget.js", "js/help.js", "js/benefits.js", "js/pages.js", "js/map.js", "js/icons.js", "js/glyphs.js",
   "fonts/figtree-latin.woff2", "fonts/caprasimo-latin.woff2",
   "icons/favicon.svg", "icons/icon-192.png", "icons/apple-touch-icon.png",
   "i18n/en.json", "i18n/recipes/en.json",

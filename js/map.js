@@ -2,8 +2,38 @@
    Loaded only when someone opens the map, so the app shell stays small. */
 import { t, esc } from "./core.js";
 import { CONFIG, TILES } from "./config.js";
+import { KIND_GLYPH, KCOL } from "./glyphs.js";
 
-const KCOL = { pantry: "#E0664F", senior: "#6FA3DE", meal: "#B987C7", fridge: "#3FB8BC", store: "#7FC796", market: "#F5C04A", rmp: "#B987C7" };
+/* Pins: a teardrop in the kind's colour with its glyph, drawn once per kind on a canvas (no image requests).
+   The selected pin is bigger, with a yolk ring. */
+const BOARD = "#1F3B2D", CHALK = "#F1EBDD", YOLK = "#F5C04A";
+function pinImage(k, sel) {
+  const pr = Math.min(3, Math.max(2, devicePixelRatio || 1));
+  const W = sel ? 46 : 34, H = Math.round(W * 1.25);
+  const c = document.createElement("canvas"); c.width = W * pr; c.height = H * pr;
+  const g = c.getContext("2d"); g.scale(pr, pr);
+  const r = W / 2 - (sel ? 4 : 2.5), cx = W / 2, cy = r + (sel ? 4 : 2.5), tip = H - 1.5;
+  const drop = () => {
+    g.beginPath();
+    const a = Math.asin(Math.min(1, r / (tip - cy))) ;
+    g.arc(cx, cy, r, Math.PI / 2 + a, Math.PI / 2 - a + 2 * Math.PI);
+    g.lineTo(cx, tip); g.closePath();
+  };
+  g.shadowColor = "rgba(0,0,0,.35)"; g.shadowBlur = 4; g.shadowOffsetY = 1.5;
+  if (sel) { g.save(); g.lineWidth = 7; g.strokeStyle = YOLK; drop(); g.stroke(); g.restore(); }
+  drop(); g.fillStyle = KCOL[k] || CHALK; g.fill();
+  g.shadowColor = "transparent";
+  g.lineWidth = 2; g.strokeStyle = sel ? BOARD : CHALK; drop(); g.stroke();
+  const gl = KIND_GLYPH[k];
+  if (gl) {
+    const s = (r * 1.25) / 24;
+    g.save(); g.translate(cx - 12 * s, cy - 12 * s); g.scale(s, s);
+    g.lineCap = g.lineJoin = "round"; g.lineWidth = 2.1; g.strokeStyle = BOARD; g.fillStyle = "transparent";
+    for (const d of [...gl.d, ...gl.a]) g.stroke(new Path2D(d));
+    g.restore();
+  }
+  return { width: W * pr, height: H * pr, data: new Uint8Array(g.getImageData(0, 0, W * pr, H * pr).data.buffer), pr };
+}
 let loaded = null;
 
 function script(src) {
@@ -93,22 +123,26 @@ export async function mountMap(el, { center, onSelect }) {
     map.addSource("me", { type: "geojson", data: { type: "FeatureCollection", features: [] } });
     map.addLayer({ id: "me-halo", type: "circle", source: "me", paint: { "circle-radius": 14, "circle-color": "#F5C04A", "circle-opacity": 0.25 } });
     map.addLayer({ id: "me", type: "circle", source: "me", paint: { "circle-radius": 6, "circle-color": "#F5C04A", "circle-stroke-color": "#1F3B2D", "circle-stroke-width": 2 } });
+    for (const k of Object.keys(KCOL)) for (const sel of [0, 1]) {
+      const im = pinImage(k, sel);
+      map.addImage(`pin-${k}${sel ? "-sel" : ""}`, { width: im.width, height: im.height, data: im.data }, { pixelRatio: im.pr });
+    }
+    // far out, small dots; closer in, glyph pins
     map.addLayer({
-      id: "pts", type: "circle", source: "pts",
-      paint: {
-        "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, 4, 13, 8, 16, 11],
-        "circle-color": ["match", ["get", "k"], ...Object.entries(KCOL).flat(), "#F1EBDD"],
-        "circle-stroke-color": "#F1EBDD", "circle-stroke-width": 1.6,
-      },
+      id: "dots", type: "circle", source: "pts", maxzoom: 10.5,
+      paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 6, 2.5, 10.5, 5], "circle-color": ["match", ["get", "k"], ...Object.entries(KCOL).flat(), CHALK], "circle-stroke-color": BOARD, "circle-stroke-width": 1 },
     });
-    map.on("click", "pts", e => {
-      const f = e.features?.[0]; if (!f) return;
-      new ml.Popup({ closeButton: true, maxWidth: "260px" }).setLngLat(f.geometry.coordinates).setHTML(`<b>${esc(f.properties.n)}</b>`).addTo(map);
-      onSelect?.(f.properties.id);
-    });
-    map.on("mouseenter", "pts", () => (map.getCanvas().style.cursor = "pointer"));
-    map.on("mouseleave", "pts", () => (map.getCanvas().style.cursor = ""));
+    const pinLayout = img => ({ "icon-image": img, "icon-anchor": "bottom", "icon-allow-overlap": true, "icon-ignore-placement": true, "symbol-sort-key": ["-", 0, ["get", "o"]] });
+    map.addLayer({ id: "pts", type: "symbol", source: "pts", minzoom: 10.5, layout: { ...pinLayout(["concat", "pin-", ["get", "k"]]), "icon-size": ["interpolate", ["linear"], ["zoom"], 10.5, 0.7, 13, 1] } });
+    map.addLayer({ id: "hover", type: "symbol", source: "pts", filter: ["==", ["get", "id"], ""], layout: { ...pinLayout(["concat", "pin-", ["get", "k"]]), "icon-size": 1.2 } });
+    map.addLayer({ id: "sel", type: "symbol", source: "pts", filter: ["==", ["get", "id"], ""], layout: pinLayout(["concat", "pin-", ["get", "k"], "-sel"]) });
+    for (const L of ["pts", "dots", "hover", "sel"]) {
+      map.on("click", L, e => { const f = e.features?.[0]; if (f) onSelect?.(f.properties.id); });
+      map.on("mouseenter", L, () => (map.getCanvas().style.cursor = "pointer"));
+      map.on("mouseleave", L, () => (map.getCanvas().style.cursor = ""));
+    }
     if (pending) api.update(...pending);
+    api.select(selId);
     setMe(me);
   });
   function setMe(c) {
@@ -116,11 +150,14 @@ export async function mountMap(el, { center, onSelect }) {
     if (!map.getSource("me")) return;
     map.getSource("me").setData({ type: "FeatureCollection", features: c?.src ? [{ type: "Feature", geometry: { type: "Point", coordinates: [c.lon, c.lat] }, properties: {} }] : [] });
   }
-  let fitted = false;
+  let fitted = false, selId = null, hovId = null, byId = new Map();
+  const setFilter = (L, id) => map.getLayer(L) && map.setFilter(L, ["==", ["get", "id"], id || ""]);
   const api = {
     update(items, loc) {
       if (!map.getSource("pts")) { pending = [items, loc]; return; }
-      map.getSource("pts").setData({ type: "FeatureCollection", features: items.map(s => ({ type: "Feature", geometry: { type: "Point", coordinates: [s.lon, s.lat] }, properties: { id: s.id, k: s.k, n: s.n } })) });
+      byId = new Map(items.map(s => [s.id, s]));
+      // o = list order, so nearer or better matches draw on top
+      map.getSource("pts").setData({ type: "FeatureCollection", features: items.map((s, i) => ({ type: "Feature", geometry: { type: "Point", coordinates: [s.lon, s.lat] }, properties: { id: s.id, k: s.k, n: s.n, o: i } })) });
       if (loc) setMe(loc);
       if (!fitted && items.length) {
         fitted = true;
@@ -129,6 +166,17 @@ export async function mountMap(el, { center, onSelect }) {
         map.fitBounds(b, { padding: 40, maxZoom: 14, duration: 0 });
       }
     },
+    // the row someone picked: big pin with a ring; brought into view if it's off the map
+    select(id, { fly = false } = {}) {
+      selId = id || null; setFilter("sel", selId); setFilter("hover", hovId && hovId !== selId ? hovId : "");
+      const s = selId && byId.get(selId);
+      if (s && fly) {
+        const p = map.project([s.lon, s.lat]), c = map.getContainer(), m = 60;
+        if (p.x < m || p.y < m || p.x > c.clientWidth - m || p.y > c.clientHeight - m || map.getZoom() < 12)
+          map.easeTo({ center: [s.lon, s.lat], zoom: Math.max(map.getZoom(), 13), duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 500 });
+      }
+    },
+    hover(id) { hovId = id || null; setFilter("hover", hovId && hovId !== selId ? hovId : ""); },
     recenter(loc) { fitted = false; setMe(loc); map.easeTo({ center: [loc.lon, loc.lat], zoom: 12.5, duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 600 }); },
     resize() { map.resize(); },
     destroy() { map.remove(); },
