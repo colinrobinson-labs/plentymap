@@ -555,8 +555,6 @@ legend{padding:0;margin-block-end:4px}
 .shop .check .tip{grid-area:3/1/auto/-1}
 .shop .ln .link{white-space:nowrap}
 .shop .check .ln{margin-block-start:-6px}
-.foot .love{display:flex;align-items:flex-start;gap:8px;color:var(--ink);font-weight:600;font-size:15.5px}
-.foot .love .i{color:var(--tomato);flex:none;margin-block-start:3px}
 
 /* ---------- spacing system: one scale for every gap and inner padding ----------
    4 · 8 · 12 · 16 · 24 · 32 · 48. Cards pad 16, big panels pad 24, items in a list sit 12 apart,
@@ -858,6 +856,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .hm-or a:hover .hm-oname{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--yolk)}
 .hm-or .hm-lead{border-color:rgba(241,235,221,.3);transform:translateY(-4px)}
 .hm-op{flex:none;font-weight:700;color:var(--yolk);font-variant-numeric:tabular-nums}
+@media (max-width:959px){.hm-or li:nth-child(n+3){display:none}}
 
 /* open near you */
 .hm-change{margin-inline-start:auto;font:700 14.5px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--ink-2);padding:12px 0;margin-block:-12px}
@@ -872,6 +871,9 @@ h1+.lead{margin-block-start:var(--s2)}
 .hm-dist{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
 .hm-all{display:inline-flex;align-items:center;gap:6px;min-height:44px;margin-block-start:var(--s2);font-weight:700;color:var(--ink);text-underline-offset:3px}
 .hm-near .locbar{margin-block-start:var(--s2)}
+.hm-note{margin:0 0 var(--s3);font-size:15px;line-height:1.45;color:var(--mute)}
+.hlp-where{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.hlp-where a{color:var(--ink-2);font-weight:700;text-underline-offset:3px;padding-block:10px;margin-block:-10px}
 
 /* the menu */
 .hm-menu ol{list-style:none;margin:0;padding:0;display:grid}
@@ -900,12 +902,13 @@ h1+.lead{margin-block-start:var(--s2)}
   .hm-board{padding:var(--s6) var(--s6) var(--s5);margin-inline:0}
   .hm-plate{width:132px;height:132px}.hm-plate svg{width:96px;height:96px}
 }
-/* computers and big tablets: the board on the left, what's near and the menu down the right */
+/* computers and big tablets: the board on the left, what's near and the menu down the right.
+   Each column is as tall as what's in it: the near list's row hugs its rows and the menu follows
+   right under it, so neither side stretches into empty space when the other is taller. */
 @media (min-width:960px){
-  .home{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-areas:"board near" "board menu";column-gap:var(--s7);row-gap:var(--s6);align-items:start}
-  .hm-board{grid-area:board;min-height:calc(100dvh - var(--head) - 120px);display:flex;flex-direction:column}
-  .hm-dinner{margin-block-start:auto}
-  .hm-lede{margin-block-end:var(--s6)}
+  .home{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"board near" "board menu";column-gap:var(--s7);row-gap:var(--s5);align-items:start}
+  .hm-board{grid-area:board;padding-block-end:var(--s6);position:sticky;inset-block-start:calc(var(--head) + var(--s4))}
+  .hm-dinner{margin-block-start:var(--s6)}
   .hm-near{grid-area:near;padding-block-start:var(--s2)}
   .hm-menu{grid-area:menu}
 }
