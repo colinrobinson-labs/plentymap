@@ -110,31 +110,43 @@ out center meta;`;
   const qPR = `[out:json][timeout:120];area["ISO3166-1"="PR"][admin_level=2]->.pr;(${sel}(area.pr);${sel2}(area.pr););out center meta;`;
   let prev = {};
   try { prev = JSON.parse(await readFile(join(out, "osm-regions.json"), "utf8")); } catch { }
-  async function pull(query, name) {
-    for (let i = 0; i < eps.length * 2; i++) {
+  // the whole step gets a time budget; once it runs out, the remaining regions keep last week's listings
+  const deadline = Date.now() + 35 * 60000;
+  async function pull(query, name, tries = 3, timeout = 240000) {
+    for (let i = 0; i < tries; i++) {
+      if (Date.now() + 30000 > deadline) { log(`osm ${name}: out of time`); return null; }
       const ep = eps[i % eps.length];
       try {
-        const j = await (await get(ep, { method: "POST", body: "data=" + encodeURIComponent(query), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 270000 }, 1)).json();
+        const j = await (await get(ep, { method: "POST", body: "data=" + encodeURIComponent(query), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: Math.min(timeout, deadline - Date.now()) }, 1)).json();
         // Overpass reports a timeout or memory stop as a "remark" next to whatever it managed to return
         if (j.remark && /error|timed out|out of memory|runtime/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
         if (!Array.isArray(j.elements)) throw new Error("no elements array");
         return j.elements;
-      } catch (e) { log(`osm ${name} via ${ep.split("/")[2]}: ${e.message}`); await new Promise(r => setTimeout(r, 10000 * (i + 1))); }
+      } catch (e) { log(`osm ${name} via ${ep.split("/")[2]}: ${e.message}`); await new Promise(r => setTimeout(r, 8000 * (i + 1))); }
     }
     return null;
   }
+  const inBox = (e, [, s, w, n, ea]) => { const la = e.lat ?? e.center?.lat, lo = e.lon ?? e.center?.lon; return la >= s && la <= n && lo >= w && lo <= ea; };
+  // the fewest listings a region can plausibly have; zero or a handful means the server cut it short
+  const FLOOR = { alaska: 3, hawaii: 3, "puerto-rico": 0 };
   const by = {}, kept = [], missing = [];
+  // first try the whole country in one query (fast when the servers are quiet), then split it by region
+  const all = await pull(`[out:json][timeout:900];
+area["ISO3166-1"="US"][admin_level=2]->.us;
+(${sel}(area.us);${sel2}(area.us););
+out center meta;`, "nationwide", 3, 600000);
+  const pr = await pull(qPR, "puerto-rico");
   for (const r of [...REGIONS, ["puerto-rico"]]) {
-    const name = r[0];
-    const got = await pull(name === "puerto-rico" ? qPR : q(r), name);
-    const was = prev[name]?.length || 0;
+    const name = r[0], was = prev[name]?.length || 0, floor = FLOOR[name] ?? 10;
+    let got = name === "puerto-rico" ? pr : all ? all.filter(e => inBox(e, r)) : null;
+    const ok = x => x && x.length >= floor && !(was >= 20 && x.length < was * 0.6);
     // far fewer than last week means a cut-off pull, not hundreds of pantries closing in a week
-    if (got && !(was >= 20 && got.length < was * 0.6)) by[name] = got;
+    if (!ok(got)) { log(`osm ${name}: ${got ? got.length : "no"} from the big pull; asking for the region alone`); got = name === "puerto-rico" ? null : await pull(q(r), name); }
+    if (ok(got)) by[name] = got;
     else if (was) { by[name] = prev[name]; kept.push(name); }
     else if (got) by[name] = got;
     else missing.push(name);
     log(`osm ${name}: ${by[name]?.length ?? 0}${kept.includes(name) ? " (kept last week's)" : ""}`);
-    await new Promise(res => setTimeout(res, 3000));   // be gentle with the shared Overpass servers
   }
   const seen = new Set(), elements = [];
   for (const e of Object.values(by).flat()) { const k = e.type + e.id; if (!seen.has(k)) { seen.add(k); elements.push(e); } }

@@ -24,7 +24,7 @@ jobs:
           node-version: "22"
       - name: OpenStreetMap, region by region
         continue-on-error: true
-        timeout-minutes: 40
+        timeout-minutes: 45
         run: |
           mkdir -p /tmp/r/osm
           ONLY=place,osm node tools/fetch-us.mjs /tmp/r/osm
