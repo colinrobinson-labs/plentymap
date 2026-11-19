@@ -145,7 +145,10 @@ await writeFile(join(outDir, "index.json"), JSON.stringify({
   cells: index,
 }));
 console.log(`[build-extra] cells ${cells.size}, ${JSON.stringify(count)}, ${(bytes / 1048576).toFixed(1)} MB`);
-// each OpenStreetMap layer must look complete, or last week's layers stay up
-const MIN = { garden: 1000, givebox: 100, bakery: 20 };
-const short = Object.entries(MIN).filter(([k, n]) => (count[k] || 0) < n);
+// each OpenStreetMap layer that was fetched must look complete, or last week's layers stay up
+// (a layer fetch-extra.mjs could not get at all is simply left out of this week's build)
+const MIN = { garden: 1000, givebox: 100, bakery: 20 }, FILE = { garden: "gardens", givebox: "giveboxes", bakery: "bakeries" };
+const have = {};
+for (const k of Object.keys(MIN)) have[k] = !!(await rd(FILE[k] + ".json"));
+const short = Object.entries(MIN).filter(([k, n]) => have[k] && (count[k] || 0) < n);
 if (short.length) { console.error(`[build-extra] output looks too small (${short.map(([k]) => `${k} ${count[k] || 0}`).join(", ")}); stopping`); process.exit(1); }

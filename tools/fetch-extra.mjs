@@ -3,7 +3,8 @@
 //   - OpenStreetMap: community gardens, little free pantries (give boxes), bakery outlet stores
 //   - USDA FNS Summer Meals Site Finder (ArcGIS), when a summer season is published
 // Usage: node fetch-extra.mjs <outDir>
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { gunzipSync } from "node:zlib";
 import { join } from "node:path";
 
 const out = process.argv[2] || "raw-extra";
@@ -38,33 +39,50 @@ async function step(name, fn) {
 
 // ---------- 1. OpenStreetMap ----------
 // One nationwide query is too heavy for the public Overpass servers (they answer 502/504), so the US is
-// read in boxes and merged. A box that fails on every server fails the whole layer, and the job then
-// stops before saving, so last week's layers stay up instead of a half-empty map.
+// read in boxes and merged. A box that fails on every server is split into four smaller boxes and read
+// again (up to two levels). If a layer still fails, last week's copy of that layer is reused (saved on
+// the extradata branch under raw/), so one slow server never blocks the other layers from publishing.
 const EPS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
 // [south, west, north, east]: the lower 48 in 4 x 3 boxes, then Alaska, Hawaii, Puerto Rico + USVI
 const BOXES = [];
 for (const [s, n] of [[24.4, 33], [33, 40], [40, 49.5]]) for (const [w, e] of [[-125, -110], [-110, -97], [-97, -84], [-84, -66.8]]) BOXES.push([s, w, n, e]);
 BOXES.push([51, -180, 71.5, -129], [18.8, -160.5, 22.4, -154.7], [17.6, -67.4, 18.6, -64.5]);
-async function overpass(name, body, min) {
-  const seen = new Map();
-  for (const b of BOXES) {
-    const q = `[out:json][timeout:300][bbox:${b.join(",")}];\n(\n${body}\n);\nout center tags meta;`;
-    let ok = false, last;
-    for (const ep of EPS) {
-      try {
-        const j = await json(ep, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 360000 }, 2);
-        if (j.remark && /runtime error|timed out|out of memory/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
-        for (const e of j.elements || []) seen.set(e.type + e.id, e);
-        ok = true; break;
-      } catch (e) { last = e; log(`overpass ${name} box ${b.join(",")} ${ep}: ${e.message}`); }
-    }
-    if (!ok) throw new Error(`box ${b.join(",")}: ${last?.message}`);
-    await new Promise(r => setTimeout(r, 2000));   // be gentle with the shared servers
+const T0 = Date.now(), BUDGET = 75 * 60000;   // stop splitting after 75 min so the job ends in time
+const quarter = ([s, w, n, e]) => { const m = r => Math.round(r * 100) / 100, y = m((s + n) / 2), x = m((w + e) / 2); return [[s, w, y, x], [s, x, y, e], [y, w, n, x], [y, x, n, e]]; };
+async function readBox(name, body, b, depth, seen) {
+  const q = `[out:json][timeout:170][bbox:${b.join(",")}];\n(\n${body}\n);\nout center tags meta;`;
+  let last;
+  for (const ep of EPS) {
+    try {
+      const j = await json(ep, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 200000 }, 1);
+      if (j.remark && /runtime error|timed out|out of memory/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
+      for (const e of j.elements || []) seen.set(e.type + e.id, e);
+      await new Promise(r => setTimeout(r, 2000));   // be gentle with the shared servers
+      return;
+    } catch (e) { last = e; log(`overpass ${name} box ${b.join(",")} ${ep}: ${e.message}`); await new Promise(r => setTimeout(r, 4000)); }
   }
-  const elements = [...seen.values()];
-  if (elements.length < min) throw new Error(`too few elements: ${elements.length}`);
-  report[name + "_n"] = elements.length;
-  return save(name + ".json", { elements });
+  if (depth >= 2 || Date.now() - T0 > BUDGET) throw new Error(`box ${b.join(",")}: ${last?.message}`);
+  log(`overpass ${name}: splitting box ${b.join(",")}`);
+  for (const sub of quarter(b)) await readBox(name, body, sub, depth + 1, seen);
+}
+const prevDir = process.env.PREV_RAW || "";
+async function overpass(name, body, min) {
+  try {
+    const seen = new Map();
+    for (const b of BOXES) await readBox(name, body, b, 0, seen);
+    const elements = [...seen.values()];
+    if (elements.length < min) throw new Error(`too few elements: ${elements.length}`);
+    report[name + "_n"] = elements.length;
+    return await save(name + ".json", { fetched: new Date().toISOString(), elements });
+  } catch (e) {
+    // reuse last week's copy of this layer, if there is one
+    const prev = prevDir && await readFile(join(prevDir, name + ".json.gz")).then(b => JSON.parse(gunzipSync(b))).catch(() => null);
+    if (!prev?.elements?.length) throw e;
+    report[name] = `reused copy from ${String(prev.fetched || "last week").slice(0, 10)} (${e.message})`;
+    report[name + "_n"] = prev.elements.length;
+    report.stale = [...(report.stale || []), name];
+    return save(name + ".json", prev);
+  }
 }
 await step("gardens", () => overpass("gardens", `  nwr["leisure"="garden"]["garden:type"="community"];
   nwr["landuse"="allotments"]["name"];`, 1000));
@@ -134,5 +152,8 @@ await step("summer", async () => {
 
 await save("report.json", { fetched: new Date().toISOString(), ...report });
 log(JSON.stringify(report, null, 1));
-// all three OSM layers must succeed; summer meals are seasonal and may be absent
-if (["gardens", "giveboxes", "bakeries"].some(k => report[k] !== "ok")) { log("an OpenStreetMap layer failed; keeping last week's layers"); process.exit(1); }
+// A layer that failed with no earlier copy is left out; build-extra.mjs then publishes the others.
+// Only stop when every OpenStreetMap layer failed outright (likely an outage), keeping last week's build.
+const osm = ["gardens", "giveboxes", "bakeries"];
+if (osm.every(k => /^failed/.test(report[k] || ""))) { log("every OpenStreetMap layer failed; keeping last week's layers"); process.exit(1); }
+if (osm.some(k => report[k] !== "ok")) log("some layers were reused or left out: " + osm.filter(k => report[k] !== "ok").join(", "));

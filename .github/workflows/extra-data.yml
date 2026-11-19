@@ -43,7 +43,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Get last week's raw layers (reused if a source fails this week)
+        run: |
+          mkdir -p /tmp/x/prev
+          if git fetch --depth=1 origin extradata 2>/dev/null; then
+            git archive FETCH_HEAD raw | tar -x -C /tmp/x/prev --strip-components=1 2>/dev/null || true
+          fi
+          ls -la /tmp/x/prev
       - name: Fetch sources
+        env:
+          PREV_RAW: /tmp/x/prev
         run: node tools/fetch-extra.mjs /tmp/x/raw
       - name: Build the layer packs
         run: |
@@ -67,6 +76,9 @@ jobs:
             git -C "$GITHUB_WORKSPACE" archive FETCH_HEAD flags | tar -x -C . 2>/dev/null || true
           fi
           cp /tmp/x/raw/report.json extra/report.json
+          # keep this week's raw OpenStreetMap layers so next week can reuse one if its source fails
+          mkdir -p raw
+          for f in gardens giveboxes bakeries; do [ -f /tmp/x/raw/$f.json ] && gzip -9c /tmp/x/raw/$f.json > raw/$f.json.gz; done
           git init -q -b extradata
           git config user.name "plenty-map-data"
           git config user.email "actions@users.noreply.github.com"
