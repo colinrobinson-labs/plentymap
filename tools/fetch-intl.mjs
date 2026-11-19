@@ -99,14 +99,32 @@ async function overpass(q, min) {
   throw last;
 }
 const AREA = `area["ISO3166-1"="${CC}"][admin_level=2]->.c;`;
-await step("osm", async () => {
-  if (await fresh("osm.json", 6)) { log("osm.json is under 6 days old; keeping it"); report.osm_cached = true; return; }
-  const j = await overpass(`[out:json][timeout:900];${AREA}
-(
+const FOOD = `(
   nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"](area.c);
   nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"](area.c);
 );
-out center meta;`, CC === "GB" ? 300 : 150);   // Nov 2026: GB ~450, CA ~224
+out center meta;`;
+// Canada's whole-country polygon times out on the public servers (Nov 2026: 502/504 on all three),
+// so Canada is asked one province or territory at a time and the answers are merged.
+const CA_PARTS = ["AB", "BC", "MB", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT"];
+await step("osm", async () => {
+  if (await fresh("osm.json", 6)) { log("osm.json is under 6 days old; keeping it"); report.osm_cached = true; return; }
+  let j;
+  if (CC === "CA") {
+    const seen = new Map(), missed = [];
+    for (const p of CA_PARTS) {
+      try {
+        const r = await overpass(`[out:json][timeout:300];area["ISO3166-2"="CA-${p}"]->.c;${FOOD}`, 0);
+        for (const e of r.elements) seen.set(e.type + e.id, e);
+        log(`osm ${p}: ${r.elements.length}`);
+      } catch (e) { missed.push(p); }
+    }
+    if (missed.length) report.osm_missed = missed;
+    j = { elements: [...seen.values()] };
+    if (j.elements.length < 150 || missed.includes("ON") || missed.includes("QC")) throw new Error(`too few elements: ${j.elements.length}, missed ${missed.join(" ") || "none"}`);
+  } else {
+    j = await overpass(`[out:json][timeout:900];${AREA}${FOOD}`, 300);   // Nov 2026: GB ~450
+  }
   await save("osm.json", j);
 });
 await step("osm_shops", async () => {

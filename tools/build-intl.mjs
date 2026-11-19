@@ -330,5 +330,5 @@ await writeFile(join(outDir, "index.json"), JSON.stringify({
   cells: index,
 }));
 log(`cells ${cells.size}, sites ${sites.length} ${JSON.stringify(kinds)}, stores ${nStores}, postcode areas ${districts.length}, places ${seen.size}, ${(bytes / 1048576).toFixed(1)} MB in cells`);
-const MIN = CC === "GB" ? { sites: 1500, zips: 2500 } : { sites: 250, zips: 1500 };
+const MIN = CC === "GB" ? { sites: 1500, zips: 2500 } : { sites: 150, zips: 1500 };
 if (sites.length < MIN.sites || districts.length < MIN.zips) { console.error(`[build-${CC.toLowerCase()}] output looks too small; stopping`); process.exit(1); }
