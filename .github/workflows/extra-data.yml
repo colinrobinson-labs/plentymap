@@ -34,7 +34,7 @@ jobs:
   places:
     if: github.event_name == 'push' || (github.event_name == 'schedule' && github.event.schedule == '23 12 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places'))
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
