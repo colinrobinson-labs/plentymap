@@ -13,7 +13,8 @@ const log = (...a) => console.log("[fetch-us]", ...a);
 async function get(url, opts = {}, tries = 4) {
   for (let i = 1; ; i++) {
     try {
-      const r = await fetch(url, { ...opts, headers: { "User-Agent": UA, ...(opts.headers || {}) }, signal: AbortSignal.timeout(300000) });
+      const { timeout = 300000, ...o } = opts;
+      const r = await fetch(url, { ...o, headers: { "User-Agent": UA, ...(o.headers || {}) }, signal: AbortSignal.timeout(timeout) });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       return r;
     } catch (e) {
@@ -66,56 +67,7 @@ await step("snap", async () => {
   await save("snap.json", rows);
 });
 
-// 2. OpenStreetMap: food banks, pantries, soup kitchens and community fridges, one state at a time.
-//    One nationwide query times out on busy Overpass servers and comes back partial (a "remark" and a few
-//    hundred elements), so each state is its own small query, checked on its own. A state that still fails
-//    keeps last week's listings (raw/osm-states.json on the usdata branch) instead of dropping to zero.
-const OSM_STATES = [...STATES.filter(s => !["GU", "VI"].includes(s)), "PR"];
-await step("osm", async () => {
-  const eps = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
-  const q = st => `[out:json][timeout:180];
-area["ISO3166-2"="US-${st}"]->.a;
-(
-  nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"](area.a);
-  nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"](area.a);
-);
-out center meta;`;
-  let prev = {};
-  try { prev = JSON.parse(await readFile(join(out, "osm-states.json"), "utf8")); } catch { }
-  const by = {}, fresh = [], kept = [], missing = [];
-  for (const st of OSM_STATES) {
-    let got = null;
-    for (let i = 0; i < eps.length * 2 && !got; i++) {
-      const ep = eps[i % eps.length];
-      try {
-        const j = await (await get(ep, { method: "POST", body: "data=" + encodeURIComponent(q(st)), headers: { "Content-Type": "application/x-www-form-urlencoded" } }, 1)).json();
-        // Overpass reports a timeout or memory stop as a "remark" next to whatever it managed to return
-        if (j.remark && /error|timed out|out of memory/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
-        if (!Array.isArray(j.elements)) throw new Error("no elements array");
-        got = j.elements;
-      } catch (e) { log(`osm ${st} via ${ep.split("/")[2]}: ${e.message}`); await new Promise(r => setTimeout(r, 4000 * (i + 1))); }
-    }
-    // a state that had listings last week and now returns none is treated as a failed pull, not a real drop
-    if (got && !(got.length === 0 && prev[st]?.length > 5)) { by[st] = got; fresh.push(st); }
-    else if (prev[st]) { by[st] = prev[st]; kept.push(st); }
-    else missing.push(st);
-    await new Promise(r => setTimeout(r, 1500));   // be gentle with the shared Overpass servers
-  }
-  const counts = Object.fromEntries(Object.entries(by).map(([s, e]) => [s, e.length]));
-  const withSites = Object.values(counts).filter(n => n > 0).length;
-  const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  log(`osm per state ${JSON.stringify(counts)}; kept from last week: ${kept.join(" ") || "none"}; missing: ${missing.join(" ") || "none"}`);
-  report.osm_per_state = counts; report.osm_kept = kept; report.osm_missing = missing;
-  // coverage check: listings must come from most states, not just a big total from a few
-  if (withSites < 40 || total < 1500 || fresh.length < 30) throw new Error(`thin OSM coverage: ${total} elements, ${withSites} states with any, ${fresh.length} fresh`);
-  await save("osm-states.json", by);
-  // one combined file in the shape build-us.mjs reads; the same place can sit in two state areas at a border
-  const seen = new Set(), elements = [];
-  for (const e of Object.values(by).flat()) { const k = e.type + e.id; if (!seen.has(k)) { seen.add(k); elements.push(e); } }
-  await save("osm.json", { elements });
-});
-
-// 3. Census Gazetteer: ZIP code (ZCTA) centers and place (city, town, CDP) centers.
+// 2. Census Gazetteer: ZIP code (ZCTA) centers and place (city, town, CDP) centers.
 async function gaz(kind, file, min) {
   for (const yr of [2025, 2024, 2023]) {
     try {
@@ -134,6 +86,82 @@ async function gaz(kind, file, min) {
 }
 await step("zcta", () => gaz("zcta", "zcta.tsv", 30000));
 await step("place", () => gaz("place", "place.tsv", 30000));
+
+// 4. OpenStreetMap: food banks, pantries, soup kitchens and community fridges.
+//    One nationwide query often times out on the shared Overpass servers and comes back partial (a "remark"
+//    and a few hundred elements), so the country is pulled in regional boxes, each checked on its own.
+//    A region that fails, or drops far below last week's count, keeps last week's listings
+//    (raw/osm-regions.json on the usdata branch). Then every listing gets a state from the nearest
+//    Census place, and the pull must cover most states, not just reach a total.
+await step("osm", async () => {
+  const eps = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
+  // [name, south, west, north, east]; together they cover the lower 48, Alaska and Hawaii
+  const REGIONS = [
+    ["northeast", 38.7, -80.6, 47.6, -66.8], ["mid-south", 36.5, -92.0, 38.7, -74.9], ["great-lakes", 38.7, -92.0, 49.5, -80.6],
+    ["southeast", 24.3, -92.0, 36.5, -75.2], ["south-central", 25.8, -107.0, 36.5, -92.0], ["plains", 36.5, -104.1, 49.5, -92.0],
+    ["mountain", 31.3, -117.0, 49.1, -104.1], ["pacific", 32.4, -125.0, 49.1, -117.0],
+    ["alaska", 51.0, -180.0, 71.6, -129.9], ["hawaii", 18.8, -160.5, 22.4, -154.7],
+  ];
+  const sel = `nwr["amenity"~"^(food_bank|community_fridge|food_sharing|soup_kitchen)$"]`, sel2 = `nwr["amenity"="social_facility"]["social_facility"~"^(food_bank|soup_kitchen)$"]`;
+  const q = ([, s, w, n, e]) => `[out:json][timeout:240];
+area["ISO3166-1"="US"][admin_level=2]->.us;
+(${sel}(area.us)(${s},${w},${n},${e});${sel2}(area.us)(${s},${w},${n},${e}););
+out center meta;`;
+  const qPR = `[out:json][timeout:120];area["ISO3166-1"="PR"][admin_level=2]->.pr;(${sel}(area.pr);${sel2}(area.pr););out center meta;`;
+  let prev = {};
+  try { prev = JSON.parse(await readFile(join(out, "osm-regions.json"), "utf8")); } catch { }
+  async function pull(query, name) {
+    for (let i = 0; i < eps.length * 2; i++) {
+      const ep = eps[i % eps.length];
+      try {
+        const j = await (await get(ep, { method: "POST", body: "data=" + encodeURIComponent(query), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 270000 }, 1)).json();
+        // Overpass reports a timeout or memory stop as a "remark" next to whatever it managed to return
+        if (j.remark && /error|timed out|out of memory|runtime/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
+        if (!Array.isArray(j.elements)) throw new Error("no elements array");
+        return j.elements;
+      } catch (e) { log(`osm ${name} via ${ep.split("/")[2]}: ${e.message}`); await new Promise(r => setTimeout(r, 10000 * (i + 1))); }
+    }
+    return null;
+  }
+  const by = {}, kept = [], missing = [];
+  for (const r of [...REGIONS, ["puerto-rico"]]) {
+    const name = r[0];
+    const got = await pull(name === "puerto-rico" ? qPR : q(r), name);
+    const was = prev[name]?.length || 0;
+    // far fewer than last week means a cut-off pull, not hundreds of pantries closing in a week
+    if (got && !(was >= 20 && got.length < was * 0.6)) by[name] = got;
+    else if (was) { by[name] = prev[name]; kept.push(name); }
+    else if (got) by[name] = got;
+    else missing.push(name);
+    log(`osm ${name}: ${by[name]?.length ?? 0}${kept.includes(name) ? " (kept last week's)" : ""}`);
+    await new Promise(res => setTimeout(res, 3000));   // be gentle with the shared Overpass servers
+  }
+  const seen = new Set(), elements = [];
+  for (const e of Object.values(by).flat()) { const k = e.type + e.id; if (!seen.has(k)) { seen.add(k); elements.push(e); } }
+  // state of each listing, from the nearest Census place (good enough for a coverage check)
+  const perState = {};
+  try {
+    const lines = (await readFile(join(out, "place.tsv"), "utf8")).split(/\r?\n/), head = lines[0].split("|").map(h => h.trim());
+    const iS = head.indexOf("USPS"), iLa = head.findIndex(h => /INTPTLAT/.test(h)), iLo = head.findIndex(h => /INTPTLONG/.test(h));
+    const grid = new Map();
+    for (const l of lines.slice(1)) { const c = l.split("|"); const la = +c[iLa], lo = +c[iLo]; if (!la) continue; const k = `${Math.floor(la)}_${Math.floor(lo)}`; (grid.get(k) || grid.set(k, []).get(k)).push([la, lo, c[iS].trim()]); }
+    for (const e of elements) {
+      const la = e.lat ?? e.center?.lat, lo = e.lon ?? e.center?.lon; if (la == null) continue;
+      let best = "", bd = Infinity;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) for (const p of grid.get(`${Math.floor(la) + dy}_${Math.floor(lo) + dx}`) || []) { const d = (p[0] - la) ** 2 + (p[1] - lo) ** 2; if (d < bd) { bd = d; best = p[2]; } }
+      if (best) perState[best] = (perState[best] || 0) + 1;
+    }
+  } catch (e) { log("osm state check skipped: " + e.message); }
+  const nStates = Object.keys(perState).length;
+  log(`osm ${elements.length} elements; per state ${JSON.stringify(perState)}; kept: ${kept.join(" ") || "none"}; missing: ${missing.join(" ") || "none"}`);
+  report.osm_per_region = Object.fromEntries(Object.entries(by).map(([k, v]) => [k, v.length]));
+  report.osm_per_state = perState; report.osm_kept = kept; report.osm_missing = missing;
+  if (elements.length < 1500) throw new Error(`thin OSM pull: ${elements.length} elements`);
+  if (Object.keys(perState).length && nStates < 45) throw new Error(`OSM pull covers only ${nStates} states`);
+  if (missing.length > 1) throw new Error("OSM regions missing: " + missing.join(" "));
+  await save("osm-regions.json", by);
+  await save("osm.json", { elements });
+});
 
 await save("report.json", { fetched: new Date().toISOString(), ...report });
 log(JSON.stringify(report));

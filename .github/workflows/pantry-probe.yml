@@ -22,14 +22,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: OpenStreetMap, state by state
+      - name: OpenStreetMap, region by region
         continue-on-error: true
+        timeout-minutes: 40
         run: |
           mkdir -p /tmp/r/osm
-          ONLY=osm node tools/fetch-us.mjs /tmp/r/osm
-          rm -f /tmp/r/osm/osm.json /tmp/r/osm/osm-states.json
+          ONLY=place,osm node tools/fetch-us.mjs /tmp/r/osm
+          rm -f /tmp/r/osm/place.tsv /tmp/r/osm/osm-regions.json
       - name: Candidate sources and food bank platforms
         continue-on-error: true
+        timeout-minutes: 45
         run: |
           if [ -f tools/research/run.sh ]; then bash tools/research/run.sh /tmp/r/probe; else node tools/research/probe.mjs /tmp/r/probe; fi
       - name: Save to the pantry-research branch

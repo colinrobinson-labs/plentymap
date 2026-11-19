@@ -32,7 +32,7 @@ jobs:
           mkdir -p /tmp/u/raw
           if git fetch --depth=1 origin usdata 2>/dev/null; then
             git archive FETCH_HEAD raw/history.json | tar -x -C /tmp/u 2>/dev/null || true
-            git archive FETCH_HEAD raw/osm-states.json | tar -x -C /tmp/u 2>/dev/null || true
+            git archive FETCH_HEAD raw/osm-regions.json | tar -x -C /tmp/u 2>/dev/null || true
           fi
           ls -la /tmp/u/raw
       - name: Fetch national sources
@@ -45,7 +45,7 @@ jobs:
         run: |
           cd /tmp/u
           # keep the branch small: the history and report, not the big raw downloads
-          mkdir -p keep && mv raw/history.json raw/report.json keep/ && { mv raw/osm-states.json keep/ 2>/dev/null || true; } && rm -rf raw && mv keep raw
+          mkdir -p keep && mv raw/history.json raw/report.json keep/ && { mv raw/osm-regions.json keep/ 2>/dev/null || true; } && rm -rf raw && mv keep raw
           git init -q -b usdata
           git config user.name "plenty-map-data"
           git config user.email "actions@users.noreply.github.com"
