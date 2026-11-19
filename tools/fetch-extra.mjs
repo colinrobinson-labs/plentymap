@@ -24,7 +24,7 @@ async function get(url, opts = {}, tries = 3) {
     }
   }
 }
-const json = async (url, opts) => (await get(url, opts)).json();
+const json = async (url, opts, tries) => (await get(url, opts, tries)).json();
 async function save(name, data) {
   const s = typeof data === "string" ? data : JSON.stringify(data);
   await writeFile(join(out, name), s);
@@ -37,27 +37,41 @@ async function step(name, fn) {
 }
 
 // ---------- 1. OpenStreetMap ----------
+// One nationwide query is too heavy for the public Overpass servers (they answer 502/504), so the US is
+// read in boxes and merged. A box that fails on every server fails the whole layer, and the job then
+// stops before saving, so last week's layers stay up instead of a half-empty map.
 const EPS = ["https://overpass-api.de/api/interpreter", "https://overpass.kumi.systems/api/interpreter", "https://overpass.private.coffee/api/interpreter"];
+// [south, west, north, east]: the lower 48 in 4 x 3 boxes, then Alaska, Hawaii, Puerto Rico + USVI
+const BOXES = [];
+for (const [s, n] of [[24.4, 33], [33, 40], [40, 49.5]]) for (const [w, e] of [[-125, -110], [-110, -97], [-97, -84], [-84, -66.8]]) BOXES.push([s, w, n, e]);
+BOXES.push([51, -180, 71.5, -129], [18.8, -160.5, 22.4, -154.7], [17.6, -67.4, 18.6, -64.5]);
 async function overpass(name, body, min) {
-  const q = `[out:json][timeout:900];\narea["ISO3166-1"="US"][admin_level=2]->.us;\n(\n${body}\n);\nout center tags meta;`;
-  let last;
-  for (const ep of EPS) {
-    try {
-      const j = await json(ep, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 960000 });
-      const n = j.elements?.length || 0;
-      if (n < min) throw new Error(`too few elements: ${n} ${j.remark || ""}`);
-      report[name + "_n"] = n;
-      return save(name + ".json", j);
-    } catch (e) { last = e; log(`overpass ${name} ${ep}: ${e.message}`); }
+  const seen = new Map();
+  for (const b of BOXES) {
+    const q = `[out:json][timeout:300][bbox:${b.join(",")}];\n(\n${body}\n);\nout center tags meta;`;
+    let ok = false, last;
+    for (const ep of EPS) {
+      try {
+        const j = await json(ep, { method: "POST", body: "data=" + encodeURIComponent(q), headers: { "Content-Type": "application/x-www-form-urlencoded" }, timeout: 360000 }, 2);
+        if (j.remark && /runtime error|timed out|out of memory/i.test(j.remark)) throw new Error(j.remark.slice(0, 120));
+        for (const e of j.elements || []) seen.set(e.type + e.id, e);
+        ok = true; break;
+      } catch (e) { last = e; log(`overpass ${name} box ${b.join(",")} ${ep}: ${e.message}`); }
+    }
+    if (!ok) throw new Error(`box ${b.join(",")}: ${last?.message}`);
+    await new Promise(r => setTimeout(r, 2000));   // be gentle with the shared servers
   }
-  throw last;
+  const elements = [...seen.values()];
+  if (elements.length < min) throw new Error(`too few elements: ${elements.length}`);
+  report[name + "_n"] = elements.length;
+  return save(name + ".json", { elements });
 }
-await step("gardens", () => overpass("gardens", `  nwr["leisure"="garden"]["garden:type"="community"](area.us);
-  nwr["landuse"="allotments"]["name"](area.us);`, 1000));
-await step("giveboxes", () => overpass("giveboxes", `  nwr["amenity"="give_box"](area.us);
-  nwr["amenity"="food_sharing"]["name"~"pantry|blessing",i](area.us);`, 50));
-await step("bakeries", () => overpass("bakeries", `  nwr["shop"]["name"~"(bread|bakery|bake shop|baking|bakeries).*(outlet|thrift|discount)|(outlet|thrift).*(bread|bakery)",i](area.us);
-  nwr["shop"]["name"~"^(franz|dave's killer bread|pepperidge farm|flowers|nature's own|entenmann's|bimbo|aunt millie's|schwebel's|alpha baking|lewis bake shop|hostess|mrs\\\\. baird's|holsum|sara lee|arnold|oroweat|martin's|wonder).*(outlet|store|thrift)",i](area.us);`, 20));
+await step("gardens", () => overpass("gardens", `  nwr["leisure"="garden"]["garden:type"="community"];
+  nwr["landuse"="allotments"]["name"];`, 1000));
+await step("giveboxes", () => overpass("giveboxes", `  nwr["amenity"="give_box"];
+  nwr["amenity"="food_sharing"]["name"~"pantry|blessing",i];`, 50));
+await step("bakeries", () => overpass("bakeries", `  nwr["shop"]["name"~"(bread|bakery|bake shop|baking|bakeries).*(outlet|thrift|discount)|(outlet|thrift).*(bread|bakery)",i];
+  nwr["shop"]["name"~"^(franz|dave's killer bread|pepperidge farm|flowers|nature's own|entenmann's|bimbo|aunt millie's|schwebel's|alpha baking|lewis bake shop|hostess|mrs\\\\. baird's|holsum|sara lee|arnold|oroweat|martin's|wonder).*(outlet|store|thrift)",i];`, 20));
 
 // ---------- 2. USDA Summer Meals Site Finder ----------
 // The finder is an ArcGIS Experience app. Find its feature layers from the app's own config (the same
@@ -99,7 +113,10 @@ await step("summer", async () => {
       if (!lm || lm.geometryType !== "esriGeometryPoint") continue;
       const cnt = await json(`${svc}/${L.id}/query?where=1%3D1&returnCountOnly=true&f=json`).catch(() => ({}));
       log(`layer ${svc}/${L.id} "${lm.name}" rows ${cnt.count}`);
-      if ((cnt.count || 0) > (best?.count || 0)) best = { url: `${svc}/${L.id}`, name: lm.name, count: cnt.count, fields: lm.fields.map(f => f.name), edited: lm.editingInfo?.lastEditDate };
+      // a published layer beats a "(Testing)" copy of it, then the one with more rows
+      const rank = c => (/test/i.test(c.url) ? 0 : 1e9) + (c.count || 0);
+      const cand = { url: `${svc}/${L.id}`, count: cnt.count };
+      if (cnt.count > 0 && (!best || rank(cand) > rank(best))) best = { url: `${svc}/${L.id}`, name: lm.name, count: cnt.count, fields: lm.fields.map(f => f.name), edited: lm.editingInfo?.lastEditDate };
     }
   }
   if (!best) { report.summer = "no layer found (off season?)"; await save("summer.json", { layer: null, features: [] }); return; }
@@ -117,5 +134,5 @@ await step("summer", async () => {
 
 await save("report.json", { fetched: new Date().toISOString(), ...report });
 log(JSON.stringify(report, null, 1));
-// the OSM layers are the core of this build; summer meals are seasonal and may be absent
-if (["gardens", "giveboxes", "bakeries"].every(k => report[k] !== "ok")) process.exit(1);
+// all three OSM layers must succeed; summer meals are seasonal and may be absent
+if (["gardens", "giveboxes", "bakeries"].some(k => report[k] !== "ok")) { log("an OpenStreetMap layer failed; keeping last week's layers"); process.exit(1); }
