@@ -186,7 +186,7 @@ export async function render(main) {
   main.innerHTML = `
     <h1 class="disp">${esc(t("help_h"))}</h1>
     <p class="lead">${esc(t("help_p"))}</p>
-    ${!A.partner && stateName(A.st) ? `<p class="small mute">${ico("pin", "i sm")} ${esc(t("us_help_in", { st: stateName(A.st) }))}</p>` : ""}
+    ${!A.partner && stateName(A.st) ? `<p class="small mute hlp-where">${ico("pin", "i sm")} <span>${esc(t("us_help_in", { st: stateName(A.st) }))}</span> <a href="#/find">${esc(t("home_change"))}</a></p>` : ""}
     ${foodToday()}
 
     <div class="sec"><h2>${esc(t("check_h"))}</h2></div>
