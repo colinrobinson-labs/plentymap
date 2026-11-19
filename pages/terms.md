@@ -8,7 +8,7 @@
 - We work hard to keep listings, prices and benefit information right, but they come from many places and change often. **Call ahead before you travel**, and check with the program itself before you rely on anything.
 - Plenty Map is **not a government website**, not a food bank, and not medical, nutrition, legal or financial advice. Only the program itself can tell you whether you qualify.
 - **In an emergency, call 911** (999 or 112 in the UK, 911 in Canada).
-- Because Plenty Map is free and provided as it is, our responsibility to you is limited, as explained in sections 14 and 15. Some laws give you rights we can't take away, and nothing here takes them away.
+- Because Plenty Map is free and provided as it is, our responsibility to you is limited, as explained in sections 14 to 16. Some laws give you rights we can't take away, and nothing here takes them away.
 
 The rest of this page is the full agreement. Please read it.
 
@@ -43,6 +43,7 @@ Information about food banks, pantries, meal sites, community fridges, stores, f
 - **Call ahead or check the source before you go**, especially if the trip is long or costly. Where we list a phone number or website, that place is the authority, not us.
 - **We don't run, inspect, approve or endorse any listed place.** Each place sets its own rules and is responsible for its own food, staff and premises. Being listed doesn't mean a place is safe, licensed, open to you, or recommended by us.
 - **Community fridges, free pantry boxes and shared food** are run by volunteers or neighbors, not by us. We can't know what is inside or how it was stored. Use your own judgment, check packaging and dates, and don't eat anything that looks or smells wrong.
+- **You decide whether to visit a place, travel there or eat what you get there, and you do so at your own risk.** Plenty Map doesn't take part in anything that happens between you and a listed place.
 - A missing place doesn't mean help isn't available. Call 211 (in the US and Canada) or your local council or advice service (in the UK).
 
 ## 5. Benefits information and the quick check
@@ -122,17 +123,21 @@ TO THE FULLEST EXTENT ALLOWED BY LAW, OUR TOTAL LIABILITY FOR ALL CLAIMS RELATED
 
 **Nothing in these Terms limits or excludes liability that can't be limited or excluded by law**, including liability for fraud, for our gross negligence or willful misconduct, for violating the law, or, where the law says so, for death or personal injury caused by negligence. If you live in the United Kingdom, the European Union, Quebec or another place whose consumer laws give you rights that these Terms can't change, those rights still apply.
 
-## 16. If you misuse the Service
+## 16. Disputes with places, programs and stores
+
+Your dealings with any food bank, program, agency, store, restaurant or other place you find through Plenty Map are only between you and them. To the fullest extent allowed by law, you release Plenty Map and the people who run, volunteer for or contribute to it from claims of every kind arising from those dealings, known or unknown. If you live in California, you waive California Civil Code section 1542, which says: "A general release does not extend to claims that the creditor or releasing party does not know or suspect to exist in his or her favor at the time of executing the release and that, if known by him or her, would have materially affected his or her settlement with the debtor or released party." If you live elsewhere, you waive any similar law, where the law allows. This release doesn't apply to anything the law doesn't allow to be released.
+
+## 17. If you misuse the Service
 
 If you use the Service in a way that breaks these Terms or the law, and someone makes a claim against us because of it, you agree to cover the reasonable costs we have because of that claim, to the extent the law allows. This doesn't apply to ordinary use of the Service, and it doesn't apply where the law where you live doesn't allow it.
 
-## 17. Changes to the Service and these Terms
+## 18. Changes to the Service and these Terms
 
 We may change, pause or stop any part of the Service at any time. Because there are no accounts, we can't notify you individually.
 
 We may update these Terms. When we do, we'll post the new version here with a new effective date and, for important changes, show a notice in the app. Changes apply from the effective date and don't apply to anything that happened before it. If you keep using the Service after a change, you accept the new Terms.
 
-## 18. Law and disputes
+## 19. Law and disputes
 
 These Terms are governed by the laws of the State of California, USA, without regard to its conflict-of-laws rules. Any dispute about the Service will be decided by the state or federal courts located in San Diego County, California, and you and we agree to those courts' jurisdiction. Either of us may instead bring a claim in small claims court if it qualifies.
 
@@ -140,11 +145,13 @@ If you live outside the United States, you also keep the protection of the manda
 
 Before bringing a claim, please email us first so we can try to fix the problem. Most concerns can be solved quickly.
 
-## 19. If you use Plenty Map outside the United States
+To the extent the law allows, any claim related to the Service must be brought within one (1) year after it arises, or it is permanently barred.
+
+## 20. If you use Plenty Map outside the United States
 
 Plenty Map is run from the United States. Some features, listings and benefit information are made for particular countries and may not apply where you are. You're responsible for following the laws that apply to you.
 
-## 20. App Store and Google Play
+## 21. App Store and Google Play
 
 If you got Plenty Map from Apple's App Store, you and we agree that:
 
@@ -159,7 +166,7 @@ If you got Plenty Map from Apple's App Store, you and we agree that:
 
 If you got Plenty Map from Google Play, Google's terms for Google Play also apply to your download. Questions or complaints about the app should come to us, using the contact details below.
 
-## 21. General terms
+## 22. General terms
 
 - **Whole agreement.** These Terms, together with the Privacy Policy, are the whole agreement between you and us about the Service.
 - **If part of these Terms can't be enforced**, the rest stays in effect, and that part is changed only as much as needed to make it enforceable.
@@ -168,11 +175,11 @@ If you got Plenty Map from Google Play, Google's terms for Google Play also appl
 - **Things outside our control.** We aren't responsible for delays or failures caused by events we can't reasonably control, such as outages at our hosting providers, natural disasters or changes in the law.
 - **Headings and examples** are for convenience. Words like "including" mean "including, without limitation."
 
-## 22. Translations
+## 23. Translations
 
 These Terms are written in English. We may offer translations to help you understand them. If a translation and the English version differ, the English version applies, unless the law where you live requires otherwise.
 
-## 23. Contact
+## 24. Contact
 
 Plenty Map
 San Diego, California, USA
