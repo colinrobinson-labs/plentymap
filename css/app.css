@@ -656,13 +656,15 @@ h1+.lead{margin-block-start:var(--s2)}
 .rcard h3{overflow-wrap:anywhere}
 @media (max-width:360px){.rcard .tm{white-space:normal}}
 
-/* ---------- Icons, round 3 set (drawn in js/icons.js) ---------- */
+/* ---------- Icons, round 4 set (drawn in js/icons.js) ---------- */
 .i{stroke-width:1.75}
-.i .f,.i .fa,.i .ft,.d .f,.d .fa,.d .ft{fill:currentColor;stroke:none}
-.kn *{stroke:#000!important;stroke-width:4.6!important;fill:none!important}
-.kn .o,.kn .f,.kn .fa,.kn .ft{fill:#000!important}
-.d{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;overflow:visible;flex:none}
+.i .f,.i .fa,.i .ft,.d .f,.d .fa,.d .ft,.d .fb{fill:currentColor;stroke:none}
+.kn *{stroke:#000!important;stroke-width:3.9!important;fill:none!important}
+.d .kn *{stroke-width:3.4!important}
+.kn .o,.kn .f,.kn .fa,.kn .ft,.kn .fb{fill:#000!important}
+.d{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;overflow:visible;flex:none}
 .d .a{stroke:var(--yolk)}.d .fa{fill:var(--yolk)}.d .t{stroke:#E0664F}.d .ft{fill:#E0664F}
+.d .fb{fill:var(--board)}.d .sb{stroke:var(--board);stroke-width:1.2}
 .rcard .art svg{width:46px;height:46px}
 @media (max-width:320px){.rcard .art svg{width:36px;height:36px}}
 
