@@ -2,7 +2,7 @@
    - App shell, English text and San Diego data are stored on install.
    - The person's own language, the map code and any map area they've looked at are stored as they use them.
    - Everything comes from our own site, plus the street map from our own tiles host. */
-const V = "pm-1.0.0-12";
+const V = "pm-1.0.0-13";
 const SHELL = `${V}-shell`, DATA = `${V}-data`, MAP = "pm-map-1", TILES = "pm-tiles-1";
 const PRECACHE = [
   "./", "index.html", "manifest.webmanifest", "favicon.ico",

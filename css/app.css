@@ -524,3 +524,39 @@ legend{padding:0;margin-block-end:4px}
 .stack>.fg .chips.wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
 .toast a{color:var(--yolk);font-weight:800;text-underline-offset:3px;white-space:nowrap}
 #shop-h{scroll-margin-block-start:calc(var(--head) + 20px)}#shop-h:focus{outline:none}
+
+/* "coming soon" notes: quiet, one line, never a button */
+.soon{display:inline-flex;align-items:center;gap:6px;margin-block:4px 0;padding:4px 10px 4px 8px;border:1px dashed var(--line);border-radius:999px;font-size:13px;color:var(--ink-2)}
+.soon .i{flex:none;color:var(--mute)}
+
+/* shopping list: buying tips and store search links */
+.shop .check .nm label{display:block;cursor:pointer}
+.shop .check.done .nm{text-decoration:none}
+.shop .check.done .nm label{text-decoration:line-through;color:var(--mute)}
+.shop .ln{display:flex;flex-wrap:wrap;gap:2px 16px;margin-block-start:2px}
+.shop .ln .link{display:inline-flex;align-items:center;gap:4px}
+.shop .tipbtn[aria-expanded="true"]{text-decoration-thickness:2px;color:var(--ink)}
+.shop .check .price{align-self:flex-start}
+.shop .tip{flex:1 0 100%;margin:2px 0 4px;padding:10px 12px;border-radius:10px;background:var(--bg);font-size:14.5px}
+.shop .tip p{margin:0}
+.shop .tip p+p{margin-block-start:8px}
+.shop .tip .at{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.shop .tip .at span{color:var(--mute);font-size:13.5px;margin-inline-end:2px}
+.shop .tip .at a{display:inline-flex;align-items:center;gap:4px;min-height:36px;padding:4px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font-weight:600;text-decoration:none}
+.shop .tip .at a:hover{border-color:var(--ink-2)}
+.shop .tip .at a .i{width:14px;height:14px;color:var(--mute)}
+@media print{.shop .ln,.shop .tip,.soon{display:none!important}}
+.shop .check{align-items:flex-start}
+.shop .check input{margin-block-start:2px}
+@media (max-width:359px){.stack>.fg .chips.wrap{grid-template-columns:minmax(0,1fr)}}
+/* shopping list row: [box] name ... price / actions under the name / tip panel full width */
+.shop .check{display:grid;grid-template-columns:24px minmax(0,1fr) auto;column-gap:12px;align-items:start}
+.shop .check .nm{display:contents}
+.shop .check input{grid-area:1/1}
+.shop .check .nm label{grid-area:1/2;min-width:0;overflow-wrap:anywhere}
+.shop .check .price{grid-area:1/3;margin:0}
+.shop .check>form{grid-area:1/2/auto/-1;justify-self:end}
+.shop .check .ln{grid-area:2/2/auto/-1}
+.shop .check .tip{grid-area:3/1/auto/-1}
+.shop .ln .link{white-space:nowrap}
+.shop .check .ln{margin-block-start:-6px}

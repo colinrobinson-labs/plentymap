@@ -6,9 +6,9 @@ import { region, findPlace, setLoc, covered, nearestZip, placeNames, programName
 if (window.top !== window.self) { try { window.top.location = window.self.location.href; } catch { document.documentElement.textContent = ""; } }
 
 const TABS = [
-  { id: "find", icon: "basket" },
   { id: "cook", icon: "pot" },
   { id: "budget", icon: "wallet" },
+  { id: "find", icon: "basket" },
   { id: "help", icon: "hand" },
 ];
 const VIEWS = {
@@ -46,21 +46,21 @@ const EN_NAMES = { en: "English", es: "Spanish", "zh-Hans": "Chinese, Simplified
 /* What Plenty Map is, said on the very first screen, before anyone has picked a language.
    Shown in the language the phone asks for, and in English under it when that's different. */
 const INTRO = {
-  en: ["Free food help near you", "Food banks and free meals, stores that take EBT, cheap recipes, and help getting benefits. All free.", "Choose your language"],
-  es: ["Ayuda gratis con comida cerca de ti", "Bancos de comida y comidas gratis, tiendas que aceptan EBT, recetas baratas y ayuda para recibir beneficios. Todo gratis.", "Elige tu idioma"],
-  "zh-Hans": ["你附近的免费食物援助", "食物银行和免费餐食、接受 EBT 的商店、省钱食谱，以及申请福利的帮助。全部免费。", "选择你的语言"],
-  "zh-Hant": ["你附近的免費食物援助", "食物銀行和免費餐食、接受 EBT 的商店、省錢食譜，以及申請福利的協助。全部免費。", "選擇你的語言"],
-  vi: ["Hỗ trợ thực phẩm miễn phí gần bạn", "Ngân hàng thực phẩm và bữa ăn miễn phí, cửa hàng nhận EBT, công thức nấu ăn rẻ, và giúp xin trợ cấp. Tất cả đều miễn phí.", "Chọn ngôn ngữ của bạn"],
-  fil: ["Libreng tulong sa pagkain malapit sa iyo", "Mga food bank at libreng pagkain, mga tindahang tumatanggap ng EBT, murang recipe, at tulong sa pagkuha ng benepisyo. Libre lahat.", "Piliin ang iyong wika"],
-  ar: ["مساعدة غذائية مجانية بالقرب منك", "بنوك الطعام والوجبات المجانية، والمتاجر التي تقبل بطاقة EBT، ووصفات رخيصة، ومساعدة في الحصول على المعونات. كل ذلك مجانًا.", "اختر لغتك"],
-  ht: ["Èd gratis pou manje toupre w", "Bank manje ak manje gratis, magazen ki aksepte EBT, resèt bon mache, ak èd pou jwenn benefis. Tout gratis.", "Chwazi lang ou"],
-  ko: ["가까운 곳의 무료 식품 지원", "푸드뱅크와 무료 식사, EBT를 받는 가게, 저렴한 레시피, 복지 혜택 신청 도움까지. 모두 무료예요.", "언어를 선택하세요"],
-  ru: ["Бесплатная помощь с едой рядом с вами", "Продуктовые банки и бесплатное питание, магазины, где принимают EBT, недорогие рецепты и помощь с оформлением пособий. Всё бесплатно.", "Выберите язык"],
-  pt: ["Ajuda gratuita com comida perto de você", "Bancos de alimentos e refeições grátis, lojas que aceitam EBT, receitas baratas e ajuda para conseguir benefícios. Tudo grátis.", "Escolha seu idioma"],
-  "fa-AF": ["کمک رایگان غذایی نزدیک شما", "بانک‌های غذا و غذای رایگان، دکان‌هایی که EBT قبول می‌کنند، دستور پخت‌های ارزان، و کمک برای گرفتن کمک‌های دولتی. همه رایگان.", "زبان خود را انتخاب کنید"],
-  ps: ["ستاسو سره نږدې وړیا خوراکي مرسته", "د خوړو بانکونه او وړیا ډوډۍ، هغه دوکانونه چې EBT مني، ارزانه پخلي، او د ګټو په ترلاسه کولو کې مرسته. ټول وړیا.", "خپله ژبه وټاکئ"],
-  so: ["Caawimaad cunto oo bilaash ah oo kuu dhow", "Bangiyada cuntada iyo cunto bilaash ah, dukaamada aqbala EBT, cunto karis jaban, iyo caawimaad helitaanka gargaarka. Dhammaan waa bilaash.", "Dooro luqaddaada"],
-  uk: ["Безкоштовна допомога з їжею поруч із вами", "Продуктові банки й безкоштовне харчування, магазини, де приймають EBT, недорогі рецепти та допомога з оформленням пільг. Усе безкоштовно.", "Оберіть мову"],
+  en: ["Eat well for less", "Cheap recipes, a weekly meal plan that fits your budget, stores that take EBT, free food nearby, and help with benefits. All free.", "Choose your language"],
+  es: ["Come bien gastando menos", "Recetas baratas, un plan de comidas semanal que cabe en tu presupuesto, tiendas que aceptan EBT, comida gratis cerca y ayuda con beneficios. Todo gratis.", "Elige tu idioma"],
+  "zh-Hans": ["花更少，吃更好", "省钱食谱、符合预算的每周餐单、接受 EBT 的商店、附近的免费食物，还有福利申请帮助。全部免费。", "选择你的语言"],
+  "zh-Hant": ["花更少，吃更好", "省錢食譜、符合預算的每週餐單、接受 EBT 的商店、附近的免費食物，還有福利申請協助。全部免費。", "選擇你的語言"],
+  vi: ["Ăn ngon mà tốn ít hơn", "Công thức nấu ăn rẻ, thực đơn hằng tuần vừa túi tiền, cửa hàng nhận EBT, thực phẩm miễn phí gần bạn, và giúp xin trợ cấp. Tất cả đều miễn phí.", "Chọn ngôn ngữ của bạn"],
+  fil: ["Kumain nang maayos sa mas mura", "Murang recipe, lingguhang meal plan na kasya sa budget mo, mga tindahang tumatanggap ng EBT, libreng pagkain sa malapit, at tulong sa benepisyo. Libre lahat.", "Piliin ang iyong wika"],
+  ar: ["كُل جيدًا بتكلفة أقل", "وصفات رخيصة، وخطة وجبات أسبوعية تناسب ميزانيتك، ومتاجر تقبل EBT، وطعام مجاني قريب، ومساعدة في المعونات. كل ذلك مجانًا.", "اختر لغتك"],
+  ht: ["Manje byen pou mwens lajan", "Resèt bon mache, yon plan manje pou semèn nan ki antre nan bidjè w, magazen ki aksepte EBT, manje gratis toupre, ak èd pou benefis. Tout gratis.", "Chwazi lang ou"],
+  ko: ["적게 쓰고 잘 먹기", "저렴한 레시피, 예산에 맞는 주간 식단, EBT를 받는 가게, 근처 무료 식품, 혜택 신청 도움까지. 모두 무료예요.", "언어를 선택하세요"],
+  ru: ["Хорошо питаться, тратя меньше", "Недорогие рецепты, план питания на неделю под ваш бюджет, магазины, где принимают EBT, бесплатная еда рядом и помощь с пособиями. Всё бесплатно.", "Выберите язык"],
+  pt: ["Coma bem gastando menos", "Receitas baratas, um plano semanal de refeições que cabe no seu orçamento, lojas que aceitam EBT, comida grátis por perto e ajuda com benefícios. Tudo grátis.", "Escolha seu idioma"],
+  "fa-AF": ["با پول کمتر خوب غذا بخورید", "دستور پخت‌های ارزان، برنامه غذایی هفته‌وار مطابق بودجه شما، دکان‌هایی که EBT قبول می‌کنند، غذای رایگان در نزدیکی، و کمک برای کمک‌های دولتی. همه رایگان.", "زبان خود را انتخاب کنید"],
+  ps: ["په لږو پیسو ښه خواړه وخورئ", "ارزانه پخلي، اونیز د خوړو پلان چې ستاسو بودیجې ته برابر وي، هغه دوکانونه چې EBT مني، نږدې وړیا خواړه، او د ګټو په برخه کې مرسته. ټول وړیا.", "خپله ژبه وټاکئ"],
+  so: ["Si fiican wax u cun, lacag yar", "Cunto karis jaban, qorshe cunto toddobaadle ah oo ku habboon miisaaniyaddaada, dukaamo aqbala EBT, cunto bilaash ah oo dhow, iyo caawimaad gargaarka. Dhammaan waa bilaash.", "Dooro luqaddaada"],
+  uk: ["Добре харчуватися, витрачаючи менше", "Недорогі рецепти, план харчування на тиждень під ваш бюджет, магазини, де приймають EBT, безкоштовна їжа поруч і допомога з пільгами. Усе безкоштовно.", "Оберіть мову"],
 };
 
 function showWelcome(changing = false) {
@@ -109,7 +109,7 @@ async function showSetup() {
   $("#setup-h", w).focus();
   bindLoc("s", () => done());
   $("#s-skip", w).onclick = () => done();
-  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/find"; route(); }
+  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/cook"; route(); }
 }
 
 /* A ZIP / neighborhood box plus a GPS button. Used in setup and on Find food. */
@@ -229,8 +229,8 @@ function shell() {
 let current = null, cleanup = null, lastView = null;
 export async function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
-  let view = parts[0] || "find";
-  if (!VIEWS[view]) view = "find";
+  let view = parts[0] || "cook";
+  if (!VIEWS[view]) view = "cook";
   $$("[data-tab]").forEach(a => a.dataset.tab === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   const token = {}; current = token;
   try { cleanup?.(); } catch {}

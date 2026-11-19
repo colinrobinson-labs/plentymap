@@ -1,5 +1,5 @@
 /* Budget: a week of meals for your household, what it costs, and a shopping list by aisle. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, rt, dayName, shareThing, toast, announce, activeCuisine } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, rt, dayName, shareThing, toast, announce, activeCuisine, openOut, ingNameEn } from "./core.js";
 import { food, canCook, dietOk, perServing, price, name, pkgLabel, cuisineMatch, facts } from "./food.js";
 import { SNAP } from "./benefits.js";
 import { stateOf } from "./region.js";
@@ -211,7 +211,7 @@ function paint() {
       <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(Math.min(1, pct) * 100)}" aria-label="${esc(t("of_budget", { p: num(Math.round(pct * 100)) }))}"><i class="${over ? "over" : ""}"></i></div>
       <span class="small">${esc(over ? t("over_budget", { m: money(tot.eat - weekly, false) }) : t("under_budget", { m: money(Math.max(0, weekly - tot.eat), false) }))}</span></div>`;
   $("#kpis .meter i").style.width = Math.min(100, Math.round(pct * 100)) + "%";
-  $("#blow").innerHTML = over ? `<div class="notice warn">${ico("alert")}<p>${esc(t("budget_low", { m: money(tot.eat, false) }))} <a href="#/find">${esc(t("free_near"))}</a></p></div>` : "";
+  $("#blow").innerHTML = over ? `<div class="notice warn">${ico("alert")}<p>${esc(t("budget_low", { m: money(tot.eat, false) }))} <a href="#/find/in/free">${esc(t("free_near"))}</a></p></div>` : "";
 
   $("#week").innerHTML = S.plan.days.map((d, i) => `<div class="card day"><h3>${esc(dayName((i + 1) % 7))}</h3>
     ${["b", "l", "d"].filter(m => d[m]).map(m => { const x = d[m], nm = rt(x.id).t; return `<div class="meal"><span class="k">${esc(t("meal_" + m))}</span>
@@ -227,15 +227,49 @@ function paint() {
   $("#shop").innerHTML = AISLES.filter(a => by[a]).map(a => `<h3>${esc(t("aisle_" + a))}</h3>${by[a].sort((x, y) => name(x.id).localeCompare(name(y.id), S.lang)).map(it => `
     <div class="check ${S.got.has(it.id) ? "done" : ""}">
       <input type="checkbox" id="g-${it.id}" data-got="${it.id}" ${S.got.has(it.id) ? "checked" : ""}>
-      <label class="nm" for="g-${it.id}">${esc(name(it.id))}<small>${esc(it.have ? t("have_it") : `${num(it.n)} × ${pkgLabel(it.id)}`)}</small></label>
-      <button class="link small" type="button" data-have="${it.id}">${esc(it.have ? t("need_it") : t("have_it_btn"))}</button>
-      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}">${esc(money(it.c))}</button>`}
+      <div class="nm"><label for="g-${it.id}">${esc(name(it.id))}<small>${esc(it.have ? t("have_it") : `${num(it.n)} × ${pkgLabel(it.id)}`)}</small></label>
+        <span class="ln"><button class="link small" type="button" data-have="${it.id}">${esc(it.have ? t("need_it") : t("have_it_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>${it.have ? "" : `<button class="link small tipbtn" type="button" data-tip="${it.id}" aria-expanded="false" aria-controls="tip-${it.id}">${ico("search", "i sm")}${esc(t("tips_btn"))}<span class="sr">: ${esc(name(it.id))}</span></button>`}</span></div>
+      ${it.have ? "" : `<button class="price" type="button" data-price="${it.id}" aria-label="${esc(t("edit_price", { i: name(it.id), m: money(it.c) }))}">${esc(money(it.c))}</button>
+      <div class="tip" id="tip-${it.id}" hidden></div>`}
     </div>`).join("")}`).join("") || `<p class="mute">${esc(t("list_empty"))}</p>`;
   $$("[data-got]").forEach(c => c.onchange = () => { c.checked ? S.got.add(c.dataset.got) : S.got.delete(c.dataset.got); save("got"); c.parentElement.classList.toggle("done", c.checked); });
   $$("[data-have]").forEach(b => b.onclick = () => { const id = b.dataset.have; S.have.has(id) ? S.have.delete(id) : S.have.add(id); save("have"); paint(); $(`[data-have="${id}"]`)?.focus(); });
   $$("[data-price]").forEach(b => b.onclick = () => editPrice(b.dataset.price, b));
+  $$("[data-tip]").forEach(b => b.onclick = () => {
+    const box = $("#tip-" + b.dataset.tip), open = box.hidden;
+    if (open && !box.firstChild) {
+      box.innerHTML = tipHtml(b.dataset.tip);
+      $$("a[data-out]", box).forEach(a => a.addEventListener("click", e => { e.preventDefault(); openOut(a.href); }));
+    }
+    box.hidden = !open; b.setAttribute("aria-expanded", open);
+  });
   $("#extras").innerHTML = Object.keys(S.extra).length ? `<p class="small">${esc(t("extras", { n: Object.keys(S.extra).length }))} <button class="link" type="button" id="clrx">${esc(t("clear"))}</button></p>` : "";
   $("#clrx")?.addEventListener("click", () => { S.extra = {}; save("extra"); paint(); });
+}
+
+/* ---------- buying tips and store search links ---------- */
+// which money-saving tip fits each ingredient
+const TIP = {};
+for (const [k, ids] of Object.entries({
+  bulk: "rice lentils peas_d potato onion chbr beef", dry: "dbeans",
+  lowna: "cbeans chick ctom tsauce corn bouil beets",
+  store: "pasta flour oats tpaste tuna coco eggs milk butter oil pb mayo tofu bread ftort ctort ramen salsa soy vinegar sugar bpowder",
+  block: "cheddar", plain: "yogurt", bone: "chleg", whole: "carrot cabbage garlic celery",
+  season: "sweetp pepper gonion cilantro lime ginger", frozen: "fmix fpeas fspin fbroc",
+  intl: "cumin chili curry paprika italian garpow cinn mungb buckwheat kimchi",
+})) for (const id of ids.split(" ")) TIP[id] = k;
+// items where the store's own brand is the best value: the search asks for it by name
+const OWN = new Set(["rice", "lentils", "peas_d", "dbeans", ...Object.keys(TIP).filter(id => ["store", "lowna", "frozen", "block", "plain"].includes(TIP[id]))]);
+const QUERY = { onion: "yellow onions 3 lb bag", potato: "russet potatoes 5 lb bag", dbeans: "dried pinto beans", cbeans: "canned black beans", chleg: "bone-in chicken thighs", buckwheat: "buckwheat groats", peas_d: "dried split peas" };
+const SHOPS = [
+  ["Walmart", "https://www.walmart.com/search?q=", "Great Value"],
+  ["Kroger", "https://www.kroger.com/search?query=", "Kroger"],
+  ["Target", "https://www.target.com/s?searchTerm=", "Good & Gather"],
+];
+function tipHtml(id) {
+  const q = QUERY[id] || ingNameEn(id).replace(/\s*\(.*?\)/g, "").toLowerCase();
+  const links = SHOPS.map(([n, u, own]) => `<a href="${esc(u + encodeURIComponent((OWN.has(id) ? own + " " : "") + q))}" target="_blank" rel="noopener noreferrer" data-out>${esc(n)} ${ico("ext", "i sm")}</a>`).join("");
+  return `${TIP[id] ? `<p>${esc(t("tip_" + TIP[id]))}</p>` : ""}<p class="at"><span>${esc(t("find_at"))}</span>${links}</p>`;
 }
 
 function editPrice(id, btn) {
@@ -282,6 +316,7 @@ export async function render(main) {
     <div id="extras"></div>
     <div class="card shop" id="shop"></div>
     <p class="tiny mute">${esc(t("price_note"))} ${esc(t("price_edit_hint"))}</p>
+    <p class="soon">${ico("clock", "i sm")}<span>${esc(t("soon_prices"))}</span></p>
     ${foot()}`;
   $$("[data-hh]").forEach(b => b.onclick = () => {
     const k = b.dataset.hh; S.hh[k] = Math.max(k === "a" ? 1 : 0, Math.min(12, S.hh[k] + +b.dataset.v)); save("hh");

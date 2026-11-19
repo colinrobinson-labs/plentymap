@@ -109,6 +109,7 @@ export const hasT = k => k in STR || k in EN;
 /* recipe text: {t: title, s: [steps], tip} */
 export const rt = id => REC[id] || REC_EN[id] || { t: id, s: [], tip: "" };
 export const ingName = id => REC.ing?.[id] ?? REC_EN.ing?.[id] ?? id;
+export const ingNameEn = id => REC_EN.ing?.[id] ?? id;
 export const unitName = (u, n) => {
   const tbl = REC.units?.[u] ?? REC_EN.units?.[u];
   if (!tbl) return u;

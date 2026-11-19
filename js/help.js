@@ -58,12 +58,12 @@ function results() {
     outp.push(prog("sunbucks", t("sun_h"), inc <= WIC.limit(n) ? "likely" : "ask", esc(t("sun_p", { m: money(SUN_BUCKS, false) })), out(LINKS.sunbucks, t("learn_more")) + tel(PHONES.sunbucks, t("call"))));
   }
   if (w.senior) {
-    outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), `<a class="btn sm" href="#/find">${ico("basket", "i sm")} ${esc(t("cat_senior"))}</a>`));
+    outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), `<a class="btn sm" href="#/find/in/senior">${ico("basket", "i sm")} ${esc(t("cat_senior"))}</a>`));
     outp.push(prog("ais", t("ais_h"), "likely", esc(t("ais_p")), tel(PHONES.ais, t("call_ais")) + out(LINKS.ais, t("learn_more"))));
   }
-  if (w.senior || w.dis || w.home) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("rmp_p")), `<a class="btn sm" href="#/find">${esc(t("cat_rmp"))}</a>` + out(LINKS.rmp, t("learn_more"))));
+  if (w.senior || w.dis || w.home) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(LINKS.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel(PHONES.sd211, t("call_211"), "btn sm pri")));
-  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>`));
+  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>`));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("results_note"))}</span></p>
     <div class="grid2">${outp.join("")}</div>`;
@@ -101,9 +101,9 @@ function resultsUS() {
     outp.push(prog("csfp", t("csfp_h"), inc <= Math.round(fplMonth(n, st) * 1.5) ? "likely" : "ask", esc(t("csfp_p")), out(US.csfp, t("learn_more"))));
     outp.push(prog("ais", t("ais_h"), "likely", esc(t("us_ais_p")), tel(ELDERCARE, t("us_call_eldercare")) + out(US.eldercare, t("learn_more"))));
   }
-  if ((w.senior || w.dis || w.home) && A.stores.some(s => s.k === "rmp")) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("us_rmp_p")), `<a class="btn sm" href="#/find">${esc(t("cat_rmp"))}</a>` + out(US.rmp, t("learn_more"))));
+  if ((w.senior || w.dis || w.home) && A.stores.some(s => s.k === "rmp")) outp.push(prog("rmp", t("rmp_h"), cf === "ask" ? "maybe" : "likely", esc(t("us_rmp_p")), `<a class="btn sm" href="#/find/in/rmp">${esc(t("cat_rmp"))}</a>` + out(US.rmp, t("learn_more"))));
   if (w.home) outp.push(prog("home", t("home_h"), "likely", esc(t("home_p")), tel("211", t("call_211"), "btn sm pri")));
-  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>` + out(US.foodbank, t("us_fb_find"))));
+  outp.push(prog("pantry", t("pantry_h"), "likely", esc(t("pantry_p")), `<a class="btn sm" href="#/find/in/pantry">${ico("basket", "i sm")} ${esc(t("tab_find"))}</a>` + out(US.foodbank, t("us_fb_find"))));
   return `<div class="sec"><h2 id="res-h" tabindex="-1">${esc(t("results_h"))}</h2></div>
     <p class="notice">${ico("info")}<span>${esc(t("us_results_note"))}</span></p>
     <div class="grid2">${outp.join("")}</div>`;
@@ -115,11 +115,11 @@ function urgentUS() {
         ${tel("211", t("call_211"), "btn pri")}
         ${S0.ph ? tel(S0.ph, t("us_call_snap"), "btn") : ""}
         ${out(US.foodbank, t("us_fb_find"), "btn")}
-        <a class="btn" href="#/find">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
+        <a class="btn" href="#/find/in/free">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
       </div>`;
 }
 function moreUS() {
-  return `${prog("mm", t("us_mm_h"), "", esc(t("us_mm_p")), `<a class="btn sm" href="#/find">${esc(t("cat_market"))}</a>`)}
+  return `${prog("mm", t("us_mm_h"), "", esc(t("us_mm_p")), `<a class="btn sm" href="#/find/in/market">${esc(t("cat_market"))}</a>`)}
       ${prog("imm", t("imm_h"), "", esc(t("us_imm_p")), tel("211", t("call_211")) + out(US.rules, t("learn_more")))}
       ${prog("work", t("work_h"), "", esc(t("us_work_p")), out(US.work, t("learn_more")))}
       ${prog("scam", t("scam_h"), "", esc(t("scam_p")))}`;
@@ -141,7 +141,7 @@ export async function render(main) {
         ${tel(PHONES.sd211, t("call_211"), "btn pri")}
         ${tel(PHONES.sdfb, t("call_sdfb"), "btn")}
         ${tel(PHONES.fsd, t("call_fsd"), "btn")}
-        <a class="btn" href="#/find">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
+        <a class="btn" href="#/find/in/free">${ico("basket", "i sm")} ${esc(t("free_near"))}</a>
       </div>` : urgentUS()}
     </section>
 
@@ -162,7 +162,7 @@ export async function render(main) {
 
     <div class="sec"><h2>${esc(t("more_h"))}</h2></div>
     <div class="grid2">
-      ${A.partner ? `${prog("mm", t("mm_h"), "", esc(t("mm_p", { m: money(10, false) })), `<a class="btn sm" href="#/find">${esc(t("cat_market"))}</a>` + out(LINKS.marketmatch, t("learn_more")))}
+      ${A.partner ? `${prog("mm", t("mm_h"), "", esc(t("mm_p", { m: money(10, false) })), `<a class="btn sm" href="#/find/in/market">${esc(t("cat_market"))}</a>` + out(LINKS.marketmatch, t("learn_more")))}
       ${prog("imm", t("imm_h"), "", esc(t("imm_p")), tel(PHONES.sd211, t("call_211")) + out(LINKS.hr1, t("learn_more")))}
       ${prog("work", t("work_h"), "", esc(t("work_p")), out(LINKS.hr1, t("learn_more")))}
       ${prog("scam", t("scam_h"), "", esc(t("scam_p")))}` : moreUS()}
