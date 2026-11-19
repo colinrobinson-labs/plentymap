@@ -26,7 +26,10 @@ permissions:
   contents: write
   actions: write
   issues: write
-concurrency: extra-data
+# main and launch both write the extradata branch, so their runs queue behind each other; test runs on
+# other branches get their own lane and never cancel or hold up a live build
+concurrency:
+  group: extra-data-${{ (github.ref_name == 'main' || github.ref_name == 'launch') && 'live' || github.ref_name }}
 env:
   LIVE: ${{ github.ref_name == 'main' || github.ref_name == 'launch' }}
 
