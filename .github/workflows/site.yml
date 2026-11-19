@@ -83,6 +83,8 @@ jobs:
           else
             echo "::warning::no extradata branch yet; extra layers and report flags skipped"
           fi
+          # an empty index (data/extra/index.json in the repo) until the first weekly build, so the app never asks for a missing file
+          [ -f _site/data/extra/index.json ] || { mkdir -p _site/data/extra && cp data/extra/index.json _site/data/extra/; }
       - name: Publish to gh-pages
         run: |
           cd _site
