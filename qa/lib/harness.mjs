@@ -25,6 +25,8 @@ export function watch(page, problems, screenRef) {
     if (m.type() !== "error") return;
     const t = m.text();
     if (/Failed to load resource/.test(t)) return; // reported with its URL by the response handler
+    // the R2 tile host only allows plentymap.com, so a local test server is refused by CORS (the app falls back to its own tiles)
+    if (!LIVE && /tiles\.plentymap\.com/.test(t) && /CORS|Access-Control|Failed to fetch/i.test(t)) return;
     problems.push({ check: "console-error", screen: at(), sel: "", detail: t.slice(0, 300) });
   });
   page.on("pageerror", e => problems.push({ check: "js-error", screen: at(), sel: "", detail: (e.message || String(e)).slice(0, 300) }));
