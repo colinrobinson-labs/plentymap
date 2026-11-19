@@ -12,6 +12,7 @@ const TABS = [
   { id: "help", icon: "hand" },
 ];
 const VIEWS = {
+  home: () => import("./home.js"),
   find: () => import("./find.js"),
   cook: () => import("./cook.js"),
   budget: () => import("./budget.js"),
@@ -128,7 +129,7 @@ async function showSetup() {
   $("#setup-h", w).focus();
   bindLoc("s", () => done());
   $("#s-skip", w).onclick = () => done();
-  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/cook"; route(); }
+  function done() { store.set("setupDone", true); hideWelcome(); shell(); location.hash = "#/home"; route(); }
 }
 
 /* A ZIP / neighborhood box plus a GPS button. Used in setup and on Find food. */
@@ -159,6 +160,18 @@ async function locHelp() {
   if (/Mac OS X|Macintosh/.test(ua)) return "loc_help_mac";
   if (/Windows/.test(ua)) return "loc_help_win";
   return "loc_help_site";
+}
+/* The UK and Canada are next: say so to people there instead of "outside the U.S." (until their data ships). */
+const CA_PROV = /,?\s+(ON|QC|BC|AB|MB|SK|NS|NB|NL|PE|YT|NT|NU)$/i;
+const COMING_WORDS = /\b(canada|united kingdom|england|scotland|wales|northern ireland|ontario|quebec|qu\u00e9bec|british columbia|alberta|manitoba|saskatchewan|nova scotia|toronto|montreal|montr\u00e9al|vancouver|calgary|edmonton|ottawa|winnipeg|london|manchester|birmingham|glasgow|edinburgh|liverpool|leeds|bristol|cardiff|belfast)\b/i;
+function comingQ(q) {
+  const s = String(q || "").trim();
+  return /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i.test(s) || /^[A-Z]\d[A-Z]\s*\d[A-Z]\d$/i.test(s) || CA_PROV.test(s) || COMING_WORDS.test(s);
+}
+function comingAt(lat, lon) {
+  const uk = lat > 49.8 && lat < 60.9 && lon > -8.2 && lon < 1.8 && !(lon < -5.4 && lat < 54.1); // leaves out Ireland, roughly
+  const ca = lat > 41.6 && lat < 83.2 && lon > -141.1 && lon < -52.5;  // only asked when the point isn't in the U.S.
+  return uk || ca;
 }
 export function bindLoc(p, after) {
   const form = $(`#${p}-form`), msg = () => $(`#${p}-msg`);
@@ -214,7 +227,7 @@ export function bindLoc(p, after) {
     e.preventDefault(); close(); seq++;
     const q = inp.value;
     const r = await findPlace(q);
-    if (r.error) return say(t(r.error === "outside" ? "loc_outside" : "loc_notfound"));
+    if (r.error) return say(t(comingQ(q) ? "loc_coming" : r.error === "outside" ? "loc_outside" : "loc_notfound"));
     const el = msg(); if (el) el.textContent = "";
     setLoc(r); after?.(r);
   };
@@ -222,7 +235,7 @@ export function bindLoc(p, after) {
     const btn = $(`#${p}-gps`); btn.disabled = true; say(t("loc_finding"), true);
     try {
       const pos = await getPosition();
-      if (!(await covered(pos.lat, pos.lon))) { say(t("loc_outside")); return; }
+      if (!(await covered(pos.lat, pos.lon))) { say(t(comingAt(pos.lat, pos.lon) ? "loc_coming" : "loc_outside")); return; }
       // round to about 100 m: plenty for "near me", and less exact than the phone's fix
       const lat = +pos.lat.toFixed(3), lon = +pos.lon.toFixed(3);
       const R = await region({ lat, lon });
@@ -252,11 +265,24 @@ function shell() {
   document.title = "Plenty Map: " + t("tagline");
 }
 
+/* Where an empty address lands: Home, unless the first tab opened on each of the last three visits was
+   the same one; then that tab. Only those three tab names are kept, on this device; Settings > Clear forgets them. */
+function noteVisit(view) {
+  try { if (sessionStorage.getItem("pm.visit")) return; sessionStorage.setItem("pm.visit", "1"); } catch { return; }
+  store.set("habit", [...store.get("habit", []), view].slice(-3));
+}
+function habitTab() {
+  const h = store.get("habit", []);
+  return h.length === 3 && h.every(v => v === h[0]) && TABS.some(x => x.id === h[0]) ? h[0] : null;
+}
+
 let current = null, cleanup = null, lastView = null;
 export async function route() {
   const parts = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
-  let view = parts[0] || "cook";
-  if (!VIEWS[view]) view = "cook";
+  let view = parts[0] || habitTab() || "home";
+  if (!VIEWS[view]) view = "home";
+  if (!parts[0] && view !== "home") history.replaceState(null, "", "#/" + view);
+  if (TABS.some(x => x.id === view)) noteVisit(view);
   $$("[data-tab]").forEach(a => a.dataset.tab === view ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
   const token = {}; current = token;
   try { cleanup?.(); } catch {}

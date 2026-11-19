@@ -3,7 +3,7 @@
   "short_name": "Plenty Map",
   "description": "Find food. Cook cheap. Get help. In your language.",
   "id": "./",
-  "start_url": "./#/cook",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
