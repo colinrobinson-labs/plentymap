@@ -1,0 +1,596 @@
+{
+"dal": {
+"t": "Dal de lentilles rouges et riz",
+"s": [
+"Mettez le riz à cuire. Faites tomber l'oignon haché dans l'huile 5 minutes, puis ajoutez l'ail et les épices 1 minute en remuant.",
+"Ajoutez les lentilles rincées, les tomates et 4 tasses d'eau. Laissez mijoter 20 à 25 minutes en remuant de temps en temps, jusqu'à ce que ce soit tendre et épais.",
+"Salez au goût et servez sur le riz."
+],
+"tip": "Les lentilles rouges cuisent le plus vite. Les brunes ou les vertes marchent aussi : comptez 10 minutes de plus."
+},
+"bbrice": {
+"t": "Poêlée de riz et haricots noirs",
+"s": [
+"Dans une grande casserole, faites cuire l'oignon et le poivron hachés dans l'huile 5 minutes.",
+"Ajoutez le riz et les épices et remuez 1 minute. Ajoutez 3 tasses d'eau et le cube de bouillon, couvrez et faites cuire à feu doux 18 minutes.",
+"Incorporez les haricots égouttés et la salsa, couvrez encore 5 minutes, puis servez."
+],
+"tip": "Ajoutez un œuf au plat ou une cuillerée de yogourt si vous en avez."
+},
+"sheetchk": {
+"t": "Poulet, pommes de terre et carottes sur une plaque",
+"s": [
+"Préchauffez le four à 425 °F (220 °C). Coupez les pommes de terre et les carottes en morceaux et l'oignon en quartiers.",
+"Mélangez le tout sur une plaque de cuisson avec l'huile, les épices et une bonne pincée de sel. Placez le poulet par-dessus, côté peau vers le haut.",
+"Faites rôtir 40 à 45 minutes, jusqu'à ce que le poulet soit doré et atteigne 165 °F (74 °C) à l'intérieur."
+],
+"tip": "Gardez les os au congélateur pour faire une soupe plus tard."
+},
+"friedrice": {
+"t": "Riz frit aux œufs et légumes",
+"s": [
+"Faites cuire le riz à l'avance et laissez-le refroidir. Le riz de la veille est le meilleur.",
+"Brouillez les œufs dans la moitié de l'huile, puis mettez-les de côté.",
+"Ajoutez le reste de l'huile, l'ail et les légumes surgelés. Faites cuire 4 minutes, ajoutez le riz et la sauce soya, et faites sauter jusqu'à ce que ce soit chaud.",
+"Remettez les œufs et garnissez d'oignons verts tranchés."
+],
+"tip": "Un reste de viande ou de tofu peut aller dans le riz à l'étape 3."
+},
+"pbnoodle": {
+"t": "Nouilles au beurre d'arachide et chou croquant",
+"s": [
+"Faites cuire les spaghettis. Gardez 1 tasse d'eau de cuisson avant de les égoutter.",
+"Fouettez le beurre d'arachide, la sauce soya, le vinaigre, le sucre et l'ail râpé avec un peu d'eau chaude à la fois, jusqu'à ce que ce soit lisse.",
+"Mélangez les nouilles avec la sauce, le chou et la carotte râpés et les oignons verts. Bon chaud ou froid."
+],
+"tip": "Se transporte bien pour le dîner du lendemain."
+},
+"mugegg": {
+"t": "Burrito aux œufs et épinards au micro-ondes",
+"s": [
+"Battez les œufs dans une tasse avec une pincée de sel et une petite poignée d'épinards surgelés.",
+"Faites cuire au micro-ondes 45 secondes, remuez, puis encore 30 à 45 secondes jusqu'à ce que ce soit juste pris.",
+"Mettez dans la tortilla avec le fromage et la salsa, puis roulez."
+],
+"tip": "Se fait dans une résidence étudiante ou une chambre de motel avec juste un micro-ondes."
+},
+"onoats": {
+"t": "Gruau de nuit au beurre d'arachide et banane",
+"s": [
+"Mélangez l'avoine, le lait, le beurre d'arachide et la cannelle dans un pot ou un bol.",
+"Couvrez et laissez au frigo toute la nuit.",
+"Le matin, tranchez la banane par-dessus. Mangez froid ou réchauffez."
+],
+"tip": "Préparez cinq pots le dimanche et vos déjeuners de la semaine sont prêts."
+},
+"burritos": {
+"t": "Burritos haricots et fromage pour le congélateur",
+"s": [
+"Faites cuire le riz. Faites tomber l'oignon haché dans l'huile, ajoutez les épices et les haricots égouttés, et écrasez grossièrement à la fourchette.",
+"Réchauffez les tortillas pour qu'elles plient. Garnissez chacune de riz, de haricots, de salsa et de fromage, repliez les côtés et roulez serré.",
+"Mangez-les tout de suite, ou emballez-les un par un et congelez-les. Au micro-ondes, congelés, 2 à 3 minutes en les retournant une fois."
+],
+"tip": "Huit dîners pour environ le prix d'un repas pour emporter."
+},
+"chickcurry": {
+"t": "Cari de pois chiches et épinards",
+"s": [
+"Mettez le riz à cuire. Faites tomber l'oignon haché dans l'huile, puis ajoutez l'ail et la poudre de cari 1 minute.",
+"Ajoutez les tomates, le lait de coco et les pois chiches égouttés. Laissez mijoter 15 minutes.",
+"Ajoutez les épinards surgelés et remuez jusqu'à ce que ce soit chaud. Salez au goût et servez sur le riz."
+],
+"tip": "Pas de lait de coco? Ajoutez à la fin une tasse de lait ou de yogourt."
+},
+"tunapasta": {
+"t": "Pâtes crémeuses au thon et petits pois",
+"s": [
+"Faites cuire les pâtes. Ajoutez les petits pois surgelés pendant les 2 dernières minutes, puis égouttez.",
+"Dans la même casserole, faites fondre le beurre, ajoutez la farine et remuez 1 minute, puis ajoutez le lait en fouettant jusqu'à ce que ça épaississe.",
+"Ajoutez le fromage, puis les pâtes, les pois et le thon égoutté. Assaisonnez de sel et de poivre."
+],
+"tip": "Remplacez le thon par une boîte de haricots blancs pour une version végétarienne."
+},
+"splitpea": {
+"t": "Soupe aux pois cassés et pommes de terre",
+"s": [
+"Faites tomber l'oignon, la carotte et le céleri hachés dans l'huile 8 minutes. Ajoutez l'ail.",
+"Ajoutez les pois cassés rincés, la pomme de terre en dés, le bouillon et 8 tasses d'eau.",
+"Laissez mijoter partiellement couvert environ 1 heure, en remuant de temps en temps, jusqu'à ce que les pois se défassent."
+],
+"tip": "Se congèle parfaitement en portions individuelles."
+},
+"chili": {
+"t": "Chili économique (un peu de bœuf, beaucoup de haricots)",
+"s": [
+"Faites brunir le bœuf avec l'oignon haché, 8 minutes. Ajoutez l'ail, la poudre de chili et le cumin 1 minute.",
+"Ajoutez la pâte de tomate, les tomates, les haricots avec leur liquide et 1 tasse d'eau.",
+"Laissez mijoter 25 minutes en remuant de temps en temps. Salez au goût."
+],
+"tip": "Sans bœuf et avec une boîte de haricots de plus, c'est un chili végétalien."
+},
+"pancakes": {
+"t": "Crêpes à la banane",
+"s": [
+"Écrasez les bananes dans un bol. Ajoutez les œufs, le lait et 1 cuillère à soupe d'huile en fouettant.",
+"Ajoutez la farine, le sucre, la poudre à pâte et une pincée de sel, et mélangez juste assez. Les grumeaux, ce n'est pas grave.",
+"Faites cuire ¼ de tasse à la fois dans une poêle légèrement huilée à feu moyen, en retournant quand des bulles apparaissent."
+],
+"tip": "Les bananes très mûres, avec des taches, donnent les crêpes les plus sucrées."
+},
+"arrozpollo": {
+"t": "Poulet et riz en un seul chaudron",
+"s": [
+"Assaisonnez le poulet de sel, de cumin et de paprika. Faites-le dorer dans l'huile dans un grand chaudron, 4 minutes de chaque côté. Mettez de côté.",
+"Faites cuire l'oignon et le poivron hachés 5 minutes, ajoutez l'ail et le riz, et remuez 2 minutes.",
+"Ajoutez la sauce tomate, le bouillon et 3½ tasses d'eau. Déposez le poulet dans le riz, couvrez et faites cuire à feu doux 30 minutes.",
+"Parsemez les petits pois sur le dessus, couvrez encore 5 minutes, et vérifiez que le poulet atteint 165 °F (74 °C)."
+],
+"tip": "Un seul chaudron, donc un seul chaudron à laver."
+},
+"ramenup": {
+"t": "Ramen amélioré au micro-ondes",
+"s": [
+"Mettez les nouilles et une poignée de légumes surgelés dans un grand bol. Couvrez d'eau et faites cuire au micro-ondes 3 minutes.",
+"Cassez l'œuf dans le bol, piquez le jaune une fois, et faites cuire encore 45 à 60 secondes jusqu'à ce que le blanc soit pris.",
+"Ajoutez la moitié du sachet d'assaisonnement (il est très salé) et l'oignon vert."
+],
+"tip": "Avec la moitié du sachet, il y a beaucoup moins de sel et on ne s'en rend pas compte."
+},
+"potato": {
+"t": "Pomme de terre au four garnie, au micro-ondes",
+"s": [
+"Brossez la pomme de terre et piquez-la partout avec une fourchette.",
+"Faites cuire au micro-ondes 5 minutes, retournez-la, puis encore 3 à 5 minutes jusqu'à ce qu'un couteau entre facilement.",
+"Ouvrez-la et garnissez de haricots réchauffés, de fromage, de salsa et d'une cuillerée de yogourt."
+],
+"tip": "Le yogourt nature remplace la crème sure pour moins cher."
+},
+"rollup": {
+"t": "Roulé au beurre d'arachide et banane",
+"s": [
+"Étendez le beurre d'arachide sur la tortilla et saupoudrez de cannelle.",
+"Placez la banane sur un bord et roulez serré. Coupez en rondelles pour les petits enfants."
+],
+"tip": "Pas de cuisinière, pas de dégât, environ deux minutes."
+},
+"quesadilla": {
+"t": "Quesadillas aux haricots noirs et au maïs",
+"s": [
+"Écrasez les haricots égouttés avec le cumin et une pincée de sel. Ajoutez le maïs égoutté.",
+"Étendez sur la moitié de chaque tortilla, ajoutez le fromage et pliez.",
+"Faites cuire dans une poêle sans huile à feu moyen, 2 à 3 minutes de chaque côté, jusqu'à ce que ce soit doré. Servez avec de la salsa."
+],
+"tip": "Assez rapide pour un soir de semaine, assez amusant pour que les enfants aident."
+},
+"minestrone": {
+"t": "Minestrone aux légumes surgelés",
+"s": [
+"Faites tomber l'oignon haché dans l'huile 5 minutes, puis ajoutez l'ail et les fines herbes.",
+"Ajoutez les tomates, les légumes surgelés, les haricots, le bouillon et 7 tasses d'eau. Portez à ébullition.",
+"Ajoutez les pâtes et laissez mijoter 10 minutes jusqu'à ce qu'elles soient tendres."
+],
+"tip": "Les légumes surgelés sont cueillis mûrs et coûtent souvent moins cher que les frais."
+},
+"sptacos": {
+"t": "Tacos aux patates douces et haricots noirs",
+"s": [
+"Préchauffez le four à 425 °F (220 °C). Coupez les patates douces et l'oignon en dés, mélangez avec l'huile, les épices et le sel, et faites rôtir 25 minutes.",
+"Réchauffez les haricots. Mélangez le chou râpé avec le jus de lime et une pincée de sel.",
+"Réchauffez les tortillas dans une poêle sans huile et garnissez-les de tout."
+],
+"tip": "Mettez deux tortillas de maïs par taco pour qu'elles ne se déchirent pas."
+},
+"shakshuka": {
+"t": "Œufs dans une sauce tomate épicée (chakchouka)",
+"s": [
+"Faites cuire l'oignon et le poivron tranchés dans l'huile 8 minutes. Ajoutez l'ail et les épices 1 minute.",
+"Ajoutez les tomates et laissez mijoter 10 minutes jusqu'à ce que ce soit épais. Salez au goût.",
+"Faites 8 petits creux, cassez-y les œufs, couvrez et faites cuire à feu doux 6 à 8 minutes. Servez avec du pain pour saucer."
+],
+"tip": "Au déjeuner, au dîner ou au souper. Ça marche pour les trois."
+},
+"tofubowl": {
+"t": "Bols de riz au tofu croustillant et brocoli",
+"s": [
+"Mettez le riz à cuire. Pressez le tofu entre des linges 10 minutes, puis coupez-le en cubes.",
+"Faites frire le tofu dans l'huile à feu moyen-vif, en le retournant, jusqu'à ce qu'il soit doré sur presque tous les côtés, environ 10 minutes.",
+"Ajoutez le brocoli surgelé et l'ail et faites cuire 5 minutes. Ajoutez la sauce soya et le sucre et remuez jusqu'à ce que ce soit brillant. Servez sur le riz."
+],
+"tip": "Dans la plupart des épiceries, le tofu est une des protéines les moins chères au gramme."
+},
+"chknoodle": {
+"t": "Soupe poulet et nouilles",
+"s": [
+"Mettez le poulet, le bouillon, la moitié de l'oignon et 10 tasses d'eau dans un grand chaudron. Laissez mijoter 35 minutes.",
+"Retirez le poulet. Quand il est assez tiède, détachez la viande des os et effilochez-la.",
+"Ajoutez au bouillon les carottes et le céleri tranchés, le reste de l'oignon, l'ail et les fines herbes. Faites cuire 10 minutes, ajoutez les nouilles et faites cuire jusqu'à ce qu'elles soient tendres. Remettez le poulet."
+],
+"tip": "Faites cuire les nouilles à part si vous prévoyez congeler la soupe."
+},
+"pinto": {
+"t": "Riz et haricots du Costa Rica (gallo pinto) avec œufs",
+"s": [
+"Faites cuire le riz à l'avance. Le riz de la veille est le meilleur.",
+"Faites tomber l'oignon et le poivron hachés dans l'huile, ajoutez l'ail, puis les haricots avec quelques cuillerées de leur liquide.",
+"Ajoutez le riz et mélangez jusqu'à ce qu'il soit tacheté et chaud. Ajoutez la coriandre hachée et garnissez chaque assiette d'un œuf au plat."
+],
+"tip": "Les haricots noirs sont traditionnels, mais prenez ceux que vous avez."
+},
+"tunasalad": {
+"t": "Salade de haricots blancs et thon sur rôties",
+"s": [
+"Égouttez et rincez les haricots. Égouttez le thon.",
+"Mélangez avec les oignons verts tranchés, le vinaigre, l'huile, le sel et le poivre.",
+"Déposez sur du pain ou des rôties."
+],
+"tip": "Aucune cuisson, et ça se garde 3 jours au frigo."
+},
+"chicksmash": {
+"t": "Sandwichs aux pois chiches écrasés",
+"s": [
+"Égouttez les pois chiches et écrasez-les à la fourchette, en laissant quelques morceaux.",
+"Ajoutez la mayonnaise, le céleri haché fin, le vinaigre, le sel et le poivre.",
+"Étendez une bonne couche sur du pain."
+],
+"tip": "C'est comme un sandwich au thon, sans le thon."
+},
+"mugmac": {
+"t": "Macaroni au fromage dans une tasse",
+"s": [
+"Mettez les pâtes dans une grande tasse avec de l'eau pour les couvrir de 1 pouce (2,5 cm) et une pincée de sel.",
+"Faites cuire au micro-ondes par tranches de 1 minute, en remuant chaque fois, 4 à 5 minutes, jusqu'à ce qu'elles soient tendres. Ajoutez un peu d'eau si ça sèche.",
+"Ajoutez le lait et le fromage et faites cuire encore 30 secondes."
+],
+"tip": "Posez la tasse sur une assiette au cas où ça déborde."
+},
+"beanpot": {
+"t": "Le gros chaudron de haricots",
+"s": [
+"Rincez les haricots et retirez les petites roches. Faites-les tremper toute la nuit dans beaucoup d'eau si vous pouvez.",
+"Égouttez, puis couvrez d'eau fraîche de 2 pouces (5 cm). Ajoutez l'oignon coupé en deux, l'ail, le bouillon et le cumin.",
+"Laissez mijoter doucement, partiellement couvert, 1½ à 2 heures, jusqu'à ce qu'ils soient crémeux. Salez à la fin."
+],
+"tip": "Les haricots secs coûtent environ la moitié du prix des haricots en conserve. Un chaudron donne une semaine de burritos, de soupes et de bols de riz."
+},
+"bftacos": {
+"t": "Tacos déjeuner aux pommes de terre et œufs",
+"s": [
+"Coupez les pommes de terre en petits dés et faites-les frire dans l'huile, 8 minutes à couvert, puis à découvert jusqu'à ce qu'elles soient croustillantes.",
+"Versez les œufs battus avec une pincée de sel et brouillez doucement.",
+"Garnissez des tortillas chaudes et ajoutez de la salsa."
+],
+"tip": "Une douzaine de tacos pour moins cher qu'un trio au service à l'auto."
+},
+"canhcai": {
+"t": "Soupe au chou et tofu (canh)",
+"s": [
+"Coupez le chou en bouchées et le tofu en cubes. Tranchez l'oignon vert.",
+"Faites chauffer l'huile dans une casserole, faites revenir l'ail 30 secondes, puis ajoutez 6 tasses d'eau et le bouillon. Portez à ébullition.",
+"Ajoutez le chou et laissez mijoter 6 minutes. Ajoutez le tofu et la sauce soya et laissez mijoter encore 3 minutes. Garnissez d'oignon vert et servez avec du riz."
+],
+"tip": "Une soupe légère qui va avec tous les repas de riz. Ajoutez quelques crevettes ou un peu de porc haché si vous en avez."
+},
+"chaoga": {
+"t": "Bouillie de riz au poulet et gingembre (cháo gà, arroz caldo)",
+"s": [
+"Dans un grand chaudron, faites revenir l'oignon haché, l'ail et le gingembre tranché dans l'huile 3 minutes. Ajoutez le riz et remuez 1 minute.",
+"Ajoutez le poulet, le bouillon et 10 tasses d'eau. Laissez mijoter 40 minutes en remuant de temps en temps, jusqu'à ce que le riz soit tendre et crémeux.",
+"Retirez le poulet, détachez la viande des os et remettez-la dans le chaudron. Salez au goût et garnissez d'oignon vert."
+],
+"tip": "Doux pour l'estomac et bon pour les personnes malades. Un filet de lime ou un peu de sauce de poisson à table, c'est excellent."
+},
+"tomatoegg": {
+"t": "Sauté de tomates et œufs",
+"s": [
+"Mettez le riz à cuire. Battez les œufs avec une pincée de sel. Tranchez l'oignon vert.",
+"Brouillez les œufs dans la moitié de l'huile jusqu'à ce qu'ils soient juste pris, puis mettez-les dans une assiette.",
+"Ajoutez le reste de l'huile, les tomates avec leur jus et le sucre. Faites cuire 4 minutes en écrasant un peu. Remettez les œufs, garnissez d'oignon vert et servez sur le riz."
+],
+"tip": "L'été, les tomates fraîches sont parfaites ici. Prenez-en 4, hachées, au lieu de la boîte."
+},
+"scallion": {
+"t": "Nouilles à l'huile d'oignons verts",
+"s": [
+"Faites cuire les nouilles ou des spaghettis fins jusqu'à ce qu'ils soient tendres et égouttez.",
+"Pendant ce temps, coupez les oignons verts en petits morceaux. Faites-les cuire dans l'huile à feu doux 8 à 10 minutes, jusqu'à ce qu'ils soient foncés et croustillants.",
+"Ajoutez la sauce soya et le sucre à l'huile chaude, puis mélangez avec les nouilles."
+],
+"tip": "Ajoutez un œuf au plat pour en faire un repas complet."
+},
+"monggo": {
+"t": "Ragoût de haricots mungo aux épinards (ginisang monggo)",
+"s": [
+"Rincez les haricots mungo et laissez-les mijoter dans 6 tasses d'eau 30 à 35 minutes, jusqu'à ce qu'ils soient tendres et qu'ils éclatent.",
+"Dans une autre poêle, faites revenir l'ail, l'oignon haché et les tomates dans l'huile 5 minutes. Mettez le riz à cuire.",
+"Ajoutez le mélange d'oignon et le bouillon aux haricots. Ajoutez les épinards surgelés et faites cuire 5 minutes. Salez au goût et servez avec le riz."
+],
+"tip": "Servi traditionnellement le vendredi. Quand il y a un peu plus d'argent, on ajoute souvent du poisson frit ou du porc sur le dessus."
+},
+"tofuadobo": {
+"t": "Adobo de tofu et pommes de terre",
+"s": [
+"Mettez le riz à cuire. Coupez le tofu et les pommes de terre en cubes et écrasez l'ail.",
+"Faites dorer le tofu dans l'huile à feu moyen-vif, environ 8 minutes, puis poussez-le sur le côté et faites revenir l'ail 1 minute.",
+"Ajoutez les pommes de terre, la sauce soya, le vinaigre, le sucre, quelques tours de poivre noir et 1 tasse d'eau. Couvrez et laissez mijoter 15 minutes, jusqu'à ce que les pommes de terre soient tendres et la sauce brillante."
+],
+"tip": "Ne remuez pas pendant les premières minutes après avoir ajouté le vinaigre. Il s'adoucit en cuisant."
+},
+"mujaddara": {
+"t": "Lentilles et riz aux oignons croustillants (moujaddara)",
+"s": [
+"Tranchez les oignons finement. Faites-les cuire dans l'huile à feu moyen, en remuant souvent, 20 à 25 minutes jusqu'à ce qu'ils soient bien bruns. Retirez-en la moitié pour le dessus.",
+"Pendant ce temps, faites mijoter les lentilles brunes rincées dans 4 tasses d'eau 15 minutes. N'égouttez pas.",
+"Ajoutez aux lentilles le riz, le cumin, 1 cuillère à thé de sel et les oignons restés dans la poêle. Couvrez et faites cuire à feu doux 20 minutes. Servez garni des oignons croustillants et d'une cuillerée de yogourt."
+],
+"tip": "Tout le goût vient des oignons bien bruns : prenez votre temps."
+},
+"adas": {
+"t": "Soupe aux lentilles rouges (chorbat adas)",
+"s": [
+"Hachez l'oignon et la carotte. Faites-les tomber dans l'huile 6 minutes, puis ajoutez l'ail et le cumin 1 minute.",
+"Ajoutez les lentilles rouges rincées, le bouillon et 8 tasses d'eau. Laissez mijoter 20 minutes, jusqu'à ce que les lentilles se défassent.",
+"Écrasez ou passez au mélangeur jusqu'à ce que ce soit lisse. Salez au goût et ajoutez le jus de lime. Servez avec du pain."
+],
+"tip": "Épaisse et nourrissante pour très peu d'argent. Elle épaissit en reposant : ajoutez de l'eau en la réchauffant."
+},
+"ful": {
+"t": "Haricots chauds écrasés à la lime et à l'ail (foul)",
+"s": [
+"Mettez les haricots avec la moitié de leur liquide dans un bol ou une casserole et réchauffez-les, 3 minutes au micro-ondes ou 5 sur la cuisinière.",
+"Écrasez grossièrement avec l'ail écrasé, le cumin, le jus de lime et une pincée de sel.",
+"Arrosez d'huile et mangez avec du pain. Ajoutez de la tomate ou de l'oignon hachés ou un œuf cuit dur si vous en avez."
+],
+"tip": "Les fèves sont traditionnelles. Les haricots pinto, les haricots rouges ou les pois chiches marchent aussi."
+},
+"kichiri": {
+"t": "Haricots mungo et riz (kichiri)",
+"s": [
+"Rincez les haricots mungo et le riz. Faites mijoter les haricots mungo dans 3 tasses d'eau 15 minutes.",
+"Faites frire l'oignon haché dans l'huile jusqu'à ce qu'il soit doré, puis ajoutez l'ail et le cumin 1 minute.",
+"Ajoutez aux haricots le riz, les oignons, 1 cuillère à thé de sel et 2 autres tasses d'eau. Couvrez et faites cuire à feu doux 20 minutes jusqu'à ce que ce soit tendre et un peu collant. Servez avec du yogourt."
+],
+"tip": "Ajoutez un peu de menthe séchée ou d'ail au yogourt, comme on le sert à la maison."
+},
+"shorwa": {
+"t": "Soupe aux pois chiches et pommes de terre (chorwa)",
+"s": [
+"Faites tomber l'oignon haché dans l'huile 6 minutes. Ajoutez l'ail et la poudre de cari 1 minute.",
+"Ajoutez les tomates, les pommes de terre en dés, les pois chiches égouttés, le bouillon et 7 tasses d'eau.",
+"Laissez mijoter 25 minutes jusqu'à ce que les pommes de terre soient tendres. Salez au goût, garnissez de coriandre et servez avec du pain pour tremper."
+],
+"tip": "Déchirez le pain dans le bol et versez la soupe par-dessus, comme le veut la tradition."
+},
+"bariis": {
+"t": "Riz épicé au poulet (bariis iskukaris)",
+"s": [
+"Assaisonnez le poulet de sel, de cumin et de poudre de cari. Faites-le dorer dans l'huile dans un grand chaudron, 4 minutes de chaque côté. Mettez de côté.",
+"Faites cuire l'oignon haché 6 minutes, puis ajoutez l'ail, la pâte de tomate et la cannelle 1 minute. Ajoutez le riz rincé.",
+"Ajoutez 3 tasses d'eau et le bouillon, posez le poulet sur le dessus, couvrez et faites cuire à feu doux 30 minutes, jusqu'à ce que le poulet atteigne 165 °F (74 °C). Servez avec une banane à côté."
+],
+"tip": "Beaucoup de familles somaliennes le mangent avec une banane. Essayez avant de dire non."
+},
+"diripwa": {
+"t": "Riz et haricots haïtiens (diri ak pwa)",
+"s": [
+"Égouttez les haricots en gardant leur liquide. Passez au mélangeur ou écrasez l'ail, la moitié des oignons verts et une pincée de sel avec le jus de lime. C'est un épis rapide.",
+"Faites revenir l'oignon haché et l'épis dans l'huile 3 minutes. Ajoutez les haricots et faites revenir encore 3 minutes.",
+"Ajoutez le liquide des haricots et assez d'eau pour faire 4 tasses, puis le bouillon. Portez à ébullition, ajoutez le riz rincé, couvrez et faites cuire à feu doux 20 minutes. Garnissez du reste des oignons verts."
+],
+"tip": "Les haricots rouges sont classiques. Les haricots noirs ou pinto marchent aussi."
+},
+"legim": {
+"t": "Ragoût de légumes haïtien (légume)",
+"s": [
+"Mettez le riz à cuire. Hachez le chou, les carottes et l'oignon.",
+"Faites revenir l'oignon et l'ail dans l'huile 4 minutes, puis ajoutez la pâte de tomate 1 minute.",
+"Ajoutez le chou, les carottes, les épinards, le bouillon et 1½ tasse d'eau. Couvrez et laissez mijoter 25 minutes, en écrasant les légumes à mesure qu'ils ramollissent. Salez au goût et servez sur le riz."
+],
+"tip": "Ajoutez un peu de poulet ou de bœuf si vous en avez. C'est aussi bon sans."
+},
+"grechka": {
+"t": "Sarrasin à l'oignon, à la carotte et à l'œuf (gretchka)",
+"s": [
+"Rincez le sarrasin. Mettez-le dans une casserole avec 2½ tasses d'eau et une pincée de sel. Portez à ébullition, couvrez et faites cuire à feu doux 15 minutes.",
+"Pendant ce temps, faites revenir l'oignon haché et la carotte râpée dans le beurre jusqu'à ce qu'ils soient tendres et dorés. Faites cuire les œufs, durs ou au plat.",
+"Mélangez les légumes au sarrasin et servez avec un œuf dans chaque assiette."
+],
+"tip": "Un reste de sarrasin avec du lait et un peu de sucre, c'est un déjeuner classique."
+},
+"borscht": {
+"t": "Soupe aux betteraves et au chou (bortsch)",
+"s": [
+"Faites tomber l'oignon haché et la carotte râpée dans l'huile 6 minutes. Ajoutez la pâte de tomate 1 minute.",
+"Ajoutez 8 tasses d'eau, le bouillon et les pommes de terre en dés. Laissez mijoter 10 minutes, puis ajoutez le chou émincé et laissez mijoter encore 10 minutes.",
+"Ajoutez les betteraves coupées en lanières avec leur jus, l'ail et le vinaigre. Laissez mijoter 5 minutes. Salez au goût et servez avec une cuillerée de yogourt."
+],
+"tip": "Le yogourt nature remplace la crème sure. Le bortsch est encore meilleur le lendemain."
+},
+"kimchirice": {
+"t": "Riz frit au kimchi et à l'œuf (kimchi bokkeumbap)",
+"s": [
+"Faites cuire le riz à l'avance. Le riz froid de la veille frit le mieux. Hachez le kimchi.",
+"Faites revenir le kimchi dans l'huile 3 minutes. Ajoutez le riz, la sauce soya, le sucre et un peu de jus de kimchi, et faites sauter jusqu'à ce que ce soit chaud.",
+"Faites cuire les œufs au plat. Servez chaque bol avec un œuf sur le dessus et de l'oignon vert tranché."
+],
+"tip": "Le kimchi plus vieux et plus acide est le meilleur pour cette recette."
+},
+"gyeranjjim": {
+"t": "Œufs à la vapeur au micro-ondes (gyeran-jjim)",
+"s": [
+"Battez les œufs dans une grande tasse ou un bol avec ⅓ de tasse d'eau, la sauce soya et un peu d'oignon vert tranché.",
+"Couvrez sans serrer et faites cuire au micro-ondes 1 minute. Remuez doucement.",
+"Faites cuire encore 30 à 60 secondes, jusqu'à ce que ce soit gonflé et juste pris. Mangez avec du riz."
+],
+"tip": "Prenez un grand bol. Ça gonfle beaucoup, puis ça retombe."
+},
+"caldoverde": {
+"t": "Soupe aux pommes de terre et légumes verts (caldo verde)",
+"s": [
+"Faites tomber l'oignon haché et l'ail dans 2 cuillères à soupe d'huile pendant 5 minutes.",
+"Ajoutez les pommes de terre en dés, le bouillon et 7 tasses d'eau. Laissez mijoter 20 minutes, puis écrasez jusqu'à ce que ce soit presque lisse.",
+"Ajoutez le chou ou le chou frisé émincé très fin et faites cuire 5 minutes. Salez au goût et arrosez du reste de l'huile."
+],
+"tip": "Ajoutez quelques tranches de saucisse si vous en avez. C'est comme ça qu'on la sert dans les fêtes."
+},
+"fideo": {
+"t": "Soupe aux nouilles grillées (sopa de fideo)",
+"s": [
+"Cassez les nouilles fines en petits morceaux. Faites-les revenir dans l'huile à feu moyen, en remuant, jusqu'à ce qu'elles soient bien dorées, environ 4 minutes.",
+"Passez au mélangeur ou hachez finement l'oignon et l'ail et ajoutez-les avec la sauce tomate. Faites cuire 2 minutes.",
+"Ajoutez 6 tasses d'eau et le bouillon. Laissez mijoter 8 à 10 minutes jusqu'à ce que les nouilles soient tendres."
+],
+"tip": "À table, ajoutez un filet de lime et un peu de coriandre hachée."
+},
+"ing": {
+"rice": "Riz blanc",
+"pasta": "Pâtes",
+"flour": "Farine tout usage",
+"oats": "Flocons d'avoine",
+"lentils": "Lentilles sèches",
+"dbeans": "Haricots secs (pinto ou noirs)",
+"peas_d": "Pois cassés secs",
+"cbeans": "Haricots en conserve (noirs, pinto ou rouges)",
+"chick": "Pois chiches en conserve",
+"ctom": "Tomates en dés en conserve",
+"tpaste": "Pâte de tomate",
+"tsauce": "Sauce tomate",
+"tuna": "Thon en conserve",
+"coco": "Lait de coco",
+"corn": "Maïs en conserve",
+"eggs": "Œufs",
+"milk": "Lait",
+"cheddar": "Fromage cheddar",
+"yogurt": "Yogourt nature",
+"butter": "Beurre",
+"oil": "Huile végétale",
+"pb": "Beurre d'arachide",
+"mayo": "Mayonnaise",
+"chleg": "Cuisses ou hauts de cuisse de poulet, avec os",
+"chbr": "Poitrine de poulet désossée",
+"beef": "Bœuf haché",
+"tofu": "Tofu ferme",
+"bread": "Pain",
+"ftort": "Tortillas de farine",
+"ctort": "Tortillas de maïs",
+"ramen": "Ramen instantané",
+"potato": "Pommes de terre",
+"sweetp": "Patates douces",
+"onion": "Oignon",
+"carrot": "Carottes",
+"cabbage": "Chou vert",
+"garlic": "Ail",
+"celery": "Céleri",
+"pepper": "Poivron",
+"gonion": "Oignons verts",
+"cilantro": "Coriandre fraîche",
+"lime": "Lime",
+"banana": "Bananes",
+"fmix": "Légumes mélangés surgelés",
+"fpeas": "Petits pois surgelés",
+"fspin": "Épinards surgelés",
+"fbroc": "Brocoli surgelé",
+"salsa": "Salsa",
+"soy": "Sauce soya",
+"vinegar": "Vinaigre",
+"sugar": "Sucre",
+"bpowder": "Poudre à pâte",
+"bouil": "Cubes de bouillon",
+"cumin": "Cumin moulu",
+"chili": "Assaisonnement au chili",
+"curry": "Poudre de cari",
+"paprika": "Paprika",
+"italian": "Fines herbes à l'italienne",
+"garpow": "Ail en poudre",
+"cinn": "Cannelle",
+"mungb": "Haricots mungo secs",
+"buckwheat": "Gruau de sarrasin (kacha)",
+"beets": "Betteraves en conserve",
+"kimchi": "Kimchi",
+"ginger": "Gingembre frais"
+},
+"units": {
+"lb": "lb",
+"oz": "oz",
+"floz": "oz liq.",
+"gal": "gallon",
+"can": {
+"one": "boîte",
+"other": "boîtes"
+},
+"egg": {
+"one": "œuf",
+"other": "œufs"
+},
+"cup": {
+"one": "tasse",
+"other": "tasses"
+},
+"tbsp": "c. à soupe",
+"tsp": "c. à thé",
+"slice": {
+"one": "tranche",
+"other": "tranches"
+},
+"tortilla": {
+"one": "tortilla",
+"other": "tortillas"
+},
+"pack": {
+"one": "paquet",
+"other": "paquets"
+},
+"onion": {
+"one": "oignon",
+"other": "oignons"
+},
+"clove": {
+"one": "gousse",
+"other": "gousses"
+},
+"bunch": {
+"one": "botte",
+"other": "bottes"
+},
+"pepper": {
+"one": "poivron",
+"other": "poivrons"
+},
+"lime": {
+"one": "lime",
+"other": "limes"
+},
+"banana": {
+"one": "banane",
+"other": "bananes"
+},
+"bag": {
+"one": "sac",
+"other": "sacs"
+},
+"box": {
+"one": "boîte",
+"other": "boîtes"
+},
+"block": {
+"one": "bloc",
+"other": "blocs"
+},
+"cube": {
+"one": "cube",
+"other": "cubes"
+},
+"head": {
+"one": "tête",
+"other": "têtes"
+},
+"each": "chacun",
+"jar": {
+"one": "pot",
+"other": "pots"
+},
+"piece": {
+"one": "morceau",
+"other": "morceaux"
+}
+}
+}
