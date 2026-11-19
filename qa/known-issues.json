@@ -3139,6 +3139,10 @@
   "61be7833c0": {
    "key": "overlap|find-map|div.fside > div.fbar > div.viewtoggle.seg > button",
    "since": "2026-11-19"
+  },
+  "1157fa4205": {
+   "key": "axe-serious|benefits-result|input[data-w=\"preg\"]",
+   "since": "2026-11-19"
   }
  }
 }
