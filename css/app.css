@@ -633,6 +633,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .rgrid>li{display:flex}
 .err{display:flex;align-items:flex-start;gap:var(--s2);color:var(--out);font-weight:600;font-size:15px}
 .err .i{flex:none;margin-block-start:2px}
+.err .msg-act{display:flex;width:max-content;max-width:100%;margin-block-start:var(--s3);font-weight:600}
 .in[aria-invalid="true"]{border-color:var(--out);box-shadow:inset 0 0 0 1px var(--out)}
 .hero .err,.welcome .err{color:#FFB4A3}
 .hero .in[aria-invalid="true"],.welcome .in[aria-invalid="true"]{border-color:#FFB4A3;box-shadow:inset 0 0 0 1px #FFB4A3}

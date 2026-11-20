@@ -615,5 +615,14 @@
  "csfp_over": "Bwat sa a se pou moun 60 an oswa plis ki gen revni jiska {g} pa mwa pou kay yo. Pa w la depase sa. Manje pou granmoun ak Meals on Wheels pa gen limit revni.",
  "sfmnp_over": "Chèk sa yo se pou moun 60 an oswa plis ki gen revni jiska {g} pa mwa pou kay yo, e kèk eta mete limit la pi ba. Pa w la depase sa.",
  "pantry_over": "Gen kèk bank manje ki bay manje gouvènman an ak yon limit revni: {g} pa mwa pou kay ou nan Kalifòni. Anpil lòt, plis legliz ak frijidè kominotè, sèvi nenpòt moun ki mande.",
- "us_pantry_over": "Gen kèk bank manje ki bay manje gouvènman an ak yon limit revni. Anpil lòt, plis legliz ak frijidè kominotè, sèvi nenpòt moun ki mande."
+ "us_pantry_over": "Gen kèk bank manje ki bay manje gouvènman an ak yon limit revni. Anpil lòt, plis legliz ak frijidè kominotè, sèvi nenpòt moun ki mande.",
+ "loc_here_rough": "kote ou ye apeprè",
+ "loc_use_rough": "Sèvi avè l kanmenm",
+ "loc_rough": "Aparèy ou a bay yon kote apeprè sèlman (anviwon {d}), kidonk kote ki pi pre yo ka pa bon. Tape kòd ZIP ou, oswa limen lokasyon egzak la epi eseye ankò.",
+ "loc_timeout": "Aparèy ou a pa t ka jwenn ou atan. Eseye ankò bò yon fenèt oswa deyò, oswa tape kòd ZIP ou.",
+ "loc_precise_ios": "Sou iPhone: Settings › Privacy & Security › Location Services › Safari Websites › limen Precise Location.",
+ "loc_precise_android": "Sou Android: Settings › Location › App location permissions › navigatè ou › limen Use precise location.",
+ "loc_precise_app_ios": "Sou iPhone: Settings › Plenty Map › Location › limen Precise Location.",
+ "loc_precise_app_android": "Sou Android: Settings › Apps › Plenty Map › Permissions › Location › limen Use precise location.",
+ "loc_precise_pc": "Òdinatè ki pa gen GPS ka sèlman devine ak Wi-Fi a oswa koneksyon entènèt la. Limen Wi-Fi a ede."
 }

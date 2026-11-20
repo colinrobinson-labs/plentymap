@@ -33,9 +33,15 @@ export const store = {
 };
 
 /* ---------- state ---------- */
+/* Device locations saved before 2026-11-20 came from a quick, possibly cell-tower fix, with no accuracy
+   kept: let those go so the next "Use my location" takes a fresh, precise one. */
+function gpsLoc(L) {
+  if (L?.src === "gps" && L.acc == null) { store.del("loc"); return null; }
+  return L;
+}
 export const S = {
   lang: store.get("lang"),
-  loc: store.get("loc"),                // {zip, lat, lon, label, src: "zip"|"gps"|"place"}
+  loc: gpsLoc(store.get("loc")),        // {zip, lat, lon, label, src: "zip"|"gps"|"place"}; gps also {acc, rough}
   kit: store.get("kit", ["stove", "micro"]), // stove (stove + oven), hotplate, micro. [] = no heat
   fridge: store.get("fridge", true),   // false = no way to keep food cold: only shelf-stable recipes
   maxCost: store.get("maxCost", 0),     // per serving, 0 = any
@@ -132,9 +138,11 @@ export function timeFmt(hhmm) {
   const [h, m] = hhmm.split(":").map(Number);
   return dateFmt(new Date(Date.UTC(2024, 0, 10, h + 8, m)), { hour: "numeric", minute: m ? "2-digit" : undefined });
 }
+/* What to call the saved place. A device location is named in the current language, never by a ZIP guess. */
+export const locLabel = (L = S.loc) => !L ? "" : L.src === "gps" ? t(L.rough ? "loc_here_rough" : "loc_here") : L.label || "";
 export const miles = (m) => {
   const mi = m / 1609.34;
-  if (mi < 0.1) return S.loc?.src === "gps" ? t("dist_here") : t("dist_mi", { d: "< " + num(0.1, 1) });
+  if (mi < 0.1) return S.loc?.src === "gps" && !S.loc.rough ? t("dist_here") : t("dist_mi", { d: "< " + num(0.1, 1) });
   return t("dist_mi", { d: num(mi, mi < 10 ? 1 : 0) });
 };
 
@@ -202,17 +210,46 @@ export async function shareThing({ title, text, url }) {
     return true;
   } catch { return false; }
 }
-export async function getPosition() {
-  const G = plugin("Geolocation");
-  if (G) {
-    const p = await G.getCurrentPosition({ enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 });
-    return { lat: p.coords.latitude, lon: p.coords.longitude };
-  }
+/* The person's own position, straight from the device. Never an IP guess and never a cached fix:
+   high accuracy (GPS where there is one), maximumAge 0, and watched for a few seconds, because the
+   first answer is often a rough cell-tower or Wi-Fi one that sharpens as GPS locks on.
+   Resolves {lat, lon, acc} (acc = meters, as the device reports it). Rejects with the device's error:
+   code 1 = not allowed, 2 = unavailable, 3 = no fix in time. Nothing leaves the device. */
+export const GPS_GOOD_M = 50;    // a fix this sharp ends the wait at once
+export async function getPosition({ settle = 10000, giveUp = 30000 } = {}) {
+  const opts = { enableHighAccuracy: true, maximumAge: 0, timeout: giveUp };
+  const G = plugin("Geolocation"), W = navigator.geolocation;
+  if (!G && !W) throw Object.assign(new Error("nogeo"), { code: 2 });
+  const t0 = Date.now();
   return new Promise((res, rej) => {
-    if (!navigator.geolocation) return rej(new Error("nogeo"));
-    navigator.geolocation.getCurrentPosition(
-      p => res({ lat: p.coords.latitude, lon: p.coords.longitude }),
-      e => rej(e), { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 });
+    let best = null, done = false, stop = null, soft = 0, grace = 0;
+    const end = err => {
+      if (done) return; done = true;
+      clearTimeout(soft); clearTimeout(hard); clearTimeout(grace); try { stop?.(); } catch {}
+      best ? res(best) : rej(err || Object.assign(new Error("timeout"), { code: 3 }));
+    };
+    const hard = setTimeout(() => end(), giveUp);
+    const got = p => {
+      const c = p?.coords; if (!c || !isFinite(c.latitude) || !isFinite(c.longitude)) return;
+      const acc = isFinite(c.accuracy) ? c.accuracy : 99999;
+      clearTimeout(grace); grace = -1;
+      if (!best || acc <= best.acc) best = { lat: c.latitude, lon: c.longitude, acc };
+      if (acc <= GPS_GOOD_M) return end();
+      // keep listening a little for a sharper fix: until `settle` after the tap, and at least 3 s after the first fix
+      if (!soft) soft = setTimeout(() => end(), Math.max(3000, settle - (Date.now() - t0)));
+    };
+    // "not allowed" is final. Other errors can be a passing hiccup while GPS starts: give it a few seconds.
+    const fail = e => {
+      if (e?.code === 1 || /denied|permission/i.test(e?.message || "")) { best = null; return end(e); }
+      if (!best && !grace) grace = setTimeout(() => end(e), 4000);
+    };
+    if (G) {
+      Promise.resolve(G.watchPosition(opts, (p, e) => e ? fail(e) : got(p)))
+        .then(id => { stop = () => G.clearWatch({ id }); if (done) stop(); }, fail);
+    } else {
+      const id = W.watchPosition(got, fail, opts);
+      stop = () => W.clearWatch(id);
+    }
   });
 }
 /* Links that leave the app (directions, program sites) open in the system browser/maps app. */

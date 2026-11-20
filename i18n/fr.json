@@ -615,5 +615,14 @@
  "csfp_over": "Ce panier est pour les personnes de 60 ans et plus dont le revenu va jusqu'à {g} par mois pour le foyer. Le vôtre dépasse ce montant. Les repas pour aînés et Meals on Wheels n'ont pas de limite de revenu.",
  "sfmnp_over": "Ces chèques sont pour les personnes de 60 ans et plus dont le revenu va jusqu'à {g} par mois pour le foyer, et certains États fixent une limite plus basse. Le vôtre dépasse ce montant.",
  "pantry_over": "Certaines banques alimentaires distribuent de la nourriture du gouvernement avec une limite de revenu : {g} par mois pour votre foyer en Californie. Beaucoup d'autres, ainsi que des églises et des frigos communautaires, servent toute personne qui demande.",
- "us_pantry_over": "Certaines banques alimentaires distribuent de la nourriture du gouvernement avec une limite de revenu. Beaucoup d'autres, ainsi que des églises et des frigos communautaires, servent toute personne qui demande."
+ "us_pantry_over": "Certaines banques alimentaires distribuent de la nourriture du gouvernement avec une limite de revenu. Beaucoup d'autres, ainsi que des églises et des frigos communautaires, servent toute personne qui demande.",
+ "loc_here_rough": "votre position approximative",
+ "loc_use_rough": "L'utiliser quand même",
+ "loc_rough": "Votre appareil n'a partagé qu'une position approximative (à environ {d} près), donc les lieux les plus proches peuvent être faux. Entrez votre code postal, ou activez la position exacte et réessayez.",
+ "loc_timeout": "Votre appareil n'a pas pu vous localiser à temps. Réessayez près d'une fenêtre ou dehors, ou entrez votre code postal.",
+ "loc_precise_ios": "Sur iPhone : Réglages › Confidentialité et sécurité › Service de localisation › Sites Web Safari › activez Position exacte.",
+ "loc_precise_android": "Sur Android : Paramètres › Localisation › Autorisations des applications › votre navigateur › activez Utiliser la position exacte.",
+ "loc_precise_app_ios": "Sur iPhone : Réglages › Plenty Map › Position › activez Position exacte.",
+ "loc_precise_app_android": "Sur Android : Paramètres › Applications › Plenty Map › Autorisations › Position › activez Utiliser la position exacte.",
+ "loc_precise_pc": "Sans GPS, un ordinateur ne peut que deviner à partir du Wi-Fi ou de la connexion Internet. Activer le Wi-Fi aide."
 }

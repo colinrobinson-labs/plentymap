@@ -604,5 +604,14 @@
  "csfp_over": "Thùng này dành cho người từ 60 tuổi có thu nhập đến {g} mỗi tháng cho cả nhà. Thu nhập của bạn cao hơn mức đó. Bữa ăn cho người cao tuổi và Meals on Wheels không có giới hạn thu nhập.",
  "sfmnp_over": "Các phiếu này dành cho người từ 60 tuổi có thu nhập đến {g} mỗi tháng cho cả nhà, và một số tiểu bang đặt mức thấp hơn. Thu nhập của bạn cao hơn mức đó.",
  "pantry_over": "Một số nơi phát thực phẩm dùng thực phẩm của chính phủ có giới hạn thu nhập: {g} mỗi tháng cho nhà bạn ở California. Nhiều nơi khác, cùng nhà thờ và tủ lạnh cộng đồng, giúp bất cứ ai cần.",
- "us_pantry_over": "Một số nơi phát thực phẩm dùng thực phẩm của chính phủ có giới hạn thu nhập. Nhiều nơi khác, cùng nhà thờ và tủ lạnh cộng đồng, giúp bất cứ ai cần."
+ "us_pantry_over": "Một số nơi phát thực phẩm dùng thực phẩm của chính phủ có giới hạn thu nhập. Nhiều nơi khác, cùng nhà thờ và tủ lạnh cộng đồng, giúp bất cứ ai cần.",
+ "loc_here_rough": "vị trí gần đúng của bạn",
+ "loc_use_rough": "Vẫn dùng",
+ "loc_rough": "Thiết bị chỉ chia sẻ vị trí gần đúng (sai số khoảng {d}), nên các nơi gần nhất có thể không đúng. Hãy nhập mã ZIP, hoặc bật vị trí chính xác rồi thử lại.",
+ "loc_timeout": "Thiết bị không tìm được vị trí kịp. Hãy thử lại gần cửa sổ hoặc ngoài trời, hoặc nhập mã ZIP.",
+ "loc_precise_ios": "Trên iPhone: Cài đặt › Quyền riêng tư & Bảo mật › Dịch vụ định vị › Trang web Safari › bật Vị trí chính xác.",
+ "loc_precise_android": "Trên Android: Cài đặt › Vị trí › Quyền truy cập vị trí của ứng dụng › trình duyệt của bạn › bật Sử dụng vị trí chính xác.",
+ "loc_precise_app_ios": "Trên iPhone: Cài đặt › Plenty Map › Vị trí › bật Vị trí chính xác.",
+ "loc_precise_app_android": "Trên Android: Cài đặt › Ứng dụng › Plenty Map › Quyền › Vị trí › bật Sử dụng vị trí chính xác.",
+ "loc_precise_pc": "Máy tính không có GPS chỉ đoán được qua Wi-Fi hoặc kết nối internet. Bật Wi-Fi sẽ giúp chính xác hơn."
 }

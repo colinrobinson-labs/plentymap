@@ -615,5 +615,14 @@
  "csfp_over": "Esta cesta é para pessoas de 60 anos ou mais com renda de até {g} por mês para a casa. A sua passa disso. As refeições para idosos e o Meals on Wheels não têm limite de renda.",
  "sfmnp_over": "Estes cheques são para pessoas de 60 anos ou mais com renda de até {g} por mês para a casa, e alguns estados usam um limite menor. A sua passa disso.",
  "pantry_over": "Alguns bancos de alimentos distribuem comida do governo com limite de renda: {g} por mês para sua casa na Califórnia. Muitos outros, além de igrejas e geladeiras comunitárias, atendem quem pedir.",
- "us_pantry_over": "Alguns bancos de alimentos distribuem comida do governo com limite de renda. Muitos outros, além de igrejas e geladeiras comunitárias, atendem quem pedir."
+ "us_pantry_over": "Alguns bancos de alimentos distribuem comida do governo com limite de renda. Muitos outros, além de igrejas e geladeiras comunitárias, atendem quem pedir.",
+ "loc_here_rough": "sua localização aproximada",
+ "loc_use_rough": "Usar assim mesmo",
+ "loc_rough": "Seu aparelho só compartilhou uma localização aproximada (a cerca de {d}), então os lugares mais próximos podem estar errados. Digite seu ZIP code, ou ative a localização exata e tente de novo.",
+ "loc_timeout": "Seu aparelho não conseguiu te localizar a tempo. Tente de novo perto de uma janela ou do lado de fora, ou digite seu ZIP code.",
+ "loc_precise_ios": "No iPhone: Ajustes › Privacidade e Segurança › Serviços de Localização › Sites do Safari › ative Localização Exata.",
+ "loc_precise_android": "No Android: Configurações › Localização › Permissões de localização do app › seu navegador › ative Usar local exato.",
+ "loc_precise_app_ios": "No iPhone: Ajustes › Plenty Map › Localização › ative Localização Exata.",
+ "loc_precise_app_android": "No Android: Configurações › Apps › Plenty Map › Permissões › Localização › ative Usar local exato.",
+ "loc_precise_pc": "Computadores sem GPS só conseguem adivinhar pelo Wi-Fi ou pela conexão de internet. Ligar o Wi-Fi ajuda."
 }

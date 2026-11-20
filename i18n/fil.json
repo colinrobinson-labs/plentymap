@@ -615,5 +615,14 @@
  "csfp_over": "Ang kahong ito ay para sa mga 60 taong gulang pataas na may kitang hanggang {g} kada buwan para sa bahay nila. Lampas doon ang sa iyo. Walang limit sa kita ang pagkain para sa senior at ang Meals on Wheels.",
  "sfmnp_over": "Ang mga tseke na ito ay para sa mga 60 taong gulang pataas na may kitang hanggang {g} kada buwan para sa bahay nila, at may mga estadong mas mababa ang limit. Lampas doon ang sa iyo.",
  "pantry_over": "May mga pantry na namimigay ng pagkain mula sa gobyerno na may limit sa kita: {g} kada buwan para sa bahay mo sa California. Marami pang iba, pati mga simbahan at community fridge, ang tumutulong sa kahit sinong humingi.",
- "us_pantry_over": "May mga pantry na namimigay ng pagkain mula sa gobyerno na may limit sa kita. Marami pang iba, pati mga simbahan at community fridge, ang tumutulong sa kahit sinong humingi."
+ "us_pantry_over": "May mga pantry na namimigay ng pagkain mula sa gobyerno na may limit sa kita. Marami pang iba, pati mga simbahan at community fridge, ang tumutulong sa kahit sinong humingi.",
+ "loc_here_rough": "tantiyang lokasyon mo",
+ "loc_use_rough": "Gamitin pa rin",
+ "loc_rough": "Tantiyang lokasyon lang ang ibinigay ng device mo (mga {d} ang layo), kaya baka mali ang pinakamalalapit na lugar. I-type ang ZIP code mo, o i-on ang eksaktong lokasyon at subukan ulit.",
+ "loc_timeout": "Hindi ka nahanap ng device mo sa oras. Subukan ulit malapit sa bintana o sa labas, o i-type ang ZIP code mo.",
+ "loc_precise_ios": "Sa iPhone: Settings › Privacy & Security › Location Services › Safari Websites › i-on ang Precise Location.",
+ "loc_precise_android": "Sa Android: Settings › Location › App location permissions › ang browser mo › i-on ang Use precise location.",
+ "loc_precise_app_ios": "Sa iPhone: Settings › Plenty Map › Location › i-on ang Precise Location.",
+ "loc_precise_app_android": "Sa Android: Settings › Apps › Plenty Map › Permissions › Location › i-on ang Use precise location.",
+ "loc_precise_pc": "Ang mga computer na walang GPS ay nanghuhula lang mula sa Wi-Fi o internet connection. Makakatulong ang pag-on ng Wi-Fi."
 }

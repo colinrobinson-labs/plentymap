@@ -1,6 +1,6 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
    and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store, locLabel } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
@@ -438,7 +438,7 @@ export async function render(main, { args }) {
   <div class="findapp">
     <div class="fside">
       <section class="hero findhero${S.loc ? " has-loc" : ""}" aria-labelledby="find-h">
-        <h1 class="disp" id="find-h">${esc(S.loc ? t("find_h_near", { p: S.loc.label }) : t("find_h"))}</h1>
+        <h1 class="disp" id="find-h">${esc(S.loc ? t("find_h_near", { p: locLabel() }) : t("find_h"))}</h1>
         <p id="find-p">${esc(t(R.partner ? "find_p" : "us_find_p"))}</p>
         ${locForm("f", S.loc?.src === "gps" ? "" : S.loc?.label || "")}
         <p class="small" id="f-msg" role="status"></p>
@@ -467,7 +467,7 @@ export async function render(main, { args }) {
   const gps = $("#f-gps");
   if (gps) { gps.setAttribute("aria-label", t("loc_gps")); gps.innerHTML = `${ico("locate")}<span class="lbl" aria-hidden="true">${esc(t("loc_gps"))}</span>`; }
 
-  bindLoc("f", () => { $("#find-h").textContent = t("find_h_near", { p: S.loc.label }); $(".findhero")?.classList.add("has-loc"); });
+  bindLoc("f", () => { $("#find-h").textContent = t("find_h_near", { p: locLabel() }); $(".findhero")?.classList.add("has-loc"); });
   const paintFilters = () => {
     const cat = catOf(F.cat);
     const freeCat = isFreeCat(cat) && cat.kinds.some(k => SCHED.includes(k));
