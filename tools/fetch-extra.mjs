@@ -98,12 +98,71 @@ async function overpass(name, body, min) {
     return save(name + ".json", prev);
   }
 }
-await step("gardens", () => overpass("gardens", `  nwr["leisure"="garden"]["garden:type"="community"];
-  nwr["landuse"="allotments"]["name"];`, 1000));
-await step("giveboxes", () => overpass("giveboxes", `  nwr["amenity"="give_box"];
-  nwr["amenity"="food_sharing"]["name"~"pantry|blessing",i];`, 50));
-await step("bakeries", () => overpass("bakeries", `  nwr["shop"]["name"~"(bread|bakery|bake shop|baking|bakeries).*(outlet|thrift|discount)|(outlet|thrift).*(bread|bakery)",i];
-  nwr["shop"]["name"~"^(franz|dave's killer bread|pepperidge farm|flowers|nature's own|entenmann's|bimbo|aunt millie's|schwebel's|alpha baking|lewis bake shop|hostess|mrs\\\\. baird's|holsum|sara lee|arnold|oroweat|martin's|wonder).*(outlet|store|thrift)",i];`, 20));
+// The same three selections, as tests on one element's tags (used on the Geofabrik extract below)
+const BAKERY1 = /(bread|bakery|bake shop|baking|bakeries).*(outlet|thrift|discount)|(outlet|thrift).*(bread|bakery)/i;
+const BAKERY2 = /^(franz|dave's killer bread|pepperidge farm|flowers|nature's own|entenmann's|bimbo|aunt millie's|schwebel's|alpha baking|lewis bake shop|hostess|mrs\. baird's|holsum|sara lee|arnold|oroweat|martin's|wonder).*(outlet|store|thrift)/i;
+const PICK = {
+  gardens: t => (t.leisure === "garden" && t["garden:type"] === "community") || (t.landuse === "allotments" && !!t.name),
+  giveboxes: t => t.amenity === "give_box" || (t.amenity === "food_sharing" && /pantry|blessing/i.test(t.name || "")),
+  bakeries: t => !!t.shop && (BAKERY1.test(t.name || "") || BAKERY2.test(t.name || "")),
+};
+const MIN = { gardens: 1000, giveboxes: 50, bakeries: 20 };
+
+// First choice: the weekly Geofabrik extracts of the US, filtered with osmium in the workflow and exported
+// as GeoJSON lines (OSM_SEQ). No shared query server involved, so no timeouts. Each feature becomes the
+// same element shape Overpass returns ({type, id, timestamp, tags, lat/lon or center}).
+async function fromExtract(file) {
+  const { createReadStream } = await import("node:fs");
+  const { createInterface } = await import("node:readline");
+  const out = { gardens: new Map(), giveboxes: new Map(), bakeries: new Map() };
+  const pts = (g, acc) => { if (typeof g[0] === "number") acc.push(g); else for (const x of g) pts(x, acc); return acc; };
+  let n = 0;
+  for await (const line of createInterface({ input: createReadStream(file), crlfDelay: Infinity })) {
+    const l = line.replace(/^\x1e/, "").trim();
+    if (!l) continue;
+    const f = JSON.parse(l); n++;
+    const p = f.properties || {}, type = p["@type"], id = p["@id"];
+    if (!type || id == null || !f.geometry) continue;
+    const tags = {};
+    for (const [k, v] of Object.entries(p)) if (!k.startsWith("@")) tags[k] = String(v);
+    const layers = Object.keys(PICK).filter(k => PICK[k](tags));
+    if (!layers.length) continue;
+    const ts = p["@timestamp"], timestamp = typeof ts === "number" ? new Date(ts * 1000).toISOString() : ts || undefined;
+    const e = { type, id: +id, timestamp, tags };
+    if (f.geometry.type === "Point") { [e.lon, e.lat] = f.geometry.coordinates; }
+    else {
+      const c = pts(f.geometry.coordinates, []);
+      if (!c.length) continue;
+      let w = 180, so = 90, ea = -180, no = -90;
+      for (const [x, y] of c) { if (x < w) w = x; if (x > ea) ea = x; if (y < so) so = y; if (y > no) no = y; }
+      e.center = { lat: (so + no) / 2, lon: (w + ea) / 2 };
+    }
+    for (const k of layers) out[k].set(type + id, e);
+  }
+  log(`extract: ${n} features read`);
+  for (const k of Object.keys(PICK)) {
+    const elements = [...out[k].values()];
+    if (elements.length < MIN[k]) throw new Error(`extract: too few ${k}: ${elements.length}`);
+    report[k + "_n"] = elements.length;
+    await save(k + ".json", { fetched: new Date().toISOString(), source: "geofabrik", elements });
+    report[k] = "ok";
+  }
+  report.osm_source = "geofabrik";
+}
+let extractOk = false;
+if (process.env.OSM_SEQ) {
+  try { await fromExtract(process.env.OSM_SEQ); extractOk = true; }
+  catch (e) { log(`extract failed (${e.message}); falling back to Overpass`); report.extract = "failed: " + e.message; }
+}
+if (!extractOk) {
+  report.osm_source = "overpass";
+  await step("gardens", () => overpass("gardens", `  nwr["leisure"="garden"]["garden:type"="community"];
+  nwr["landuse"="allotments"]["name"];`, MIN.gardens));
+  await step("giveboxes", () => overpass("giveboxes", `  nwr["amenity"="give_box"];
+  nwr["amenity"="food_sharing"]["name"~"pantry|blessing",i];`, MIN.giveboxes));
+  await step("bakeries", () => overpass("bakeries", `  nwr["shop"]["name"~"(bread|bakery|bake shop|baking|bakeries).*(outlet|thrift|discount)|(outlet|thrift).*(bread|bakery)",i];
+  nwr["shop"]["name"~"^(franz|dave's killer bread|pepperidge farm|flowers|nature's own|entenmann's|bimbo|aunt millie's|schwebel's|alpha baking|lewis bake shop|hostess|mrs\\\\. baird's|holsum|sara lee|arnold|oroweat|martin's|wonder).*(outlet|store|thrift)",i];`, MIN.bakeries));
+}
 
 // ---------- 2. USDA Summer Meals Site Finder ----------
 // The finder is an ArcGIS Experience app. Find its feature layers from the app's own config (the same

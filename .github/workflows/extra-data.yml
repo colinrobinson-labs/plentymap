@@ -56,7 +56,7 @@ jobs:
 
   places:
     needs: places-due
-    # a push runs it on main only: each run reads the whole US from the shared, free Overpass servers,
+    # a push runs it on main only: each run downloads the US OpenStreetMap extracts (~10 GB),
     # so test it on a branch with "Run workflow" (job: places) instead of on every push
     if: always() && ((github.event_name == 'push' && github.ref_name == 'main') || needs.places-due.outputs.due == 'true' || (github.event_name == 'schedule' && github.event.schedule == '23 3 * * 2') || (github.event_name == 'workflow_dispatch' && (inputs.job == 'all' || inputs.job == 'places')))
     runs-on: ubuntu-latest
@@ -73,9 +73,31 @@ jobs:
             git archive FETCH_HEAD raw | tar -x -C /tmp/x/prev --strip-components=1 2>/dev/null || true
           fi
           ls -la /tmp/x/prev
+      # OpenStreetMap from the Geofabrik US extracts (updated daily), filtered with osmium. The shared Overpass
+      # query servers time out on GitHub's runners, so they are only the fallback when this step fails.
+      - name: OpenStreetMap extracts (Geofabrik + osmium)
+        id: osm
+        continue-on-error: true
+        timeout-minutes: 60
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y -q -o Acquire::Retries=3 osmium-tool >/dev/null
+          mkdir -p /tmp/osm && cd /tmp/osm
+          for r in us-west us-midwest us-northeast us-south us-pacific us/puerto-rico us/us-virgin-islands; do
+            n=$(basename "$r")
+            curl -fsSL --retry 4 --retry-delay 30 -A "PlentyMapDataBot/1.0 (weekly build)" -o in.osm.pbf "https://download.geofabrik.de/north-america/$r-latest.osm.pbf"
+            echo "$n: $(du -h in.osm.pbf | cut -f1)"
+            osmium tags-filter in.osm.pbf nwr/leisure=garden nwr/landuse=allotments nwr/amenity=give_box,food_sharing nwr/shop -o "f-$n.osm.pbf" --overwrite
+            rm -f in.osm.pbf
+          done
+          osmium merge f-*.osm.pbf -o all.osm.pbf --overwrite
+          osmium export all.osm.pbf -f geojsonseq -a type,id,timestamp -o all.geojsonseq --overwrite
+          ls -la /tmp/osm; df -h /tmp | tail -1
+          echo "seq=/tmp/osm/all.geojsonseq" >> "$GITHUB_OUTPUT"
       - name: Fetch sources
         env:
           PREV_RAW: /tmp/x/prev
+          OSM_SEQ: ${{ steps.osm.outputs.seq }}
         run: node tools/fetch-extra.mjs /tmp/x/raw
       - name: Build the layer packs
         run: |
