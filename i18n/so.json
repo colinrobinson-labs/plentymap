@@ -615,5 +615,14 @@
  "csfp_over": "Sanduuqan waxaa loogu talagalay dadka 60 jirka ah ama ka weyn ee dakhliga gurigoodu yahay ilaa {g} bishii. Kaaga ayaa ka badan. Cuntada waayeelka iyo Meals on Wheels ma laha xad dakhli.",
  "sfmnp_over": "Jeegaggan waxaa loogu talagalay dadka 60 jirka ah ama ka weyn ee dakhliga gurigoodu yahay ilaa {g} bishii, gobollada qaarna xad ka hooseeya ayay dhigaan. Kaaga ayaa ka badan.",
  "pantry_over": "Bakhaarrada cuntada qaar waxay bixiyaan cunto dowladeed oo leh xad dakhli: {g} bishii gurigaaga gudaha California. Kuwo kale oo badan, iyo kaniisadaha iyo qaboojiyeyaasha bulshada, waxay caawiyaan qof kasta oo codsada.",
- "us_pantry_over": "Bakhaarrada cuntada qaar waxay bixiyaan cunto dowladeed oo leh xad dakhli. Kuwo kale oo badan, iyo kaniisadaha iyo qaboojiyeyaasha bulshada, waxay caawiyaan qof kasta oo codsada."
+ "us_pantry_over": "Bakhaarrada cuntada qaar waxay bixiyaan cunto dowladeed oo leh xad dakhli. Kuwo kale oo badan, iyo kaniisadaha iyo qaboojiyeyaasha bulshada, waxay caawiyaan qof kasta oo codsada.",
+ "loc_here_rough": "goobtaada qiyaas ahaan",
+ "loc_use_rough": "Haddana isticmaal",
+ "loc_rough": "Qalabkaagu wuxuu bixiyay goob qiyaas ah oo keliya (qiyaastii {d}), sidaa darteed meelaha ugu dhow way khaldanaan karaan. Qor koodhkaaga ZIP, ama shid goobta saxda ah oo mar kale isku day.",
+ "loc_timeout": "Qalabkaagu waqtigii kuma helin goobtaada. Mar kale isku day adoo daaqad u dhow ama banaanka jooga, ama qor koodhkaaga ZIP.",
+ "loc_precise_ios": "iPhone: Settings › Privacy & Security › Location Services › Safari Websites › shid Precise Location.",
+ "loc_precise_android": "Android: Settings › Location › App location permissions › browser-kaaga › shid Use precise location.",
+ "loc_precise_app_ios": "iPhone: Settings › Plenty Map › Location › shid Precise Location.",
+ "loc_precise_app_android": "Android: Settings › Apps › Plenty Map › Permissions › Location › shid Use precise location.",
+ "loc_precise_pc": "Kombiyuutarada aan GPS lahayn waxay ku qiyaasaan Wi-Fi ama xiriirka internetka oo keliya. Shidista Wi-Fi way caawisaa."
 }

@@ -1,5 +1,5 @@
 /* Plenty Map: start-up, language picker, first-run setup, tabs and routing, settings and privacy. */
-import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION, VARS } from "./core.js";
+import { S, save, store, LANGS, LANG, loadLang, t, esc, $, $$, ico, MARK, toast, announce, getPosition, native, VERSION, VARS, num } from "./core.js";
 import { CONFIG } from "./config.js";
 import { region, findPlace, setLoc, covered, nearestZip, placeNames, programName } from "./region.js";
 
@@ -163,6 +163,18 @@ async function locHelp() {
   if (/Windows/.test(ua)) return "loc_help_win";
   return "loc_help_site";
 }
+/* Past this many meters the device's answer is a guess from cell towers or the connection, not GPS */
+const ROUGH_M = 1000;
+const roughDist = m => { const mi = m / 1609.34; return t("dist_mi", { d: num(mi, mi < 10 ? 1 : 0) }); };
+/* When the device only shares a rough location: how to share the exact one, for this phone or computer */
+function preciseHelp() {
+  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const N = native();
+  if (N) return N.getPlatform?.() === "android" ? "loc_precise_app_android" : "loc_precise_app_ios";
+  if (ios) return "loc_precise_ios";
+  if (/Android/.test(ua)) return "loc_precise_android";
+  return "loc_precise_pc";
+}
 /* The UK and Canada are next: say so to people there instead of "outside the U.S." (until their data ships). */
 const CA_PROV = /,?\s+(ON|QC|BC|AB|MB|SK|NS|NB|NL|PE|YT|NT|NU)$/i;
 const COMING_WORDS = /\b(canada|united kingdom|england|scotland|wales|northern ireland|ontario|quebec|qu\u00e9bec|british columbia|alberta|manitoba|saskatchewan|nova scotia|toronto|montreal|montr\u00e9al|vancouver|calgary|edmonton|ottawa|winnipeg|london|manchester|birmingham|glasgow|edinburgh|liverpool|leeds|bristol|cardiff|belfast)\b/i;
@@ -233,21 +245,39 @@ export function bindLoc(p, after) {
     const el = msg(); if (el) el.textContent = "";
     setLoc(r); after?.(r);
   };
+  const useFix = (pos, R, rough) => {
+    // round to about 100 m: plenty for "near me", and less exact than the phone's fix
+    const lat = +pos.lat.toFixed(3), lon = +pos.lon.toFixed(3);
+    // the state comes from the nearest ZIP center; no ZIP is shown for a device location, since a center
+    // can belong to the next ZIP over (rural ZIPs are miles wide) and would look like the wrong place
+    const z = nearestZip(lat, lon, R);
+    const loc = { lat, lon, label: t(rough ? "loc_here_rough" : "loc_here"), zip: null, st: z.st || R.st, src: "gps", acc: Math.round(pos.acc), rough: !!rough };
+    setLoc(loc); say(""); after?.(loc);
+  };
   $(`#${p}-gps`).onclick = async () => {
-    const btn = $(`#${p}-gps`); btn.disabled = true; say(t("loc_finding"), true);
+    const btn = $(`#${p}-gps`); btn.disabled = true; btn.setAttribute("aria-busy", "true"); say(t("loc_finding"), true);
     try {
       const pos = await getPosition();
       if (!(await covered(pos.lat, pos.lon))) { say(t(comingAt(pos.lat, pos.lon) ? "loc_coming" : "loc_outside")); return; }
-      // round to about 100 m: plenty for "near me", and less exact than the phone's fix
-      const lat = +pos.lat.toFixed(3), lon = +pos.lon.toFixed(3);
-      const R = await region({ lat, lon });
-      const z = nearestZip(lat, lon, R);
-      const loc = { lat, lon, label: t("loc_here"), zip: z.zip, st: z.st || R.st, src: "gps" };
-      setLoc(loc); say(""); after?.(loc);
+      const R = await region({ lat: +pos.lat.toFixed(3), lon: +pos.lon.toFixed(3) });
+      if (pos.acc <= ROUGH_M) return useFix(pos, R, false);
+      // Only a rough fix (cell towers, the internet connection, or Precise Location switched off):
+      // don't pass it off as where they are. Say so, say how to fix it, and let them choose.
+      say(t("loc_rough", { d: roughDist(pos.acc) }) + " " + t(await preciseHelp()));
+      $(`#${p}-q`)?.setAttribute("aria-invalid", "false");   // nothing wrong with the box: don't outline it
+      const el = msg(), txt = el?.querySelector("span") || el;
+      if (txt) {
+        const b = document.createElement("button");
+        b.type = "button"; b.className = "btn sm msg-act"; b.textContent = t("loc_use_rough");
+        b.onclick = () => useFix(pos, R, true);
+        txt.append(b);
+      }
     } catch (err) {
-      if (err?.code === 1 || /denied|permission/i.test(err?.message || "")) say(t("loc_denied") + " " + t(await locHelp()));
+      const m = err?.message || "";
+      if (err?.code === 1 || /denied|permission|disabled|not enabled/i.test(m)) say(t("loc_denied") + " " + t(await locHelp()));
+      else if (err?.code === 3) say(t("loc_timeout"));
       else say(t("loc_failed"));
-    } finally { btn.disabled = false; }
+    } finally { btn.disabled = false; btn.removeAttribute("aria-busy"); }
   };
 }
 

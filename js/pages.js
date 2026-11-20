@@ -1,5 +1,5 @@
 /* Settings, Privacy and About. */
-import { S, save, store, t, esc, $, ico, toast, LANG, VERSION, dateFmt } from "./core.js";
+import { S, save, store, t, esc, $, ico, toast, LANG, VERSION, dateFmt, locLabel } from "./core.js";
 import { foot, showWelcome, applyTheme, locForm, bindLoc, legalUrl } from "./app.js";
 import { region } from "./region.js";
 import { CONFIG } from "./config.js";
@@ -12,7 +12,7 @@ function settings(main) {
       <div class="row between"><span><b>${esc(t("language"))}</b><br><span class="mute small" lang="${S.lang}">${esc(LANG[S.lang].name)}</span></span>
         <button class="btn sm" type="button" id="chlang">${ico("globe", "i sm")} ${esc(t("change"))}</button></div>
       <hr class="hr">
-      <div><b>${esc(t("your_area"))}</b><p class="mute small">${esc(S.loc ? (S.loc.src === "gps" ? t("loc_here") + (S.loc.zip ? " (" + S.loc.zip + ")" : "") : S.loc.label) : t("no_area"))}</p></div>
+      <div><b>${esc(t("your_area"))}</b><p class="mute small">${esc(S.loc ? locLabel() : t("no_area"))}</p></div>
       ${locForm("st", "")}
       <p class="small mute" id="st-msg" role="status"></p>
       ${S.loc ? `<button class="link" type="button" id="clrloc">${esc(t("forget_area"))}</button>` : ""}

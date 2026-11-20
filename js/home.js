@@ -1,6 +1,6 @@
 /* Home: what Plenty Map is, with real things up front. Tonight's dinner with its price, places near
    you that are open now or soon, and a menu of the four tabs with what each one holds. */
-import { S, t, esc, $, ico, dish, money, num, rt, miles, dist, timeFmt, dateFmt, tidyCaps, activeCuisine } from "./core.js";
+import { S, t, esc, $, ico, dish, money, num, rt, miles, dist, timeFmt, dateFmt, tidyCaps, activeCuisine, locLabel } from "./core.js";
 import { food, canCook, dietOk, perServing, slotOf } from "./food.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
@@ -93,7 +93,7 @@ function placeName(R) {
   const L = S.loc; if (!L) return "";
   const z = L.zip && R?.zips?.[L.zip];
   if (L.src === "zip" && z?.[2]) return `${tidyCaps(z[2])}${z[3] && !R.partner ? ", " + z[3] : ""} ${L.zip}`;
-  return L.label || "";
+  return locLabel(L);
 }
 
 /* ---------- markup ---------- */

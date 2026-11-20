@@ -615,5 +615,14 @@
  "csfp_over": "Esta caja es para personas de 60 años o más con ingresos de hasta {g} al mes para su hogar. Los tuyos pasan de eso. Las comidas para mayores y Meals on Wheels no tienen límite de ingresos.",
  "sfmnp_over": "Estos cheques son para personas de 60 años o más con ingresos de hasta {g} al mes para su hogar, y algunos estados ponen un límite más bajo. Los tuyos pasan de eso.",
  "pantry_over": "Algunas despensas reparten comida del gobierno con un límite de ingresos: {g} al mes para tu hogar en California. Muchas otras, además de iglesias y refrigeradores comunitarios, atienden a cualquiera que lo pida.",
- "us_pantry_over": "Algunas despensas reparten comida del gobierno con un límite de ingresos. Muchas otras, además de iglesias y refrigeradores comunitarios, atienden a cualquiera que lo pida."
+ "us_pantry_over": "Algunas despensas reparten comida del gobierno con un límite de ingresos. Muchas otras, además de iglesias y refrigeradores comunitarios, atienden a cualquiera que lo pida.",
+ "loc_here_rough": "tu ubicación aproximada",
+ "loc_use_rough": "Usarla de todos modos",
+ "loc_rough": "Tu dispositivo solo compartió una ubicación aproximada (a unas {d}), así que los lugares más cercanos podrían no ser correctos. Escribe tu código postal, o activa la ubicación exacta y vuelve a intentarlo.",
+ "loc_timeout": "Tu dispositivo no pudo encontrarte a tiempo. Inténtalo de nuevo cerca de una ventana o afuera, o escribe tu código postal.",
+ "loc_precise_ios": "En iPhone: Ajustes › Privacidad y seguridad › Localización › Sitios web de Safari › activa Ubicación exacta.",
+ "loc_precise_android": "En Android: Ajustes › Ubicación › Permisos de ubicación de apps › tu navegador › activa Usar ubicación precisa.",
+ "loc_precise_app_ios": "En iPhone: Ajustes › Plenty Map › Ubicación › activa Ubicación exacta.",
+ "loc_precise_app_android": "En Android: Ajustes › Aplicaciones › Plenty Map › Permisos › Ubicación › activa Usar ubicación precisa.",
+ "loc_precise_pc": "Las computadoras sin GPS solo pueden adivinar por el Wi-Fi o la conexión a internet. Encender el Wi-Fi ayuda."
 }

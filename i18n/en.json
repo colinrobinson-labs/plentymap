@@ -615,5 +615,14 @@
  "csfp_over": "This box is for people 60 and older with income up to {g} a month for your home. Yours is over that. Senior meals and Meals on Wheels have no income limit.",
  "sfmnp_over": "These checks are for people 60 and older with income up to {g} a month for your home, and some states set it lower. Yours is over that.",
  "pantry_over": "Some pantries give out government food with an income limit: {g} a month for your home in California. Many others, plus churches and community fridges, serve anyone who asks.",
- "us_pantry_over": "Some pantries give out government food with an income limit. Many others, plus churches and community fridges, serve anyone who asks."
+ "us_pantry_over": "Some pantries give out government food with an income limit. Many others, plus churches and community fridges, serve anyone who asks.",
+ "loc_here_rough": "your approximate location",
+ "loc_use_rough": "Use it anyway",
+ "loc_rough": "Your device only shared a rough location (within about {d}), so the nearest places could be wrong. Type your ZIP code, or turn on precise location and try again.",
+ "loc_timeout": "Your device couldn't find you in time. Try again near a window or outside, or type your ZIP code.",
+ "loc_precise_ios": "On iPhone: Settings › Privacy & Security › Location Services › Safari Websites › turn on Precise Location.",
+ "loc_precise_android": "On Android: Settings › Location › App location permissions › your browser › turn on Use precise location.",
+ "loc_precise_app_ios": "On iPhone: Settings › Plenty Map › Location › turn on Precise Location.",
+ "loc_precise_app_android": "On Android: Settings › Apps › Plenty Map › Permissions › Location › turn on Use precise location.",
+ "loc_precise_pc": "Computers without GPS can only guess from Wi-Fi or the internet connection. Turning on Wi-Fi helps."
 }
