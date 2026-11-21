@@ -123,13 +123,52 @@ function parseDates(s, yearHint, ref) {
 
 const MONTH_ONLY_RX = new RegExp(`\\b(?:no\\s+(?:food\\s+)?distribution\\s+in\\s+${MONRX}|${MONRX}\\s+(?:\\d{4}\\s+)?(?:distribution\\s+)?cancel)`, "i");
 
+/* US holidays named in notes ("Closed on Thanksgiving Day"). Each becomes a plain date, in the
+   holiday's next occurrence from about a month before the build date on. */
+const nthWd = (y, m, wd, k) => { // k-th weekday of a month, k = -1 for the last one
+  if (k === -1) { const last = new Date(Date.UTC(y, m, 0)); return last.getUTCDate() - ((last.getUTCDay() - wd + 7) % 7); }
+  return 1 + ((wd - new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 7) % 7) + (k - 1) * 7;
+};
+const HOLIDAYS = [
+  [/\b(?:the\s+)?day\s+after\s+thanksgiving\b|\bblack\s+friday\b/i, y => [11, nthWd(y, 11, 4, 4) + 1]],
+  [/\bthanksgiving(?:\s+day)?\b(?!\s+week)/i, y => [11, nthWd(y, 11, 4, 4)]],
+  [/\bchristmas\s+eve\b/i, () => [12, 24]],
+  [/\bchristmas(?:\s+day)?\b/i, () => [12, 25]],
+  [/\bnew\s+year'?s\s+eve\b/i, () => [12, 31]],
+  [/\bnew\s+year'?s(?:\s+day)?\b/i, () => [1, 1]],
+  [/\bveterans'?\s+day\b/i, () => [11, 11]],
+  [/\bjuneteenth\b/i, () => [6, 19]],
+  [/\b(?:independence\s+day|fourth\s+of\s+july)\b/i, () => [7, 4]],
+  [/\bmemorial\s+day\b/i, y => [5, nthWd(y, 5, 1, -1)]],
+  [/\blabor\s+day\b/i, y => [9, nthWd(y, 9, 1, 1)]],
+  [/\b(?:mlk|martin\s+luther\s+king(?:,?\s+jr\.?)?)(?:\s+jr\.?)?\s+day\b/i, y => [1, nthWd(y, 1, 1, 3)]],
+  [/\bpresidents'?\s+day\b/i, y => [2, nthWd(y, 2, 1, 3)]],
+];
+const MONTH_NAMES = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+function holidaysToDates(s, ref) {
+  const from = ref.getTime() - 30 * 864e5;
+  for (const [rx, at] of HOLIDAYS) {
+    s = s.replace(new RegExp(rx.source, "gi"), () => {
+      for (const y of [ref.getUTCFullYear() - 1, ref.getUTCFullYear(), ref.getUTCFullYear() + 1]) {
+        const [m, d] = at(y);
+        if (Date.UTC(y, m - 1, d) >= from) return `${MONTH_NAMES[m]} ${d}, ${y}`;
+      }
+      return "";
+    });
+  }
+  return s;
+}
+
 /* Notes about closures and reschedules. kind "sdfb" notes are a "reschedules/closures" column, so bare dates mean reschedules. */
 export function parseNotes(text, src, ref = new Date()) {
   const res = { skip: [], add: [], moved: [], skipMonths: [], unclear: false };
   if (!text) return res;
-  const s = text.replace(/\s+/g, " ").trim();
+  const orig = text.replace(/\s+/g, " ").trim();
+  // "closed Thanksgiving week", "closed over winter break": a closure we can't pin to dates, so say "call first"
+  if (/\b(?:thanksgiving|christmas|holiday|winter|spring)\s+(?:week|break)\b/i.test(orig)) res.unclear = true;
+  const s = holidaysToDates(orig, ref);
   if (/^(none|n\/a)$/i.test(s) || /^no (holiday )?(reschedul|closure|rescheduled)[a-z]*( or closed dates)?( for| in)? ?(holidays|2\d{3})?\.?$/i.test(s) || /all distributions will be held on regularly scheduled days/i.test(s) && !/\d/.test(s.replace(/all distributions[^.]*\./i, ""))) return res;
-  const yearM = s.match(/\b(20\d\d)\b/);
+  const yearM = orig.match(/\b(20\d\d)\b/); // from the food bank's own words, not the holiday dates we filled in
   const yearHint = yearM ? +yearM[1] : null;
   // split into clauses at sentence ends and at keyword changes
   const clauses = s.split(/(?<=[.;])\s+|(?=\b(?:open on|cancell?ations?:|reschedul\w*(?: dates)?(?: due to holidays)?:|closed\b))/i).map(x => x.trim()).filter(Boolean);
@@ -147,6 +186,19 @@ export function parseNotes(text, src, ref = new Date()) {
     // "will be on 11/21 and not 11/28" / "will be on 11/19, not 11/5"
     const wb = c.match(/will be on (.+?)(?:,|\s)\s*(?:and\s+)?not (.+)/i);
     if (wb) { res.add.push(...parseDates(wb[1], yearHint, ref)); res.skip.push(...parseDates(wb[2], yearHint, ref)); continue; }
+    // "Reschedule Dates: April 30, May 21, July Cancelled, August 27th rescheduled to August 20th, November 12":
+    // a list of new dates, where single entries can say they're cancelled or name the date they replace
+    if (/^(?:20\d\d\s+)?reschedul\w*(?: dates)?(?: due to holidays)?(?: for \d{4})?:/i.test(c) && /cancel|reschedul\w* to/i.test(c.replace(/^[^:]*:/, ""))) {
+      for (const part of c.replace(/^[^:]*:/, "").split(/[,;]\s*(?![^,;]*\b20\d\d\b\s*$)(?=\D*[a-z])/i)) {
+        const pl = part.toLowerCase(), pd = parseDates(part, yearHint, ref);
+        const pm = pl.match(new RegExp(`\\b${MONRX}\\s+(?:\\d{4}\\s+)?(?:distribution\\s+)?cancel`, "i"));
+        if (pm && !pd.length) { res.skipMonths.push(MON[pm[1].slice(0, 3)]); continue; }
+        const pair = part.match(/(.+?)\s+rescheduled to\s+(.+)/i);
+        if (pair) { res.skip.push(...parseDates(pair[1], yearHint, ref)); res.add.push(...parseDates(pair[2], yearHint, ref)); continue; }
+        if (/cancel|closed/.test(pl)) res.skip.push(...pd); else res.moved.push(...pd);
+      }
+      continue;
+    }
     if (/closed|cancel|no (food )?distribution|not open|no pantry/.test(low)) res.skip.push(...dates);
     else if (/open on|will be on|moved to/.test(low)) res.add.push(...dates);
     else if (/resched/.test(low)) {
@@ -330,8 +382,10 @@ export function nextTimes(sched, now = new Date(), n = 3, days = 45, tz = TZ) {
     const t = Date.UTC(y, m - 1, d);
     if (t < base - 31 * 864e5 || t > base + days * 864e5) continue;
     let best = null, bd = 1e15;
-    // search regular dates around it, including just outside our window
-    for (let i = -10; i <= 10; i++) {
+    // search regular dates around it, including just outside our window. A monthly schedule ("4th Thursday")
+    // moves within its month, however far: "rescheduled for holidays: November 2" replaces Thanksgiving's date.
+    const span = rules.some(r => r.nth) ? 31 : 10;
+    for (let i = -span; i <= span; i++) {
       const dt = new Date(t + i * 864e5);
       const yy = dt.getUTCFullYear(), mm = dt.getUTCMonth() + 1, dd = dt.getUTCDate(), wd = dt.getUTCDay();
       const hit = rules.some(r => r.wd === wd && (!r.nth || r.nth.some(k => k === -1 ? isLast(yy, mm, dd) : nthOf(yy, mm, dd) === k)));
