@@ -4,6 +4,7 @@
 #     (release is manual in App Store Connect, so approval does not publish anything)
 #   replace build waiting for review: if the version is still in the queue with an older build, takes it out,
 #     attaches the newest processed build and sends it again (leaves it alone once Apple starts reviewing)
+#   release: releases an approved version now, or makes a version still in review go live as soon as it is approved
 #   status: prints where the version, its builds and review submissions stand
 #   testers: makes the internal TestFlight group "Plenty Map team" and adds everyone on the team
 # Uses the same API key secrets as the iOS build (PM_ASC_KEY_ID, PM_ASC_KEY_P8).
@@ -15,7 +16,7 @@ on:
       what:
         description: What to send
         type: choice
-        options: [testers and listing, testers, listing, listing then submit for review, submit for review, replace build waiting for review, status]
+        options: [testers and listing, testers, listing, listing then submit for review, submit for review, replace build waiting for review, status, release]
         default: testers and listing
 
 permissions:
@@ -117,3 +118,19 @@ jobs:
           ASC_REPLACE: ${{ contains(inputs.what, 'replace') && '1' || '' }}
           ASC_STATUS: ${{ inputs.what == 'status' && '1' || '' }}
         run: node tools/asc-submit.mjs
+
+  release:
+    if: inputs.what == 'release'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Release to the App Store
+        env:
+          ASC_KEY_RAW: ${{ secrets.PM_ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.PM_ASC_KEY_ID }}
+          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID || '323b291b-bbde-4735-9ad6-c05f38c0c582' }}
+        run: node tools/asc-release.mjs
