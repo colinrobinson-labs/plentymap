@@ -13,7 +13,7 @@ const sched = (when, notes, src = "sdfb") => {
   const nt = resolveYears(parseNotes(notes, src, REF), s, REF);
   return { rules: s.rules, once: s.once, except: s.except, skip: nt.skip, add: nt.add, moved: nt.moved, skipMonths: nt.skipMonths };
 };
-const dates = (sc, days = 45) => nextTimes(sc, NOW, 20, days).map(x => x.date);
+const dates = (sc, days = 45) => nextTimes(sc, NOW, 200, days).map(x => x.date);
 
 test("named holidays become closure dates", () => {
   assert.deepEqual(parseNotes("Closed on Thanksgiving Day", "fsd", REF).skip, ["2026-11-26"]);
@@ -61,6 +61,16 @@ test("weekly schedules still move only to a nearby date", () => {
   // a reschedule two weeks away must not swallow an unrelated weekly date
   const d = dates(sched("Every Wednesday 9:00 am - 11:00 am", "Rescheduled to: Dec 12"), 30);
   assert.ok(d.includes("2026-11-25") && d.includes("2026-12-02") && d.includes("2026-12-12"));
+});
+
+test("a closure list split by semicolons stays a closure list", () => {
+  // North County Food Bank Client Choice Food Pantry
+  const nt = parseNotes("Closed due to holidays: January 1 & 19; February 16; March 31; May 25; June 19; July 3; September 7; October 12; November 11, 26, & 27; and December 24, 25, & 31.", "sdfb", REF);
+  assert.deepEqual(nt.moved, []);
+  for (const x of ["Y-12-24", "Y-12-25", "Y-12-31", "Y-11-26"]) assert.ok(nt.skip.includes(x), x);
+  const d = dates(sched("Open Monday through Friday by appointment from 9:00 am - 12:00 pm.", "Closed due to holidays: January 1 & 19; February 16; March 31; May 25; June 19; July 3; September 7; October 12; November 11, 26, & 27; and December 24, 25, & 31."), 45);
+  assert.ok(!d.includes("2026-12-24") && !d.includes("2026-12-25") && !d.includes("2026-12-31") && !d.includes("2027-01-01"));
+  assert.ok(d.includes("2026-12-23"));
 });
 
 test("plain closure lists still work", () => {

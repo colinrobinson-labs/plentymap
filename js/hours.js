@@ -172,8 +172,12 @@ export function parseNotes(text, src, ref = new Date()) {
   const yearHint = yearM ? +yearM[1] : null;
   // split into clauses at sentence ends and at keyword changes
   const clauses = s.split(/(?<=[.;])\s+|(?=\b(?:open on|cancell?ations?:|reschedul\w*(?: dates)?(?: due to holidays)?:|closed\b))/i).map(x => x.trim()).filter(Boolean);
+  // "Closed due to holidays: January 1 & 19; February 16; ... and December 24, 25, & 31.": a list split
+  // by semicolons keeps the meaning of the clause that started it, until a sentence ends or a new keyword
+  let carry = null;
   for (const c of clauses) {
     const low = c.toLowerCase();
+    const inherited = carry; carry = null;
     if (/no (holiday )?reschedul|regularly scheduled|^none$/.test(low) && !/\d/.test(low)) continue;
     const mo = low.match(MONTH_ONLY_RX);
     if (mo && !/\d/.test(low.replace(/20\d\d/g, ""))) {
@@ -199,7 +203,8 @@ export function parseNotes(text, src, ref = new Date()) {
       }
       continue;
     }
-    if (/closed|cancel|no (food )?distribution|not open|no pantry/.test(low)) res.skip.push(...dates);
+    if (/closed|cancel|no (food )?distribution|not open|no pantry/.test(low)) { res.skip.push(...dates); if (/;$/.test(c)) carry = "skip"; }
+    else if (inherited === "skip" && !/open|resched|moved|will be/.test(low)) { res.skip.push(...dates); if (/;$/.test(c)) carry = "skip"; }
     else if (/open on|will be on|moved to/.test(low)) res.add.push(...dates);
     else if (/resched/.test(low)) {
       // "August 27th rescheduled to August 20th"
