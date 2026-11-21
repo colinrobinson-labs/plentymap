@@ -146,8 +146,9 @@ export const num = (n, d = 0) => nfo({ maximumFractionDigits: d }).format(n);
 export const money = (v, cents = true) => {
   const f = nfo({ style: "currency", currency: MARKET.currency, currencyDisplay: "narrowSymbol", minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 });
   if (!isRtl()) return f.format(v);
-  // Arabic writes "0.61 US$": keep "US$" in one piece instead of "$US"
-  return f.formatToParts(v).map(p => p.type === "currency" && /[A-Za-z]/.test(p.value) ? iso(p.value) : p.value).join("");
+  // Arabic CLDR writes "0.61 US$", which shows as "$US" and wraps mid-symbol: show "$" like the price tags here,
+  // kept on one line with its number
+  return f.formatToParts(v).map(p => p.type === "currency" && /[A-Za-z]/.test(p.value) ? iso(p.value.replace(/^[A-Za-z]+(?=\W)/, "")) : p.type === "literal" ? p.value.replace(/\s/g, "\u00a0") : p.value).join("");
 };
 export function dateFmt(d, o) { return new Intl.DateTimeFormat(S.lang + "-u-nu-latn", { timeZone: "America/Los_Angeles", ...o }).format(d); }
 export const dayName = (wd, style = "long") => dateFmt(new Date(Date.UTC(2024, 0, 7 + wd, 20)), { weekday: style }); // 2024-01-07 was a Sunday
