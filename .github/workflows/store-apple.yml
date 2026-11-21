@@ -78,6 +78,8 @@ jobs:
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/deliver"
+          # Without a Deliverfile in the working folder, fastlane stops to ask about setting one up.
+          cd "$out" && : > Deliverfile
           node -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify({key_id: process.env.ASC_KEY_ID, issuer_id: process.env.ASC_ISSUER, key: process.env.ASC_KEY_RAW.trim() + "\n", in_house: false}))' "$RUNNER_TEMP/asc.json"
           fastlane deliver \
             --api_key_path "$RUNNER_TEMP/asc.json" \
