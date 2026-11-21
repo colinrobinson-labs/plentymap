@@ -1,7 +1,29 @@
-No account or login. Every feature works without signing in.
+1. SCREEN RECORDING (physical iPhone, latest iOS, starts at app launch)
+https://plentymap.com/review/plenty-map-demo.mp4
+The app has no accounts, no login, no user-generated content shared with other users, and no paid content, so none of those flows exist to show.
 
-Location is optional. To test without it, enter the ZIP code 92101 (San Diego) when asked "Where are you?" San Diego County has the most complete free-food listings.
+2. PURPOSE AND AUDIENCE
+Plenty Map helps people eat well for less. It is for anyone on a tight food budget: families, students, older adults, people between paychecks, and people who need free food today. The problem: help with food is scattered across food bank sites, government pages and store flyers, often only in English. Plenty Map puts it in one free app in 15 languages: cheap recipes priced per serving, a weekly meal plan and shopping list built around a budget, a map of free food (pantries, free meals, community fridges) and low-price stores that take EBT, and a private estimate of benefits like SNAP, WIC and school meals with links to apply at the official agency. It is free, with no ads, no account, no tracking and no in-app purchases.
 
-Plenty Map is an independent, non-government information service. It does not process benefit applications. Official sources (USDA and state agencies) are linked in the Benefits tab.
+3. HOW TO USE THE MAIN FEATURES (no login or sample files needed)
+- First launch: pick a language. Everything works right away without signing in.
+- Cook: browse recipes, filter by kitchen (stove, microwave, no kitchen) or diet, open one to see price per serving and steps.
+- Budget: enter who you are feeding and a weekly amount; the app builds 7 days of meals and one shopping list.
+- Find food: tap "Use my location" (optional) or type ZIP code 92101 (San Diego, the most complete listings). Switch between map and list, open a place for hours and what to bring. "Report a problem" on a listing sends only the listing, the kind of problem, an optional short note and the app language.
+- Benefits: answer a few questions for a private estimate; nothing leaves the phone. Links open the official agency site in Safari.
+- Location is optional and only read in the foreground when the person taps it. It is used on the phone to sort places by distance and is never sent anywhere.
 
-Links to outside websites open in Safari, outside the app. "Report a problem" on a listing sends only the listing, the kind of problem, an optional short note and the app language; nothing that identifies the person.
+4. EXTERNAL SERVICES
+- Our own website, plentymap.com (Cloudflare Pages), serves the listing and recipe data files.
+- Our own map tiles at tiles.plentymap.com (Cloudflare R2), built from OpenStreetMap data with Protomaps; drawn with MapLibre (open source, bundled).
+- A Cloudflare Worker receives the optional anonymous "Report a problem" notes.
+- Data sources (public, credited at plentymap.com/attributions): San Diego Food Bank and Feeding San Diego site finders, other food banks' public finders, USDA SNAP Retailer Locator, OpenStreetMap, U.S. Census, BLS food prices, USDA FoodData Central, HHS poverty guidelines, state SNAP agencies; Give Food (UK); DataBC and City of Vancouver open data (Canada).
+- No login, payment, analytics, advertising or AI services.
+
+5. REGIONAL DIFFERENCES
+Cook, Budget and all 15 languages work the same everywhere. Find food and Benefits depend on the country: the United States has full listings and SNAP/WIC/school meal checks (most complete in San Diego County); the United Kingdom and Canada have food bank listings and their own benefit guidance. Elsewhere Find food shows few or no local listings. The app is not offered in mainland China.
+
+6. REGULATED CONTENT
+Plenty Map is an independent, non-government information service. It does not process benefit applications, collect benefit data, or give financial advice. The Benefits tab shows estimates from public USDA and state rules and links to the official agency, which alone decides eligibility; this is stated in the app. All listing data comes from public sources credited in the app and at plentymap.com/attributions. No protected third-party material is used.
+
+Privacy Policy: https://plentymap.com/privacy
