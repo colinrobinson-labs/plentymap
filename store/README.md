@@ -40,9 +40,9 @@ With signing secrets in place it also makes a signed Android App Bundle on every
 | `PM_ANDROID_KEYSTORE_PASSWORD` | Its password |
 | `PM_ANDROID_KEY_ALIAS` | `upload` |
 | `PM_ANDROID_KEY_PASSWORD` | Same as the keystore password |
-| `PM_ASC_KEY_ID`, `PM_ASC_ISSUER_ID` | App Store Connect API key (Users and Access → Integrations → Team keys, access **Admin**, so Xcode can make the distribution certificate itself) |
-| `PM_ASC_KEY_P8_B64` | The downloaded `AuthKey_XXXX.p8`, base64 |
-| `PM_APPLE_TEAM_ID` | 10-character Team ID (developer.apple.com → Membership) |
+| `PM_ASC_KEY_ID` | App Store Connect API key (Users and Access → Integrations → Team keys, access **Admin**, so Xcode can make the distribution certificate itself) |
+| `PM_ASC_KEY_P8` | The downloaded `AuthKey_XXXX.p8`: open it in TextEdit and paste everything, including the BEGIN/END lines |
+| (team and issuer ids) | Written into apps.yml: team `VNJA6Y7DCH`, issuer `323b291b-…` (ids, not credentials) |
 | `PM_PLAY_SERVICE_ACCOUNT_JSON` | Optional. Google Cloud service account JSON with "Release to testing tracks" permission in Play Console |
 
 Upload key fingerprint (Play Console shows this after the first upload, so you can check it's ours):
@@ -52,9 +52,8 @@ Google keeps the real app signing key (Play App Signing), so a lost upload key c
 ### First time on each store
 
 **Apple**
-1. App Store Connect → Apps → New app: iOS, name "Plenty Map: Eat Well for Less", language English (U.S.), bundle ID `com.plentymap.app`, SKU `plentymap-ios`, full access.
-   (If the bundle ID isn't in the list, register it at developer.apple.com → Identifiers first.)
-2. Add the four `PM_ASC_*`/`PM_APPLE_TEAM_ID` secrets, then run the workflow with "Send to testers". The build shows in TestFlight after Apple's processing (10 to 30 minutes).
+1. Done 2026-11-21: bundle ID `com.plentymap.app` registered and the App Store Connect app created (Apple ID 6837537584, SKU `plentymap-ios`).
+2. Add the `PM_ASC_KEY_ID` and `PM_ASC_KEY_P8` secrets, then run the workflow with "Send to testers". The build shows in TestFlight after Apple's processing (10 to 30 minutes).
 3. TestFlight → Internal Testing → add testers (people on the App Store Connect team; up to 100). No Apple review needed for internal testers.
 4. Export compliance is answered by the app itself (`ITSAppUsesNonExemptEncryption` = NO).
 

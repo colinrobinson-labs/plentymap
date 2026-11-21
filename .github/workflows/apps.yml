@@ -2,7 +2,7 @@ name: Plenty Map apps
 # Builds the iPhone and Android apps. No one needs to run anything on a computer.
 # Every run makes test builds. Store-ready signed builds are made only when the signing secrets exist:
 #   Android: PM_ANDROID_KEYSTORE_B64, PM_ANDROID_KEYSTORE_PASSWORD, PM_ANDROID_KEY_ALIAS, PM_ANDROID_KEY_PASSWORD
-#   iOS:     PM_ASC_KEY_ID, PM_ASC_ISSUER_ID, PM_ASC_KEY_P8_B64, PM_APPLE_TEAM_ID
+#   iOS:     PM_ASC_KEY_ID, PM_ASC_KEY_P8 (the .p8 file's text, pasted as is; or PM_ASC_KEY_P8_B64)  (team and issuer ids are filled in below)
 #   Play upload (optional): PM_PLAY_SERVICE_ACCOUNT_JSON
 # Sending a build to testers happens only when someone runs this by hand with "Send to testers" ticked
 # (TestFlight and the Play internal testing track), so a normal merge never pings the testers.
@@ -100,7 +100,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 50
     env:
-      HAS_SIGNING: ${{ secrets.PM_ASC_KEY_P8_B64 != '' }}
+      HAS_SIGNING: ${{ secrets.PM_ASC_KEY_P8 != '' || secrets.PM_ASC_KEY_P8_B64 != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -123,13 +123,15 @@ jobs:
       - name: Signed build to TestFlight
         if: env.HAS_SIGNING == 'true' && github.event_name == 'workflow_dispatch' && inputs.send_to_testers
         env:
+          ASC_KEY_RAW: ${{ secrets.PM_ASC_KEY_P8 }}
           ASC_KEY: ${{ secrets.PM_ASC_KEY_P8_B64 }}
           ASC_KEY_ID: ${{ secrets.PM_ASC_KEY_ID }}
-          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID }}
-          TEAM: ${{ secrets.PM_APPLE_TEAM_ID }}
+          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID || '323b291b-bbde-4735-9ad6-c05f38c0c582' }}  # account ids, not credentials
+          TEAM: ${{ secrets.PM_APPLE_TEAM_ID || 'VNJA6Y7DCH' }}
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
-          echo "$ASC_KEY" | base64 -d > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8
+          if [ -n "$ASC_KEY_RAW" ]; then printf '%s\n' "$ASC_KEY_RAW" > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8
+          else echo "$ASC_KEY" | base64 -d > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8; fi
           build=$(( $(date -u +%s) / 600 ))
           version=$(node -p 'require(`./package.json`).version')
           xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphoneos \
