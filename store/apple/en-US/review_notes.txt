@@ -1,0 +1,7 @@
+No account or login. Every feature works without signing in.
+
+Location is optional. To test without it, enter the ZIP code 92101 (San Diego) when asked "Where are you?" San Diego County has the most complete free-food listings.
+
+Plenty Map is an independent, non-government information service. It does not process benefit applications. Official sources (USDA and state agencies) are linked in the Benefits tab.
+
+Links to outside websites open in Safari, outside the app. "Report a problem" on a listing sends only the listing, the kind of problem, an optional short note and the app language; nothing that identifies the person.

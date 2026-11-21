@@ -2,14 +2,28 @@ name: Plenty Map apps
 # Builds the iPhone and Android apps. No one needs to run anything on a computer.
 # Every run makes test builds. Store-ready signed builds are made only when the signing secrets exist:
 #   Android: PM_ANDROID_KEYSTORE_B64, PM_ANDROID_KEYSTORE_PASSWORD, PM_ANDROID_KEY_ALIAS, PM_ANDROID_KEY_PASSWORD
-#   iOS:     PM_ASC_KEY_ID, PM_ASC_ISSUER_ID, PM_ASC_KEY_P8_B64, PM_APPLE_TEAM_ID  (uploads to TestFlight)
+#   iOS:     PM_ASC_KEY_ID, PM_ASC_KEY_P8 (the .p8 file's text, pasted as is; or PM_ASC_KEY_P8_B64)  (team and issuer ids are filled in below)
+#   Play upload (optional): PM_PLAY_SERVICE_ACCOUNT_JSON
+# Sending a build to testers happens only when someone runs this by hand with "Send to testers" ticked
+# (TestFlight and the Play internal testing track), so a normal merge never pings the testers.
+# Setup steps for the store accounts: store/README.md
 on:
   workflow_dispatch:
+    inputs:
+      send_to_testers:
+        description: "Send to testers (TestFlight + Play internal testing)"
+        type: boolean
+        default: false
   push:
     branches: [main]
-    paths-ignore: ["data/regions/**", "README.md", "privacy/**", "support/**", "terms/**", "attributions/**", "accessibility/**", "legal/**", "pages/**"]
+    paths-ignore: ["data/regions/**", "README.md", "privacy/**", "support/**", "terms/**", "attributions/**", "accessibility/**", "legal/**", "pages/**", "store/**"]
+  pull_request:
+    paths: [".github/workflows/apps.yml", "capacitor.config.json", "package.json", "tools/native-assets.mjs", "tools/build-www.mjs", "icons/native/**", "store/**"]
 permissions:
   contents: read
+defaults:
+  run:
+    shell: bash  # bash -eo pipefail: a failing xcodebuild or gradle fails the step even when piped into tail
 concurrency:
   group: plenty-map-apps-${{ github.ref }}
   cancel-in-progress: true
@@ -20,10 +34,13 @@ jobs:
     timeout-minutes: 40
     env:
       HAS_SIGNING: ${{ secrets.PM_ANDROID_KEYSTORE_B64 != '' }}
+      HAS_PLAY: ${{ secrets.PM_PLAY_SERVICE_ACCOUNT_JSON != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - name: Store text fits the store limits
+        run: node tools/check-store.mjs
       - uses: actions/setup-java@v4
         with: { distribution: temurin, java-version: 21 }
       - name: Install
@@ -60,6 +77,17 @@ jobs:
             -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
             -Pandroid.injected.signing.key.password="$KEY_PASS"
           rm -f "$RUNNER_TEMP/upload.jks"
+      # Google only accepts API uploads after the first build was uploaded by hand in Play Console (store/README.md).
+      # New apps can only take draft releases until Google reviews the app; a draft is rolled out in Play Console.
+      - name: Send to Play internal testing
+        if: env.HAS_SIGNING == 'true' && env.HAS_PLAY == 'true' && github.event_name == 'workflow_dispatch' && inputs.send_to_testers
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PM_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.plentymap.app
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: draft
       - uses: actions/upload-artifact@v4
         with:
           name: plenty-map-android
@@ -72,7 +100,7 @@ jobs:
     runs-on: macos-15
     timeout-minutes: 50
     env:
-      HAS_SIGNING: ${{ secrets.PM_ASC_KEY_P8_B64 != '' }}
+      HAS_SIGNING: ${{ secrets.PM_ASC_KEY_P8 != '' || secrets.PM_ASC_KEY_P8_B64 != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -93,21 +121,24 @@ jobs:
             -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -n 40
           (cd build/Build/Products/Debug-iphonesimulator && zip -qr "$GITHUB_WORKSPACE/plenty-map-simulator.zip" App.app)
       - name: Signed build to TestFlight
-        if: env.HAS_SIGNING == 'true'
+        if: env.HAS_SIGNING == 'true' && github.event_name == 'workflow_dispatch' && inputs.send_to_testers
         env:
+          ASC_KEY_RAW: ${{ secrets.PM_ASC_KEY_P8 }}
           ASC_KEY: ${{ secrets.PM_ASC_KEY_P8_B64 }}
           ASC_KEY_ID: ${{ secrets.PM_ASC_KEY_ID }}
-          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID }}
-          TEAM: ${{ secrets.PM_APPLE_TEAM_ID }}
+          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID || '323b291b-bbde-4735-9ad6-c05f38c0c582' }}  # account ids, not credentials
+          TEAM: ${{ secrets.PM_APPLE_TEAM_ID || 'VNJA6Y7DCH' }}
         run: |
           mkdir -p ~/.appstoreconnect/private_keys
-          echo "$ASC_KEY" | base64 -d > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8
+          if [ -n "$ASC_KEY_RAW" ]; then printf '%s\n' "$ASC_KEY_RAW" > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8
+          else echo "$ASC_KEY" | base64 -d > ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8; fi
           build=$(( $(date -u +%s) / 600 ))
+          version=$(node -p 'require(`./package.json`).version')
           xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphoneos \
             -archivePath "$RUNNER_TEMP/App.xcarchive" -allowProvisioningUpdates \
             -authenticationKeyPath ~/.appstoreconnect/private_keys/AuthKey_$ASC_KEY_ID.p8 \
             -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER" \
-            DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic CURRENT_PROJECT_VERSION=$build archive | tail -n 40
+            DEVELOPMENT_TEAM="$TEAM" CODE_SIGN_STYLE=Automatic CURRENT_PROJECT_VERSION=$build MARKETING_VERSION=$version archive | tail -n 40
           cat > "$RUNNER_TEMP/export.plist" <<EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">

@@ -85,14 +85,25 @@ async function ios() {
     await writeFile(join(dir, "InfoPlist.strings"), `"NSLocationWhenInUseUsageDescription" = "${esc(await str(l, "ios_location"))}";\n"CFBundleDisplayName" = "${esc(name)}";\n`);
     files.push(LPROJ[l] + ".lproj/InfoPlist.strings");
   }
-  // Privacy manifest: no tracking, no data collected, one required-reason API (UserDefaults, used by the web view)
+  // Privacy manifest: no tracking. One data type: the optional note in "Report a problem" (stored up to 90 days,
+  // not linked to anyone, used only to fix listings). Matches the App Privacy answers and the Privacy Policy.
+  // One required-reason API (UserDefaults, used by the web view).
   await writeFile(join(app, "PrivacyInfo.xcprivacy"), `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>NSPrivacyTracking</key><false/>
 	<key>NSPrivacyTrackingDomains</key><array/>
-	<key>NSPrivacyCollectedDataTypes</key><array/>
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyCollectedDataType</key><string>NSPrivacyCollectedDataTypeOtherUserContent</string>
+			<key>NSPrivacyCollectedDataTypeLinked</key><false/>
+			<key>NSPrivacyCollectedDataTypeTracking</key><false/>
+			<key>NSPrivacyCollectedDataTypePurposes</key>
+			<array><string>NSPrivacyCollectedDataTypePurposeAppFunctionality</string></array>
+		</dict>
+	</array>
 	<key>NSPrivacyAccessedAPITypes</key>
 	<array>
 		<dict>
@@ -111,6 +122,10 @@ async function ios() {
   const appGroup = proj.findPBXGroupKey({ name: "App" }) || proj.findPBXGroupKey({ path: "App" });
   if (!proj.hasFile("PrivacyInfo.xcprivacy")) proj.addResourceFile("PrivacyInfo.xcprivacy", {}, appGroup);
   const vg = proj.findPBXVariantGroupKey?.({ name: "InfoPlist.strings" }) || proj.addLocalizationVariantGroup("InfoPlist.strings").fileRef;
+  // The xcode package leaves the new variant group outside every group, so Xcode looked for ios/App/<lang>.lproj
+  // instead of ios/App/App/<lang>.lproj and the build failed. Put it in the App group, next to the files.
+  const ag = proj.getPBXGroupByKey(appGroup);
+  if (ag && !ag.children.some(c => c.value === vg)) ag.children.push({ value: vg, comment: "InfoPlist.strings" });
   for (const l of LANGS) {
     proj.addKnownRegion(/[^A-Za-z0-9_]/.test(LPROJ[l]) ? `"${LPROJ[l]}"` : LPROJ[l]);
     const f = LPROJ[l] + ".lproj/InfoPlist.strings";

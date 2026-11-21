@@ -1,0 +1,9 @@
+{
+  "1-home":      { "h": "Eat well <em>for less.</em>", "p": "Cheap dinners, free food and help with groceries, all in one place." },
+  "2-cook":      { "h": "Recipes priced <em>per serving</em>", "p": "Sorted for your stove, your diet and your time." },
+  "3-recipe":    { "h": "Every ingredient, <em>priced</em>", "p": "Change the servings and every amount and price updates." },
+  "4-budget":    { "h": "A week of meals for <em>what you can spend</em>", "p": "One plan and one shopping list for your whole household." },
+  "5-find":      { "h": "Free food <em>near you</em>", "p": "Pantries, free meals, low-price stores and farmers markets, with hours." },
+  "6-benefits":  { "h": "See what help <em>you could get</em>", "p": "Food benefits, WIC and school meals, and how to apply. Free." },
+  "7-language":  { "h": "In <em>your language</em>", "p": "15 languages. No account, no ads, nothing to sign up for." }
+}
