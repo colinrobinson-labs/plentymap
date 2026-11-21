@@ -1,11 +1,17 @@
-# Sends the App Store listing text and screenshots in store/ to App Store Connect.
-# Manual only: Actions -> "App Store listing" -> Run workflow. Never submits for review.
+# App Store Connect housekeeping, manual only: Actions -> "App Store listing" -> Run workflow.
+#   listing: sends the listing text and screenshots in store/ (never submits for review)
+#   testers: makes the internal TestFlight group "Plenty Map team" and adds everyone on the team
 # Uses the same API key secrets as the iOS build (PM_ASC_KEY_ID, PM_ASC_KEY_P8).
 name: App Store listing
 
 on:
   workflow_dispatch:
     inputs:
+      what:
+        description: What to send
+        type: choice
+        options: [listing and testers, listing, testers]
+        default: listing and testers
       app_version:
         description: App Store version the listing belongs to
         default: "1.0"
@@ -23,7 +29,24 @@ defaults:
     shell: bash
 
 jobs:
+  testers:
+    if: contains(inputs.what, 'testers')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Internal TestFlight testers
+        env:
+          ASC_KEY_RAW: ${{ secrets.PM_ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.PM_ASC_KEY_ID }}
+          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID || '323b291b-bbde-4735-9ad6-c05f38c0c582' }}
+        run: node tools/asc-testers.mjs
+
   listing:
+    if: contains(inputs.what, 'listing')
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
