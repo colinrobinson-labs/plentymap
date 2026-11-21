@@ -1,0 +1,604 @@
+{
+"dal": {
+"t": "Misir cas oo bariis lagu cuno (dal)",
+"s": [
+"Bariiska karis billow. Basasha la jarjaray saliidda ku jilci 5 daqiiqo, kadibna ku dar toonta iyo xawaashka oo walaaq 1 daqiiqo.",
+"Ku dar misirta la dhaqay, yaanyada iyo 4 koob oo biyo ah. Dab yar ku kari 20 ilaa 25 daqiiqo, mar mar walaaq, ilaa ay jilicdo oo ay adkaato.",
+"Cusbo ku dar sidaad jeceshahay, bariiska dushiisa ku bixi."
+],
+"tip": "Misirta casi ayaa ugu dhakhso badan. Misirta bunniga ah ama cagaaran sidoo kale way shaqeysaa: 10 daqiiqo oo dheeri ah sii."
+},
+"bbrice": {
+"t": "Digir madow iyo bariis digsi keliya",
+"s": [
+"Dheri ballaaran, ku kari basasha iyo basbaaska macaan ee la jarjaray saliid 5 daqiiqo.",
+"Ku dar bariiska iyo xawaashka oo walaaq 1 daqiiqo. Ku dar 3 koob oo biyo ah iyo boorash (bouillon) xabbad, dabool oo dab yar ku kari 18 daqiiqo.",
+"Si tartiib ah ugu dar digirta la miiray iyo salsada, 5 daqiiqo kale dabool, kadib bixi."
+],
+"tip": "Haddii aad haysato, ku dar ukun la shiilay ama malqaacad caano fadhi ah."
+},
+"sheetchk": {
+"t": "Digaag, baradho iyo karooto foornada lagu dubay",
+"s": [
+"Foornada kululee ilaa 425°F (220°C). Baradhada iyo karootada jar gabal waaweyn, basashana afar u kala jar.",
+"Wax walba saxanka foornada kula qas saliidda, xawaashka iyo cusbo fiican. Digaagga dusha saar, maqaarka kor u jeeda.",
+"Dub 40 ilaa 45 daqiiqo, ilaa digaaggu bunni noqdo oo gudihiisu gaaro 165°F (74°C)."
+],
+"tip": "Lafaha barafeeyaha ku kaydi si aad mar dambe maraq uga sameyso."
+},
+"friedrice": {
+"t": "Bariis la shiilay oo ukun iyo khudaar leh",
+"s": [
+"Bariiska hore u kari oo qabooji. Bariiska shalay ayaa ugu fiican.",
+"Ukunta nuska saliidda ku shiil adigoo walaaqaya, kadib dhinac dhig.",
+"Ku dar saliidda hartay, toonta iyo khudaarta barafeysan. Kari 4 daqiiqo, ku dar bariiska iyo suugada soy-ga, oo shiil ilaa uu kululaado.",
+"Ukunta dib ugu celi, dushana ka saar basal cagaar la jarjaray."
+],
+"tip": "Hilib ama tofu kasta oo hadhay waxaad ku dari kartaa tallaabada 3."
+},
+"pbnoodle": {
+"t": "Baasto subagga lowska leh iyo kaabash cusub",
+"s": [
+"Isbageetiga kari. Kahor intaadan miirin, 1 koob oo biyaha karinta ah kaydi.",
+"Subagga lowska, suugada soy-ga, khalka, sonkorta iyo toonta la xoqay ku garaac biyo kulul oo yar ilaa ay jilicsanaato.",
+"Baastada kula qas suugada, kaabashka iyo karootada la xoqay iyo basasha cagaaran. Way fiican tahay iyadoo kulul ama qabow."
+],
+"tip": "Si fiican ayay u qaadataa qadada maalinta xigta."
+},
+"mugegg": {
+"t": "Burrito ukun iyo isbinaaj ah oo microwave-ka lagu sameeyo",
+"s": [
+"Ukunta ku garaac koob weyn oo leh cusbo yar iyo sacab yar oo isbinaaj barafeysan ah.",
+"Microwave-ka geli 45 ilbiriqsi, walaaq, kadib 30 ilaa 45 ilbiriqsi kale ilaa ay is qabato.",
+"Tortilla-da ku shub farmaajada iyo salsada, oo duub."
+],
+"tip": "Waxay ka shaqeysaa qolka ardayda ama qol huteel oo microwave keliya leh."
+},
+"onoats": {
+"t": "Oats habeenkii la qooyay oo subagga lowska iyo muus leh",
+"s": [
+"Oats-ka, caanaha, subagga lowska iyo qorfaha ku qas weel ama madiibad.",
+"Dabool oo habeenkii oo dhan qaboojiyaha ku dhaaf.",
+"Subaxda muuska jarjar oo dusha saar. Qabow u cun ama kululee."
+],
+"tip": "Axadda samee shan weel, quraacda toddobaadkana waa diyaar."
+},
+"burritos": {
+"t": "Burrito digir iyo farmaajo ah oo barafeeyaha la geliyo",
+"s": [
+"Bariiska kari. Basasha la jarjaray saliidda ku jilci, ku dar xawaashka iyo digirta la miiray, oo fargeeto ku burburi.",
+"Tortilla-da kululee si ay u laabato. Mid walba ku buuxi bariis, digir, salsa iyo farmaajo, dhinacyada laab oo si adag u duub.",
+"Hadda cun, ama mid walba duub oo barafee. Microwave-ka ku kululee 2 ilaa 3 daqiiqo, hal mar rogo."
+],
+"tip": "Siddeed qado oo ku dhow qiimaha hal cunto oo dibadda laga soo iibsado."
+},
+"chickcurry": {
+"t": "Kari digir garbanzo iyo isbinaaj",
+"s": [
+"Bariiska karis billow. Basasha la jarjaray saliidda ku jilci, kadib ku dar toonta iyo budada kariga 1 daqiiqo.",
+"Ku dar yaanyada, caanaha qumbaha iyo digirta garbanzo ee la miiray. Dab yar ku kari 15 daqiiqo.",
+"Ku dar isbinaajka barafeysan ilaa uu kululaado. Cusbo ku dar oo bariis ku bixi."
+],
+"tip": "Caano qumbe ma haysid? Dhammaadka ku dar koob caano ama caano fadhi."
+},
+"tunapasta": {
+"t": "Baasto kareem leh oo tuuna iyo digir cagaaran leh",
+"s": [
+"Baastada kari. Digirta cagaaran ee barafeysan ku dar 2-da daqiiqo ee ugu dambeeya, kadib miir.",
+"Isla dheriga, subagga dhalaali, burka ku walaaq 1 daqiiqo, kadib caanaha ku dar adigoo garaacaya ilaa ay adkaato.",
+"Ku dar farmaajada, kadib baastada, digirta iyo tuunada la miiray. Cusbo iyo filfil madow ku dar."
+],
+"tip": "Tuunada beddel qasac digir cad ah si ay khudaar keliya u noqoto."
+},
+"splitpea": {
+"t": "Maraq digir jajab ah iyo baradho",
+"s": [
+"Basasha, karootada iyo seleeriga la jarjaray saliidda ku jilci 8 daqiiqo. Ku dar toonta.",
+"Ku dar digirta jajabka ah ee la dhaqay, baradhada la jarjaray, boorashka iyo 8 koob oo biyo ah.",
+"Dab yar ku kari, qayb ahaan daboolan, ilaa 1 saac, mar mar walaaq, ilaa digirtu kala daadato."
+],
+"tip": "Si fiican ayuu u barafoobaa qaybo qof keliya ah."
+},
+"chili": {
+"t": "Chili jaban (hilib yar, digir badan)",
+"s": [
+"Hilibka la shiiday iyo basasha la jarjaray shiil 8 daqiiqo. Ku dar toonta, budada basbaaska iyo kamuunka 1 daqiiqo.",
+"Ku dar tamaandho la shiiday (paste), yaanyada, digirta iyo biyaheeda iyo 1 koob oo biyo ah.",
+"Dab yar ku kari 25 daqiiqo, mar mar walaaq. Cusbo ku dar."
+],
+"tip": "Hilibka ka tag oo ku dar qasac kale oo digir ah si ay khudaar keliya u noqoto."
+},
+"pancakes": {
+"t": "Bankeeg muus",
+"s": [
+"Muuska madiibad ku burburi. Ku garaac ukunta, caanaha iyo 1 malqaacad weyn oo saliid ah.",
+"Ku dar burka, sonkorta, baking powder-ka iyo cusbo yar, oo walaaq ilaa ay isku darsamaan oo keliya. Kuuskuusyo yar waa caadi.",
+"Mar kasta ¼ koob ku kari digsi saliid yar leh dab dhexdhexaad ah, rog marka ay xumbo soo baxdo."
+],
+"tip": "Muuska aadka u bislaaday ee dhibcaha leh ayaa sameeya bankeegga ugu macaan."
+},
+"arrozpollo": {
+"t": "Digaag iyo bariis dheri keliya",
+"s": [
+"Digaagga ku dar cusbo, kamuun iyo paprika. Dheri weyn saliid ku shiil 4 daqiiqo dhinac kasta. Dhinac dhig.",
+"Basasha iyo basbaaska macaan ee la jarjaray kari 5 daqiiqo, ku dar toonta iyo bariiska, walaaq 2 daqiiqo.",
+"Ku dar suugada yaanyada, boorashka iyo 3½ koob oo biyo ah. Digaagga bariiska dhexdiisa geli, dabool oo dab yar ku kari 30 daqiiqo.",
+"Digirta cagaaran dusha ka saar, 5 daqiiqo kale dabool, oo hubi in digaaggu gaaray 165°F (74°C)."
+],
+"tip": "Dheri keliya waxay ka dhigan tahay hal dheri oo la dhaqo."
+},
+"ramenup": {
+"t": "Ramen microwave oo la hagaajiyay",
+"s": [
+"Baastada iyo sacab khudaar barafeysan ah madiibad weyn geli. Biyo ku shub oo microwave-ka geli 3 daqiiqo.",
+"Ukunta ku jebi, jaalaha hal mar dalool, oo microwave-ka geli 45 ilaa 60 ilbiriqsi kale ilaa caddaantu is qabato.",
+"Ku dar nuska baakada xawaashka (aad buu u cusbo badan yahay) iyo basal cagaar, oo walaaq."
+],
+"tip": "Nuska baakada ayaa cusbada aad u yareeya, mana dareemaysid farqi."
+},
+"potato": {
+"t": "Baradho microwave lagu dubay oo wax lagu buuxiyay",
+"s": [
+"Baradhada si fiican u dhaq oo meel walba fargeeto ku dalool.",
+"Microwave-ka geli 5 daqiiqo, rog, kadib 3 ilaa 5 daqiiqo kale ilaa middi si fudud u gasho.",
+"Kala fur, dushana ka saar digir kulul, farmaajo, salsa iyo malqaacad caano fadhi ah."
+],
+"tip": "Caano fadhi caadi ah ayaa ka jaban labeen dhanaan."
+},
+"rollup": {
+"t": "Tortilla duuban oo subagga lowska iyo muus leh",
+"s": [
+"Subagga lowska tortilla-da mari oo qorfe ku saydhi.",
+"Muuska hal gees dhig oo si adag u duub. Carruurta yaryar wareegyo ugu jar."
+],
+"tip": "Dab la'aan, wasakh la'aan, ku dhawaad laba daqiiqo."
+},
+"quesadilla": {
+"t": "Quesadilla digir madow iyo galley",
+"s": [
+"Digirta la miiray ku burburi kamuun iyo cusbo yar. Ku dar galleyda la miiray.",
+"Nuska tortilla kasta mari, farmaajo ku dar, oo laab.",
+"Digsi qalalan ku kari dab dhexdhexaad ah 2 ilaa 3 daqiiqo dhinac kasta, ilaa ay dahab noqoto. Salsa ku bixi."
+],
+"tip": "Dhakhso ayay u diyaarisaa habeenada shaqada, carruurtuna way caawin karaan."
+},
+"minestrone": {
+"t": "Maraq minestrone oo khudaar barafeysan leh",
+"s": [
+"Basasha la jarjaray saliidda ku jilci 5 daqiiqo, kadib ku dar toonta iyo geedaha udgoon.",
+"Ku dar yaanyada, khudaarta barafeysan, digirta, boorashka iyo 7 koob oo biyo ah. Karkari.",
+"Ku dar baastada oo dab yar ku kari 10 daqiiqo ilaa ay jilicdo."
+],
+"tip": "Khudaarta barafeysan waxaa la gooyaa iyadoo bislaatay, inta badanna way ka jaban tahay tan cusub."
+},
+"sptacos": {
+"t": "Tacos baradho macaan iyo digir madow",
+"s": [
+"Foornada kululee ilaa 425°F (220°C). Baradhada macaan iyo basasha jarjar, kula qas saliid, xawaash iyo cusbo, oo dub 25 daqiiqo.",
+"Digirta kululee. Kaabashka la xoqay kula qas casiir liin iyo cusbo yar.",
+"Tortilla-da digsi qalalan ku kululee oo wax walba ku buuxi."
+],
+"tip": "Taco kasta laba tortilla galley ah isku dar si aanay u jeexmin."
+},
+"shakshuka": {
+"t": "Ukun ku jirta suugo yaanyo xawaash leh (shakshuka)",
+"s": [
+"Basasha iyo basbaaska macaan ee la jarjaray saliidda ku kari 8 daqiiqo. Ku dar toonta iyo xawaashka 1 daqiiqo.",
+"Ku dar yaanyada oo dab yar ku kari 10 daqiiqo ilaa ay adkaato. Cusbo ku dar.",
+"Samee 8 god oo yar, ukunta ku jebi, dabool oo dab yar ku kari 6 ilaa 8 daqiiqo. Rooti ku bixi."
+],
+"tip": "Quraac, qado ama casho. Saddexdaba way u fiican tahay."
+},
+"tofubowl": {
+"t": "Madiibad bariis ah oo tofu qallalan iyo brokoli leh",
+"s": [
+"Bariiska karis billow. Tofu-ga tuwaal dhexdiisa ku cadaadi 10 daqiiqo, kadib jarjar.",
+"Tofu-ga saliidda ku shiil dab dhexdhexaad ilaa sare, rog-rog ilaa dhinacyada badankoodu dahab noqdaan, ku dhawaad 10 daqiiqo.",
+"Ku dar brokoliga barafeysan iyo toonta oo kari 5 daqiiqo. Ku walaaq suugada soy-ga iyo sonkorta ilaa ay dhalaalaan. Bariis ku bixi."
+],
+"tip": "Dukaamada badankooda tofu waa mid ka mid ah borotiinnada ugu jaban grammkiiba."
+},
+"chknoodle": {
+"t": "Maraq digaag iyo baasto",
+"s": [
+"Digaagga, boorashka, nuska basasha iyo 10 koob oo biyo ah dheri weyn geli. Dab yar ku kari 35 daqiiqo.",
+"Digaagga ka saar. Marka uu qaboobo, hilibka lafaha ka bixi oo kala jeex.",
+"Maraqa ku dar karootada iyo seleeriga la jarjaray, basasha hartay, toonta iyo geedaha udgoon. Kari 10 daqiiqo, ku dar baastada oo kari ilaa ay jilicdo. Digaagga dib ugu celi."
+],
+"tip": "Haddii aad barafayn doonto, baastada gooni u kari."
+},
+"pinto": {
+"t": "Bariis iyo digir Costa Rica (gallo pinto) oo ukun leh",
+"s": [
+"Bariiska hore u kari. Bariiska shalay ayaa ugu fiican.",
+"Basasha iyo basbaaska macaan ee la jarjaray saliidda ku jilci, ku dar toonta, kadib digirta iyo dhowr malqaacad oo biyaheeda ah.",
+"Bariiska si tartiib ah ugu dar ilaa uu midab yeesho oo kululaado. Ku dar kabsar la jarjaray, saxan kastana ukun la shiilay dusha saar."
+],
+"tip": "Digirta madow waa dhaqameed, laakiin isticmaal digir kasta oo aad haysato."
+},
+"tunasalad": {
+"t": "Saladh digir cad iyo tuuna oo rooti la dubay lagu cuno",
+"s": [
+"Digirta miir oo dhaq. Tuunada miir.",
+"Ku qas basal cagaar la jarjaray, khal, saliid, cusbo iyo filfil madow.",
+"Rooti ama rooti la dubay dusha saar."
+],
+"tip": "Karis la'aan gebi ahaanba, 3 maalmood ayuuna qaboojiyaha ku jiri karaa."
+},
+"chicksmash": {
+"t": "Sandwich digir garbanzo la burburiyay",
+"s": [
+"Digirta garbanzo miir oo fargeeto ku burburi, qaar gabal ka dhig.",
+"Ku dar mayonnaise, seleeri aad loo jarjaray, khal, cusbo iyo filfil madow, oo walaaq.",
+"Rootiga si qaro leh u mari."
+],
+"tip": "Waa sida sandwich tuuna, laakiin tuuna la'aan."
+},
+"mugmac": {
+"t": "Baasto iyo farmaajo koob lagu sameeyo",
+"s": [
+"Baastada koob weyn geli, biyo ku shub ilaa ay dul maraan 2.5 sentimitir, iyo cusbo yar.",
+"Microwave-ka geli daqiiqad daqiiqad, mar kasta walaaq, 4 ilaa 5 daqiiqo ilaa ay jilicdo. Haddii ay qallasho biyo yar ku dar.",
+"Ku walaaq caanaha iyo farmaajada oo microwave-ka geli 30 ilbiriqsi kale."
+],
+"tip": "Koobka saxan dul saar haddii uu karkaro oo soo daato."
+},
+"beanpot": {
+"t": "Dheriga weyn ee digirta",
+"s": [
+"Digirta dhaq oo dhagxaanta ka saar. Haddii aad awoodo, habeenkii biyo badan ku qooy.",
+"Miir, kadib biyo cusub ku shub ilaa ay dul maraan 5 sentimitir. Ku dar basal labo loo kala jaray, toon, boorash iyo kamuun.",
+"Dab aad u yar ku kari, qayb ahaan daboolan, 1½ ilaa 2 saacadood ilaa ay kareem noqoto. Cusbada dhammaadka ku dar."
+],
+"tip": "Digirta qallalan waxay ku kacdaa ku dhawaad nuska qiimaha tan qasaca. Hal dheri wuxuu quudiyaa toddobaad burrito, maraq iyo bariis."
+},
+"bftacos": {
+"t": "Tacos quraac oo baradho iyo ukun leh",
+"s": [
+"Baradhada jarjar yar oo saliidda ku shiil, daboolan 8 daqiiqo, kadib aan daboolnayn ilaa ay qallalto.",
+"Ku shub ukunta la garaacay iyo cusbo yar oo si tartiib ah u walaaq.",
+"Tortilla kulul ku buuxi oo salsa dusha saar."
+],
+"tip": "Laba iyo toban tacos oo ka jaban hal cunto oo dhakhso ah."
+},
+"canhcai": {
+"t": "Maraq kaabash iyo tofu (canh)",
+"s": [
+"Kaabashka jar gabal yaryar, tofu-gana jarjar. Basal cagaarka jar.",
+"Saliidda dheri ku kululee, toonta shiil 30 ilbiriqsi, kadib ku dar 6 koob oo biyo ah iyo boorash. Karkari.",
+"Ku dar kaabashka oo dab yar ku kari 6 daqiiqo. Ku dar tofu-ga iyo suugada soy-ga oo kari 3 daqiiqo kale. Basal cagaar dusha ka saar oo bariis ku bixi."
+],
+"tip": "Maraq fudud oo cunto kasta oo bariis ah la socda. Haddii aad haysato, ku dar xoogaa aargoosto ama hilib la shiiday."
+},
+"chaoga": {
+"t": "Bariis boorash ah oo digaag iyo sinjibiil leh (cháo gà, arroz caldo)",
+"s": [
+"Dheri weyn, basasha la jarjaray, toonta iyo sinjibiilka la jarjaray saliidda ku shiil 3 daqiiqo. Ku dar bariiska oo walaaq 1 daqiiqo.",
+"Ku dar digaagga, boorashka iyo 10 koob oo biyo ah. Dab yar ku kari 40 daqiiqo, mar mar walaaq, ilaa bariisku jilco oo kareem noqdo.",
+"Digaagga ka saar, hilibka lafaha ka bixi oo dib ugu walaaq. Cusbo ku dar oo basal cagaar dusha ka saar."
+],
+"tip": "Caloosha ayuu u fudud yahay, qofka bukaana wuu u wanaagsan yahay. Liin ama suugo kalluun miiska ayaa ku fiican."
+},
+"tomatoegg": {
+"t": "Yaanyo iyo ukun la shiilay",
+"s": [
+"Bariiska karis billow. Ukunta ku garaac cusbo yar. Basal cagaarka jar.",
+"Ukunta nuska saliidda ku shiil ilaa ay is qabato oo keliya, kadib saxan u wareeji.",
+"Ku dar saliidda hartay, yaanyada iyo biyaheeda iyo sonkorta. Kari 4 daqiiqo, xoogaa burburi. Ukunta dib ugu celi, basal cagaar dusha ka saar oo bariis ku bixi."
+],
+"tip": "Xagaaga yaanyo cusub halkan way ku fiican tahay. Qasacadda beddelkeeda isticmaal 4 la jarjaray."
+},
+"scallion": {
+"t": "Baasto saliid basal cagaar leh",
+"s": [
+"Baastada ama isbageetiga khafiifka ah kari ilaa ay jilicdo oo miir.",
+"Inta lagu jiro, basal cagaarka jar gabal gaagaaban. Saliidda ku kari dab yar 8 ilaa 10 daqiiqo ilaa uu madoobaado oo qallalo.",
+"Suugada soy-ga iyo sonkorta ku walaaq saliidda kulul, kadib baastada kula qas."
+],
+"tip": "Ukun la shiilay dusha saar si ay cunto buuxda u noqoto."
+},
+"monggo": {
+"t": "Digir mung oo isbinaaj leh (ginisang monggo)",
+"s": [
+"Digirta mung dhaq oo ku kari 6 koob oo biyo ah 30 ilaa 35 daqiiqo ilaa ay jilicdo oo kala dillaacdo.",
+"Digsi kale, toonta, basasha la jarjaray iyo yaanyada saliidda ku shiil 5 daqiiqo. Bariiska karis billow.",
+"Isku darka basasha iyo boorashka digirta ku dar. Ku dar isbinaajka barafeysan oo kari 5 daqiiqo. Cusbo ku dar oo bariis ku bixi."
+],
+"tip": "Dhaqan ahaan Jimcaha ayaa la cunaa. Kalluun ama hilib la shiilay dusha ah ayaa caadi ah marka lacag dheeri ah jirto."
+},
+"tofuadobo": {
+"t": "Adobo tofu iyo baradho",
+"s": [
+"Bariiska karis billow. Tofu-ga iyo baradhada jarjar, toontana burburi.",
+"Tofu-ga saliidda ku shiil dab dhexdhexaad ilaa sare ku dhawaad 8 daqiiqo, kadib dhinac u riix oo toonta shiil 1 daqiiqo.",
+"Ku dar baradhada, suugada soy-ga, khalka, sonkorta, filfil madow iyo 1 koob oo biyo ah. Dabool oo dab yar ku kari 15 daqiiqo ilaa baradhadu jilicdo oo suugadu dhalaasho."
+],
+"tip": "Ha walaaqin dhowrka daqiiqo ee ugu horreeya kadib markaad khalka ku darto. Wuu jilcaa marka uu karsamo."
+},
+"mujaddara": {
+"t": "Misir iyo bariis basal qallalan leh (mujaddara)",
+"s": [
+"Basasha khafiif u jar. Saliidda ku kari dab dhexdhexaad ah, si joogto ah u walaaq, 20 ilaa 25 daqiiqo ilaa ay bunni madow noqoto. Nuskeed ka saar dusha awgeed.",
+"Inta lagu jiro, misirta bunniga ah ee la dhaqay ku kari 4 koob oo biyo ah 15 daqiiqo. Ha miirin.",
+"Misirta ku dar bariiska, kamuunka, 1 malqaacad yar oo cusbo ah iyo basasha dheriga ku hartay. Dabool oo dab yar ku kari 20 daqiiqo. Ku bixi basal qallalan iyo malqaacad caano fadhi ah."
+],
+"tip": "Basasha bunniga ah ayaa dhadhanka leh, markaa waqti sii."
+},
+"adas": {
+"t": "Maraq misir cas (shorbat adas)",
+"s": [
+"Basasha iyo karootada jarjar. Saliidda ku jilci 6 daqiiqo, kadib ku dar toonta iyo kamuunka 1 daqiiqo.",
+"Ku dar misirta casaanka ah ee la dhaqay, boorashka iyo 8 koob oo biyo ah. Dab yar ku kari 20 daqiiqo ilaa misirtu kala daadato.",
+"Burburi ama blender ku shiid ilaa ay siman tahay. Cusbo ku dar oo liin ku tuuji. Rooti ku bixi."
+],
+"tip": "Qaro leh oo dhereg leh, lacag aad u yar. Way adkaataa marka ay fadhido, markaa biyo ku dar marka aad kululeyso."
+},
+"ful": {
+"t": "Foul kulul oo liin iyo toon leh (ful)",
+"s": [
+"Digirta iyo nuska biyaheeda madiibad ama dheri ku kululee, 3 daqiiqo microwave ama 5 dabka.",
+"Ku burburi toon la tumay, kamuun, casiir liin iyo cusbo yar.",
+"Saliid dusha ka shub oo rooti ku cun. Haddii aad haysato ku dar yaanyo, basal la jarjaray ama ukun la kariyay."
+],
+"tip": "Digirta foulka waa dhaqameed. Digir pinto, digir cas ama garbanzo dhammaan way shaqeeyaan."
+},
+"kichiri": {
+"t": "Digir mung iyo bariis (kichiri)",
+"s": [
+"Digirta mung iyo bariiska dhaq. Digirta ku kari 3 koob oo biyo ah 15 daqiiqo.",
+"Basasha la jarjaray saliidda ku shiil ilaa ay dahab noqoto, kadib ku dar toonta iyo kamuunka 1 daqiiqo.",
+"Digirta ku dar bariiska, basasha, 1 malqaacad yar oo cusbo ah iyo 2 koob oo biyo ah oo kale. Dabool oo dab yar ku kari 20 daqiiqo ilaa ay jilicdo oo xoogaa dhegdheg yeelato. Caano fadhi ku bixi."
+],
+"tip": "Caano fadhiga ku walaaq xoogaa naanac qallalan ama toon, sida guriga loogu cuno."
+},
+"shorwa": {
+"t": "Maraq digir garbanzo iyo baradho (shorwa)",
+"s": [
+"Basasha la jarjaray saliidda ku jilci 6 daqiiqo. Ku dar toonta iyo budada kariga 1 daqiiqo.",
+"Ku dar yaanyada, baradhada la jarjaray, digirta garbanzo ee la miiray, boorashka iyo 7 koob oo biyo ah.",
+"Dab yar ku kari 25 daqiiqo ilaa baradhadu jilicdo. Cusbo ku dar, kabsar dusha ka saar oo rooti ku bixi."
+],
+"tip": "Rootiga madiibadda ku jarjar oo maraqa ku shub, sida dhaqanka ah."
+},
+"bariis": {
+"t": "Bariis iskukaris oo digaag leh",
+"s": [
+"Digaagga ku dar cusbo, kamuun iyo budada kariga. Dheri weyn saliid ku shiil 4 daqiiqo dhinac kasta. Dhinac dhig.",
+"Basasha la jarjaray kari 6 daqiiqo, kadib ku dar toonta, tamaandho la shiiday iyo qorfe 1 daqiiqo. Ku walaaq bariiska la dhaqay.",
+"Ku dar 3 koob oo biyo ah iyo boorash, digaagga dusha saar, dabool oo dab yar ku kari 30 daqiiqo, ilaa digaaggu gaaro 165°F (74°C). Muus dhinaca ku bixi."
+],
+"tip": "Muus iyo bariis waa sida qoysas badan oo Soomaali ahi u cunaan. Isku day intaadan ka tagin."
+},
+"diripwa": {
+"t": "Bariis iyo digir Haiti (diri ak pwa)",
+"s": [
+"Digirta miir laakiin biyaheeda kaydi. Toonta, nuska basal cagaarka iyo cusbo yar ku shiid ama ku burburi casiir liin. Kani waa epis degdeg ah.",
+"Basasha la jarjaray iyo epis-ka saliidda ku shiil 3 daqiiqo. Ku dar digirta oo shiil 3 daqiiqo kale.",
+"Ku dar biyaha digirta iyo biyo kale ilaa ay 4 koob noqdaan, iyo boorash. Karkari, ku walaaq bariiska la dhaqay, dabool oo dab yar ku kari 20 daqiiqo. Basal cagaarka hadhay dusha ka saar."
+],
+"tip": "Digirta casaanka ah waa tii asalka ahayd. Digir madow ama pinto sidoo kale way shaqeeyaan."
+},
+"legim": {
+"t": "Fuud khudaar Haiti (legim)",
+"s": [
+"Bariiska karis billow. Kaabashka, karootada iyo basasha jarjar.",
+"Basasha iyo toonta saliidda ku shiil 4 daqiiqo, kadib ku walaaq tamaandho la shiiday 1 daqiiqo.",
+"Ku dar kaabashka, karootada, isbinaajka, boorashka iyo 1½ koob oo biyo ah. Dabool oo dab yar ku kari 25 daqiiqo, khudaarta burburi marka ay jilicdo. Cusbo ku dar oo bariis ku bixi."
+],
+"tip": "Haddii aad haysato, ku dar xoogaa digaag ama hilib lo'aad. La'aantiisna sidoo kale way fiican tahay."
+},
+"grechka": {
+"t": "Buckwheat basal, karooto iyo ukun leh (grechka)",
+"s": [
+"Buckwheat-ka dhaq. Dheri ku geli 2½ koob oo biyo ah iyo cusbo yar. Karkari, dabool oo dab yar ku kari 15 daqiiqo.",
+"Inta lagu jiro, basasha la jarjaray iyo karootada la xoqay subagga ku shiil ilaa ay jilcaan oo dahab noqdaan. Ukunta kari ama shiil.",
+"Khudaarta buckwheat-ka ku walaaq, saxan kastana ukun ku bixi."
+],
+"tip": "Buckwheat hadhay oo caano iyo sonkor yar lagu daray waa quraac dhaqameed."
+},
+"borscht": {
+"t": "Maraq barbarooni (beet) iyo kaabash (borscht)",
+"s": [
+"Basasha la jarjaray iyo karootada la xoqay saliidda ku jilci 6 daqiiqo. Ku walaaq tamaandho la shiiday 1 daqiiqo.",
+"Ku dar 8 koob oo biyo ah, boorashka iyo baradhada la jarjaray. Dab yar ku kari 10 daqiiqo, kadib ku dar kaabashka la xoqay oo kari 10 kale.",
+"Ku dar barbarooniga oo dhaadheer loo jaray iyo biyihiisa, toonta iyo khalka. Kari 5 daqiiqo. Cusbo ku dar oo malqaacad caano fadhi ah ku bixi."
+],
+"tip": "Caano fadhi caadi ah ayaa beddeli kara labeenta dhanaan. Borscht maalinta xigta ayuu ka sii macaan yahay."
+},
+"kimchirice": {
+"t": "Bariis la shiilay oo kimchi iyo ukun leh (kimchi bokkeumbap)",
+"s": [
+"Bariiska hore u kari. Bariis qabow oo shalay ah ayaa ugu fiican shiilidda. Kimchi-ga jarjar.",
+"Kimchi-ga saliidda ku shiil 3 daqiiqo. Ku dar bariiska, suugada soy-ga, sonkorta iyo xoogaa casiirka kimchi ah, oo shiil ilaa uu kululaado.",
+"Ukunta shiil. Madiibad kasta ukun dusha ugu bixi iyo basal cagaar la jarjaray."
+],
+"tip": "Kimchi duug ah oo dhanaan ayaa ugu fiican cuntadan."
+},
+"gyeranjjim": {
+"t": "Ukun uumi lagu kariyay oo microwave ah (gyeran-jjim)",
+"s": [
+"Ukunta ku garaac koob ama madiibad weyn oo leh ⅓ koob oo biyo ah, suugada soy-ga iyo xoogaa basal cagaar ah oo la jarjaray.",
+"Si dabacsan u dabool oo microwave-ka geli 1 daqiiqo. Si tartiib ah u walaaq.",
+"Microwave-ka geli 30 ilaa 60 ilbiriqsi kale, ilaa ay bararto oo is qabato. Bariis ku cun."
+],
+"tip": "Isticmaal madiibad weyn. Aad ayay u kacdaa, kadibna way degtaa."
+},
+"caldoverde": {
+"t": "Maraq baradho iyo caleen cagaar (caldo verde)",
+"s": [
+"Basasha la jarjaray iyo toonta 2 malqaacad oo weyn oo saliid ah ku jilci 5 daqiiqo.",
+"Ku dar baradhada la jarjaray, boorashka iyo 7 koob oo biyo ah. Dab yar ku kari 20 daqiiqo, kadib burburi ilaa ay ku dhawaato siman.",
+"Ku dar kaabash ama kale aad khafiif ah loo jaray oo kari 5 daqiiqo. Cusbo ku dar oo saliidda hartay dusha ka shub."
+],
+"tip": "Haddii aad haysato, xoogaa sausage ah ku jar. Sidaas ayaa xafladaha loogu bixiyaa."
+},
+"fideo": {
+"t": "Maraq baasto la dubay (sopa de fideo)",
+"s": [
+"Baastada khafiifka ah jajab gaagaaban ka dhig. Saliidda ku shiil dab dhexdhexaad ah, adigoo walaaqaya, ilaa ay bunni dahab ah noqoto, ku dhawaad 4 daqiiqo.",
+"Basasha iyo toonta blender ku shiid ama aad u jarjar, oo kula dar suugada yaanyada. Kari 2 daqiiqo.",
+"Ku dar 6 koob oo biyo ah iyo boorash. Dab yar ku kari 8 ilaa 10 daqiiqo ilaa baastadu jilicdo."
+],
+"tip": "Miiska liin ku tuuji oo xoogaa kabsar la jarjaray ku dar."
+},
+"soakoats": {
+"t": "Oats subagga lowska leh oo aan la karin",
+"s": [
+"Oats-ka ku shub koob ama baaquli, kuna shub ilaa ¾ koob oo biyo nadiif ah oo la cabbi karo, inta uun ku filan inay dabooshaan.",
+"U daa 10 daqiiqo ilaa uu jilco. Biyo kulul haddii aad heli karto, 2 ama 3 daqiiqo ayuu ku diyaar noqdaa.",
+"Ku walaaq subagga lowska, muuska jarjar oo dul saar, qorfaha ku saydh."
+],
+"tip": "Oats-ka degdegga ah ayaa ugu dhaqsaha badan jilcid. Oats-ka caadiga ah sidoo kale wuu shaqeeyaa, wax yar buu adkaadaa."
+},
+"beanwrap": {
+"t": "Tortilla digir madow iyo liin leh",
+"s": [
+"Digirta biyaha ka shub. Haddii aad awoodo ku dhaq biyo nadiif ah.",
+"Qiyaastii badhkeed fargeeto ku burburi. Liinta ku tuuji, ku dar xawaashka iyo cusbo yar, kadibna walaaq.",
+"Tortilla-yada dul saar, duub oo cun."
+],
+"tip": "Digirta pinto ama tan cas sidoo kale way fiican yihiin."
+},
+"chickwrap": {
+"t": "Digir garbanzo la burburiyay oo rooti lagu cuno",
+"s": [
+"Digirta garbanzo biyaha ka shub.",
+"Fargeeto ku burburi, kadib ku walaaq saliidda, casiirka liinta, kamuunka iyo cusbo yar.",
+"Si qaro weyn rootiga ugu mari."
+],
+"tip": "Dhowr jeex oo basal cayriin ah ama basbaas yar ayaa dhadhan u kordhinaya."
+},
+"tunacrack": {
+"t": "Tuuna liin leh oo buskud lagu cuno",
+"s": [
+"Fur tuunada oo biyaha ka shub.",
+"Liinta ku tuuji, ku dar budada basbaaska oo fargeeto ku walaaq.",
+"Buskudka dul saar oo cun."
+],
+"tip": "Tuunada baakadda ku jirta uma baahna fure qasac iyo biyo ka shubid."
+},
+"manba": {
+"t": "Rooti subagga lowska oo basbaas leh",
+"s": [
+"Subagga lowska rootiga mari.",
+"Budada basbaaska ku saydh, wax yar ama badan.",
+"Muuska la cun, dhinac ama jarjaran oo dul saaran."
+],
+"tip": "Haiti, manba (subagga lowska) waxaa badanaa lagu sameeyaa basbaas. Ku dar inta kulayl ee aad jeceshahay."
+},
+"sardines": {
+"t": "Saardiin rooti iyo basal lagu cuno",
+"s": [
+"Fur qasacadda. Saliidda hay: dhadhan badan bay leedahay.",
+"Jar dhowr giraan oo khafiif ah oo basal ah.",
+"Saardiinta rootiga dul saar, saliid yar ku shub, basasha dul saar oo liinta ku tuuji."
+],
+"tip": "Lafaha jilicsan waa la cuni karaa waxayna leeyihiin kaalshiyam badan. Basasha inteeda kale si fiican bay u sii jirtaa qaboojiye la'aan."
+},
+"pbramen": {
+"t": "Ramen subagga lowska leh",
+"s": [
+"Baastada ku rid baaquli ama koob weyn oo biyo ku shub ilaa ay daboolaan: kulul haddii aad heli karto, laakiin biyo nadiif ah oo qabow sidoo kale way shaqeeyaan.",
+"Sug ilaa ay jilcayso: qiyaastii 5 daqiiqo biyo kulul, 20 ilaa 30 biyo qabow. Biyaha intooda badan ka shub.",
+"Ku walaaq subagga lowska, badh baakadda xawaashka iyo budada basbaaska."
+],
+"tip": "Biyo kulul oo kildhi, mashiinka qaxwada ama tuubada biyaha kulul ee dukaan dhammaan way shaqeeyaan. Baaquliga saxan ku dabool inta uu qoyanayo."
+},
+"ing": {
+"crackers": "Buskud cusbo leh",
+"sardines": "Saardiin qasac ah",
+"rice": "Bariis cad",
+"pasta": "Baasto",
+"flour": "Bur",
+"oats": "Oats",
+"lentils": "Misir qallalan",
+"dbeans": "Digir qallalan (pinto ama madow)",
+"peas_d": "Digir jajab ah oo qallalan",
+"cbeans": "Digir qasac ah (madow, pinto ama cas)",
+"chick": "Digir garbanzo qasac ah",
+"ctom": "Yaanyo la jarjaray oo qasac ah",
+"tpaste": "Tamaandho la shiiday (paste)",
+"tsauce": "Suugo yaanyo",
+"tuna": "Tuuna qasac ah",
+"coco": "Caano qumbe",
+"corn": "Galley qasac ah",
+"eggs": "Ukun",
+"milk": "Caano",
+"cheddar": "Farmaajo cheddar",
+"yogurt": "Caano fadhi caadi ah",
+"butter": "Subag",
+"oil": "Saliid khudaar",
+"pb": "Subagga lowska",
+"mayo": "Mayonnaise",
+"chleg": "Lugo digaag oo laf leh",
+"chbr": "Naas digaag oo aan laf lahayn",
+"beef": "Hilib lo'aad oo la shiiday",
+"tofu": "Tofu adag",
+"bread": "Rooti",
+"ftort": "Tortilla bur ah",
+"ctort": "Tortilla galley ah",
+"ramen": "Ramen degdeg ah",
+"potato": "Baradho",
+"sweetp": "Baradho macaan",
+"onion": "Basal",
+"carrot": "Karooto",
+"cabbage": "Kaabash cagaaran",
+"garlic": "Toon",
+"celery": "Seleeri",
+"pepper": "Basbaas macaan",
+"gonion": "Basal cagaar",
+"cilantro": "Kabsar (cilantro)",
+"lime": "Liin dhanaan",
+"banana": "Muus",
+"fmix": "Khudaar isku dhafan oo barafeysan",
+"fpeas": "Digir cagaaran oo barafeysan",
+"fspin": "Isbinaaj barafeysan",
+"fbroc": "Brokoli barafeysan",
+"salsa": "Salsa",
+"soy": "Suugada soy-ga",
+"vinegar": "Khal",
+"sugar": "Sonkor",
+"bpowder": "Baking powder",
+"bouil": "Boorash (bouillon) xabbado",
+"cumin": "Kamuun la shiiday",
+"chili": "Budada basbaaska",
+"curry": "Budada kariga",
+"paprika": "Paprika",
+"italian": "Geedo udgoon oo Talyaani ah",
+"garpow": "Budada toonta",
+"cinn": "Qorfe",
+"mungb": "Digir mung oo qallalan",
+"buckwheat": "Buckwheat (kasha)",
+"beets": "Barbarooni (beet) qasac ah",
+"kimchi": "Kimchi",
+"ginger": "Sinjibiil cusub"
+},
+"units": {
+"lb": "rodol",
+"oz": "oz",
+"floz": "fl oz",
+"gal": "galaan",
+"can": "qasac",
+"egg": "ukun",
+"cup": "koob",
+"tbsp": "malqaacad weyn",
+"tsp": "malqaacad yar",
+"slice": "xabbo",
+"tortilla": "tortilla",
+"pack": "baako",
+"onion": "basal",
+"clove": "xabbo",
+"bunch": "xidhmo",
+"pepper": "xabbo",
+"lime": "liin",
+"banana": "muus",
+"bag": "bac",
+"box": "kartoon",
+"block": "xabbo",
+"cube": "xabbo",
+"head": "xabbo",
+"each": "xabbo",
+"jar": "weel",
+"piece": "gabal"
+}
+}
