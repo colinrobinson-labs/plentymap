@@ -287,7 +287,7 @@ function shell() {
   $("#brand").setAttribute("aria-label", "Plenty Map, " + t("home"));
   const tabHtml = TABS.map(x => `<a href="#/${x.id}" data-tab="${x.id}">${ico(x.icon)}<span>${esc(t("tab_" + x.id))}</span></a>`).join("");
   $("#tabs").innerHTML = tabHtml; $("#dtabs").innerHTML = tabHtml;
-  $("#langbtn").innerHTML = `${ico("globe")}<span lang="${S.lang}">${esc(LANG[S.lang].name)}</span>`;
+  $("#langbtn").innerHTML = `${ico("globe")}<span lang="${S.lang}">${esc(LANG[S.lang].short || LANG[S.lang].name)}</span>`;
   $("#langbtn").setAttribute("aria-label", t("change_lang") + ": " + LANG[S.lang].name);
   $("#langbtn").onclick = () => showWelcome(true);
   $("#setbtn").innerHTML = `${ico("gear")}<span class="sr">${esc(t("settings"))}</span>`;
