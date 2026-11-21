@@ -1,0 +1,7 @@
+Thanks for testing Plenty Map! Please try:
+• Pick your language, then enter your ZIP code or allow location
+• Cook: change the kitchen and diet filters, open a recipe, change servings
+• Budget: set your household and weekly budget, swap a meal
+• Find food: switch between list and map, open a place, tap Directions and Call
+• Benefits: run the quick check
+Tell us anything that looks wrong, confusing or cut off: hello@plentymap.com
