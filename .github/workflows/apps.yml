@@ -121,6 +121,9 @@ jobs:
           npx cap add ios
           node tools/native-assets.mjs ios
           npx cap sync ios
+          for k in NSLocationWhenInUseUsageDescription NSLocationAlwaysAndWhenInUseUsageDescription NSLocationAlwaysUsageDescription; do
+            /usr/libexec/PlistBuddy -c "Print :$k" ios/App/App/Info.plist >/dev/null || { echo "::error::Info.plist missing $k"; exit 1; }
+          done
       - name: Test build (Simulator)
         run: |
           xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Debug \

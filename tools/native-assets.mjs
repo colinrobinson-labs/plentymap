@@ -54,6 +54,8 @@ async function android() {
   console.log("android assets done");
 }
 
+const LOC_KEYS = ["NSLocationWhenInUseUsageDescription", "NSLocationAlwaysAndWhenInUseUsageDescription", "NSLocationAlwaysUsageDescription"];
+
 async function ios() {
   const app = join(root, "ios/App/App");
   if (!existsSync(app)) throw new Error("run `npx cap add ios` first");
@@ -71,7 +73,10 @@ async function ios() {
   let p = await readFile(plist, "utf8");
   const loc = await str("en", "ios_location");
   const add = (k, v) => { if (!p.includes(`<key>${k}</key>`)) p = p.replace(/<dict>/, `<dict>\n\t<key>${k}</key>\n\t${v}`); };
-  add("NSLocationWhenInUseUsageDescription", `<string>${loc.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</string>`);
+  // Location is only read in the foreground, when the person taps "use my location". The geolocation plugin's
+  // code mentions "Always" APIs, so Apple's upload check (ITMS-90683) wants those keys present too. Same honest text.
+  const locXml = `<string>${loc.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</string>`;
+  for (const k of LOC_KEYS) add(k, locXml);
   add("CFBundleLocalizations", `<array>${LANGS.map(l => `<string>${LPROJ[l]}</string>`).join("")}</array>`);
   add("CFBundleAllowMixedLocalizations", "<true/>");
   add("ITSAppUsesNonExemptEncryption", "<false/>");
@@ -82,7 +87,8 @@ async function ios() {
     const dir = join(app, LPROJ[l] + ".lproj");
     await mkdir(dir, { recursive: true });
     const name = await str(l, "app_name") || "Plenty Map";
-    await writeFile(join(dir, "InfoPlist.strings"), `"NSLocationWhenInUseUsageDescription" = "${esc(await str(l, "ios_location"))}";\n"CFBundleDisplayName" = "${esc(name)}";\n`);
+    const locL = esc(await str(l, "ios_location"));
+    await writeFile(join(dir, "InfoPlist.strings"), LOC_KEYS.map(k => `"${k}" = "${locL}";\n`).join("") + `"CFBundleDisplayName" = "${esc(name)}";\n`);
     files.push(LPROJ[l] + ".lproj/InfoPlist.strings");
   }
   // Privacy manifest: no tracking. One data type: the optional note in "Report a problem" (stored up to 90 days,
