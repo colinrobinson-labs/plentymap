@@ -16,7 +16,7 @@ export const LANGS = [
   { code: "vi", name: "Tiếng Việt", dir: "ltr", cuisine: "vietnamese" },
   { code: "fil", name: "Tagalog", dir: "ltr", cuisine: "filipino" },
   { code: "ar", name: "العربية", dir: "rtl", cuisine: "middleeast" },
-  { code: "ht", name: "Kreyòl ayisyen", dir: "ltr", cuisine: "haitian" },
+  { code: "ht", name: "Kreyòl ayisyen", short: "Kreyòl", dir: "ltr", cuisine: "haitian" },
   { code: "ko", name: "한국어", dir: "ltr", cuisine: "korean" },
   { code: "ru", name: "Русский", dir: "ltr", cuisine: "easteuro" },
   { code: "pt", name: "Português", dir: "ltr", cuisine: "brazilian" },

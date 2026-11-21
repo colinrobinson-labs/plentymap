@@ -323,6 +323,8 @@ legend{padding:0;margin-block-end:4px}
   .tbtn{padding:0 11px}
 }
 #setbtn{flex-shrink:0;justify-content:center;min-width:42px;padding:0 11px}
+/* 360-399px (iPhone Duo outer screen, small phones): a slightly smaller brand so the language name fits whole */
+@media (min-width:360px) and (max-width:399px){.top .wrap{gap:8px;padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}.brand{font-size:20px;gap:7px}.brand svg{width:30px;height:30px}.tbtn{padding:0 10px;gap:6px}#setbtn{padding:0 10px}}
 /* Long words and narrow screens: wrapping chips and rows can shrink instead of pushing past the edge */
 .chips.wrap .chip{flex:0 1 auto;max-width:100%;white-space:normal;text-align:start;line-height:1.25;padding-block:6px}
 .sec{flex-wrap:wrap}
