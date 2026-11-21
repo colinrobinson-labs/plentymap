@@ -1,0 +1,76 @@
+# Sends the App Store listing text and screenshots in store/ to App Store Connect.
+# Manual only: Actions -> "App Store listing" -> Run workflow. Never submits for review.
+# Uses the same API key secrets as the iOS build (PM_ASC_KEY_ID, PM_ASC_KEY_P8).
+name: App Store listing
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: App Store version the listing belongs to
+        default: "1.0"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: store-apple
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  listing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Store text fits the store limits
+        run: node tools/check-store.mjs
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Install fastlane
+        run: gem install fastlane --no-document
+      - name: Lay out files the way fastlane expects
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/deliver"
+          mkdir -p "$out/metadata/en-US" "$out/screenshots/en-US"
+          for f in name subtitle keywords description promotional_text marketing_url support_url privacy_url; do
+            cp "store/apple/en-US/$f.txt" "$out/metadata/en-US/$f.txt"
+          done
+          for f in store/screenshots/apple-iphone-6.9/*.jpg; do cp "$f" "$out/screenshots/en-US/iphone-$(basename "$f")"; done
+          for f in store/screenshots/apple-ipad-13/*.jpg; do cp "$f" "$out/screenshots/en-US/ipad-$(basename "$f")"; done
+          ls -R "$out"
+      - name: Upload to App Store Connect
+        env:
+          ASC_KEY_RAW: ${{ secrets.PM_ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.PM_ASC_KEY_ID }}
+          ASC_ISSUER: ${{ secrets.PM_ASC_ISSUER_ID || '323b291b-bbde-4735-9ad6-c05f38c0c582' }}
+          APP_VERSION: ${{ inputs.app_version }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/deliver"
+          node -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify({key_id: process.env.ASC_KEY_ID, issuer_id: process.env.ASC_ISSUER, key: process.env.ASC_KEY_RAW.trim() + "\n", in_house: false}))' "$RUNNER_TEMP/asc.json"
+          fastlane deliver \
+            --api_key_path "$RUNNER_TEMP/asc.json" \
+            --app_identifier com.plentymap.app \
+            --platform ios \
+            --app_version "$APP_VERSION" \
+            --metadata_path "$out/metadata" \
+            --screenshots_path "$out/screenshots" \
+            --skip_binary_upload true \
+            --skip_app_version_update true \
+            --overwrite_screenshots true \
+            --submit_for_review false \
+            --automatic_release false \
+            --run_precheck_before_submit false \
+            --force true
+          rm -f "$RUNNER_TEMP/asc.json"

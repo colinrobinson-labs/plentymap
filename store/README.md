@@ -26,6 +26,10 @@ written by `tools/native-assets.mjs` matches it (one data type: the optional not
 Make them again after a design change: `bash qa/build-site.sh _site && node qa/serve.mjs _site 4173 &` then
 `node tools/store-screenshots.mjs store/screenshots en`. The script stops if a caption doesn't fit.
 
+## App Store listing (`.github/workflows/store-apple.yml`)
+
+Actions → **App Store listing** → Run workflow sends the text in `apple/en-US/` and the iPhone 6.9" and iPad 13" screenshots to App Store Connect with fastlane deliver. It replaces the screenshots already there, never uploads a build and never submits for review. It uses the same `PM_ASC_KEY_ID` / `PM_ASC_KEY_P8` secrets as the iOS build.
+
 ## Builds (`.github/workflows/apps.yml`)
 
 Every push to main and every pull request that touches the native setup builds an Android test APK and an iOS Simulator build.
