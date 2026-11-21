@@ -39,10 +39,13 @@ if (!editable(state) && !(process.env.ASC_REPLACE && /WAITING_FOR_REVIEW/.test(s
 
 // Wait up to 40 minutes for Apple to finish processing the newest build.
 let build;
+// Replacing: a build uploaded minutes ago can take a while to show up at all, so wait for one newer than the attached one.
+const was = /WAITING_FOR_REVIEW/.test(state) ? (await attached())?.id : null;
 for (let i = 0; i < 80; i++) {
   build = (await api("GET", `/v1/builds?filter[app]=${app.id}&filter[preReleaseVersion.version]=${VERSION}&sort=-uploadedDate&limit=1`)).data[0];
   const s = build?.attributes.processingState;
   console.log(`Newest build ${build?.attributes.version ?? "none"}: ${s ?? "-"}`);
+  if (was && build?.id === was) { if (i < 20) { console.log("Waiting for the new upload to appear..."); await sleep(30000); continue; } console.log("No newer build than the one in review; nothing to do."); process.exit(0); }
   if (s === "VALID") break;
   if (s === "FAILED" || s === "INVALID") throw new Error(`Build ${build.attributes.version} ${s}`);
   await sleep(30000);
