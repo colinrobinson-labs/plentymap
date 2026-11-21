@@ -296,7 +296,7 @@ function tipHtml(id) {
 function editPrice(id, btn) {
   const x = FD.ing[id];
   const f = document.createElement("form"); f.className = "pedit";
-  const cur = money(0).replace(/[\d.,\s\u00a0\u200f\u200e]/g, "");
+  const cur = money(0).replace(/[\d.,\s\u00a0\u200f\u200e\u2066-\u2069]/g, "");
   f.innerHTML = `<label class="sr" for="pe">${esc(t("price_for", { p: pkgLabel(id) }))}</label>
     <span class="pbox" dir="ltr"><span class="cur" aria-hidden="true">${esc(cur)}</span><input class="in" id="pe" inputmode="decimal" autocomplete="off" value="${(price(id) * x.per).toFixed(2)}"></span>
     <button class="btn sm" type="submit">${esc(t("save"))}</button>

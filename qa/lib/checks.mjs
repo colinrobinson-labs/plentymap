@@ -8,7 +8,8 @@
 //   clipped-hint    an input's placeholder is wider than the box
 //   overlap         two pieces of text (or text and an icon) drawn on top of each other
 //   tap-target      a button, link or control smaller than 44x44 (inline links inside sentences are allowed)
-//   rtl-digits      in Arabic, Dari or Pashto, a phone number, ZIP, address or time shows its digit groups in the wrong order
+//   rtl-digits      in Arabic, Dari or Pashto, a phone number, ZIP, address or time shows its digit groups in the wrong order,
+//                   or a fraction, temperature or currency ("2½", "425°F (220°C)", "US$") is split around its number
 //   rtl-dir         the page isn't right-to-left in a right-to-left language
 //   lang-attr       <html lang> doesn't match the chosen language
 //   untranslated    a screen string shows in English in another language
@@ -202,6 +203,17 @@ export function runChecks({ lang, dir, enLeaks = [], keys = [], skip = [] }) {
         }
         if (!ok || xs.length < 2) continue;
         if (xs.some((x, i) => i && x < xs[i - 1])) add("rtl-digits", el, `"${m[0].trim()}" shows its digit groups reversed`);
+      }
+      // a number and what belongs to it: "2½", "425°F", "(220°C)", "US$" must read left to right too
+      for (const m of txt.matchAll(/[0-9]+[½⅓⅔¼¾⅛]|[0-9]+°[FC]|\([0-9]+°[FC]\)|US\$/g)) {
+        const xs = []; let line = null, ok = true;
+        for (let i = 0; i < m[0].length; i++) {
+          const rg = document.createRange(); rg.setStart(n, m.index + i); rg.setEnd(n, m.index + i + 1);
+          const r = rg.getBoundingClientRect(); if (!r.width) { ok = false; break; }
+          if (line === null) line = r.top; else if (Math.abs(r.top - line) > 4) { ok = false; break; }
+          xs.push(r.left);
+        }
+        if (ok && xs.some((x, i) => i && x < xs[i - 1])) add("rtl-digits", el, `"${m[0]}" shows out of order`);
       }
     }
   }
