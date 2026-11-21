@@ -122,6 +122,10 @@ async function ios() {
   const appGroup = proj.findPBXGroupKey({ name: "App" }) || proj.findPBXGroupKey({ path: "App" });
   if (!proj.hasFile("PrivacyInfo.xcprivacy")) proj.addResourceFile("PrivacyInfo.xcprivacy", {}, appGroup);
   const vg = proj.findPBXVariantGroupKey?.({ name: "InfoPlist.strings" }) || proj.addLocalizationVariantGroup("InfoPlist.strings").fileRef;
+  // The xcode package leaves the new variant group outside every group, so Xcode looked for ios/App/<lang>.lproj
+  // instead of ios/App/App/<lang>.lproj and the build failed. Put it in the App group, next to the files.
+  const ag = proj.getPBXGroupByKey(appGroup);
+  if (ag && !ag.children.some(c => c.value === vg)) ag.children.push({ value: vg, comment: "InfoPlist.strings" });
   for (const l of LANGS) {
     proj.addKnownRegion(/[^A-Za-z0-9_]/.test(LPROJ[l]) ? `"${LPROJ[l]}"` : LPROJ[l]);
     const f = LPROJ[l] + ".lproj/InfoPlist.strings";
