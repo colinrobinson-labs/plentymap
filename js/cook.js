@@ -78,10 +78,11 @@ function msum() {
 }
 const foldOpen = id => { try { return sessionStorage.getItem("pm.fold." + id) === "1"; } catch { return false; } };
 const keepFold = el => el.addEventListener("toggle", () => { try { sessionStorage.setItem("pm.fold." + el.dataset.fold, el.open ? "1" : "0"); } catch { /* private mode: folds just start closed */ } });
+const WIDE = "(min-width: 760px)";
 function filters() {
   const cu = activeCuisine();
   const grp = (id, title, body) => `<div class="fg" role="group" aria-labelledby="${id}"><div class="fg-h" id="${id}">${esc(title)}</div><div class="fg-c">${body}</div></div>`;
-  const wide = matchMedia("(min-width: 760px)").matches;
+  const wide = matchMedia(WIDE).matches;
   return `<div class="card filters" id="filters">
     ${wide ? "" : `<details class="fold allfl" data-fold="all" ${foldOpen("all") ? "open" : ""}><summary><span class="fs-h">${ico("filter", "i sm")}${esc(t("filters"))}</span><span class="fsum" id="fsum">${esc(fsum())}</span>${ico("chev", "i chev")}</summary><div class="fold-b">`}
     ${grp("l-kit", t("kit_q"), `<div class="tiles">
@@ -267,6 +268,10 @@ export async function render(main, { args, changedView }) {
     bindFilters(); paint();
   }
   if (args[0]) openSheet(args[0]); else closeSheet(false);
-  return () => closeSheet(true);
+  // Folding or unfolding a phone (or turning a tablet) crosses this width while the page is open:
+  // swap the filters between their folded phone form and their open form, keeping what is set.
+  const mq = matchMedia(WIDE), onMq = () => { const f = $("#filters"); if (f) { f.outerHTML = filters(); bindFilters(); } };
+  mq.addEventListener?.("change", onMq);
+  return () => { mq.removeEventListener?.("change", onMq); closeSheet(true); };
 }
 export { closeSheet };

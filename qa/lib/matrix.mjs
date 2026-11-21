@@ -15,6 +15,16 @@ export const LANGS = [
 export const WIDTHS = [280, 320, 390, 768, 1024, 1440];
 export const HEIGHT = w => (w >= 1024 ? 900 : w >= 768 ? 1024 : 800);
 export const THEMES = ["light", "dark"];
+// Folding phones and phones held sideways (iPhone Duo: outer screen, inner screen upright and sideways;
+// any phone in landscape). Checked in light, every language. The gate checks the sideways inner screen,
+// the one that switches to the computer layout below 960px.
+export const FOLDS = [
+  { id: "duo-outer", w: 382, h: 700 }, { id: "duo-inner", w: 669, h: 951 },
+  { id: "duo-inner-wide", w: 951, h: 669 }, { id: "phone-sideways", w: 678, h: 466 },
+];
+export const folds = () => (QUICK || GATE ? FOLDS.filter(f => f.id === "duo-inner-wide") : FOLDS);
+// same rule as DESK in js/core.js
+export const isDesk = (w, h) => w >= 960 || (w >= 900 && h >= 540);
 
 // QA_QUICK=1 (local runs): fewer combinations, same checks.
 export const QUICK = !!process.env.QA_QUICK;

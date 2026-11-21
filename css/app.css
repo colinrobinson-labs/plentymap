@@ -87,7 +87,7 @@ p{margin:0}
 .tabs a[aria-current="page"]::before{content:"";position:absolute;inset-block-start:0;inset-inline:22%;height:3px;border-radius:0 0 3px 3px;background:var(--yolk)}
 
 main{max-width:1180px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left)) calc(var(--bar) + 36px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-right));outline:none}
-@media (min-width:960px){
+@media (min-width:960px),(min-width:900px) and (min-height:540px){
   .tabs{display:none}.dtabs{display:flex}
   main{padding-block-end:56px;padding-inline:24px}
 }
@@ -178,13 +178,13 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 .hero .btn.pri:hover{background:var(--yolk-2)}
 
 .findwrap{display:grid;gap:16px;margin-block-start:14px}
-@media (min-width:960px){
+@media (min-width:960px),(min-width:900px) and (min-height:540px){
   .findwrap.withmap{grid-template-columns:minmax(380px,460px) 1fr;align-items:start}
   .findwrap.withmap .mapbox{position:sticky;inset-block-start:calc(var(--head) + 16px);height:calc(100dvh - var(--head) - 40px)}
 }
 .mapbox{height:calc(100dvh - var(--head) - var(--bar) - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));min-height:340px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--board-2);position:relative}
 .mapbox .loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--chalk)}
-@media (min-width:960px){.viewtoggle{display:none}}
+@media (min-width:960px),(min-width:900px) and (min-height:540px){.viewtoggle{display:none}}
 
 .list{display:grid;gap:12px;list-style:none;margin:0;padding:0}
 .site{padding:14px 16px 12px;display:grid;gap:8px}
@@ -294,7 +294,7 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 
 /* ---------- misc ---------- */
 .toast{position:fixed;inset-inline:16px;inset-block-end:calc(var(--bar) + 18px + env(safe-area-inset-bottom));z-index:80;margin:0 auto;max-width:420px;background:var(--board);color:var(--chalk);padding:12px 16px;border-radius:12px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3);text-align:center}
-@media (min-width:960px){.toast{inset-block-end:24px}}
+@media (min-width:960px),(min-width:900px) and (min-height:540px){.toast{inset-block-end:24px}}
 .foot{margin-block-start:34px;padding-block-start:16px;border-block-start:2px dashed var(--line);color:var(--mute);font-size:14.5px;display:grid;gap:6px}
 .foot a{color:var(--ink-2)}
 .offline{background:var(--warn-bg);color:var(--ink);text-align:center;font-size:14.5px;font-weight:600;padding:6px 12px}
@@ -331,7 +331,7 @@ legend{padding:0;margin-block-end:4px}
 .shop .check .nm{flex:1 1 140px;min-width:0;overflow-wrap:anywhere}
 .shop .check .price{margin-inline-start:auto}
 /* Desktop: category chips wrap instead of scrolling off the edge */
-@media (min-width:960px){.chips{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0}}
+@media (min-width:960px),(min-width:900px) and (min-height:540px){.chips{flex-wrap:wrap;overflow:visible;margin-inline:0;padding-inline:0}}
 .findwrap>*,.list>*,.site>*,.filters>*,.ftoday>*,.prog>*,.grid2>*,.qs>*,.stack>*,.hero>*{min-width:0}
 .notice.dietbox{background:var(--line-2);margin-block:12px}
 .notice.dietbox .i{color:var(--ink-2)}
@@ -393,7 +393,7 @@ legend{padding:0;margin-block-end:4px}
 @media (max-width:520px){.seg.n4{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}}
 .viewtoggle.seg{display:inline-grid}
 .viewtoggle.seg>button{min-height:44px;padding:0 16px}
-@media (min-width:960px){.viewtoggle.seg{display:none}}
+@media (min-width:960px),(min-width:900px) and (min-height:540px){.viewtoggle.seg{display:none}}
 
 /* tiles: a picture card per option, ticked in the corner when on */
 .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -671,7 +671,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .findhero #find-p{font-size:15px;line-height:1.45;margin:0}
 .findhero .locbar{flex-wrap:nowrap;margin-block-start:var(--s1)}
 .findhero #f-gps{flex:none}
-@media (max-width:599px),(min-width:960px){
+@media (max-width:599px),(min-width:960px),(min-width:900px) and (min-height:540px){
   .findhero #f-gps{width:48px;padding:0;justify-content:center}
   .findhero #f-gps .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
@@ -751,7 +751,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .pdir{grid-area:dir;position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 var(--s3);border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-weight:700;font-size:14.5px;text-decoration:none;white-space:nowrap}
 .pdir:hover{border-color:var(--ink)}
 .pdir .i{color:var(--ink-2)}
-@media (max-width:479px),(min-width:960px) and (max-width:1199px){
+@media (max-width:479px),(min-width:960px) and (max-width:1199px),(min-width:900px) and (max-width:959px) and (min-height:540px){
   .pdir{width:44px;padding:0}
   .pdir .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 }
@@ -783,7 +783,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .mapcard .acts{grid-column:1/-1;display:flex;gap:var(--s2);flex-wrap:wrap}
 
 /* computers: list beside a map that fills the window */
-@media (min-width:960px){
+@media (min-width:960px),(min-width:900px) and (min-height:540px){
   main.findmode{max-width:none;padding:0}
   .findapp{display:grid;grid-template-columns:clamp(440px,36vw,580px) minmax(0,1fr);align-items:start}
   .fside{padding:var(--s5) var(--s5) var(--s6);gap:var(--s4)}
@@ -797,7 +797,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .pline:empty{display:none}
 #flistwrap{gap:var(--s3)}
 /* phones: the list/map switch floats above the tab bar, so the list starts sooner */
-@media (max-width:959px){
+@media (max-width:899px),(max-width:959px) and (max-height:539px){
   .findhero.has-loc #find-p{display:none}
   .fbar .viewtoggle.seg{position:fixed;z-index:20;inset-inline-start:50%;transform:translateX(-50%);inset-block-end:calc(var(--bar) + var(--s3) + env(safe-area-inset-bottom));border-radius:999px;box-shadow:0 8px 24px -6px rgba(0,0,0,.45);border-color:var(--ink)}
   [dir="rtl"] .fbar .viewtoggle.seg{transform:translateX(50%)}
@@ -805,9 +805,11 @@ h1+.lead{margin-block-start:var(--s2)}
   .mapcard{inset-block-end:calc(var(--s3) + 60px)}
   .findmode .foot{padding-block-end:56px}
 }
-@media (max-width:959px){
+@media (max-width:899px),(max-width:959px) and (max-height:539px){
   .findapp.mapview .fside>.foot,.findapp.mapview #fflt{display:none}
-  .findapp.mapview>.mapbox{margin-block-start:var(--s3);height:calc(100dvh - var(--head) - var(--bar) - 96px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+  .findapp.mapview>.mapbox{scroll-margin-block-end:calc(var(--bar) + var(--s3) + env(safe-area-inset-bottom));margin-block-start:var(--s3);height:calc(100dvh - var(--head) - var(--bar) - 96px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+  /* the map credit sits above the floating List/Map switch, not under it */
+  .findapp.mapview .maplibregl-ctrl-bottom-right,.findapp.mapview .maplibregl-ctrl-bottom-left{margin-block-end:56px}
 }
 .pline{column-gap:10px}
 .pline .sep{display:none}
@@ -857,7 +859,7 @@ h1+.lead{margin-block-start:var(--s2)}
 .hm-or a:hover .hm-oname{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--yolk)}
 .hm-or .hm-lead{border-color:rgba(241,235,221,.3);transform:translateY(-4px)}
 .hm-op{flex:none;font-weight:700;color:var(--yolk);font-variant-numeric:tabular-nums}
-@media (max-width:959px){.hm-or li:nth-child(n+3){display:none}}
+@media (max-width:899px),(max-width:959px) and (max-height:539px){.hm-or li:nth-child(n+3){display:none}}
 
 /* open near you */
 .hm-change{margin-inline-start:auto;font:700 14.5px/1 var(--f-body);letter-spacing:0;text-transform:none;color:var(--ink-2);padding:12px 0;margin-block:-12px}
@@ -906,7 +908,7 @@ h1+.lead{margin-block-start:var(--s2)}
 /* computers and big tablets: the board on the left, what's near and the menu down the right.
    Each column is as tall as what's in it: the near list's row hugs its rows and the menu follows
    right under it, so neither side stretches into empty space when the other is taller. */
-@media (min-width:960px){
+@media (min-width:960px),(min-width:900px) and (min-height:540px){
   .home{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"board near" "board menu";column-gap:var(--s7);row-gap:var(--s5);align-items:start}
   .hm-board{grid-area:board;padding-block-end:var(--s6);position:sticky;inset-block-start:calc(var(--head) + var(--s4))}
   .hm-dinner{margin-block-start:var(--s6)}
@@ -1078,3 +1080,52 @@ details.report summary{font-size:14px;color:var(--ink-2);cursor:pointer;display:
 .ings li{align-items:baseline}
 @media (min-width:760px){.sheet .panel{max-height:calc(100dvh - 2 * var(--s6))}}
 .filters .fold.allfl>summary .chev{order:2;margin-inline-start:auto}
+
+/* ---------- Foldables (Nov 2026): iPhone Duo and other book-style folding phones ----------
+   iPhone Duo outer screen = an ordinary phone. Inner screen held sideways (951 x 669) gets the computer
+   layout (see DESK in js/core.js); held upright (669 x 951) it is a small tablet. When the browser can see
+   the fold (viewport segments), nothing important sits on it. */
+
+/* recipe facts: three across or six across, never five and one left over */
+.sheet .body{container-type:inline-size}
+.facts{grid-template-columns:repeat(3,minmax(0,1fr))}
+@container (min-width:660px){.facts{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@container (max-width:329px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Inner screen sideways: the fold runs down the middle, so Find's list takes exactly the left half
+   (right half in RTL) and the map the other. The fold never runs through a row of the list. */
+@media (min-width:900px) and (max-width:959px) and (min-height:540px){
+  .findapp{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+
+/* Any phone held sideways (Duo outer screen, every regular phone): the screen is short, so the bars
+   get out of the way. Icon and label side by side in the tab bar, like iOS does, and a slimmer header. */
+@media (orientation:landscape) and (max-height:500px) and (max-width:959px){
+  :root{--bar:48px;--head:52px}
+  .tabs a{flex-direction:row;gap:8px;font-size:14px;padding-block:0}
+  .tabs a .i{width:22px;height:22px}
+  .tabs a[aria-current="page"]::before{inset-inline:30%}
+  main{padding-block-start:var(--s3)}
+  main>h1{font-size:clamp(26px,4.4vw,32px)}
+  /* the map fills the screen between the two bars */
+  .findapp.mapview>.mapbox{min-height:220px;height:calc(100dvh - var(--head) - var(--bar) - var(--s5) - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+}
+
+/* The fold runs top to bottom (book posture, or flat when the browser reports two segments):
+   the recipe and other sheets fill one side; Find splits along the fold. */
+@media (horizontal-viewport-segments:2){
+  .sheet{justify-content:flex-end;align-items:stretch}
+  .sheet .panel{width:min(env(viewport-segment-width 0 0),env(viewport-segment-width 1 0));max-width:none;max-height:none;border-radius:0;padding-block-start:env(safe-area-inset-top)}
+  .findapp{grid-template-columns:env(viewport-segment-width 0 0) minmax(0,1fr);column-gap:calc(env(viewport-segment-left 1 0) - env(viewport-segment-right 0 0))}
+  .home{column-gap:calc(env(viewport-segment-left 1 0) - env(viewport-segment-right 0 0) + var(--s7))}
+}
+/* The fold runs side to side (tabletop: half the phone flat on the counter, half standing up):
+   the recipe sits on the standing half, where it reads like a cookbook propped up while you cook. */
+@media (vertical-viewport-segments:2){
+  .sheet{align-items:flex-start}
+  .sheet .panel{height:env(viewport-segment-height 0 0);max-height:none;border-radius:0 0 20px 20px;padding-block:env(safe-area-inset-top) var(--s4)}
+}
+/* Top bar tabs on narrower computer layouts (900-1099: unfolded Duo, small laptops, long languages):
+   one line per tab. The icons step aside so Vietnamese, Ukrainian, Somali... labels never wrap. */
+.dtabs a{white-space:nowrap}
+@media (max-width:1099px){.dtabs{margin-inline-start:var(--s2)}.dtabs a{padding:0 12px}.dtabs a .i{display:none}}

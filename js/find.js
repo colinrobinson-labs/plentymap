@@ -1,6 +1,6 @@
 /* Find food: free groceries, senior boxes, meals, fridges, cheap grocery stores, farmers markets
    and SNAP restaurants near a ZIP or the phone's location. All from our own area files. */
-import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store, locLabel } from "./core.js";
+import { S, save, t, esc, $, $$, ico, mark, money, num, dateFmt, timeFmt, miles, dist, tidyCaps, telHref, safeUrl, shareThing, openOut, activeCuisine, announce, store, locLabel, DESK } from "./core.js";
 import { region } from "./region.js";
 import { nextTimes, todayISO } from "./hours.js";
 import { locForm, bindLoc, foot } from "./app.js";
@@ -56,7 +56,7 @@ const GROUPS = [
 ];
 const groupOf = id => GROUPS.find(g => g.id === id || g.subs.includes(id)) || GROUPS[0];
 const isFreeCat = cat => cat.kinds.some(k => FREE.includes(k));
-const phone = () => matchMedia("(max-width: 959px)").matches;
+const phone = () => !matchMedia(DESK).matches;
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function dirUrl(s) {
@@ -432,7 +432,7 @@ export async function render(main, { args }) {
     const s = R.byId.get(args[0]);
     if (s) { focusId = s.id; F.cat = !FREE.includes(s.k) ? s.k : s.k === "senior" && !S.senior ? "senior" : "free"; F.today = F.walk = F.drive = false; }
   }
-  const wide = matchMedia("(min-width: 960px)");
+  const wide = matchMedia(DESK);
   main.classList.add("findmode");
   main.innerHTML = `
   <div class="findapp">

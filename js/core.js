@@ -3,6 +3,10 @@
 
 import { MARKET } from "./config.js";
 export const VERSION = "1.0.0";
+// The computer layout (tabs in the top bar, Find's list beside its map). It also takes in screens a bit
+// narrower than 960px when they are tall enough, like an unfolded iPhone Duo held sideways (951 x 669),
+// but never a phone held sideways (440 tall or less). Keep in step with the same media queries in css/app.css.
+export const DESK = "(min-width: 960px), (min-width: 900px) and (min-height: 540px)";
 
 export const LANGS = [
   { code: "en", name: "English", dir: "ltr", cuisine: "american" },
