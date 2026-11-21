@@ -1,5 +1,5 @@
 /* Recipes and ingredients: costs, nutrition, kitchen and diet checks, amounts in plain units. */
-import { S, fetchJSON, ingName, unitName, num, activeCuisine, t } from "./core.js";
+import { S, fetchJSON, ingName, unitName, num, activeCuisine, t, bidi } from "./core.js";
 
 let F = null;
 export async function food() {
@@ -86,7 +86,7 @@ export function frac(q) {
   if (d > .07) return num(Math.round(q * 10) / 10, 1);
   if (best[0] === 1) { w += 1; best = FR[0]; }
   if (!w && !best[1]) return num(Math.round(q * 100) / 100, 2);
-  return (w ? num(w) : "") + best[1];
+  return bidi((w ? num(w) : "") + best[1]);
 }
 const CUPS = { rice: 2.25, lentils: 2.3, flour: 3.6, oats: 5.3, dbeans: 2.3, peas_d: 2.25, mungb: 2.2, buckwheat: 2.6 };
 // counted things: "2 eggs" reads as "2" next to the name "Eggs"

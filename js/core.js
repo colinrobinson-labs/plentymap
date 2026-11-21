@@ -110,12 +110,24 @@ export function t(k, v) {
   s ??= STR[k] ?? EN[k] ?? k;
   if (v) for (const x in v) s = s.split("{" + x + "}").join(x === "n" ? num(v[x]) : v[x]);
   if (s.includes("{snap}")) s = s.split("{snap}").join(VARS.snap);
-  if (LANG[S.lang]?.dir === "rtl") s = s.replace(/\d+(?:[-\u2013]\d+)+/g, m => "\u2066" + m + "\u2069");
-  return s;
+  return bidi(s);
 }
+/* Right-to-left languages: a run like "2-3", "2½", "425°F (220°C)" or "US$" is shown left to right inside the
+   sentence (Unicode isolates), so the fraction, degree sign and parentheses stay with their number. */
+const isRtl = () => LANG[S.lang]?.dir === "rtl";
+const iso = m => "\u2066" + m + "\u2069";
+const N = "\\d+(?:[.,]\\d+)?";
+const BIDI_RUN = new RegExp(`${N}(?:[-\u2013]${N})*[½⅓⅔¼¾⅛]?(?:\\s?°\\s?[FC])?(?:\\s?\\(${N}\\s?°\\s?[FC]\\))?`, "g");
+export const bidi = s => !isRtl() || typeof s !== "string" ? s
+  : s.replace(BIDI_RUN, m => /[-\u2013½⅓⅔¼¾⅛°]/.test(m) ? iso(m.replace(/\s/g, "\u00a0")) : m);
 export const hasT = k => k in STR || k in EN;
 /* recipe text: {t: title, s: [steps], tip} */
-export const rt = id => REC[id] || REC_EN[id] || { t: id, s: [], tip: "" };
+const RT = {};
+export const rt = id => {
+  const r = REC[id] || REC_EN[id] || { t: id, s: [], tip: "" };
+  if (!isRtl()) return r;
+  return (RT[S.lang + id] ||= { ...r, t: bidi(r.t), s: (r.s || []).map(bidi), tip: bidi(r.tip) });
+};
 export const ingName = id => REC.ing?.[id] ?? REC_EN.ing?.[id] ?? id;
 export const ingNameEn = id => REC_EN.ing?.[id] ?? id;
 export const unitName = (u, n) => {
@@ -131,7 +143,12 @@ const NF = {};
 const nfo = (o) => { const k = S.lang + JSON.stringify(o); return (NF[k] ||= new Intl.NumberFormat(S.lang + "-u-nu-latn", o)); };
 export const num = (n, d = 0) => nfo({ maximumFractionDigits: d }).format(n);
 /* Money always goes through the active market's currency (config.js), shown in the reader's language. */
-export const money = (v, cents = true) => nfo({ style: "currency", currency: MARKET.currency, currencyDisplay: "narrowSymbol", minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 }).format(v);
+export const money = (v, cents = true) => {
+  const f = nfo({ style: "currency", currency: MARKET.currency, currencyDisplay: "narrowSymbol", minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 });
+  if (!isRtl()) return f.format(v);
+  // Arabic writes "0.61 US$": keep "US$" in one piece instead of "$US"
+  return f.formatToParts(v).map(p => p.type === "currency" && /[A-Za-z]/.test(p.value) ? iso(p.value) : p.value).join("");
+};
 export function dateFmt(d, o) { return new Intl.DateTimeFormat(S.lang + "-u-nu-latn", { timeZone: "America/Los_Angeles", ...o }).format(d); }
 export const dayName = (wd, style = "long") => dateFmt(new Date(Date.UTC(2024, 0, 7 + wd, 20)), { weekday: style }); // 2024-01-07 was a Sunday
 export function timeFmt(hhmm) {
