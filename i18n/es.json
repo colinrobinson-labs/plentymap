@@ -585,5 +585,6 @@
  "kd_checked": "Revisado el {d}",
  "kd_src": "Publicado por",
  "kd_none": "No conocemos ofertas para este día. Pruebe otro día.",
- "kd_unavail": "La lista de los niños comen gratis no cargó. Intente más tarde."
+ "kd_unavail": "La lista de los niños comen gratis no cargó. Intente más tarde.",
+ "holiday_week": "Es semana de feriado y muchos lugares cambian su horario o cierran. Llama antes de ir."
 }

@@ -585,5 +585,6 @@
  "kd_src": "Publié par",
  "kd_none": "Nous ne connaissons aucune offre pour ce jour. Essayez un autre jour.",
  "kd_unavail": "La liste des repas gratuits pour enfants ne s'est pas chargée. Réessayez plus tard.",
- "rep_flag_ended": "Quelqu'un a signalé que cette offre a peut-être changé ou pris fin. Appelez avant d'y aller."
+ "rep_flag_ended": "Quelqu'un a signalé que cette offre a peut-être changé ou pris fin. Appelez avant d'y aller.",
+ "holiday_week": "C'est une semaine de fête : beaucoup d'endroits changent leurs horaires ou ferment. Appelez avant d'y aller."
 }

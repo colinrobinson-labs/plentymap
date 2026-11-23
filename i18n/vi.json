@@ -573,5 +573,6 @@
  "kd_checked": "Kiểm tra ngày {d}",
  "kd_src": "Nguồn",
  "kd_none": "Chúng tôi chưa biết ưu đãi nào cho ngày này. Hãy thử ngày khác.",
- "kd_unavail": "Danh sách trẻ em ăn miễn phí chưa tải được. Hãy thử lại sau."
+ "kd_unavail": "Danh sách trẻ em ăn miễn phí chưa tải được. Hãy thử lại sau.",
+ "holiday_week": "Đây là tuần lễ nghỉ, nhiều nơi đổi giờ hoặc đóng cửa. Gọi trước khi đi."
 }

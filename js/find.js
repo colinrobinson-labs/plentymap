@@ -258,6 +258,19 @@ function siteCard(s) {
   </li>`;
 }
 
+/* Holiday weeks: the six days before a major US holiday through the day after. Pantries and meal sites
+   often close or move their days then, so the free food lists say to call first. */
+const DAYMS = 864e5;
+function nthDow(y, m, dow, n) { // n-th weekday of a month (n = -1 for the last), as a UTC midnight
+  if (n > 0) { const d = new Date(Date.UTC(y, m, 1)); return Date.UTC(y, m, 1 + ((dow - d.getUTCDay() + 7) % 7) + 7 * (n - 1)); }
+  const last = new Date(Date.UTC(y, m + 1, 0)); return Date.UTC(y, m + 1, 0) - ((last.getUTCDay() - dow + 7) % 7) * DAYMS;
+}
+export function holidayWeek(iso) {
+  const now = Date.parse(iso + "T00:00:00Z"), y = +iso.slice(0, 4);
+  const days = [Date.UTC(y, 0, 1), nthDow(y, 4, 1, -1), Date.UTC(y, 6, 4), nthDow(y, 8, 1, 1), nthDow(y, 10, 4, 4), Date.UTC(y, 11, 25), Date.UTC(y + 1, 0, 1)];
+  return days.some(d => now >= d - 6 * DAYMS && now <= d + DAYMS);
+}
+
 function catNote() {
   const n = {
     store: t("note_store"),
@@ -271,7 +284,9 @@ function catNote() {
   // where we list only a few free food places nearby, say the list may be missing some, and where to find the rest
   const extra = thinHere() && CATS.find(c => c.id === F.cat)?.kinds.some(k => FREE.includes(k))
     ? `<div class="notice info">${ico("info")}<p>${esc(t("us_listings_note"))} <a href="${esc(FA_URL)}" target="_blank" rel="noopener noreferrer" data-out>${esc(t("us_fb_find"))}</a> · <a href="tel:211">${esc(t("call_211"))}</a></p></div>` : "";
-  return (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
+  const freeCat = CATS.find(c => c.id === F.cat)?.kinds.some(k => SCHED.includes(k));
+  const hol = freeCat && holidayWeek(todayISO(new Date())) ? `<p class="notice stale" id="fhol">${ico("clock", "i sm")}<span>${esc(t("holiday_week"))}</span></p>` : "";
+  return hol + (n ? `<div class="notice info">${ico("info")}<p>${esc(n)}</p></div>` : "") + extra;
 }
 
 /* Fewer than 8 free food places within about 15 miles: the list is probably missing some */

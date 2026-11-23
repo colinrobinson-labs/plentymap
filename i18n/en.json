@@ -585,5 +585,6 @@
  "kd_src": "Published by",
  "kd_none": "No deals we know of for this day. Try another day.",
  "kd_unavail": "The kids-eat-free list didn't load. Try again later.",
- "rep_flag_ended": "Someone reported this deal may have changed or ended. Call before you go."
+ "rep_flag_ended": "Someone reported this deal may have changed or ended. Call before you go.",
+ "holiday_week": "It's a holiday week, so many places change their hours or close. Call before you go."
 }
