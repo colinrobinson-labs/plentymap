@@ -1,0 +1,144 @@
+{
+ "fetched": "2026-11-23T22:57:10.577Z",
+ "sources": {
+  "lafb": {
+   "ok": true,
+   "n": 629,
+   "endpoint": "https://api26.storepoint.co/v1/163e12f02a0d79/locations"
+  },
+  "shoc": {
+   "ok": true,
+   "n": 286,
+   "endpoint": "https://api26.storepoint.co/v1/165c3ba66c7fce/locations"
+  },
+  "phila": {
+   "ok": false,
+   "error": "unexpected WPSL reply"
+  },
+  "gsfb": {
+   "ok": true,
+   "n": 628,
+   "endpoint": "https://www.gsfb.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "cbfb": {
+   "ok": true,
+   "n": 50,
+   "endpoint": "https://coastalbendfoodbank.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "ftv": {
+   "ok": true,
+   "n": 105,
+   "endpoint": "https://feedingthevalley.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "fbnela": {
+   "ok": true,
+   "n": 47,
+   "endpoint": "https://foodbanknela.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "fbwm": {
+   "ok": true,
+   "n": 238,
+   "endpoint": "https://www.foodbankwma.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "wcfb": {
+   "ok": true,
+   "n": 83,
+   "endpoint": "https://foodbank.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "shlv": {
+   "ok": true,
+   "n": 20,
+   "endpoint": "https://secondharvestlv.org/wp-admin/admin-ajax.php?action=store_search"
+  },
+  "fh": {
+   "ok": false,
+   "error": "unexpected WPSL reply"
+  },
+  "ghfb": {
+   "ok": false,
+   "error": "robots.txt disallows /wp-admin/admin-ajax.php"
+  },
+  "tcfb": {
+   "ok": true,
+   "n": 70,
+   "endpoint": "https://stophunger.org/wp-admin/admin-ajax.php (csl_ajax_onload)"
+  },
+  "rvrfb": {
+   "ok": false,
+   "error": "robots.txt disallows /wp-admin/admin-ajax.php"
+  },
+  "shsga": {
+   "ok": true,
+   "n": 164,
+   "endpoint": "https://feedingsga.org/wp-admin/admin-ajax.php (csl_ajax_onload)"
+  },
+  "fbem": {
+   "ok": true,
+   "n": 309,
+   "endpoint": "https://www.fbem.org/wp-admin/admin-ajax.php (csl_ajax_onload)"
+  },
+  "shsenc": {
+   "ok": false,
+   "error": "robots.txt disallows /wp-admin/admin-ajax.php"
+  },
+  "fbrgv": {
+   "ok": false,
+   "error": "robots.txt disallows /wp-admin/admin-ajax.php"
+  },
+  "fulfill": {
+   "ok": true,
+   "n": 127,
+   "endpoint": "https://fulfillnj.org/wp-admin/admin-ajax.php?action=asl_load_stores"
+  },
+  "foodshare": {
+   "ok": true,
+   "n": 159,
+   "endpoint": "https://foodshare.com/wp-admin/admin-ajax.php?action=asl_load_stores"
+  },
+  "idfb": {
+   "ok": false,
+   "error": "robots.txt disallows /wp-admin/admin-ajax.php"
+  },
+  "lcfb": {
+   "ok": true,
+   "n": 208,
+   "endpoint": "https://lowcountryfoodbank.org/wp-admin/admin-ajax.php?action=asl_load_stores"
+  },
+  "foodlink": {
+   "ok": true,
+   "n": 305,
+   "endpoint": "https://foodlinkny.org/wp-admin/admin-ajax.php?action=asl_load_stores"
+  },
+  "shecin": {
+   "ok": true,
+   "n": 20,
+   "endpoint": "https://curehunger.org/wp-admin/admin-ajax.php?action=asl_load_stores"
+  },
+  "shmt": {
+   "ok": true,
+   "n": 252,
+   "endpoint": "https://storerocket.io/api/user/BZJW1vbp0o/locations"
+  },
+  "ih": {
+   "ok": true,
+   "n": 211,
+   "endpoint": "https://storerocket.io/api/user/n0pjnLgp6V/locations"
+  },
+  "hfb": {
+   "ok": true,
+   "n": 1,
+   "endpoint": "https://www.google.com/maps/d/kml"
+  },
+  "iffs": {
+   "ok": true,
+   "n": 2,
+   "endpoint": "https://www.google.com/maps/d/kml"
+  },
+  "gpfb": {
+   "ok": true,
+   "n": 1,
+   "endpoint": "https://www.google.com/maps/d/kml"
+  }
+ },
+ "feedingamerica": 198
+}
