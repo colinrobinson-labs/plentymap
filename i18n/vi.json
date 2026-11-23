@@ -613,5 +613,13 @@
  "loc_precise_android": "Trên Android: Cài đặt › Vị trí › Quyền truy cập vị trí của ứng dụng › trình duyệt của bạn › bật Sử dụng vị trí chính xác.",
  "loc_precise_app_ios": "Trên iPhone: Cài đặt › Plenty Map › Vị trí › bật Vị trí chính xác.",
  "loc_precise_app_android": "Trên Android: Cài đặt › Ứng dụng › Plenty Map › Quyền › Vị trí › bật Sử dụng vị trí chính xác.",
- "loc_precise_pc": "Máy tính không có GPS chỉ đoán được qua Wi-Fi hoặc kết nối internet. Bật Wi-Fi sẽ giúp chính xác hơn."
+ "loc_precise_pc": "Máy tính không có GPS chỉ đoán được qua Wi-Fi hoặc kết nối internet. Bật Wi-Fi sẽ giúp chính xác hơn.",
+ "cf_maybe": "Thu nhập của bạn trên {g} mỗi tháng, nhưng gia đình có người từ 60 tuổi hoặc khuyết tật vẫn có thể đủ điều kiện. Hãy nộp đơn để quận xem xét.",
+ "cf_ask_other": "Thu nhập của bạn trên {g} mỗi tháng cho {n} người. Các chi phí như tiền nhà và giữ trẻ vẫn có thể giúp bạn đủ điều kiện, nên hãy hỏi thử.",
+ "us_cf_maybe": "Thu nhập của bạn trên {g} mỗi tháng, nhưng gia đình có người từ 60 tuổi hoặc khuyết tật vẫn có thể đủ điều kiện. Hãy nộp đơn để cơ quan xem xét.",
+ "foot_love": "Làm ra cho bạn, vì bạn xứng đáng được ăn ngon.",
+ "hotline_p": "Đường dây nóng chống đói quốc gia của USDA: người thật giúp bạn tìm thức ăn gần nhà, thứ Hai đến thứ Sáu, 8 giờ sáng đến 8 giờ tối giờ miền Đông. Hoặc nhắn câu hỏi kèm chữ \"food\" và mã ZIP.",
+ "hotline_call": "Gọi đường dây chống đói",
+ "hotline_text": "Nhắn tin 914-342-7744",
+ "holiday_week": "Đây là tuần lễ nghỉ, nhiều nơi đổi giờ hoặc đóng cửa. Gọi trước khi đi."
 }

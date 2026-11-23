@@ -624,5 +624,14 @@
  "loc_precise_android": "Sou Android: Settings › Location › App location permissions › navigatè ou › limen Use precise location.",
  "loc_precise_app_ios": "Sou iPhone: Settings › Plenty Map › Location › limen Precise Location.",
  "loc_precise_app_android": "Sou Android: Settings › Apps › Plenty Map › Permissions › Location › limen Use precise location.",
- "loc_precise_pc": "Òdinatè ki pa gen GPS ka sèlman devine ak Wi-Fi a oswa koneksyon entènèt la. Limen Wi-Fi a ede."
+ "loc_precise_pc": "Òdinatè ki pa gen GPS ka sèlman devine ak Wi-Fi a oswa koneksyon entènèt la. Limen Wi-Fi a ede.",
+ "cf_maybe": "Revni ou depase {g} pa mwa, men kay ki gen yon moun 60+ oswa ki gen andikap ka toujou kalifye. Aplike epi kite konte a tcheke.",
+ "cf_ask_one": "Revni ou depase {g} pa mwa pou 1 moun. Depans tankou lwaye ak gadri ka toujou fè ou kalifye, kidonk li vo lapenn mande.",
+ "cf_ask_other": "Revni ou depase {g} pa mwa pou {n} moun. Depans tankou lwaye ak gadri ka toujou fè ou kalifye, kidonk li vo lapenn mande.",
+ "us_cf_maybe": "Revni ou depase {g} pa mwa, men kay ki gen yon moun 60+ oswa ki gen andikap ka toujou kalifye. Aplike epi kite biwo a tcheke.",
+ "foot_love": "Fèt pou ou, paske ou merite bon manje.",
+ "hotline_p": "Liy Nasyonal kont Grangou USDA: vrè moun ede ou jwenn manje toupre ou, lendi rive vandredi, 8 AM rive 8 PM lè Lès. Oswa voye kesyon ou pa tèks ak mo \"food\" ak kòd postal ou.",
+ "hotline_call": "Rele liy kont grangou a",
+ "hotline_text": "Tèks 914-342-7744",
+ "holiday_week": "Se yon semèn jou ferye, kidonk anpil kote chanje lè yo oswa fèmen. Rele anvan ou ale."
 }

@@ -624,5 +624,14 @@
  "loc_precise_android": "No Android: Configurações › Localização › Permissões de localização do app › seu navegador › ative Usar local exato.",
  "loc_precise_app_ios": "No iPhone: Ajustes › Plenty Map › Localização › ative Localização Exata.",
  "loc_precise_app_android": "No Android: Configurações › Apps › Plenty Map › Permissões › Localização › ative Usar local exato.",
- "loc_precise_pc": "Computadores sem GPS só conseguem adivinhar pelo Wi-Fi ou pela conexão de internet. Ligar o Wi-Fi ajuda."
+ "loc_precise_pc": "Computadores sem GPS só conseguem adivinhar pelo Wi-Fi ou pela conexão de internet. Ligar o Wi-Fi ajuda.",
+ "cf_maybe": "Sua renda passa de {g} por mês, mas casas com alguém de 60+ ou com deficiência ainda podem ter direito. Peça e deixe o condado conferir.",
+ "cf_ask_one": "Sua renda passa de {g} por mês para 1 pessoa. Gastos como aluguel e creche ainda podem dar direito, então vale perguntar.",
+ "cf_ask_other": "Sua renda passa de {g} por mês para {n} pessoas. Gastos como aluguel e creche ainda podem dar direito, então vale perguntar.",
+ "us_cf_maybe": "Sua renda passa de {g} por mês, mas casas com alguém de 60+ ou com deficiência ainda podem ter direito. Peça e deixe o órgão conferir.",
+ "foot_love": "Feito para você, porque você merece comer bem.",
+ "hotline_p": "Linha Nacional contra a Fome do USDA: pessoas de verdade ajudam você a achar comida perto, de segunda a sexta, das 8h às 20h, horário do Leste. Ou mande sua pergunta por mensagem com \"food\" e seu CEP (ZIP).",
+ "hotline_call": "Ligar para a linha contra a fome",
+ "hotline_text": "Mensagem para 914-342-7744",
+ "holiday_week": "É semana de feriado, e muitos lugares mudam o horário ou fecham. Ligue antes de ir."
 }

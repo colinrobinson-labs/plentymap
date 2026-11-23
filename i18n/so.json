@@ -624,5 +624,14 @@
  "loc_precise_android": "Android: Settings › Location › App location permissions › browser-kaaga › shid Use precise location.",
  "loc_precise_app_ios": "iPhone: Settings › Plenty Map › Location › shid Precise Location.",
  "loc_precise_app_android": "Android: Settings › Apps › Plenty Map › Permissions › Location › shid Use precise location.",
- "loc_precise_pc": "Kombiyuutarada aan GPS lahayn waxay ku qiyaasaan Wi-Fi ama xiriirka internetka oo keliya. Shidista Wi-Fi way caawisaa."
+ "loc_precise_pc": "Kombiyuutarada aan GPS lahayn waxay ku qiyaasaan Wi-Fi ama xiriirka internetka oo keliya. Shidista Wi-Fi way caawisaa.",
+ "cf_maybe": "Dakhligaagu wuu ka badan yahay {g} bishii, laakiin guryaha leh qof 60+ ah ama naafo ah weli way u qalmi karaan. Codso oo degmada u daa inay hubiso.",
+ "cf_ask_one": "Dakhligaagu wuu ka badan yahay {g} bishii ee 1 qof. Kharashyada sida kirada iyo xannaanada carruurta weli way ku gelin karaan, ee waa mudan tahay in la weydiiyo.",
+ "cf_ask_other": "Dakhligaagu wuu ka badan yahay {g} bishii ee {n} qof. Kharashyada sida kirada iyo xannaanada carruurta weli way ku gelin karaan, ee waa mudan tahay in la weydiiyo.",
+ "us_cf_maybe": "Dakhligaagu wuu ka badan yahay {g} bishii, laakiin guryaha leh qof 60+ ah ama naafo ah weli way u qalmi karaan. Codso oo xafiiska u daa inuu hubiyo.",
+ "foot_love": "Adiga ayaa laguu sameeyay, maxaa yeelay waxaad mudan tahay cunto fiican.",
+ "hotline_p": "Khadka Qaranka ee Gaajada ee USDA: dad dhab ah ayaa kaa caawiya inaad hesho cunto kuu dhow, Isniin ilaa Jimce, 8 subaxnimo ilaa 8 fiidnimo waqtiga Bariga. Ama u dir su'aashaada fariin ahaan oo ay ku jiraan \"food\" iyo koodhkaaga ZIP.",
+ "hotline_call": "Wac khadka gaajada",
+ "hotline_text": "Fariin u dir 914-342-7744",
+ "holiday_week": "Waa toddobaad fasax ah, meelo badan ayaa beddela saacadahooda ama xira. Wac intaadan tegin."
 }

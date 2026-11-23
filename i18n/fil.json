@@ -624,5 +624,14 @@
  "loc_precise_android": "Sa Android: Settings › Location › App location permissions › ang browser mo › i-on ang Use precise location.",
  "loc_precise_app_ios": "Sa iPhone: Settings › Plenty Map › Location › i-on ang Precise Location.",
  "loc_precise_app_android": "Sa Android: Settings › Apps › Plenty Map › Permissions › Location › i-on ang Use precise location.",
- "loc_precise_pc": "Ang mga computer na walang GPS ay nanghuhula lang mula sa Wi-Fi o internet connection. Makakatulong ang pag-on ng Wi-Fi."
+ "loc_precise_pc": "Ang mga computer na walang GPS ay nanghuhula lang mula sa Wi-Fi o internet connection. Makakatulong ang pag-on ng Wi-Fi.",
+ "cf_maybe": "Lampas sa {g} kada buwan ang kita mo, pero puwede pa ring pumasa ang bahay na may 60+ o may kapansanan. Mag-apply at hayaang suriin ng county.",
+ "cf_ask_one": "Lampas ang kita mo sa {g} kada buwan para sa {n} tao. Puwede ka pa ring pumasa dahil sa gastos gaya ng upa at child care, kaya sulit itanong.",
+ "cf_ask_other": "Lampas ang kita mo sa {g} kada buwan para sa {n} tao. Puwede ka pa ring pumasa dahil sa gastos gaya ng upa at child care, kaya sulit itanong.",
+ "us_cf_maybe": "Lampas sa {g} kada buwan ang kita mo, pero puwede pa ring pumasa ang bahay na may 60+ o may kapansanan. Mag-apply at hayaang suriin ng opisina.",
+ "foot_love": "Ginawa para sa iyo, dahil karapat-dapat kang kumain nang masarap.",
+ "hotline_p": "USDA National Hunger Hotline: totoong tao ang tutulong sa iyong maghanap ng pagkain malapit sa iyo, Lunes hanggang Biyernes, 8 AM hanggang 8 PM Eastern. O i-text ang tanong mo kasama ang \"food\" at ang ZIP code mo.",
+ "hotline_call": "Tumawag sa hunger hotline",
+ "hotline_text": "I-text sa 914-342-7744",
+ "holiday_week": "Linggo ng pista opisyal ngayon, kaya maraming lugar ang nagbabago ng oras o sarado. Tumawag bago pumunta."
 }

@@ -613,5 +613,13 @@
  "loc_precise_android": "Android：设置 › 位置信息 › 应用位置权限 › 你的浏览器 › 打开“使用确切位置”。",
  "loc_precise_app_ios": "iPhone：设置 › Plenty Map › 位置 › 打开“精确位置”。",
  "loc_precise_app_android": "Android：设置 › 应用 › Plenty Map › 权限 › 位置信息 › 打开“使用确切位置”。",
- "loc_precise_pc": "没有 GPS 的电脑只能根据 Wi-Fi 或网络连接来估计位置。打开 Wi-Fi 会更准。"
+ "loc_precise_pc": "没有 GPS 的电脑只能根据 Wi-Fi 或网络连接来估计位置。打开 Wi-Fi 会更准。",
+ "cf_maybe": "你的收入超过每月 {g}，但家里有 60 岁以上或残障人士的仍可能符合。去申请，让县政府审核。",
+ "cf_ask_other": "你的收入超过 {n} 口之家每月 {g} 的上限。房租和托儿等开支仍可能让你符合，值得问问。",
+ "us_cf_maybe": "你的收入超过每月 {g}，但家里有 60 岁以上或残障人士的仍可能符合。去申请，让办公室审核。",
+ "foot_love": "为你而做，因为你值得吃好。",
+ "hotline_p": "美国农业部全国反饥饿热线：真人帮您找附近的食物，周一至周五，美东时间早8点到晚8点。也可以发短信，写上问题、\"food\"和您的邮编。",
+ "hotline_call": "拨打反饥饿热线",
+ "hotline_text": "短信 914-342-7744",
+ "holiday_week": "本周是节假日，很多地方会调整时间或关门。 去之前先打电话。"
 }

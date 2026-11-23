@@ -624,5 +624,14 @@
  "loc_precise_android": "En Android: Ajustes › Ubicación › Permisos de ubicación de apps › tu navegador › activa Usar ubicación precisa.",
  "loc_precise_app_ios": "En iPhone: Ajustes › Plenty Map › Ubicación › activa Ubicación exacta.",
  "loc_precise_app_android": "En Android: Ajustes › Aplicaciones › Plenty Map › Permisos › Ubicación › activa Usar ubicación precisa.",
- "loc_precise_pc": "Las computadoras sin GPS solo pueden adivinar por el Wi-Fi o la conexión a internet. Encender el Wi-Fi ayuda."
+ "loc_precise_pc": "Las computadoras sin GPS solo pueden adivinar por el Wi-Fi o la conexión a internet. Encender el Wi-Fi ayuda.",
+ "cf_maybe": "Tus ingresos pasan de {g} al mes, pero los hogares con alguien de 60+ o con discapacidad todavía pueden calificar. Solicita y deja que el condado lo revise.",
+ "cf_ask_one": "Tus ingresos pasan de {g} al mes para 1 persona. Gastos como renta y cuidado de niños pueden ayudarte a calificar, así que vale la pena preguntar.",
+ "cf_ask_other": "Tus ingresos pasan de {g} al mes para {n} personas. Gastos como renta y cuidado de niños pueden ayudarte a calificar, así que vale la pena preguntar.",
+ "us_cf_maybe": "Tus ingresos pasan de {g} al mes, pero los hogares con alguien de 60+ o con discapacidad todavía pueden calificar. Solicita y deja que la oficina lo revise.",
+ "foot_love": "Hecho para ti, porque mereces comer bien.",
+ "hotline_p": "Línea Nacional contra el Hambre del USDA: personas reales le ayudan a encontrar comida cerca, de lunes a viernes, de 8 AM a 8 PM hora del Este. O envíe un texto con su pregunta, la palabra \"food\" y su código postal.",
+ "hotline_call": "Llamar a la línea contra el hambre",
+ "hotline_text": "Texto al 914-342-7744",
+ "holiday_week": "Es semana de feriado y muchos lugares cambian su horario o cierran. Llama antes de ir."
 }

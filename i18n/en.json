@@ -624,5 +624,14 @@
  "loc_precise_android": "On Android: Settings › Location › App location permissions › your browser › turn on Use precise location.",
  "loc_precise_app_ios": "On iPhone: Settings › Plenty Map › Location › turn on Precise Location.",
  "loc_precise_app_android": "On Android: Settings › Apps › Plenty Map › Permissions › Location › turn on Use precise location.",
- "loc_precise_pc": "Computers without GPS can only guess from Wi-Fi or the internet connection. Turning on Wi-Fi helps."
+ "loc_precise_pc": "Computers without GPS can only guess from Wi-Fi or the internet connection. Turning on Wi-Fi helps.",
+ "cf_maybe": "Your income is over {g} a month, but homes with someone 60+ or disabled can still qualify. Apply and let the county check.",
+ "cf_ask_other": "Your income is over {g} a month for {n} people. Costs like rent and child care can still bring you in, so it's worth asking.",
+ "cf_ask_one": "Your income is over {g} a month for 1 person. Costs like rent and child care can still bring you in, so it's worth asking.",
+ "us_cf_maybe": "Your income is over {g} a month, but homes with someone 60+ or disabled can still qualify. Apply and let the office check.",
+ "foot_love": "Made for you, because you deserve good food.",
+ "hotline_p": "USDA National Hunger Hotline: real people help you find food near you, Monday to Friday, 8 AM to 8 PM Eastern. Or text your question with \"food\" and your ZIP code.",
+ "hotline_call": "Call the hunger hotline",
+ "hotline_text": "Text 914-342-7744",
+ "holiday_week": "It's a holiday week, so many places change their hours or close. Call before you go."
 }

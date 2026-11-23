@@ -116,7 +116,7 @@ function hideWelcome() { $("#welcome").hidden = true; $("#welcome").innerHTML = 
 
 /* ---------- first run: where are you? ---------- */
 async function showSetup() {
-  const w = $("#welcome");
+  const w = $("#welcome"); w.hidden = false; $("#app").hidden = true;
   w.innerHTML = `<div class="welcome">
     <div class="mark">${MARK}</div>
     <div class="setup stack">

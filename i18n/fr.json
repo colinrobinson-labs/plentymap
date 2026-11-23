@@ -624,5 +624,14 @@
  "loc_precise_android": "Sur Android : Paramètres › Localisation › Autorisations des applications › votre navigateur › activez Utiliser la position exacte.",
  "loc_precise_app_ios": "Sur iPhone : Réglages › Plenty Map › Position › activez Position exacte.",
  "loc_precise_app_android": "Sur Android : Paramètres › Applications › Plenty Map › Autorisations › Position › activez Utiliser la position exacte.",
- "loc_precise_pc": "Sans GPS, un ordinateur ne peut que deviner à partir du Wi-Fi ou de la connexion Internet. Activer le Wi-Fi aide."
+ "loc_precise_pc": "Sans GPS, un ordinateur ne peut que deviner à partir du Wi-Fi ou de la connexion Internet. Activer le Wi-Fi aide.",
+ "cf_maybe": "Votre revenu dépasse {g} par mois, mais les foyers avec une personne de 60 ans et plus ou handicapée peuvent quand même être admissibles. Faites une demande et laissez le comté vérifier.",
+ "cf_ask_other": "Votre revenu dépasse {g} par mois pour {n} personnes. Des dépenses comme le loyer et la garde d'enfants peuvent quand même vous rendre admissible : ça vaut la peine de demander.",
+ "cf_ask_one": "Votre revenu dépasse {g} par mois pour 1 personne. Des dépenses comme le loyer et la garde d'enfants peuvent quand même vous rendre admissible : ça vaut la peine de demander.",
+ "us_cf_maybe": "Votre revenu dépasse {g} par mois, mais les foyers avec une personne de 60 ans et plus ou handicapée peuvent quand même être admissibles. Faites une demande et laissez le bureau vérifier.",
+ "foot_love": "Fait pour vous, parce que vous méritez de bien manger.",
+ "hotline_p": "Ligne nationale contre la faim de l'USDA : de vraies personnes vous aident à trouver de la nourriture près de chez vous, du lundi au vendredi, de 8 h à 20 h (heure de l'Est). Vous pouvez aussi texter votre question avec « food » et votre code ZIP.",
+ "hotline_call": "Appeler la ligne contre la faim",
+ "hotline_text": "Texter le 914-342-7744",
+ "holiday_week": "C'est une semaine de fête : beaucoup d'endroits changent leurs horaires ou ferment. Appelez avant d'y aller."
 }
