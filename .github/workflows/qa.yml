@@ -81,13 +81,15 @@ jobs:
       # system libraries and fonts come from apt, whose mirrors sometimes stall: each try gets 4 minutes, 3 tries
       - name: System libraries and fonts
         working-directory: qa
-        timeout-minutes: 14
+        timeout-minutes: 18
         run: |
+          # a timed-out try can leave apt-get running and holding the dpkg lock, so each retry clears that first
           for i in 1 2 3; do
-            timeout 240 npx playwright install-deps chromium >/dev/null \
-              && timeout 240 sudo apt-get install -y -q -o Acquire::Retries=3 -o Acquire::http::Timeout=30 fonts-noto-core fonts-noto-cjk >/dev/null \
-              && exit 0
-            echo "::warning::apt try $i stalled or failed; retrying"; sleep 10
+            if timeout 240 npx playwright install-deps chromium > /tmp/apt.log 2>&1 \
+              && sudo timeout -k 10 240 apt-get install -y -q -o DPkg::Lock::Timeout=60 -o Acquire::Retries=3 -o Acquire::http::Timeout=30 fonts-noto-core fonts-noto-cjk >> /tmp/apt.log 2>&1; then exit 0; fi
+            echo "::warning::apt try $i stalled or failed. Last lines:"; tail -n 5 /tmp/apt.log
+            sudo pkill -x apt-get || true; sudo pkill -x dpkg || true; sleep 3
+            sudo dpkg --configure -a || true
           done
           exit 1
       - uses: actions/download-artifact@v4
@@ -166,10 +168,11 @@ jobs:
         with: { name: qa-findings, path: qa/results/, retention-days: 30 }
       - name: File and update issues
         if: github.event_name != 'pull_request'
+        # a run with a missing test shard only adds and updates issues: it never closes one it didn't get to check
         env:
           GITHUB_TOKEN: ${{ github.token }}
           QA_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          QA_SCOPES: ${{ env.LEVEL == 'full' && 'layout,states,a11y,links' || '' }}${{ needs.data.result == 'success' && ',data' || '' }}
+          QA_SCOPES: ${{ env.LEVEL == 'full' && steps.triage.outputs.code != '2' && 'layout,states,a11y,links' || '' }}${{ needs.data.result == 'success' && ',data' || '' }}
         run: node qa/scripts/file-issues.mjs
       - name: Save the latest findings for the weekly digest
         if: github.event_name == 'schedule'
